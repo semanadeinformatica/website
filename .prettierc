@@ -1,0 +1,11 @@
+{
+    "pluginSearchDirs": [
+        "."
+    ],
+    "plugins": [
+        "@prettier/plugin-php"
+    ],
+    "printWidth": 100,
+    "singleQuote": true,
+    "endOfLine": "auto"
+}
