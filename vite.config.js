@@ -3,8 +3,15 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
+    publicDir: "public",
+    server: {
+        hmr: {
+            host: 'localhost',
+        },
+    },
     plugins: [
         laravel({
+            publicDirectory: "public",
             input: 'resources/js/app.js',
             refresh: true,
         }),
