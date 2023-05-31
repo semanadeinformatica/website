@@ -36,29 +36,24 @@ VOLUME [ \
     "/var/www/resources", "/var/www/routes" \
     ]
 
-RUN chown www-data /var/www
-RUN chmod 700 /var/www
-RUN usermod -u $HOST_UID www-data
-USER www-data
-
 # Copy project code and install project dependencies
-COPY --chown=www-data composer.json composer.lock ./
+COPY composer.json composer.lock ./
 RUN composer install --no-autoloader
 
-COPY --chown=www-data package.json package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
-COPY --chown=www-data . .
+COPY . .
 
 RUN rm .env*
-COPY --chown=www-data .env .env
+COPY .env .env
 
 RUN composer dumpautoload
 
 RUN php artisan storage:link
 
 # Copy project configurations
-COPY --chown=www-data ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
 EXPOSE 8000
 EXPOSE 5173
