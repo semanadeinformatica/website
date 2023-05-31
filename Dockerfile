@@ -51,7 +51,7 @@ RUN npm install
 COPY --chown=www-data . .
 
 RUN rm .env*
-COPY .env .env
+COPY --chown=www-data .env .env
 
 RUN composer dumpautoload
 

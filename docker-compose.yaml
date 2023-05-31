@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - "HOST_UID=1000"
     ports:
       - "8000:8000"
       - "5173:5173"

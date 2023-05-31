@@ -5,9 +5,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     publicDir: "public",
     server: {
-        hmr: {
-            host: 'localhost',
-        },
+        host: true,
     },
     plugins: [
         laravel({
