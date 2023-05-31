@@ -1,9 +1,32 @@
 version: "3"
 services:
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - "HOST_UID=1000"
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    environment:
+      - "DB_HOST=postgres"
+      - "PORT=8000"
+    volumes:
+      - "./app:/var/www/app"
+      - "./storage:/var/www/storage"
+      - "./resources:/var/www/resources"
+      - "./routes:/var/www/routes"
+    depends_on:
+      - postgres
+
   postgres:
-    image: postgres:9.6
+    image: postgres:11
+    restart: always
     ports:
       - "5432:5432"
+    expose:
+      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
