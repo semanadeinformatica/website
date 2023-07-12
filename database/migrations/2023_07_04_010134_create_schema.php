@@ -11,19 +11,24 @@ return new class extends Migration {
      */
     public function up(): void {
         // User tables
+        Schema::table('users', function (Blueprint $table) {
+            $table->morphs('usertype');
+        });
         Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(\App\Models\User::class);
+            $table->foreignIdFor(\App\Models\User::class)->primary();
+            $table->string('linkedin')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
         Schema::create('companies', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(\App\Models\User::class);
+            $table->foreignIdFor(\App\Models\User::class)->primary();
             $table->timestamps();
         });
         Schema::create('admins', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(\App\Models\User::class);
+            $table->foreignIdFor(\App\Models\User::class)->primary();
             $table->timestamps();
         });
 
@@ -50,21 +55,21 @@ return new class extends Migration {
             $table->dateTime('date_start');
             $table->dateTime('date_end');
             $table->string('topic');
-            $table->integer('capacity')->unsigned();
+            $table->integer('capacity')->unsigned()->nullable();
             $table->foreignIdFor(\App\Models\Edition::class);
             $table->timestamps();
         });
         Schema::create('speakers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('title');
-            $table->string('description');
-            $table->string('organization');
-            $table->string('linkedin');
-            $table->string('twitter');
-            $table->string('facebook');
-            $table->string('website');
-            $table->string('email');
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
+            $table->string('organization')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
             $table->foreignIdFor(\App\Models\Event::class);
             $table->timestamps();
         });
@@ -74,7 +79,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->integer('points')->unsigned();
+
+            // we need to be careful to update this when we add new categories
             $table->enum('category', ['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']);
+
             // TODO: Unlock condition
             $table->foreignIdFor(\App\Models\Edition::class);
             $table->timestamps();
@@ -85,6 +93,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(\App\Models\Student::class);
             $table->foreignIdFor(\App\Models\Edition::class);
+
+            // this will be calculated by a trigger
+            $table->integer('points')->unsigned()->default(0);
             $table->timestamps();
             $table->unique(['student_id', 'edition_id']);
         });
@@ -111,6 +122,9 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropMorphs('usertype');
+        });
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('admins');
