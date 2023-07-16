@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->morphs('usertype');
         });
         Schema::create('students', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary();
+            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
             $table->string('linkedin')->nullable();
             $table->string('twitter')->nullable();
             $table->string('facebook')->nullable();
@@ -24,11 +24,11 @@ return new class extends Migration {
             $table->timestamps();
         });
         Schema::create('companies', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary();
+            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('admins', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary();
+            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -44,7 +44,7 @@ return new class extends Migration {
             $table->string('name');
             $table->integer('price')->unsigned();
             $table->integer('stock')->unsigned();
-            $table->foreignIdFor(\App\Models\Edition::class);
+            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -56,7 +56,7 @@ return new class extends Migration {
             $table->dateTime('date_end');
             $table->string('topic');
             $table->integer('capacity')->unsigned()->nullable();
-            $table->foreignIdFor(\App\Models\Edition::class);
+            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('speakers', function (Blueprint $table) {
@@ -70,7 +70,7 @@ return new class extends Migration {
             $table->string('facebook')->nullable();
             $table->string('website')->nullable();
             $table->string('email')->nullable();
-            $table->foreignIdFor(\App\Models\Event::class);
+            $table->foreignIdFor(\App\Models\Event::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -84,15 +84,15 @@ return new class extends Migration {
             $table->enum('category', ['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']);
 
             // TODO: Unlock condition
-            $table->foreignIdFor(\App\Models\Edition::class);
+            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
         // Enrollment
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Student::class);
-            $table->foreignIdFor(\App\Models\Edition::class);
+            $table->foreignIdFor(\App\Models\Student::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
 
             // this will be calculated by a trigger
             $table->integer('points')->unsigned()->default(0);
@@ -102,18 +102,18 @@ return new class extends Migration {
 
         // Many to many
         Schema::create('enrollment_event', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class);
-            $table->foreignIdFor(\App\Models\Event::class);
+            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Event::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'event_id']);
         });
         Schema::create('enrollment_quest', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class);
-            $table->foreignIdFor(\App\Models\Quest::class);
+            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Quest::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'quest_id']);
         });
         Schema::create('enrollment_product', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class);
-            $table->foreignIdFor(\App\Models\Product::class);
+            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'product_id']);
         });
 
@@ -141,7 +141,7 @@ return new class extends Migration {
             CREATE TRIGGER update_enrollment_points
             AFTER INSERT OR UPDATE OR DELETE ON enrollment_quest
             FOR EACH ROW EXECUTE FUNCTION update_enrollment_points();
-        '); 
+        ');
     }
 
     /**
