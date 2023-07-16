@@ -10,6 +10,19 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
+        // Socials
+        Schema::create('social_media', function (Blueprint $table) {
+            $table->id();
+            $table->string('email')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('github')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('website')->nullable();
+            $table->timestamps();
+        });
+
         // User tables
         Schema::table('users', function (Blueprint $table) {
             $table->morphs('usertype');
@@ -17,16 +30,13 @@ return new class extends Migration {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
-            $table->string('linkedin')->nullable();
-            $table->string('twitter')->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('website')->nullable();
-            $table->string('email')->nullable();
+            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('admins', function (Blueprint $table) {
@@ -68,11 +78,7 @@ return new class extends Migration {
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->string('organization')->nullable();
-            $table->string('linkedin')->nullable();
-            $table->string('twitter')->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('website')->nullable();
-            $table->string('email')->nullable();
+            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Event::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
