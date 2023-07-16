@@ -116,6 +116,32 @@ return new class extends Migration {
             $table->foreignIdFor(\App\Models\Product::class);
             $table->primary(['enrollment_id', 'product_id']);
         });
+
+        // Triggers
+        DB::unprepared('
+            CREATE OR REPLACE FUNCTION update_enrollment_points() RETURNS TRIGGER AS $$
+                BEGIN
+                    IF (OLD IS NOT NULL) THEN
+                        UPDATE enrollments SET points = points - (
+                            SELECT points FROM quests WHERE id = OLD.quest_id
+                        ) WHERE id = OLD.enrollment_id;
+                    END IF;
+
+                    IF (NEW IS NOT NULL) THEN
+                        UPDATE enrollments SET points = points + (
+                            SELECT points FROM quests WHERE id = NEW.quest_id
+                        ) WHERE id = NEW.enrollment_id;
+                    END IF;
+
+                    RETURN NEW;
+                END;
+            $$ LANGUAGE plpgsql;
+        ');
+        DB::unprepared('
+            CREATE TRIGGER update_enrollment_points
+            AFTER INSERT OR UPDATE OR DELETE ON enrollment_quest
+            FOR EACH ROW EXECUTE FUNCTION update_enrollment_points();
+        '); 
     }
 
     /**
@@ -137,5 +163,6 @@ return new class extends Migration {
         Schema::dropIfExists('enrollment_event');
         Schema::dropIfExists('enrollment_quest');
         Schema::dropIfExists('enrollment_product');
+        Schema::dropIfExists('update_enrollment_points');
     }
 };
