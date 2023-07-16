@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->morphs('usertype');
         });
         Schema::create('students', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
+            $table->id();
+            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
             $table->string('linkedin')->nullable();
             $table->string('twitter')->nullable();
             $table->string('facebook')->nullable();
@@ -24,11 +25,13 @@ return new class extends Migration {
             $table->timestamps();
         });
         Schema::create('companies', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
+            $table->id();
+            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('admins', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\User::class)->primary()->constrained()->cascadeOnDelete();
+            $table->id();
+            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
