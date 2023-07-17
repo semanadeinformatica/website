@@ -92,7 +92,8 @@ return new class extends Migration {
             // we need to be careful to update this when we add new categories
             $table->enum('category', ['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']);
 
-            // TODO: Unlock condition
+            $table->morphs('redeemable');
+
             $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -157,6 +158,7 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
+        Schema::dropIfExists('social_media');
         Schema::table('users', function (Blueprint $table) {
             $table->dropMorphs('usertype');
         });
