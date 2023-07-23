@@ -35,6 +35,7 @@ return new class extends Migration {
         });
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->enum('tier', ['PLATINUM', 'GOLD', 'SILVER']);
             $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
@@ -92,7 +93,7 @@ return new class extends Migration {
             // we need to be careful to update this when we add new categories
             $table->enum('category', ['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']);
 
-            $table->morphs('redeemable');
+            $table->morphs('requirement');
 
             $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

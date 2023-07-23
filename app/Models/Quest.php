@@ -30,7 +30,7 @@ class Quest extends Model {
         return $this->belongsToMany(Enrollment::class);
     }
 
-    public function redeemable(): MorphTo {
+    public function requirement(): MorphTo {
         return $this->morphTo();
     }
 }
