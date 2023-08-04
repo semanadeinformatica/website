@@ -8,6 +8,7 @@ use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ResumeController;
 use Inertia\Inertia;
 
 /*
