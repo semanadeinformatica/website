@@ -31,12 +31,27 @@ const photoInput = ref<HTMLInputElement | null>(null);
 const updateProfileInformation = () => {
     if (photoInput.value) form.photo = photoInput.value.files?.[0] ?? null;
 
-    form.post(route("user-profile-information.update"), {
-        errorBag: "updateProfileInformation",
+    if (CVInput.value) {
+        form.cv = CVInput.value.files[0];
+    }
+
+    form.post(route('user-profile-information.update'), {
+        errorBag: 'updateProfileInformation',
         preserveScroll: true,
-        onSuccess: () => clearPhotoFileInput(),
+        onSuccess: () => clearInputs(),
     });
-};
+}
+
+const downloadCV = (user) => {
+    fetch(route('file.download', { 
+        url: user.cv_url,
+        storageDisk: 'public' })) //hardcoded for now
+    .then((res) => res.blob())
+    .then((blob) => {
+      const file = window.URL.createObjectURL(blob)
+      window.open(file, '_blank')
+    });
+}
 
 const sendEmailVerification = () => {
     verificationLinkSent.value = true;
@@ -44,6 +59,10 @@ const sendEmailVerification = () => {
 
 const selectNewPhoto = () => {
     photoInput.value?.click();
+};
+
+const selectNewCV = () => {
+    CVInput.value.click();
 };
 
 const updatePhotoPreview = () => {
@@ -60,6 +79,20 @@ const updatePhotoPreview = () => {
     reader.readAsDataURL(photo);
 };
 
+const updateCVPreview = () => {
+    const cv = CVInput.value.files[0];
+
+    if (! cv) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        CVPreview.value = e.target.result;
+    };
+
+    reader.readAsDataURL(cv);
+};
+
 const deletePhoto = () => {
     router.delete(route("current-user-photo.destroy"), {
         preserveScroll: true,
@@ -70,11 +103,34 @@ const deletePhoto = () => {
     });
 };
 
+const deleteCV = () => {
+    router.delete(route('current-user-cv.destroy'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            photoPreview.value = null;
+            clearCVInput();
+        },
+    });
+};
+
+const clearInputs = () => {
+    clearPhotoFileInput();
+    clearCVInput();
+};
+
 const clearPhotoFileInput = () => {
     if (photoInput.value?.value) {
         photoInput.value.value = "";
     }
 };
+
+const clearCVInput = () => {
+    if (CVInput.value?.value) {
+        CVInput.value.value = null;
+    }
+    CVPreview.value = null;
+};
+
 </script>
 
 <template>
@@ -138,6 +194,50 @@ const clearPhotoFileInput = () => {
                 </SecondaryButton>
 
                 <InputError :message="form.errors.photo" class="mt-2" />
+            </div>
+
+            <div class="col-span-6 sm:col-span-4">
+                <!-- CV Input -->
+                <input
+                    ref="CVInput"
+                    type="file"
+                    class="hidden"
+                    @change="updateCVPreview"
+                >
+
+                <InputLabel for="cv" value="CV" />
+
+                <!-- Current CV -->
+                <SecondaryButton v-if="user.cv_path" class="mt-2 mr-2" type="button" @click.prevent="downloadCV(user)">
+                    Preview CV
+                </SecondaryButton>
+
+                <!-- New CV Preview -->
+                <div v-show="CVPreview" class="mt-2">
+                    <a
+                        class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center bg-blue-500 py-6 text-center"
+                        target="_blank"
+                        :href=CVPreview
+                    >
+                    Preview
+                    </a>
+
+                </div>
+
+                <SecondaryButton class="mt-2 mr-2" type="button" @click.prevent="selectNewCV">
+                    Select A New CV
+                </SecondaryButton>
+
+                <SecondaryButton
+                    v-if="user.cv_path"
+                    type="button"
+                    class="mt-2"
+                    @click.prevent="deleteCV"
+                >
+                    Remove CV
+                </SecondaryButton>
+
+                <InputError :message="form.errors.cv" class="mt-2" />
             </div>
 
             <!-- Name -->
