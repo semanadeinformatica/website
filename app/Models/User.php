@@ -9,12 +9,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Traits\HasCV;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasCV;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -59,6 +61,7 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'cv_url',
     ];
 
     protected $with = [
