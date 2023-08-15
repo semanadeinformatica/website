@@ -1,8 +1,6 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import CardLayout from "../../Layouts/CardLayout.vue";
@@ -29,8 +27,8 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Log in" heading="Inicia sessão!">
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+    <CardLayout title="Iniciar sessão" heading="Inicia sessão!">
+        <div v-if="status">
             {{ status }}
         </div>
 
@@ -43,8 +41,8 @@ const submit = () => {
                 required
                 autofocus
                 autocomplete="email"
+                :errorMessage="form.errors.email"
             />
-            <InputError class="mt-2" :message="form.errors.email" />
 
             <TextInput
                 label="Password"
@@ -53,8 +51,8 @@ const submit = () => {
                 type="password"
                 required
                 autocomplete="current-password"
+                :errorMessage="form.errors.password"
             />
-            <InputError class="mt-2" :message="form.errors.password" />
 
             <label class="flex items-center gap-2 self-stretch">
                 <Checkbox v-model:checked="form.remember" name="remember" />
@@ -70,7 +68,7 @@ const submit = () => {
             </div>
 
             <PrimaryButton :disabled="form.processing">
-                Log in
+                Entrar
             </PrimaryButton>
         </form>
     </CardLayout>

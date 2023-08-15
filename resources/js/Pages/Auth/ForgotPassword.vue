@@ -1,11 +1,8 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import CardLayout from "@/Layouts/CardLayout.vue";
 
 defineProps({
     status: String,
@@ -23,39 +20,26 @@ const submit = () => {
 <template>
     <Head title="Forgot Password" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-        </div>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+    <CardLayout title="Repor password" heading="Esqueceste-te da tua password?">
+        <div v-if="status">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+        <form @submit.prevent="submit" class="contents">
+            <TextInput
+                label="Email"
+                id="email"
+                v-model="form.email"
+                type="email"
+                required
+                autofocus
+                autocomplete="email"
+                :errorMessage="form.errors.email"
+            />
 
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
+            <PrimaryButton disabled="form.processing">
+                Enviar email
+            </PrimaryButton>
         </form>
-    </AuthenticationCard>
+    </CardLayout>
 </template>

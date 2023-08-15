@@ -4,7 +4,12 @@ import { onMounted, ref } from 'vue';
 const props = defineProps({
     modelValue: String,
     label: String,
+    id: String,
     placeholder: {
+        type: String,
+        default: null,
+    },
+    errorMessage: {
         type: String,
         default: null,
     },
@@ -13,8 +18,6 @@ const props = defineProps({
 defineEmits(['update:modelValue']);
 
 const input = ref(null);
-
-const placeholder = props.placeholder ?? props.label;
 
 onMounted(() => {
     if (input.value.hasAttribute('autofocus')) {
@@ -28,15 +31,17 @@ defineOptions({ inheritAttrs: false });
 </script>
 
 <template>
-    <label class="self-stretch flex flex-col items-stretch">
-        <span class="sr-only" v-if="label">{{ label }}</span>
+    <div class="self-stretch flex flex-col items-stretch">
+        <label :for="id" class="sr-only" v-if="label" :aria-describedby="`${id}-error`">{{ label }}</label>
         <input
             ref="input"
-            class="border border-black bg-2023-bg before:-z-1 relative shadow-md shadow-2023-red"
+            :id="id"
+            class="border border-black bg-2023-bg before:-z-1 relative shadow-md shadow-2023-red placeholder:text-2023-teal placeholder:font-semibold"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
-            :placeholder="placeholder"
+            :placeholder="placeholder ?? label"
             v-bind="$attrs"
         >
-    </label>
+        <span class="mt-2 font-semibold text-2023-red" :id="`${id}-error`" v-show="errorMessage">{{ errorMessage }}</span>
+    </div>
 </template>
