@@ -35,6 +35,15 @@ export default {
                 xl: '12px 12px 0 -1px var(--tw-shadow-color, currentColor), 12px 12px 0 0 black',
                 '2xl': '16px 16px 0 -1px var(--tw-shadow-color, currentColor), 16px 16px 0 0 black',
             },
+            keyframes: {
+                '2023-jump': {
+                    '0%, 100%': { transform: 'translateY(0px)' },
+                    '50%': { transform: 'translateY(-30px)' }
+                }
+            },
+            animation: {
+                '2023-maintenance-jump': '2023-jump 2s cubic-bezier(0.46, 0.03, 0.52, 0.96) infinite'
+            }
         },
     },
 
