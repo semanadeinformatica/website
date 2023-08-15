@@ -18,12 +18,15 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         $response = parent::render($request, $e);
-        // ! app()->environment(['local', 'testing']) &&
-        if (in_array($response->status(), [500, 404, 403])) {
+
+        $DEVELOPMENT = ['maintenance', 'local', 'testing'];
+        $ERROR_PAGES = [500, 404, 403];
+        
+        if (!app()->environment($DEVELOPMENT) && in_array($response->status(), $ERROR_PAGES)) {
             return Inertia::render('Error', ['status' => $response->status()])
                 ->toResponse($request)
                 ->setStatusCode($response->status());
-        } elseif ($response->status() === 503) {
+        } elseif ($response->status() === 503 && !app()->environment(['maintenance'])) {
             return Inertia::render('Maintenance')
                 ->toResponse($request)
                 ->setStatusCode($response->status());
