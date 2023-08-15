@@ -16,6 +16,8 @@ class Student extends Model {
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
+        'social_media_id',
     ];
 
     public function enrollments(): HasMany {
@@ -24,5 +26,9 @@ class Student extends Model {
 
     public function socialMedia(): BelongsTo {
         return $this->belongsTo(SocialMedia::class);
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }
