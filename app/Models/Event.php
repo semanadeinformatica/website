@@ -14,7 +14,7 @@ class Event extends Model
 
     /**
      * The attributes that are mass assignable.
-     * 
+     *
      * @var array<int, string>
      */
     protected $fillable = [
@@ -27,7 +27,7 @@ class Event extends Model
 
     /**
      * The attributes that should be cast.
-     * 
+     *
      * @var array<string, string>
      */
     protected $casts = [
@@ -35,15 +35,18 @@ class Event extends Model
         'date_end' => 'datetime',
     ];
 
-    public function edition(): BelongsTo {
+    public function edition(): BelongsTo
+    {
         return $this->belongsTo(Edition::class);
     }
 
-    public function enrollments(): BelongsToMany {
+    public function enrollments(): BelongsToMany
+    {
         return $this->belongsToMany(Enrollment::class);
     }
 
-    public function speakers(): HasMany {
+    public function speakers(): HasMany
+    {
         return $this->hasMany(Speaker::class);
     }
 }

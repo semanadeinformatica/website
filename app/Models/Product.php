@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Product extends Model {
+class Product extends Model
+{
     use HasFactory;
 
     /**
@@ -21,11 +22,13 @@ class Product extends Model {
         'stock',
     ];
 
-    public function edition(): BelongsTo {
+    public function edition(): BelongsTo
+    {
         return $this->belongsTo(Edition::class);
     }
 
-    public function enrollments(): BelongsToMany {
+    public function enrollments(): BelongsToMany
+    {
         return $this->belongsToMany(Enrollment::class);
     }
 }

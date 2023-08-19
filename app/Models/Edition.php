@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Edition extends Model {
+class Edition extends Model
+{
     use HasFactory;
 
     /**
@@ -19,19 +20,23 @@ class Edition extends Model {
         'year',
     ];
 
-    public function enrollments(): HasMany {
+    public function enrollments(): HasMany
+    {
         return $this->hasMany(Enrollment::class);
     }
 
-    public function events(): HasMany {
+    public function events(): HasMany
+    {
         return $this->hasMany(Event::class);
     }
 
-    public function products(): HasMany {
+    public function products(): HasMany
+    {
         return $this->hasMany(Product::class);
     }
 
-    public function quests(): HasMany {
+    public function quests(): HasMany
+    {
         return $this->hasMany(Quest::class);
     }
 }
