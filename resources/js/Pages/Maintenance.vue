@@ -23,33 +23,33 @@
                     <p class="bg-2023-red shadow-md shadow-2023-bg text-white p-2.5 px-5 decoration-white text-lg border border-solid border-black font-bold w-[165px] absolute -top-[30px] left-[calc(50% - 86.5px)]">Contacta-nos!</p>
                     <div class="flex gap-2.5 flex-row items-center w-full justify-evenly max-[900px]:hidden" id="contacts-content-desktop">
                         <a class="bg-2023-red p-2 rounded-full flex w-fit" target="_blank" href="https://www.facebook.com/NIAEFEUP">
-                            <i class="decoration-white" data-feather="facebook"></i>
+                            <v-icon name="io-logo-facebook" fill="white"></v-icon>
                         </a>
                         <a class="bg-2023-red-dark p-2 rounded-full flex w-fit" target="_blank" href="https://www.linkedin.com/company/nifeup/mycompany/">
-                            <i class="decoration-white" data-feather="linkedin"></i>
+                            <v-icon name="io-logo-linkedin" fill="white"></v-icon>
                         </a>
                         <p class="text-2023-teal text-lg font-bold max-[900px]:text-base">externas@sinf.pt</p>
                         <a class="bg-2023-teal p-2 rounded-full flex w-fit" target="_blank" href="https://www.instagram.com/niaefeup/">
-                            <i class="decoration-white" data-feather="instagram"></i>
+                            <v-icon name="io-logo-instagram" fill="white"></v-icon>
                         </a>
                         <a class="bg-2023-orange p-2 rounded-full flex w-fit" target="_blank" href="https://twitter.com/niaefeup">
-                            <i class="decoration-white" data-feather="twitter"></i>
+                            <v-icon name="io-logo-twitter" fill="white"></v-icon>
                         </a>
                     </div>
                     <div class="hidden flex-col items-center gap-2.5 max-[900px]:flex" id="contacts-content-mobile">
                         <p class="text-2023-teal text-lg font-bold max-[900px]:text-base">externas@sinf.pt</p>
                         <div class="grid grid-cols-2 gap-2.5 justify-center">
                             <a class="bg-2023-red p-2 rounded-full flex w-fit" target="_blank" href="https://www.facebook.com/NIAEFEUP">
-                                <i class="decoration-white" data-feather="facebook"></i>
+                                <v-icon name="io-logo-facebook" fill="white"></v-icon>
                             </a>
                             <a class="bg-2023-red-dark p-2 rounded-full flex w-fit" target="_blank" href="https://www.linkedin.com/company/nifeup/mycompany/">
-                                <i class="decoration-white" data-feather="linkedin"></i>
+                                <v-icon name="io-logo-linkedin" fill="white"></v-icon>
                             </a>
                             <a class="bg-2023-teal p-2 rounded-full flex w-fit" target="_blank" href="https://www.instagram.com/niaefeup/">
-                                <i class="decoration-white" data-feather="instagram"></i>
+                                <v-icon name="io-logo-instagram" fill="white"></v-icon>
                             </a>
                             <a class="bg-2023-orange p-2 rounded-full flex w-fit" target="_blank" href="https://twitter.com/niaefeup">
-                                <i class="decoration-white" data-feather="twitter"></i>
+                                <v-icon name="io-logo-twitter" fill="white"></v-icon>
                             </a>    
                         </div>
                     </div>
