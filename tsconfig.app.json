@@ -3,10 +3,10 @@
     "include": ["resources/js/**/*", "resources/js/**/*.vue"],
     "exclude": ["resources/js/**/__tests__/*"],
     "compilerOptions": {
-      "composite": true,
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./resources/js/*"]
-      }
+        "composite": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./resources/js/*"]
+        }
     }
-  }
+}

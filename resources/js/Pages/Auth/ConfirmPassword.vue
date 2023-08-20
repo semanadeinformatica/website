@@ -1,18 +1,18 @@
-<script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+<script setup lang="ts">
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "../../Layouts/CardLayout.vue";
 
 const form = useForm({
-    password: '',
+    password: "",
 });
 
 const passwordInput = ref(null);
 
 const submit = () => {
-    form.post(route('password.confirm'), {
+    form.post(route("password.confirm"), {
         onFinish: () => {
             form.reset();
 

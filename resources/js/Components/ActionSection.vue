@@ -1,5 +1,5 @@
-<script setup>
-import SectionTitle from './SectionTitle.vue';
+<script setup lang="ts">
+import SectionTitle from "./SectionTitle.vue";
 </script>
 
 <template>
@@ -13,8 +13,10 @@ import SectionTitle from './SectionTitle.vue';
             </template>
         </SectionTitle>
 
-        <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="px-4 py-5 sm:p-6 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <div class="mt-5 md:col-span-2 md:mt-0">
+            <div
+                class="bg-white px-4 py-5 shadow dark:bg-gray-800 sm:rounded-lg sm:p-6"
+            >
                 <slot name="content" />
             </div>
         </div>
