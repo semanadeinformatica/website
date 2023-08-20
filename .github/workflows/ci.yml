@@ -23,16 +23,26 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
  
-      - name: Run composer install
+      - name: Install PHP dependencies
         run: composer install -n --prefer-dist
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
  
-      - name: Prepare Laravel application
+      - name: Run Sail
         run: |
-          cp .env.example .env
-          php artisan key:generate
- 
+          ./sail up -d
+          ./sail npm run dev &
+          sleep 5
+
       - name: Run tests
-        run: php artisan test
+        run: ./sail test
 
   pint:
     name: Check PHP code style
@@ -51,8 +61,11 @@ jobs:
       - name: Run composer install
         run: composer install -n --prefer-dist
  
+      - name: Run Sail
+        run: ./sail up -d
+
       - name: Run Pint
-        run: ./vendor/bin/pint --test
+        run: ./sail pint --test
 
   prettier:
     name: Check Typescript code style
