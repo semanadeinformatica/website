@@ -30,7 +30,6 @@ const submit = () => {
 </script>
 
 <template>
-    {{ $page.props }}
     <CardLayout title="Iniciar sessão" heading="Inicia sessão!">
         <div v-if="status">
             {{ status }}
