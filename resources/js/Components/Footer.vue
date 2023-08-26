@@ -1,37 +1,30 @@
 <script setup>
+
+const contacts = [
+    ["io-logo-facebook", "bg-2023-red", "https://www.facebook.com/NIAEFEUP"],
+    ["io-logo-linkedin", "bg-2023-red-dark", "https://www.linkedin.com/company/nifeup/mycompany/"],
+    ["io-logo-instagram", "bg-2023-teal", "https://www.instagram.com/niaefeup/"],
+    ["io-mail", "bg-2023-orange", "mailto:ni@aefeup.pt"]
+];
 </script>
 
 <template>
     <footer class="bg-2023-bg py-4">
-        <section class="flex content-center items-center justify-center relative p-8 mx-[20%]">
-            <div class="flex gap-2 flex-row items-center w-full justify-evenly max-[900px]:hidden">
-                <a class="p-2.5 rounded-full flex w-fit bg-2023-red" target="_blank" href="https://www.facebook.com/NIAEFEUP">
-                    <v-icon name="io-logo-facebook" fill="white" scale="1.3"></v-icon>
-                </a>
-                <a class="p-2.5 rounded-full flex w-fit bg-2023-red-dark" target="_blank" href="https://www.linkedin.com/company/nifeup/mycompany/">
-                    <v-icon name="io-logo-linkedin" fill="white" scale="1.3"></v-icon>
-                </a>
-                <a class="p-2.5 rounded-full flex w-fit bg-2023-teal" target="_blank" href="https://www.instagram.com/niaefeup/">
-                    <v-icon name="io-logo-instagram" fill="white" scale="1.3"></v-icon>
-                </a>
-                <a class="p-2.5 rounded-full flex w-fit bg-2023-orange" target="_blank" href="mailto:ni@aefeup.pt">
-                    <v-icon name="io-mail" fill="white" scale="1.3"></v-icon>
-                </a>
+        <section class="flex content-center items-center justify-center relative p-8 mx-[25%]">
+            <div class="hidden gap-2 flex-row items-center w-full justify-evenly md:flex">
+                <template v-for="platform in contacts">
+                    <a class="p-2.5 rounded-full flex w-fit" :class="platform[1]" target="_blank" :href="platform[2]">
+                        <v-icon :name="platform[0]" fill="white" scale="1.3"></v-icon>
+                    </a>
+                </template>
             </div>
-            <div class="hidden flex-col items-center gap-2 max-[900px]:flex">
+            <div class="flex flex-col items-center gap-2 md:hidden">
                 <div class="grid grid-cols-2 gap-2 justify-center">
-                    <a class="p-2.5 rounded-full flex w-fit bg-2023-red" target="_blank" href="https://www.facebook.com/NIAEFEUP">
-                        <v-icon name="io-logo-facebook" fill="white" scale="1.3"></v-icon>
-                    </a>
-                    <a class="p-2.5 rounded-full flex w-fit bg-2023-red-dark" target="_blank" href="https://www.linkedin.com/company/nifeup/mycompany/">
-                        <v-icon name="io-logo-linkedin" fill="white" scale="1.3"></v-icon>
-                    </a>
-                    <a class="p-2.5 rounded-full flex w-fit bg-2023-teal" target="_blank" href="https://www.instagram.com/niaefeup/">
-                        <v-icon name="io-logo-instagram" fill="white" scale="1.3"></v-icon>
-                    </a>
-                    <a class="p-2.5 rounded-full flex w-fit bg-2023-orange" target="_blank" href="mailto:ni@aefeup.pt">
-                        <v-icon name="io-mail" fill="white" scale="1.3"></v-icon>
-                    </a>    
+                    <template v-for="platform in contacts">
+                        <a class="p-2.5 rounded-full flex w-fit" :class="platform[1]" target="_blank" :href="platform[2]">
+                            <v-icon :name="platform[0]" fill="white" scale="1.3"></v-icon>
+                        </a>
+                    </template>    
                 </div>
             </div>
         </section>  
