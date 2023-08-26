@@ -4,11 +4,14 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "../../Layouts/CardLayout.vue";
+import route from "ziggy-js";
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
+interface Props {
+    canResetPassword: boolean;
+    status: string;
+}
+
+defineProps<Props>();
 
 const form = useForm({
     email: "",
@@ -27,31 +30,32 @@ const submit = () => {
 </script>
 
 <template>
+    {{ $page.props }}
     <CardLayout title="Iniciar sessão" heading="Inicia sessão!">
         <div v-if="status">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit" class="contents">
+        <form class="contents" @submit.prevent="submit">
             <TextInput
-                label="Email"
                 id="email"
                 v-model="form.email"
+                label="Email"
                 type="email"
                 required
                 autofocus
                 autocomplete="email"
-                :errorMessage="form.errors.email"
+                :error-message="form.errors.email"
             />
 
             <TextInput
-                label="Password"
                 id="password"
                 v-model="form.password"
+                label="Password"
                 type="password"
                 required
                 autocomplete="current-password"
-                :errorMessage="form.errors.password"
+                :error-message="form.errors.password"
             />
 
             <label class="flex items-center gap-2 self-stretch">

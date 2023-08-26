@@ -6,10 +6,11 @@ import SectionBorder from "@/Components/SectionBorder.vue";
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
+import type Session from "@/Types/Session";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
-    sessions: unknown[];
+    sessions: Session[];
 }
 
 defineProps<Props>();

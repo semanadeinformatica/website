@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { nextTick, ref } from "vue";
-import { Head, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
+import { useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import route from "ziggy-js";
+import CardLayout from "@/Layouts/CardLayout.vue";
 
 const recovery = ref(false);
 
@@ -15,19 +15,19 @@ const form = useForm({
     recovery_code: "",
 });
 
-const recoveryCodeInput = ref(null);
-const codeInput = ref(null);
+const recoveryCodeInput = ref<HTMLInputElement | null>(null);
+const codeInput = ref<HTMLInputElement | null>(null);
 
 const toggleRecovery = async () => {
-    recovery.value ^= true;
+    recovery.value = !recovery.value;
 
     await nextTick();
 
     if (recovery.value) {
-        recoveryCodeInput.value.focus();
+        recoveryCodeInput.value?.focus();
         form.code = "";
     } else {
-        codeInput.value.focus();
+        codeInput.value?.focus();
         form.recovery_code = "";
     }
 };
@@ -38,13 +38,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Two-factor Confirmation" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
+    <CardLayout title="Confirmar Two-factor">
         <div class="mb-4 text-sm text-gray-600">
             <template v-if="!recovery">
                 Please confirm access to your account by entering the
@@ -106,5 +100,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </AuthenticationCard>
+    </CardLayout>
 </template>

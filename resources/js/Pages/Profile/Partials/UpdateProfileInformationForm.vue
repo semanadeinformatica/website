@@ -8,26 +8,28 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import type User from "@/Types/User";
+import route from "ziggy-js";
 
-const props = defineProps({
-    user: Object,
-});
+interface Props {
+    user: User;
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
     _method: "PUT",
     name: props.user.name,
     email: props.user.email,
-    photo: null,
+    photo: null as File | null,
 });
 
-const verificationLinkSent = ref(null);
-const photoPreview = ref(null);
-const photoInput = ref(null);
+const verificationLinkSent = ref(false);
+const photoPreview = ref<string | null>(null);
+const photoInput = ref<HTMLInputElement | null>(null);
 
 const updateProfileInformation = () => {
-    if (photoInput.value) {
-        form.photo = photoInput.value.files[0];
-    }
+    if (photoInput.value) form.photo = photoInput.value.files?.[0] ?? null;
 
     form.post(route("user-profile-information.update"), {
         errorBag: "updateProfileInformation",
@@ -41,18 +43,18 @@ const sendEmailVerification = () => {
 };
 
 const selectNewPhoto = () => {
-    photoInput.value.click();
+    photoInput.value?.click();
 };
 
 const updatePhotoPreview = () => {
-    const photo = photoInput.value.files[0];
+    const photo = photoInput.value?.files?.[0];
 
     if (!photo) return;
 
     const reader = new FileReader();
 
     reader.onload = (e) => {
-        photoPreview.value = e.target.result;
+        photoPreview.value = (e.target?.result as string) ?? null;
     };
 
     reader.readAsDataURL(photo);
@@ -70,7 +72,7 @@ const deletePhoto = () => {
 
 const clearPhotoFileInput = () => {
     if (photoInput.value?.value) {
-        photoInput.value.value = null;
+        photoInput.value.value = "";
     }
 };
 </script>
@@ -208,3 +210,4 @@ const clearPhotoFileInput = () => {
         </template>
     </FormSection>
 </template>
+@/Types/User

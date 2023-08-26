@@ -8,13 +8,17 @@ import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import route from "ziggy-js";
+import type Session from "@/Types/Session";
 
-defineProps({
-    sessions: Array,
-});
+interface Props {
+    sessions: Session[];
+}
+
+defineProps<Props>();
 
 const confirmingLogout = ref(false);
-const passwordInput = ref(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
     password: "",
@@ -23,14 +27,14 @@ const form = useForm({
 const confirmLogout = () => {
     confirmingLogout.value = true;
 
-    setTimeout(() => passwordInput.value.focus(), 250);
+    setTimeout(() => passwordInput.value?.focus(), 250);
 };
 
 const logoutOtherBrowserSessions = () => {
     form.delete(route("other-browser-sessions.destroy"), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
-        onError: () => passwordInput.value.focus(),
+        onError: () => passwordInput.value?.focus(),
         onFinish: () => form.reset(),
     });
 };
@@ -189,3 +193,4 @@ const closeModal = () => {
         </template>
     </ActionSection>
 </template>
+@/Types/Session

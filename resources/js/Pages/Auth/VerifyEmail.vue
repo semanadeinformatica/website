@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import route from "ziggy-js";
+import CardLayout from "@/Layouts/CardLayout.vue";
 
-const props = defineProps({
-    status: String,
-});
+interface Props {
+    status: string;
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({});
 
@@ -21,13 +23,7 @@ const verificationLinkSent = computed(
 </script>
 
 <template>
-    <Head title="Email Verification" />
-
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
+    <CardLayout title="Verificar email">
         <div class="mb-4 text-sm text-gray-600">
             Before continuing, could you verify your email address by clicking
             on the link we just emailed to you? If you didn't receive the email,
@@ -70,5 +66,5 @@ const verificationLinkSent = computed(
                 </div>
             </div>
         </form>
-    </AuthenticationCard>
+    </CardLayout>
 </template>

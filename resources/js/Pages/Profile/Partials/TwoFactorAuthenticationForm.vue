@@ -9,17 +9,21 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import route from "ziggy-js";
+import axios from "axios";
 
-const props = defineProps({
-    requiresConfirmation: Boolean,
-});
+interface Props {
+    requiresConfirmation: boolean;
+}
+
+const props = defineProps<Props>();
 
 const enabling = ref(false);
 const confirming = ref(false);
 const disabling = ref(false);
-const qrCode = ref(null);
-const setupKey = ref(null);
-const recoveryCodes = ref([]);
+const qrCode = ref<string | null>(null);
+const setupKey = ref<string | null>(null);
+const recoveryCodes = ref<string[]>([]);
 
 const confirmationForm = useForm({
     code: "",
@@ -58,22 +62,19 @@ const enableTwoFactorAuthentication = () => {
     );
 };
 
-const showQrCode = () => {
-    return axios.get(route("two-factor.qr-code")).then((response) => {
-        qrCode.value = response.data.svg;
-    });
+const showQrCode = async () => {
+    const response = await axios.get(route("two-factor.qr-code"));
+    qrCode.value = response.data.svg;
 };
 
-const showSetupKey = () => {
-    return axios.get(route("two-factor.secret-key")).then((response) => {
-        setupKey.value = response.data.secretKey;
-    });
+const showSetupKey = async () => {
+    const response = await axios.get(route("two-factor.secret-key"));
+    setupKey.value = response.data.secretKey;
 };
 
-const showRecoveryCodes = () => {
-    return axios.get(route("two-factor.recovery-codes")).then((response) => {
-        recoveryCodes.value = response.data;
-    });
+const showRecoveryCodes = async () => {
+    const response = await axios.get(route("two-factor.recovery-codes"));
+    recoveryCodes.value = response.data;
 };
 
 const confirmTwoFactorAuthentication = () => {

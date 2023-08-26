@@ -3,10 +3,13 @@ import { Head, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
+import route from "ziggy-js";
 
-defineProps({
-    status: String,
-});
+interface Props {
+    status: string;
+}
+
+defineProps<Props>();
 
 const form = useForm({
     email: "",
@@ -25,16 +28,16 @@ const submit = () => {
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit" class="contents">
+        <form class="contents" @submit.prevent="submit">
             <TextInput
-                label="Email"
                 id="email"
                 v-model="form.email"
+                label="Email"
                 type="email"
                 required
                 autofocus
                 autocomplete="email"
-                :errorMessage="form.errors.email"
+                :error-message="form.errors.email"
             />
 
             <PrimaryButton disabled="form.processing">
