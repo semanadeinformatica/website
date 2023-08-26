@@ -2,7 +2,11 @@
 import { Head } from "@inertiajs/vue3";
 import Banner from "@/Components/Banner.vue";
 
-defineProps<{ title: string }>();
+interface Props {
+    title: string;
+}
+
+defineProps<Props>();
 </script>
 
 <template>

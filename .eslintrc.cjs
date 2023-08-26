@@ -14,13 +14,15 @@ module.exports = {
         sourceType: "module",
     },
     extends: [
-        "plugin:@typescript-eslint/recommended",
         "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
         "plugin:vue/vue3-recommended",
         "prettier",
     ],
     plugins: ["@typescript-eslint"],
     rules: {
         "vue/multi-word-component-names": "off",
+        // Typescript does this for us
     },
 };

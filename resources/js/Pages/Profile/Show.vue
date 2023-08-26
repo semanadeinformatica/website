@@ -7,10 +7,12 @@ import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthe
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
 
-defineProps({
-    confirmsTwoFactorAuthentication: Boolean,
-    sessions: Array,
-});
+interface Props {
+    confirmsTwoFactorAuthentication: boolean;
+    sessions: unknown[];
+}
+
+defineProps<Props>();
 </script>
 
 <template>

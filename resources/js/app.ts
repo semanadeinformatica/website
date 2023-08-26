@@ -22,12 +22,13 @@ createInertiaApp({
             `./Pages/${name}.vue`,
             import.meta.glob<DefineComponent>("./Pages/**/*.vue"),
         ),
-    setup: ({ el, App, props, plugin }) =>
+    setup: ({ el, App, props, plugin }) => {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue, (window as any).Ziggy)
-            .component("v-icon", OhVueIcon),
-    // .mount(el)
+            .use(ZiggyVue, Ziggy)
+            .component("v-icon", OhVueIcon)
+            .mount(el);
+    },
     progress: {
         color: "#4B5563",
     },

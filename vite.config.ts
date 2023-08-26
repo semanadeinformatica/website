@@ -6,10 +6,13 @@ export default defineConfig({
     publicDir: "public",
     server: {
         host: true,
+        hmr: {
+            host: "localhost",
+        },
     },
     resolve: {
         alias: {
-            ziggy: "vendor/tightenco/ziggy/dist/vue.m",
+            ziggy: "/vendor/tightenco/ziggy/dist/vue.m",
         },
     },
     plugins: [

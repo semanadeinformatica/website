@@ -1,3 +1,4 @@
+<!--
 <script setup lang="ts">
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
@@ -14,6 +15,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SectionBorder from "@/Components/SectionBorder.vue";
 import TextInput from "@/Components/TextInput.vue";
+import route from "ziggy-js";
 
 const props = defineProps({
     tokens: Array,
@@ -80,7 +82,7 @@ const deleteApiToken = () => {
 
 <template>
     <div>
-        <!-- Generate API Token -->
+        <!-- Generate API Token -- >
         <FormSection @submitted="createApiToken">
             <template #title> Create API Token </template>
 
@@ -90,7 +92,7 @@ const deleteApiToken = () => {
             </template>
 
             <template #form>
-                <!-- Token Name -->
+                <!-- Token Name -- >
                 <div class="col-span-6 sm:col-span-4">
                     <InputLabel for="name" value="Name" />
                     <TextInput
@@ -106,7 +108,7 @@ const deleteApiToken = () => {
                     />
                 </div>
 
-                <!-- Token Permissions -->
+                <!-- Token Permissions -- >
                 <div v-if="availablePermissions.length > 0" class="col-span-6">
                     <InputLabel for="permissions" value="Permissions" />
 
@@ -152,7 +154,7 @@ const deleteApiToken = () => {
         <div v-if="tokens.length > 0">
             <SectionBorder />
 
-            <!-- Manage API Tokens -->
+            <!-- Manage API Tokens -- >
             <div class="mt-10 sm:mt-0">
                 <ActionSection>
                     <template #title> Manage API Tokens </template>
@@ -162,7 +164,7 @@ const deleteApiToken = () => {
                         no longer needed.
                     </template>
 
-                    <!-- API Token List -->
+                    <!-- API Token List -- >
                     <template #content>
                         <div class="space-y-6">
                             <div
@@ -206,7 +208,7 @@ const deleteApiToken = () => {
             </div>
         </div>
 
-        <!-- Token Value Modal -->
+        <!-- Token Value Modal -- >
         <DialogModal :show="displayingToken" @close="displayingToken = false">
             <template #title> API Token </template>
 
@@ -231,7 +233,7 @@ const deleteApiToken = () => {
             </template>
         </DialogModal>
 
-        <!-- API Token Permissions Modal -->
+        <!-- API Token Permissions Modal -- >
         <DialogModal
             :show="managingPermissionsFor != null"
             @close="managingPermissionsFor = null"
@@ -274,7 +276,7 @@ const deleteApiToken = () => {
             </template>
         </DialogModal>
 
-        <!-- Delete Token Confirmation Modal -->
+        <!-- Delete Token Confirmation Modal -- >
         <ConfirmationModal
             :show="apiTokenBeingDeleted != null"
             @close="apiTokenBeingDeleted = null"
@@ -302,3 +304,4 @@ const deleteApiToken = () => {
         </ConfirmationModal>
     </div>
 </template>
+-->

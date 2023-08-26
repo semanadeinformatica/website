@@ -1,51 +1,42 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from "vue";
 
-const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false,
-    },
-    maxWidth: {
-        type: String,
-        default: "2xl",
-    },
-    closeable: {
-        type: Boolean,
-        default: true,
-    },
+export interface Props {
+    show: boolean;
+    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+    closeable?: boolean;
+}
+
+export interface Emits {
+    (event: "close"): void;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    show: false,
+    maxWidth: "2xl",
+    closeable: true,
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits<Emits>();
 
 watch(
     () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = null;
-        }
-    },
+    () => (document.body.style.overflow = props.show ? "hidden" : ""),
 );
 
 const close = () => {
-    if (props.closeable) {
-        emit("close");
-    }
+    if (props.closeable) emit("close");
 };
 
-const closeOnEscape = (e) => {
-    if (e.key === "Escape" && props.show) {
-        close();
-    }
+const closeOnEscape = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && props.show) close();
 };
 
 onMounted(() => document.addEventListener("keydown", closeOnEscape));
 
 onUnmounted(() => {
     document.removeEventListener("keydown", closeOnEscape);
-    document.body.style.overflow = null;
+    document.body.style.overflow = "";
 });
 
 const maxWidthClass = computed(() => {

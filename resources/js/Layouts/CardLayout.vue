@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import AppLayout from "./AppLayout.vue";
 
-defineProps({
-    title: String,
-    heading: {
-        type: String,
-        default: null,
-    },
-});
+interface Props {
+    title: string;
+    heading?: string;
+}
+
+defineProps<Props>();
 </script>
 
 <template>

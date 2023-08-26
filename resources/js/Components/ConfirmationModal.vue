@@ -1,24 +1,11 @@
 <script setup lang="ts">
-import Modal from "./Modal.vue";
+import Modal, { type Props, type Emits } from "./Modal.vue";
 
-const emit = defineEmits(["close"]);
+defineProps<Partial<Props>>();
 
-withDefaults(
-    defineProps<{
-        show: boolean;
-        maxWidth: string;
-        closeable: boolean;
-    }>(),
-    {
-        show: false,
-        maxWidth: "2xl",
-        closeable: true,
-    },
-);
+const emit = defineEmits<Emits>();
 
-const close = () => {
-    emit("close");
-};
+const close = () => emit("close");
 </script>
 
 <template>

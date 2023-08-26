@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
+import route from "ziggy-js";
 
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-});
+interface Props {
+    canLogin: boolean;
+    canRegister: boolean;
+    laravelVersion: string;
+    phpVersion: string;
+}
+
+defineProps<Props>();
 </script>
 
 <template>

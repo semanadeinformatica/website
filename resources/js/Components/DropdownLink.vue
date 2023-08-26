@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-defineProps({
-    href: String,
-    as: String,
+interface Props {
+    href: string;
+    as?: "a" | "button";
+}
+
+withDefaults(defineProps<Props>(), {
+    href: "#",
+    as: undefined,
 });
 </script>
 

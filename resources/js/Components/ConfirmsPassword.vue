@@ -5,22 +5,25 @@ import InputError from "./InputError.vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import SecondaryButton from "./SecondaryButton.vue";
 import TextInput from "./TextInput.vue";
+import axios from "axios";
+import route from "ziggy-js";
 
-const emit = defineEmits(["confirmed"]);
+interface Props {
+    title: string;
+    content: string;
+    button: string;
+}
 
-defineProps({
-    title: {
-        type: String,
-        default: "Confirm Password",
-    },
-    content: {
-        type: String,
-        default: "For your security, please confirm your password to continue.",
-    },
-    button: {
-        type: String,
-        default: "Confirm",
-    },
+interface Emits {
+    (event: "confirmed"): void;
+}
+
+const emit = defineEmits<Emits>();
+
+withDefaults(defineProps<Props>(), {
+    title: "Confirm Password",
+    content: "For your security, please confirm your password to continue.",
+    button: "Confirm",
 });
 
 const confirmingPassword = ref(false);
@@ -31,7 +34,7 @@ const form = reactive({
     processing: false,
 });
 
-const passwordInput = ref(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const startConfirmingPassword = () => {
     axios.get(route("password.confirmation")).then((response) => {
@@ -40,7 +43,7 @@ const startConfirmingPassword = () => {
         } else {
             confirmingPassword.value = true;
 
-            setTimeout(() => passwordInput.value.focus(), 250);
+            setTimeout(() => passwordInput.value?.focus(), 250);
         }
     });
 };
@@ -61,7 +64,7 @@ const confirmPassword = () => {
         .catch((error) => {
             form.processing = false;
             form.error = error.response.data.errors.password[0];
-            passwordInput.value.focus();
+            passwordInput.value?.focus();
         });
 };
 

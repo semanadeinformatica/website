@@ -1,31 +1,28 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-const props = defineProps({
-    modelValue: String,
-    label: String,
-    id: String,
-    placeholder: {
-        type: String,
-        default: null,
-    },
-    errorMessage: {
-        type: String,
-        default: null,
-    },
-});
+interface Props {
+    modelValue: string;
+    label?: string;
+    id?: string;
+    placeholder?: string;
+    errorMessage?: string;
+}
 
-defineEmits(["update:modelValue"]);
+interface Emits {
+    (event: "update:modelValue", value: string): void;
+}
 
-const input = ref(null);
+defineProps<Props>();
+defineEmits<Emits>();
+
+const input = ref<HTMLInputElement | null>(null);
 
 onMounted(() => {
-    if (input.value.hasAttribute("autofocus")) {
-        input.value.focus();
-    }
+    if (input.value?.hasAttribute("autofocus")) input.value.focus();
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose({ focus: () => input.value?.focus() });
 
 defineOptions({ inheritAttrs: false });
 </script>
@@ -33,25 +30,30 @@ defineOptions({ inheritAttrs: false });
 <template>
     <div class="flex flex-col items-stretch self-stretch">
         <label
+            v-if="label"
             :for="id"
             class="sr-only"
-            v-if="label"
             :aria-describedby="`${id}-error`"
             >{{ label }}</label
         >
         <input
-            ref="input"
             :id="id"
+            ref="input"
+            :placeholder="placeholder ?? label"
             class="before:-z-1 relative border border-black bg-2023-bg shadow-2023-red shadow-md placeholder:font-semibold placeholder:text-2023-teal"
             :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)"
-            :placeholder="placeholder ?? label"
             v-bind="$attrs"
+            @input="
+                $emit(
+                    'update:modelValue',
+                    ($event.currentTarget as HTMLInputElement).value,
+                )
+            "
         />
         <span
-            class="mt-2 font-semibold text-2023-red"
-            :id="`${id}-error`"
             v-show="errorMessage"
+            :id="`${id}-error`"
+            class="mt-2 font-semibold text-2023-red"
             >{{ errorMessage }}</span
         >
     </div>

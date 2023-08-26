@@ -2,11 +2,13 @@
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 
-const props = defineProps({
-    active: Boolean,
-    href: String,
-    as: String,
-});
+interface Props {
+    active?: boolean;
+    href: string;
+    as?: "button";
+}
+
+const props = defineProps<Props>();
 
 const classes = computed(() => {
     return props.active

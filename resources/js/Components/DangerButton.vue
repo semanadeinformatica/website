@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { ButtonHTMLAttributes } from "vue";
 
-withDefaults(
-    defineProps<{
-        type: ButtonHTMLAttributes["type"];
-    }>(),
-    { type: "button" },
-);
+interface Props {
+    type: ButtonHTMLAttributes["type"];
+}
+
+withDefaults(defineProps<Props>(), { type: "button" });
 </script>
 
 <template>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-defineProps({
-    type: {
-        type: String,
-        default: "button",
-    },
-});
+import type { ButtonHTMLAttributes } from "vue";
+
+interface Props {
+    type: ButtonHTMLAttributes["type"];
+}
+
+withDefaults(defineProps<Props>(), { type: "submit" });
 </script>
 
 <template>

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-defineProps<{ on: boolean }>();
+interface Props {
+    on?: boolean;
+}
+
+defineProps<Props>();
 </script>
 
 <template>
