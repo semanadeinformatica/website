@@ -10,31 +10,21 @@ withDefaults(defineProps<Props>(), {
     href: "#",
     as: undefined,
 });
+
+const classes = "block w-full px-2 py-2 text-sm text-2023-bg underline font-semibold bg-2023-red-dark hover:bg-2023-red focus:outline-none focus:bg-2023-red transition duration-150 ease-in-out"
 </script>
 
 <template>
     <div>
-        <button
-            v-if="as == 'button'"
-            type="submit"
-            class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-        >
+        <button v-if="as == 'button'" type="submit" :class="classes">
             <slot />
         </button>
 
-        <a
-            v-else-if="as == 'a'"
-            :href="href"
-            class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-        >
+        <a v-else-if="as =='a'" :href="href" :class="classes">
             <slot />
         </a>
 
-        <Link
-            v-else
-            :href="href"
-            class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800"
-        >
+        <Link v-else :href="href" :class="classes">
             <slot />
         </Link>
     </div>
