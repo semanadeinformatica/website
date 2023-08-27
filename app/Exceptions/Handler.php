@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
             return Inertia::render('Error', ['status' => $response->status()])
                 ->toResponse($request)
                 ->setStatusCode($response->status());
-        } elseif ($response->status() === 503 && !app()->environment(['maintenance'])) {
+        } elseif ($response->status() === 503 && app()->environment(['maintenance'])) {
             return Inertia::render('Maintenance')
                 ->toResponse($request)
                 ->setStatusCode($response->status());
