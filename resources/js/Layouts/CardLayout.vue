@@ -20,7 +20,7 @@ defineProps<Props>();
             >
                 <h2
                     v-if="heading"
-                    class="absolute top-0 z-10 inline-block -translate-y-2/3 border border-black bg-2023-bg px-6 py-3 text-2xl font-bold text-2023-teal-dark shadow-2023-orange shadow-xl"
+                    class="absolute top-0 z-10 inline-block -translate-y-2/3 border border-black bg-2023-bg px-6 py-3 text-2xl font-bold text-2023-teal-dark shadow-xl shadow-2023-orange"
                 >
                     {{ heading }}
                 </h2>

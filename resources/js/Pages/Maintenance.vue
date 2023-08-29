@@ -36,7 +36,7 @@
                 >
             </div>
             <p
-                class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-2023-teal shadow-md"
+                class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
             >
                 semana_de_informática
             </p>
@@ -63,7 +63,7 @@
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
             >
                 <p
-                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-[165px] border border-solid border-black bg-2023-red p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-2023-bg shadow-md"
+                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-[165px] border border-solid border-black bg-2023-red p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-bg"
                 >
                     Contacta-nos!
                 </p>

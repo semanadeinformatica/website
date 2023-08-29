@@ -40,7 +40,7 @@ defineOptions({ inheritAttrs: false });
             :id="id"
             ref="input"
             :placeholder="placeholder ?? label"
-            class="before:-z-1 relative border border-black bg-2023-bg shadow-2023-red shadow-md placeholder:font-semibold placeholder:text-2023-teal"
+            class="before:-z-1 relative border border-black bg-2023-bg shadow-md shadow-2023-red placeholder:font-semibold placeholder:text-2023-teal"
             :value="modelValue"
             v-bind="$attrs"
             @input="
