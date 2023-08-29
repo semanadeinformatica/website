@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
-import Banner from "@/Components/Banner.vue";
+import { Head } from '@inertiajs/vue3';
+import Banner from '@/Components/Banner.vue';
+import Footer from '../Components/Footer.vue';
 
 interface Props {
     title: string;
@@ -27,9 +28,8 @@ defineProps<Props>();
             </header>
 
             <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
+            <slot />
+            <Footer></Footer>
         </div>
     </div>
 </template>
