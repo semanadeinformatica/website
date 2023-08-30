@@ -17,7 +17,11 @@ class Company extends Model
      */
     protected $fillable = [
         'tier',
+        'user_id',
+        'social_media_id',
     ];
+
+    protected $with = ['socialMedia'];
 
     public function socialMedia(): BelongsTo
     {

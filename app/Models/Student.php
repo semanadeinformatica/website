@@ -21,6 +21,8 @@ class Student extends Model
         'social_media_id',
     ];
 
+    protected $with = ['socialMedia'];
+
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
