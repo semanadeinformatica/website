@@ -8,9 +8,12 @@ import { ZiggyVue } from "ziggy";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 
 import * as IoIcons from "oh-vue-icons/icons/io";
+import * as FaIcons from "oh-vue-icons/icons/fa";
 
 const Io = Object.values({ ...IoIcons });
+const Fa = Object.values({ ...FaIcons });
 addIcons(...Io);
+addIcons(...Fa);
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

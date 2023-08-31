@@ -4,21 +4,20 @@ import { ref } from 'vue';
 import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import SpeakerSlide from '../Components/SpeakerSlide.vue';
-import "leaflet/dist/leaflet.css";
 import AppLayout from '../Layouts/AppLayout.vue';
+import {LMap, LTileLayer, LMarker, LControl, LIcon} from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const carousel = ref(null);
 let activeSpeaker = 1;
 
-import {LMap, LTileLayer, LMarker, LControl} from "@vue-leaflet/vue-leaflet";
-import "leaflet/dist/leaflet.css";
 
 const emits = defineEmits(['update:modelValue'])
 
-const zoom = 16
-const center = [41.17835293313974, -8.595830311142494]
-const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+const zoom = 17;
+const center = [41.17835293313974, -8.595830311142494];
+const url = "https://tile.openstreetmap.de/{z}/{x}/{y}.png";
+const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 const addMarker = (e) => {
     if (e.latlng !== undefined) {
@@ -93,17 +92,19 @@ defineProps({
             <!-- SPEAKERS -->
             <section class="relative min-h-max h-max pb-20">
                 <p class="absolute left-[calc(50%-64px)] top-0 shadow shadow-2023-bg bg-2023-red-dark font-bold w-min text-white p-3 border border-black border-solid text-2xl self-center">Speakers</p>
-                <Carousel class=" pt-20 min-h-max h-max" @slide-start="handleSlideStart" :items-to-show="4" :wrap-around="true" ref="carousel">
-                    <Slide v-for="slide in 10" :key="slide">
-                        <SpeakerSlide :slide_id="{slide}" :currentSlide="{activeSpeaker}" />
-                    </Slide>
-                </Carousel>
+                <div class=" pt-20 h-max min-h-max">
+                    <Carousel @slide-start="handleSlideStart" :items-to-show="4" :wrap-around="true" ref="carousel">
+                        <Slide v-for="slide in 10" :key="slide">
+                            <SpeakerSlide :slide_id="{slide}" :currentSlide="{activeSpeaker}" />
+                        </Slide>
+                    </Carousel>
+                </div>
                 <div class="flex align-center justify-center gap-3">
                     <button @click="prev">
-                        <v-icon name="io-arrow-back" fill="007172" scale="2"></v-icon>
+                        <v-icon name="fa-arrow-left" fill="#007172" scale="2"></v-icon>
                     </button>
                     <button @click="next">
-                        <v-icon name="io-arrow-forward" fill="007172" scale="2"></v-icon>
+                        <v-icon name="fa-arrow-right" fill="#007172" scale="2"></v-icon>
                     </button>
                 </div>
             </section>
@@ -120,26 +121,26 @@ defineProps({
                 </div>
                 <div>
                     <p class=" text-2xl text-2023-teal-dark font-bold">Silver</p>
-                    <div class="grid grid-cols-8 grid-rows-2 gap-4 justify-center items-center shadow-2xl shadow-2023-teal-dark border border-black border-solid p-10">
-                        <img class=" col-start-1 col-end-3" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-3 col-end-5" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-5 col-end-7" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-7 col-end-9" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-2 col-end-4" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-4 col-end-6" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-6 col-end-8" src="https://picsum.photos/200/100" alt="Company">
+                    <div class="grid grid-cols-8 grid-rows-2 gap-4 shadow-2xl shadow-2023-teal-dark border border-black border-solid p-10">
+                        <img class=" ml-auto mr-auto col-start-1 col-end-3" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-3 col-end-5" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-5 col-end-7" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-7 col-end-9" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-2 col-end-4" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-4 col-end-6" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-6 col-end-8" src="https://picsum.photos/200/100" alt="Company">
                     </div>
                 </div>
                 <div>
                     <p class=" text-2xl text-2023-red-dark font-bold">Bronze</p>
                     <div class="grid grid-cols-8 grid-rows-2 gap-4 justify-center align-center shadow-2xl shadow-2023-red-dark border border-black border-solid p-10">
-                        <img class=" col-start-1 col-end-3" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-3 col-end-5" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-5 col-end-7" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" col-start-7 col-end-9" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-2 col-end-4" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-4 col-end-6" src="https://picsum.photos/200/100" alt="Company">
-                        <img class=" row-start-2 col-start-6 col-end-8" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-1 col-end-3" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-3 col-end-5" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-5 col-end-7" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto col-start-7 col-end-9" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-2 col-end-4" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-4 col-end-6" src="https://picsum.photos/200/100" alt="Company">
+                        <img class=" ml-auto mr-auto row-start-2 col-start-6 col-end-8" src="https://picsum.photos/200/100" alt="Company">
                     </div>
                 </div>
             </section>
@@ -150,7 +151,13 @@ defineProps({
                     <l-map v-model:zoom="zoom" :zoom="zoom" :minZoom="4" :maxZoom="18" :zoomAnimation="true"
                     :center="center" @click="addMarker" class="cursor-auto border border-black border-solid" :use-global-leaflet="false" style="height: 300px; width: 600px">
                         <l-tile-layer :url="url" :attribution="attribution" layer-type="base"/>
-                        <l-marker :lat-lng="[41.17835293313974, -8.595830311142494]" style="background-color: red;"></l-marker>
+                        <l-marker :lat-lng="[41.17835293313974, -8.595830311142494]" style="background-color: red;">
+                        <l-icon
+                        :icon-anchor="staticAnchor"
+                        >
+                            <v-icon name="io-location-sharp" fill="#d94f04" scale="2"></v-icon>
+                        </l-icon>
+                        </l-marker>
                     </l-map>
                 </div>
             </section>
