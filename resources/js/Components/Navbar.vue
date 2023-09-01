@@ -17,20 +17,21 @@ const page_routes = {
 
 const activity_routes = {
     'Palestras': 'talks',
-    'CTF': 'ctf',
     'Workshops': 'workshops',
+    'CTF': 'ctf',
     'Competição': 'competition',
     'Dinâmicas de grupo': 'group-dynamics',
+}
+
+const options = {
+    'pages': page_routes,
+    'activities': activity_routes,
 }
 
 </script>
 
 <template>
-    <nav class="flex py-6 bg-2023-bg border-b-2 border-black">
-
-        <div class="ml-2 flex md:hidden">
-            <HamburgerMenu :options="page_routes"/>
-        </div>
+    <nav class="relative flex py-6 bg-2023-bg border-b-2 border-black">
 
         <div class="hidden md:flex w-full ml-4 lg:gap-4 min-w-fit">
             <template v-for="page in Object.keys(page_routes)">
@@ -40,41 +41,44 @@ const activity_routes = {
             </template>
         </div>
 
-        <div class="flex w-full justify-end items-center gap-1 lg:gap-4 mr-4">
-
-            <Dropdown align="center" width="32">
-                <template #trigger>
-                    <DropdownTrigger>
-                        Atividades v
-                    </DropdownTrigger>
-                </template>
-                <template #content>
-                    <template v-for="activity in Object.keys(activity_routes)">
+        <div class="flex w-full justify-end items-center mr-4">
+            <div class="hidden md:flex gap-1 lg:gap-4">
+                <Dropdown align="center" width="32">
+                    <template #trigger>
+                        <DropdownTrigger>
+                            Atividades v
+                        </DropdownTrigger>
+                    </template>
+                    <template #content>
+                        <template v-for="activity in Object.keys(activity_routes)">
+                            <DropdownLink :href="route('dashboard')">
+                                {{ activity }}
+                            </DropdownLink>
+                        </template>
+                    </template>
+                </Dropdown>
+                
+                <Dropdown align="center"  width="20">
+                    <template #trigger>
+                        <DropdownTrigger>
+                            2023 v
+                        </DropdownTrigger>
+                    </template>
+                    <template #content>
                         <DropdownLink :href="route('dashboard')">
-                            {{ activity }}
+                            2023
                         </DropdownLink>
                     </template>
-                </template>
-            </Dropdown>
+                </Dropdown>
+            </div>
 
-            <Dropdown align="center"  width="20">
-                <template #trigger>
-                    <DropdownTrigger>
-                        2023 v
-                    </DropdownTrigger>
-                </template>
-                <template #content>
-                    <DropdownLink :href="route('dashboard')">
-                        2023
-                    </DropdownLink>
-                </template>
-            </Dropdown>
-
-            <div v-if="$page.props.jetstream.managesProfilePhotos && $page.props.auth.user" class="lg:ml-4">
+            <div v-if="$page.props.auth.user" class="ml-2 lg:mx-4">
                 <a :href="route('profile.show')">
                     <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
                 </a>
             </div>
+
+            <HamburgerMenu :options="options"/>
             
         </div>
 
