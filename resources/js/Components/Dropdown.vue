@@ -8,9 +8,9 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    align: 'right',
-    width: '48',
-    contentClasses: () => ['bg-2023-red-dark', 'text-center'],
+    align: "right",
+    width: "48",
+    contentClasses: () => ["bg-2023-red-dark", "text-center"],
 });
 
 let open = ref(false);
@@ -24,21 +24,21 @@ onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
 
 const widthClass = computed(() => {
     return {
-        '20': 'w-20',
-        '32': 'w-32',
-        '48': 'w-48',
+        "20": "w-20",
+        "32": "w-32",
+        "48": "w-48",
     }[props.width.toString()];
 });
 
 const alignmentClasses = computed(() => {
     if (props.align === "left") return "origin-top-left left-0";
 
-    if (props.align === 'center') {
-        return 'origin-top left-1/2 -translate-x-1/2';
+    if (props.align === "center") {
+        return "origin-top left-1/2 -translate-x-1/2";
     }
 
-    if (props.align === 'right') {
-        return 'origin-top-right right-0';
+    if (props.align === "right") {
+        return "origin-top-right right-0";
     }
 
     return "origin-top";
@@ -51,7 +51,11 @@ const alignmentClasses = computed(() => {
             <slot name="trigger" />
         </div>
 
-        <div v-show="open" class="fixed z-40 justify-center" @click="open = false" />
+        <div
+            v-show="open"
+            class="fixed z-40 justify-center"
+            @click="open = false"
+        />
 
         <transition
             enter-active-class="transition ease-out duration-200"
