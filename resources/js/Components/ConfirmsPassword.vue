@@ -1,46 +1,49 @@
-<script setup>
-import { ref, reactive, nextTick } from 'vue';
-import DialogModal from './DialogModal.vue';
-import InputError from './InputError.vue';
-import PrimaryButton from './PrimaryButton.vue';
-import SecondaryButton from './SecondaryButton.vue';
-import TextInput from './TextInput.vue';
+<script setup lang="ts">
+import { ref, reactive, nextTick } from "vue";
+import DialogModal from "./DialogModal.vue";
+import InputError from "./InputError.vue";
+import PrimaryButton from "./PrimaryButton.vue";
+import SecondaryButton from "./SecondaryButton.vue";
+import TextInput from "./TextInput.vue";
+import axios from "axios";
+import route from "ziggy-js";
 
-const emit = defineEmits(['confirmed']);
+interface Props {
+    title: string;
+    content: string;
+    button: string;
+}
 
-defineProps({
-    title: {
-        type: String,
-        default: 'Confirm Password',
-    },
-    content: {
-        type: String,
-        default: 'For your security, please confirm your password to continue.',
-    },
-    button: {
-        type: String,
-        default: 'Confirm',
-    },
+interface Emits {
+    (event: "confirmed"): void;
+}
+
+const emit = defineEmits<Emits>();
+
+withDefaults(defineProps<Props>(), {
+    title: "Confirm Password",
+    content: "For your security, please confirm your password to continue.",
+    button: "Confirm",
 });
 
 const confirmingPassword = ref(false);
 
 const form = reactive({
-    password: '',
-    error: '',
+    password: "",
+    error: "",
     processing: false,
 });
 
-const passwordInput = ref(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const startConfirmingPassword = () => {
-    axios.get(route('password.confirmation')).then(response => {
+    axios.get(route("password.confirmation")).then((response) => {
         if (response.data.confirmed) {
-            emit('confirmed');
+            emit("confirmed");
         } else {
             confirmingPassword.value = true;
 
-            setTimeout(() => passwordInput.value.focus(), 250);
+            setTimeout(() => passwordInput.value?.focus(), 250);
         }
     });
 };
@@ -48,25 +51,27 @@ const startConfirmingPassword = () => {
 const confirmPassword = () => {
     form.processing = true;
 
-    axios.post(route('password.confirm'), {
-        password: form.password,
-    }).then(() => {
-        form.processing = false;
+    axios
+        .post(route("password.confirm"), {
+            password: form.password,
+        })
+        .then(() => {
+            form.processing = false;
 
-        closeModal();
-        nextTick().then(() => emit('confirmed'));
-
-    }).catch(error => {
-        form.processing = false;
-        form.error = error.response.data.errors.password[0];
-        passwordInput.value.focus();
-    });
+            closeModal();
+            nextTick().then(() => emit("confirmed"));
+        })
+        .catch((error) => {
+            form.processing = false;
+            form.error = error.response.data.errors.password[0];
+            passwordInput.value?.focus();
+        });
 };
 
 const closeModal = () => {
     confirmingPassword.value = false;
-    form.password = '';
-    form.error = '';
+    form.password = "";
+    form.error = "";
 };
 </script>
 
@@ -100,9 +105,7 @@ const closeModal = () => {
             </template>
 
             <template #footer>
-                <SecondaryButton @click="closeModal">
-                    Cancel
-                </SecondaryButton>
+                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
 
                 <PrimaryButton
                     class="ml-3"

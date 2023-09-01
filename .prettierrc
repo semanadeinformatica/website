@@ -1,11 +1,11 @@
 {
-    "pluginSearchDirs": [
-        "."
-    ],
+    "useTabs": false,
+    "tabWidth": 4,
+    "printWidth": 80,
+    "singleQuote": false,
+    "endOfLine": "auto",
+    "trailingComma": "all",
     "plugins": [
-        "@prettier/plugin-php"
-    ],
-    "printWidth": 100,
-    "singleQuote": true,
-    "endOfLine": "auto"
+        "prettier-plugin-tailwindcss"
+    ]
 }

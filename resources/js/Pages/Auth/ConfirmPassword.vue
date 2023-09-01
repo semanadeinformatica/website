@@ -1,40 +1,41 @@
-<script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+<script setup lang="ts">
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "../../Layouts/CardLayout.vue";
+import route from "ziggy-js";
 
 const form = useForm({
-    password: '',
+    password: "",
 });
 
-const passwordInput = ref(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const submit = () => {
-    form.post(route('password.confirm'), {
+    form.post(route("password.confirm"), {
         onFinish: () => {
             form.reset();
 
-            passwordInput.value.focus();
+            passwordInput.value?.focus();
         },
     });
 };
 </script>
 
 <template>
-    <CardLayout heading="Confirma a tua password">
-        <form @submit.prevent="submit" class="contents">
+    <CardLayout title="Confirmar password" heading="Confirma a tua password">
+        <form class="contents" @submit.prevent="submit">
             <TextInput
-                label="Password"
                 id="password"
                 ref="passwordInput"
                 v-model="form.password"
+                label="Password"
                 type="password"
                 required
                 autocomplete="current-password"
                 autofocus
-                :errorMessage="form.errors.password"
+                :error-message="form.errors.password"
             />
 
             <PrimaryButton :disabled="form.processing">

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Quest extends Model {
+class Quest extends Model
+{
     use HasFactory;
 
     /**
@@ -22,15 +23,18 @@ class Quest extends Model {
         'category',
     ];
 
-    public function edition(): BelongsTo {
+    public function edition(): BelongsTo
+    {
         return $this->belongsTo(Edition::class);
     }
 
-    public function enrollments(): BelongsToMany {
+    public function enrollments(): BelongsToMany
+    {
         return $this->belongsToMany(Enrollment::class);
     }
 
-    public function requirement(): MorphTo {
+    public function requirement(): MorphTo
+    {
         return $this->morphTo();
     }
 }

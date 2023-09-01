@@ -3,16 +3,14 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 use Inertia\Inertia;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
-
     /**
      * Prepare exception for rendering.
      *
-     * @param  \Throwable  $e
      * @return \Throwable
      */
     public function render($request, Throwable $e)
@@ -21,8 +19,8 @@ class Handler extends ExceptionHandler
 
         $DEVELOPMENT = ['maintenance', 'local', 'testing'];
         $ERROR_PAGES = [500, 404, 403];
-        
-        if (!app()->environment($DEVELOPMENT) && in_array($response->status(), $ERROR_PAGES)) {
+
+        if (! app()->environment($DEVELOPMENT) && in_array($response->status(), $ERROR_PAGES)) {
             return Inertia::render('Error', ['status' => $response->status()])
                 ->toResponse($request)
                 ->setStatusCode($response->status());

@@ -1,20 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import AppLayout from "./AppLayout.vue";
 
-defineProps({
-    title: String,
-    heading: {
-        type: String,
-        default: null,
-    }
-});
+interface Props {
+    title: string;
+    heading?: string;
+}
+
+defineProps<Props>();
 </script>
 
 <template>
     <AppLayout :title="title">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-2023-bg">
-            <div class="w-full sm:max-w-lg m-6 p-8 border border-black flex flex-col items-center gap-8 relative" :class="{'pt-14': heading}">
-                <h2 v-if="heading" class="inline-block shadow-xl shadow-2023-orange border border-black py-3 px-6 text-2023-teal-dark font-bold text-2xl absolute top-0 -translate-y-2/3 z-10 bg-2023-bg">{{ heading }}</h2>
+        <div
+            class="flex min-h-screen flex-col items-center bg-2023-bg pt-6 sm:justify-center sm:pt-0"
+        >
+            <div
+                class="relative m-6 flex w-full flex-col items-center gap-8 border border-black p-8 sm:max-w-lg"
+                :class="{ 'pt-14': heading }"
+            >
+                <h2
+                    v-if="heading"
+                    class="absolute top-0 z-10 inline-block -translate-y-2/3 border border-black bg-2023-bg px-6 py-3 text-2xl font-bold text-2023-teal-dark shadow-xl shadow-2023-orange"
+                >
+                    {{ heading }}
+                </h2>
 
                 <slot />
             </div>

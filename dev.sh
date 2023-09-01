@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
-# Start the docker containers
-docker compose up -d --build
+./sail up -d
+./sail npm run dev
