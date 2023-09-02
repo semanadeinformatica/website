@@ -1,49 +1,8 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
-import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide } from "vue3-carousel";
-import SpeakerSlide from "../Components/SpeakerSlide.vue";
 import AppLayout from "../Layouts/AppLayout.vue";
-import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
-import "leaflet/dist/leaflet.css";
-
-const carousel = ref(null);
-let activeSpeaker = 1;
-
-const emits = defineEmits(["update:modelValue"]);
-
-const zoom = 17;
-const center = [41.17835293313974, -8.595830311142494];
-const url = "https://tile.openstreetmap.de/{z}/{x}/{y}.png";
-const attribution =
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-const addMarker = (e: { latlng: undefined }) => {
-    if (e.latlng !== undefined) {
-        emits("update:modelValue", e.latlng);
-    }
-};
-function next() {
-    carousel.value.next();
-}
-
-function prev() {
-    carousel.value.prev();
-}
-
-function handleSlideStart(data: {
-    slidingToIndex: number;
-    slidesCount: number;
-}) {
-    if (data.slidingToIndex < 0) {
-        activeSpeaker = data.slidesCount - (Math.abs(data.slidingToIndex) - 1);
-    } else if (data.slidingToIndex >= data.slidesCount) {
-        activeSpeaker = 1 + (data.slidingToIndex - data.slidesCount);
-    } else {
-        activeSpeaker = data.slidingToIndex + 1;
-    }
-}
+import SpeakersCarousel from "../Components/Home/SpeakersCarousel.vue";
+import Map from "../Components/Home/Map.vue";
+import SponsorBanner from "../Components/Home/SponsorBanner.vue";
 
 defineProps({
     canLogin: Boolean,
@@ -55,8 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Home" />
-    <AppLayout>
+    <AppLayout title="Home">
         <main class="bg-2023-bg">
             <!-- LOGO & DATE -->
             <section
@@ -154,38 +112,7 @@ defineProps({
                 >
                     Speakers
                 </p>
-                <div class="h-max min-h-max pt-20">
-                    <Carousel
-                        ref="carousel"
-                        :autoplay="0"
-                        :items-to-show="4"
-                        :wrap-around="true"
-                        @slide-start="handleSlideStart"
-                    >
-                        <Slide v-for="slide in 10" :key="slide">
-                            <SpeakerSlide
-                                :slideID="{ slide }"
-                                :currentSlide="{ activeSpeaker }"
-                            />
-                        </Slide>
-                    </Carousel>
-                </div>
-                <div class="align-center flex justify-center gap-3">
-                    <button @click="prev">
-                        <v-icon
-                            name="fa-arrow-left"
-                            fill="#007172"
-                            scale="2"
-                        ></v-icon>
-                    </button>
-                    <button @click="next">
-                        <v-icon
-                            name="fa-arrow-right"
-                            fill="#007172"
-                            scale="2"
-                        ></v-icon>
-                    </button>
-                </div>
+                <SpeakersCarousel></SpeakersCarousel>
             </section>
             <!-- SPONSORS -->
             <section class="relative flex flex-col gap-10 px-20 py-24">
@@ -194,151 +121,28 @@ defineProps({
                 >
                     Sponsors
                 </p>
-                <div>
-                    <p class="text-2xl font-bold text-2023-orange">Gold</p>
-                    <div
-                        class="grid grid-cols-3 justify-around gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-orange"
-                    >
-                        <img
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                        <img
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                        <img
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-2023-teal-dark">Silver</p>
-                    <div
-                        class="grid grid-cols-8 grid-rows-2 gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-teal-dark"
-                    >
-                        <img
-                            class="col-start-1 col-end-3 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-3 col-end-5 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-5 col-end-7 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-7 col-end-9 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-2 col-end-4 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-4 col-end-6 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-6 col-end-8 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-2023-red-dark">Bronze</p>
-                    <div
-                        class="align-center grid grid-cols-8 grid-rows-2 justify-center gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-red-dark"
-                    >
-                        <img
-                            class="col-start-1 col-end-3 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-3 col-end-5 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-5 col-end-7 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-7 col-end-9 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-2 col-end-4 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-4 col-end-6 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-6 col-end-8 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/200/100"
-                            alt="Company"
-                        />
-                    </div>
-                </div>
+                <SponsorBanner tier="plat"></SponsorBanner>
+                <SponsorBanner tier="gold"></SponsorBanner>
+                <SponsorBanner tier="silver"></SponsorBanner>
             </section>
-
             <!-- MAP -->
             <section class="bg-2023-orange p-10">
-                <div
-                    class="align-center flex h-full w-full justify-center overflow-hidden rounded"
-                >
-                    <l-map
-                        v-model:zoom="zoom"
-                        class="cursor-auto border border-solid border-black"
-                        :zoom="zoom"
-                        :minZoom="4"
-                        :maxZoom="18"
-                        :zoomAnimation="true"
-                        :center="center"
-                        :use-global-leaflet="false"
-                        style="height: 300px; width: 600px"
-                        @click="addMarker"
-                    >
-                        <l-tile-layer
-                            :url="url"
-                            :attribution="attribution"
-                            layer-type="base"
-                        />
-                        <l-marker
-                            :lat-lng="[41.17835293313974, -8.595830311142494]"
-                            style="background-color: red"
-                        >
-                            <l-icon>
-                                <v-icon
-                                    class="absolute -bottom-[9px] -right-[14px]"
-                                    name="io-location-sharp"
-                                    fill="#d94f04"
-                                    scale="2"
-                                ></v-icon>
-                            </l-icon>
-                        </l-marker>
-                    </l-map>
-                </div>
+                <Map></Map>
             </section>
         </main>
     </AppLayout>
 </template>
 
-<style></style>
+<style>
+#svg-1 {
+    animation-delay: -0.5s;
+}
+
+#svg-2 {
+    animation-delay: -1s;
+}
+
+#svg-3 {
+    animation-delay: -0.8s;
+}
+</style>

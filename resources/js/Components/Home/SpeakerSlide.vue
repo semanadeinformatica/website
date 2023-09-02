@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { watch } from "vue";
 
-const props = defineProps({
-    slideID: Object,
-    currentSlide: Object,
-});
+const props = defineProps<{
+    slideID: number;
+    currentSlide: number;
+}>();
 
-let active: boolean;
+let active: boolean = props.slideID == props.currentSlide;
 
 watch(
     () => props.currentSlide,
     (newValue, oldValue) => {
-        active = newValue?.activeSpeaker == props.slideID?.slide;
+        active = newValue == props.slideID;
     },
 );
 </script>
@@ -25,7 +25,7 @@ watch(
             alt=""
         />
         <p v-if="active" class="py-4 text-2023-teal-dark">
-            John Doe {{ slideID?.slide }}
+            John Doe {{ slideID }}
         </p>
     </div>
 </template>
