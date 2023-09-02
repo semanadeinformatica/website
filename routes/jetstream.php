@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CVController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Jetstream\Http\Controllers\CurrentTeamController;
 use Laravel\Jetstream\Http\Controllers\Inertia\ApiTokenController;
@@ -13,7 +14,6 @@ use Laravel\Jetstream\Http\Controllers\Inertia\TermsOfServiceController;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
 use Laravel\Jetstream\Http\Controllers\TeamInvitationController;
 use Laravel\Jetstream\Jetstream;
-use App\Http\Controllers\CVController;
 
 Route::group(['middleware' => config('jetstream.middleware', ['web'])], function () {
     if (Jetstream::hasTermsAndPrivacyPolicyFeature()) {
@@ -39,7 +39,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
         Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])
             ->name('current-user-photo.destroy');
-            
+
         Route::delete('/user/cv', [CVController::class, 'destroy'])
             ->name('current-user-cv.destroy');
 

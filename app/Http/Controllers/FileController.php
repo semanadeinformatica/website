@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Traits\ProcessesFiles;
+use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
