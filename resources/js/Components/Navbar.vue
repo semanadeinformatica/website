@@ -31,6 +31,13 @@ const options = {
 
 <template>
     <nav class="relative flex border-b-2 border-black bg-2023-bg py-6">
+        <div class="flex h-full w-full pl-5 md:hidden">
+            <img
+                class="flex md:hidden"
+                src="/images/cy-sinf-small.svg"
+                alt="Stylized SINF logo"
+            />
+        </div>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
             <template v-for="page in Object.keys(page_routes)">
                 <NavLink
