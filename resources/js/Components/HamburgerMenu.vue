@@ -42,7 +42,7 @@ const props = defineProps({
     </div>
     <div
         v-show="open"
-        class="absolute left-0 top-[5.65rem] z-50 m-0 flex w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
+        class="absolute left-0 top-[5.6rem] z-50 m-0 flex w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
     >
         <template v-for="page in Object.keys(props.options['pages'])">
             <ResponsiveNavLink
