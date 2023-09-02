@@ -1,17 +1,11 @@
-<script setup>
-import { Head, Link } from "@inertiajs/vue3";
+<script setup lang="ts">
+import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import { Carousel, Slide } from "vue3-carousel";
 import SpeakerSlide from "../Components/SpeakerSlide.vue";
 import AppLayout from "../Layouts/AppLayout.vue";
-import {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LControl,
-    LIcon,
-} from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const carousel = ref(null);
@@ -25,7 +19,7 @@ const url = "https://tile.openstreetmap.de/{z}/{x}/{y}.png";
 const attribution =
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-const addMarker = (e) => {
+const addMarker = (e: { latlng: undefined }) => {
     if (e.latlng !== undefined) {
         emits("update:modelValue", e.latlng);
     }
@@ -38,7 +32,10 @@ function prev() {
     carousel.value.prev();
 }
 
-function handleSlideStart(data) {
+function handleSlideStart(data: {
+    slidingToIndex: number;
+    slidesCount: number;
+}) {
     if (data.slidingToIndex < 0) {
         activeSpeaker = data.slidesCount - (Math.abs(data.slidingToIndex) - 1);
     } else if (data.slidingToIndex >= data.slidesCount) {
@@ -159,14 +156,15 @@ defineProps({
                 </p>
                 <div class="h-max min-h-max pt-20">
                     <Carousel
-                        @slide-start="handleSlideStart"
+                        ref="carousel"
+                        :autoplay="0"
                         :items-to-show="4"
                         :wrap-around="true"
-                        ref="carousel"
+                        @slide-start="handleSlideStart"
                     >
                         <Slide v-for="slide in 10" :key="slide">
                             <SpeakerSlide
-                                :slide_id="{ slide }"
+                                :slideID="{ slide }"
                                 :currentSlide="{ activeSpeaker }"
                             />
                         </Slide>
@@ -199,7 +197,7 @@ defineProps({
                 <div>
                     <p class="text-2xl font-bold text-2023-orange">Gold</p>
                     <div
-                        class="row flex justify-around border border-solid border-black p-10 shadow-2xl shadow-2023-orange"
+                        class="grid grid-cols-3 justify-around gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-orange"
                     >
                         <img
                             src="https://picsum.photos/300/200"
@@ -308,15 +306,15 @@ defineProps({
                 >
                     <l-map
                         v-model:zoom="zoom"
+                        class="cursor-auto border border-solid border-black"
                         :zoom="zoom"
                         :minZoom="4"
                         :maxZoom="18"
                         :zoomAnimation="true"
                         :center="center"
-                        @click="addMarker"
-                        class="cursor-auto border border-solid border-black"
                         :use-global-leaflet="false"
                         style="height: 300px; width: 600px"
+                        @click="addMarker"
                     >
                         <l-tile-layer
                             :url="url"
@@ -327,8 +325,9 @@ defineProps({
                             :lat-lng="[41.17835293313974, -8.595830311142494]"
                             style="background-color: red"
                         >
-                            <l-icon :icon-anchor="staticAnchor">
+                            <l-icon>
                                 <v-icon
+                                    class="absolute -bottom-[9px] -right-[14px]"
                                     name="io-location-sharp"
                                     fill="#d94f04"
                                     scale="2"
