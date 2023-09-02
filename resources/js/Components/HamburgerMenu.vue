@@ -5,9 +5,9 @@ import route from "ziggy-js";
 
 const open = ref(false);
 
-const props = defineProps({
-    options: Object,
-});
+const props = defineProps<{
+    options: { [x: string]: object };
+}>();
 </script>
 
 <template>
