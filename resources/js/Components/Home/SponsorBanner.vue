@@ -2,15 +2,15 @@
 import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 
-const carousel_plat = ref(null);
-const carousel_gold = ref(null);
-const carousel_silver = ref(null);
+const carousel_plat = ref<typeof Carousel | null>(null);
+const carousel_gold = ref<typeof Carousel | null>(null);
+const carousel_silver = ref<typeof Carousel | null>(null);
 
-const next = (carousel: null) => {
+const next = (carousel: typeof Carousel | null) => {
     carousel?.next();
 };
 
-const prev = (carousel: null) => {
+const prev = (carousel: typeof Carousel | null) => {
     carousel?.prev();
 };
 defineProps<{

@@ -4,9 +4,8 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel";
 import SpeakerSlide from "./SpeakerSlide.vue";
 
-const carousel = ref(null);
+const carousel = ref<typeof Carousel | null>(null);
 let activeSpeaker = 1;
-const carouselKey = ref(0);
 const breakpoints = {
     1024: {
         itemsToShow: 4,
@@ -14,11 +13,11 @@ const breakpoints = {
 };
 
 const next = () => {
-    carousel.value.next();
+    carousel.value?.next();
 };
 
 const prev = () => {
-    carousel.value.prev();
+    carousel.value?.prev();
 };
 
 const handleSlideStart = (data: {
@@ -39,7 +38,6 @@ const handleSlideStart = (data: {
     <div class="h-max min-h-max pt-20">
         <Carousel
             ref="carousel"
-            :key="carouselKey"
             :autoplay="0"
             :items-to-show="2"
             :wrap-around="true"

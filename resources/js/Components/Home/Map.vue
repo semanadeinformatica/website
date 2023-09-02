@@ -16,7 +16,6 @@ const attribution: string =
         <l-map
             v-model:zoom="zoom"
             class="cursor-auto border border-solid border-black"
-            :zoom="zoom"
             :minZoom="4"
             :maxZoom="18"
             :zoomAnimation="true"
