@@ -11,7 +11,6 @@ trait HasCV
     /**
      * Update the user's CV.
      *
-     * @param  \Illuminate\Http\UploadedFile  $cv
      * @param  string  $storagePath
      * @return void
      */
@@ -52,8 +51,6 @@ trait HasCV
 
     /**
      * Get the URL to the user's CV.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     public function CVUrl(): Attribute
     {

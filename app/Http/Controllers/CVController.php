@@ -10,7 +10,6 @@ class CVController extends Controller
     /**
      * Delete the current user's CV.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request)
