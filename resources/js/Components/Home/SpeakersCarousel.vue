@@ -1,37 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel";
 import SpeakerSlide from "./SpeakerSlide.vue";
 
 const carousel = ref(null);
 let activeSpeaker = 1;
+const carouselKey = ref(0);
+const breakpoints = {
+    1024: {
+        itemsToShow: 4,
+    },
+};
 
-function next() {
+const next = () => {
     carousel.value.next();
-}
+};
 
-function prev() {
+const prev = () => {
     carousel.value.prev();
-}
+};
 
-let itemsToShow = 4;
-
-onMounted(() => {
-    window.addEventListener("resize", () => {
-        if (window.innerWidth >= 900) {
-            itemsToShow = 4;
-        } else {
-            itemsToShow = 2;
-        }
-        console.log(itemsToShow);
-    });
-});
-
-function handleSlideStart(data: {
+const handleSlideStart = (data: {
     slidingToIndex: number;
     slidesCount: number;
-}) {
+}) => {
     if (data.slidingToIndex < 0) {
         activeSpeaker = data.slidesCount - (Math.abs(data.slidingToIndex) - 1);
     } else if (data.slidingToIndex >= data.slidesCount) {
@@ -39,16 +32,18 @@ function handleSlideStart(data: {
     } else {
         activeSpeaker = data.slidingToIndex + 1;
     }
-}
+};
 </script>
 
 <template>
     <div class="h-max min-h-max pt-20">
         <Carousel
             ref="carousel"
+            :key="carouselKey"
             :autoplay="0"
-            :items-to-show="itemsToShow"
+            :items-to-show="2"
             :wrap-around="true"
+            :breakpoints="breakpoints"
             @slide-start="handleSlideStart"
         >
             <Slide v-for="slide in 10" :key="slide">

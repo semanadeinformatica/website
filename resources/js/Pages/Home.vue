@@ -61,14 +61,14 @@ defineProps({
             </section>
             <!-- ABOUT US -->
             <section
-                class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify"
+                class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
             >
                 <h2
                     class="absolute -top-[36px] left-[calc(50%-89px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
                 >
                     Sobre nós
                 </h2>
-                <p class="p-20 text-lg text-white">
+                <p class="p-20 text-lg text-white max-lg:pb-10">
                     A Semana de Informática (SINF), organizada pelo Núcleo de
                     Informática da Associação de Estudantes da Faculdade de
                     Engenharia da Universidade do Porto (NIAEFEUP), foi criada
@@ -77,7 +77,7 @@ defineProps({
                     da Informática, promovendo a sua interação com o mundo
                     empresarial através de eventos sociais.
                 </p>
-                <p class="p-20 text-lg text-white">
+                <p class="p-20 text-lg text-white max-lg:py-10">
                     A edição de 2022 decorre entre os dias 31 de outubro a 2 de
                     novembro. Os participantes têm a seu dispor palestras e
                     workshops onde entrarão em contacto com diversas tecnologias
@@ -97,12 +97,12 @@ defineProps({
                     Inscreve-te!
                 </h2>
                 <div
-                    class="mx-[10%] flex w-full justify-around border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange"
+                    class="mx-[10%] grid w-full grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2"
                 >
-                    <span>07 dias</span>
-                    <span>70 bancas</span>
-                    <span>7 talks</span>
-                    <span>7 workshops</span>
+                    <span class="text-center">7 dias</span>
+                    <span class="text-center">70 bancas</span>
+                    <span class="text-center">4 talks</span>
+                    <span class="text-center">1 workshops</span>
                 </div>
             </section>
             <!-- SPEAKERS -->

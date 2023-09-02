@@ -24,7 +24,7 @@ watch(
             :class="{ [`w-[400px]`]: active }"
             alt=""
         />
-        <p v-if="active" class="py-4 text-2023-teal-dark">
+        <p v-if="active" class="py-4 text-lg text-2023-teal-dark">
             John Doe {{ slideID }}
         </p>
     </div>
