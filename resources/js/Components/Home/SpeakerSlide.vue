@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
     slideID: number;
     currentSlide: number;
 }>();
 
-let active: boolean = props.slideID == props.currentSlide;
-
-watch(
-    () => props.currentSlide,
-    (newValue, oldValue) => {
-        active = newValue == props.slideID;
-    },
-);
+const active = computed(() => {
+    return props.currentSlide == props.slideID;
+});
 </script>
 
 <template>

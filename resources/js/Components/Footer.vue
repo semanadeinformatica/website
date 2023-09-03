@@ -62,7 +62,7 @@ const contacts = [
             </div>
         </section>
         <div class="container mx-auto text-center font-bold text-2023-teal">
-            <p>Copyright &copy; 2023 niaefeup, todos os direitos reservados</p>
+            <p>Copyright &copy; 2023 NIAEFEUP, todos os direitos reservados</p>
         </div>
     </footer>
 </template>

@@ -3,14 +3,6 @@ import AppLayout from "../Layouts/AppLayout.vue";
 import SpeakersCarousel from "../Components/Home/SpeakersCarousel.vue";
 import Map from "../Components/Home/Map.vue";
 import SponsorBanner from "../Components/Home/SponsorBanner.vue";
-
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-    modelValue: Object,
-});
 </script>
 
 <template>

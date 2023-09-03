@@ -2,10 +2,10 @@
 import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const zoom: number = 17;
-const center: Array<number> = [41.17835293313974, -8.595830311142494];
-const url: string = "https://tile.openstreetmap.de/{z}/{x}/{y}.png";
-const attribution: string =
+const zoom = 17;
+const center = [41.17835293313974, -8.595830311142494];
+const url = "https://tile.openstreetmap.de/{z}/{x}/{y}.png";
+const attribution =
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 </script>
 
