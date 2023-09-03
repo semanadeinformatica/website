@@ -56,7 +56,7 @@ import SponsorBanner from "../Components/Home/SponsorBanner.vue";
                 class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
             >
                 <h2
-                    class="absolute -top-[36px] left-[calc(50%-89px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
+                    class="absolute -top-[36px] left-[calc(50%-88.2415px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
                 >
                     Sobre nós
                 </h2>
@@ -70,15 +70,14 @@ import SponsorBanner from "../Components/Home/SponsorBanner.vue";
                     empresarial através de eventos sociais.
                 </p>
                 <p class="p-20 text-lg text-white max-lg:py-10">
-                    A edição de 2022 decorre entre os dias 31 de outubro a 2 de
-                    novembro. Os participantes têm a seu dispor palestras e
-                    workshops onde entrarão em contacto com diversas tecnologias
-                    e conceitos que não intervêm no percurso académico,
-                    focando-se portanto nas skills técnicas, assim como um
-                    pitch, sessões de entrevistas e visitas a empresas,
-                    fomentando o seu contacto com empresas de topo a nível
-                    nacional e internacional, podendo desenvolver as suas soft
-                    skills.
+                    A edição de 2023 decorre entre os dias 25 e 31 de outubro.
+                    Os participantes têm a seu dispor palestras e workshops onde
+                    entrarão em contacto com diversas tecnologias e conceitos
+                    que não intervêm no percurso académico, focando-se portanto
+                    nas skills técnicas, assim como um pitch, sessões de
+                    entrevistas e visitas a empresas, fomentando o seu contacto
+                    com empresas de topo a nível nacional e internacional,
+                    podendo desenvolver as suas soft skills.
                 </p>
             </section>
             <!-- CALL TO ACTION -->
@@ -98,18 +97,18 @@ import SponsorBanner from "../Components/Home/SponsorBanner.vue";
                 </div>
             </section>
             <!-- SPEAKERS -->
-            <section class="relative h-max min-h-max pb-20">
+            <section class="grid-rows-[repeat(3, 1fr)] grid grid-cols-1 gap-10">
                 <p
-                    class="absolute left-[calc(50%-64px)] top-0 w-min self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
+                    class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
                 >
                     Speakers
                 </p>
                 <SpeakersCarousel></SpeakersCarousel>
             </section>
             <!-- SPONSORS -->
-            <section class="relative flex flex-col gap-10 px-20 py-24">
+            <section class="flex flex-col gap-10 px-20 py-24">
                 <p
-                    class="absolute left-[calc(50%-64px)] top-0 w-min self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
+                    class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
                 >
                     Sponsors
                 </p>

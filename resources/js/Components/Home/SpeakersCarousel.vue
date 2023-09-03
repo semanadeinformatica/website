@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel";
 import SpeakerSlide from "./SpeakerSlide.vue";
@@ -20,6 +20,23 @@ const prev = () => {
     carousel.value?.prev();
 };
 
+const wrapperHeight = () => {
+    const wrapperHeight: number | undefined = document.querySelector(
+        "li.carousel__slide--active:nth-child(11) > div:nth-child(1)",
+    )?.scrollHeight;
+    const carousel: HTMLElement | null =
+        document.querySelector("ol.carousel__track");
+
+    if (carousel)
+        carousel.style.height = wrapperHeight ? wrapperHeight + "px" : "100%";
+};
+
+onMounted(async () => {
+    window.addEventListener("resize", wrapperHeight);
+
+    await new Promise((r) => setTimeout(r, 500)).then(wrapperHeight);
+});
+
 const handleSlideStart = (data: {
     slidingToIndex: number;
     slidesCount: number;
@@ -35,20 +52,19 @@ const handleSlideStart = (data: {
 </script>
 
 <template>
-    <div class="h-max min-h-max pt-20">
-        <Carousel
-            ref="carousel"
-            :autoplay="0"
-            :items-to-show="2"
-            :wrap-around="true"
-            :breakpoints="breakpoints"
-            @slide-start="handleSlideStart"
-        >
-            <Slide v-for="slide in 10" :key="slide">
-                <SpeakerSlide :slideID="slide" :currentSlide="activeSpeaker" />
-            </Slide>
-        </Carousel>
-    </div>
+    <Carousel
+        ref="carousel"
+        snap-align="center"
+        :autoplay="2000"
+        :items-to-show="2"
+        :wrap-around="true"
+        :breakpoints="breakpoints"
+        @slide-start="handleSlideStart"
+    >
+        <Slide v-for="slide in 10" :key="slide">
+            <SpeakerSlide :slideID="slide" :currentSlide="activeSpeaker" />
+        </Slide>
+    </Carousel>
     <div class="align-center flex justify-center gap-3">
         <button @click="prev">
             <v-icon name="fa-arrow-left" fill="#007172" scale="2"></v-icon>
