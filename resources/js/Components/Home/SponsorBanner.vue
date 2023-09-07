@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
+import Sponsor from "./Sponsor.vue";
 
 const carousel_plat = ref<typeof Carousel | null>(null);
 const carousel_gold = ref<typeof Carousel | null>(null);
@@ -24,32 +25,27 @@ defineProps<{
         <div
             class="grid grid-cols-3 justify-around gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-orange max-lg:hidden"
         >
-            <img
-                class="ml-auto mr-auto"
+            <Sponsor
+                v-for="sponsor in 3"
+                :key="sponsor"
                 src="https://picsum.photos/300/200"
-                alt="Company"
-            />
-            <img
-                class="ml-auto mr-auto"
-                src="https://picsum.photos/300/200"
-                alt="Company"
-            />
-            <img
-                class="ml-auto mr-auto"
-                src="https://picsum.photos/300/200"
-                alt="Company"
-            />
+                :url="'https://google.com'"
+                :title="sponsor"
+                :description="sponsor"
+            ></Sponsor>
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-orange lg:hidden"
         >
             <Carousel ref="carousel_plat" :wrap-around="true" :autoplay="2000">
-                <Slide v-for="slide in 10" :key="slide">
-                    <img
-                        class="ml-auto mr-auto"
+                <Slide v-for="sponsor in 3" :key="sponsor">
+                    <Sponsor
                         src="https://picsum.photos/300/200"
-                        alt="Company"
-                    />
+                        position=""
+                        :url="'https://google.com'"
+                        :title="sponsor"
+                        :description="sponsor"
+                    ></Sponsor>
                 </Slide>
             </Carousel>
             <button
@@ -71,41 +67,17 @@ defineProps<{
         <div
             class="grid grid-cols-8 grid-rows-2 gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-teal-dark max-lg:hidden"
         >
-            <img
-                class="col-start-1 col-end-3 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-3 col-end-5 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-5 col-end-7 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-7 col-end-9 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-2 col-end-4 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-4 col-end-6 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-6 col-end-8 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
+            <Sponsor
+                v-for="sponsor in 7"
+                :key="sponsor"
+                src="https://picsum.photos/300/200"
+                :position="`col-start-${sponsor} col-span-2 ${
+                    sponsor % 2 ? `` : `row-start-2`
+                }`"
+                :url="'https://google.com'"
+                :title="sponsor"
+                :description="sponsor"
+            ></Sponsor>
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-teal-dark lg:hidden"
@@ -113,16 +85,14 @@ defineProps<{
             <Carousel ref="carousel_gold" :wrap-around="true" :autoplay="2000">
                 <Slide v-for="slide in 4" :key="slide">
                     <div class="mx-5 grid grid-cols-2 gap-4">
-                        <img
-                            class="ml-auto mr-auto"
+                        <Sponsor
+                            v-for="sponsor in 2"
+                            :key="sponsor"
                             src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                        <img
-                            class="ml-auto mr-auto"
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
+                            :url="'https://google.com'"
+                            :title="sponsor"
+                            :description="sponsor"
+                        ></Sponsor>
                     </div>
                 </Slide>
             </Carousel>
@@ -145,41 +115,17 @@ defineProps<{
         <div
             class="align-center grid grid-cols-8 grid-rows-2 justify-center gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-red-dark max-lg:hidden"
         >
-            <img
-                class="col-start-1 col-end-3 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-3 col-end-5 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-5 col-end-7 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-7 col-end-9 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-2 col-end-4 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-4 col-end-6 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
-            <img
-                class="col-start-6 col-end-8 row-start-2 ml-auto mr-auto"
-                src="https://picsum.photos/200/100"
-                alt="Company"
-            />
+            <Sponsor
+                v-for="sponsor in 7"
+                :key="sponsor"
+                src="https://picsum.photos/300/200"
+                :position="`col-start-${sponsor} col-span-2 ${
+                    sponsor % 2 ? `` : `row-start-2`
+                }`"
+                :url="'https://google.com'"
+                :title="sponsor"
+                :description="sponsor"
+            ></Sponsor>
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-red-dark lg:hidden"
@@ -191,21 +137,17 @@ defineProps<{
             >
                 <Slide v-for="slide in 4" :key="slide">
                     <div class="mx-5 grid grid-cols-4 grid-rows-2 gap-4">
-                        <img
-                            class="col-start-1 col-end-3 ml-auto mr-auto"
+                        <Sponsor
+                            v-for="sponsor in 3"
+                            :key="sponsor"
                             src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-3 col-end-5 ml-auto mr-auto"
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
-                        <img
-                            class="col-start-2 col-end-4 row-start-2 ml-auto mr-auto"
-                            src="https://picsum.photos/300/200"
-                            alt="Company"
-                        />
+                            :position="`col-start-${sponsor} col-span-2 ${
+                                sponsor % 2 ? `` : `row-start-2`
+                            }`"
+                            :url="'https://google.com'"
+                            :title="sponsor"
+                            :description="sponsor"
+                        ></Sponsor>
                     </div>
                 </Slide>
             </Carousel>

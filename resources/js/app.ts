@@ -3,9 +3,12 @@ import "../css/app.css";
 import { createApp, h, type DefineComponent } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { createVfm } from "vue-final-modal";
 // @ts-expect-error: Ziggy does not have type declarations
 import { ZiggyVue } from "ziggy";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
+
+const vfm = createVfm();
 
 import * as IoIcons from "oh-vue-icons/icons/io";
 import * as FaIcons from "oh-vue-icons/icons/fa";
@@ -28,6 +31,7 @@ createInertiaApp({
     setup: ({ el, App, props, plugin }) => {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(vfm)
             .use(ZiggyVue, Ziggy)
             .component("v-icon", OhVueIcon)
             .mount(el);
