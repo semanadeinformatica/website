@@ -14,30 +14,28 @@ const props = defineProps<{
     <div class="flex md:hidden">
         <button
             aria-label="Open navigation menu"
-            class="inline-flex items-center justify-center p-2 text-2023-teal"
+            class="inline-flex items-center justify-center px-2 text-2023-teal"
             @click="open = !open"
         >
-            <svg
-                class="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    :class="{ hidden: open, 'inline-flex': !open }"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                />
-                <path
-                    :class="{ hidden: !open, 'inline-flex': open }"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                />
-            </svg>
+            <template v-if="!open">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-10 text-2023-teal-dark"
+                    viewBox="0 0 512 512"
+                >
+                    <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-miterlimit="10"
+                        stroke-width="48"
+                        d="M88 152h336M88 256h336M88 360h336"
+                    />
+                </svg>
+            </template>
+            <template v-else>
+                <v-icon name="io-close" scale="2.1" fill="#025259"></v-icon>
+            </template>
         </button>
     </div>
     <div

@@ -4,11 +4,13 @@ import { Link } from "@inertiajs/vue3";
 interface Props {
     href: string;
     as?: "a" | "button";
+    method?: "get" | "post";
 }
 
 withDefaults(defineProps<Props>(), {
     href: "#",
     as: undefined,
+    method: "get",
 });
 
 const classes =
@@ -25,7 +27,7 @@ const classes =
             <slot />
         </a>
 
-        <Link v-else :href="href" :class="classes">
+        <Link v-else :href="href" :method="method" :class="classes">
             <slot />
         </Link>
     </div>
