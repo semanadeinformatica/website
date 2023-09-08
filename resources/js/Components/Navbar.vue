@@ -53,7 +53,7 @@ const options = {
             <div class="hidden gap-1 md:flex lg:gap-4">
                 <Dropdown align="center" width="32">
                     <template #trigger>
-                        <DropdownTrigger> Atividades v </DropdownTrigger>
+                        <DropdownTrigger> Atividades </DropdownTrigger>
                     </template>
                     <template #content>
                         <template
@@ -68,7 +68,7 @@ const options = {
 
                 <Dropdown align="center" width="20">
                     <template #trigger>
-                        <DropdownTrigger> 2023 v </DropdownTrigger>
+                        <DropdownTrigger> 2023 </DropdownTrigger>
                     </template>
                     <template #content>
                         <DropdownLink :href="route('dashboard')">
@@ -78,14 +78,32 @@ const options = {
                 </Dropdown>
             </div>
 
-            <div v-if="$page.props.auth.user" class="ml-2 lg:mx-4">
-                <a :href="route('profile.show')">
-                    <img
-                        class="h-10 w-10 rounded-full object-cover"
-                        :src="$page.props.auth.user.profile_photo_url"
-                        :alt="$page.props.auth.user.name"
-                    />
-                </a>
+            <div class="ml-2 lg:mx-4">
+                <template v-if="$page.props.auth.user">
+                    <Dropdown align="right" width="20">
+                        <template #trigger>
+                            <img
+                                class="h-10 w-10 cursor-pointer rounded-full object-cover"
+                                :src="$page.props.auth.user.profile_photo_url"
+                                :alt="$page.props.auth.user.name"
+                            />
+                        </template>
+                        <template #content>
+                            <DropdownLink :href="route('profile.show')">
+                                Profile
+                            </DropdownLink>
+                            <DropdownLink :href="route('logout')" method="post">
+                                Logout
+                            </DropdownLink>
+                        </template>
+                    </Dropdown>
+                </template>
+                <template v-else>
+                    <a :href="route('login')">
+                        <v-icon name="io-person" scale="1.7" fill="#025259">
+                        </v-icon>
+                    </a>
+                </template>
             </div>
 
             <HamburgerMenu :options="options" />
