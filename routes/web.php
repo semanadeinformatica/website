@@ -86,6 +86,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
 
         Route::prefix('user')->group(function () {
+            Route::prefix('/{user}')->where(['user', '[0-9]+'])->controller('App\Http\Controllers\StudentController')->group(function () {
+                Route::get('', 'show')->name('user.profile');
+            });
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::get('/download', [FileController::class, 'download'])->name('file.download');
