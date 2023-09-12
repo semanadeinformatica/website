@@ -172,15 +172,15 @@ return new class extends Migration
         Schema::dropIfExists('events');
         Schema::dropIfExists('products');
         Schema::dropIfExists('editions');
-        
+
         Schema::dropIfExists('admins');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('students');
-        
+
         Schema::table('users', function (Blueprint $table) {
             $table->dropMorphs('usertype');
         });
-        
+
         Schema::dropIfExists('social_media');
     }
 };
