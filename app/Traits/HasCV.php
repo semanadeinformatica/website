@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 trait HasCV
 {
     /**
-     * Update the user's CV.
+     * Update the student's CV.
      *
      * @param  string  $storagePath
      * @return void
@@ -30,7 +30,7 @@ trait HasCV
     }
 
     /**
-     * Delete the user's CV.
+     * Delete the student's CV.
      *
      * @return void
      */
@@ -50,7 +50,7 @@ trait HasCV
     }
 
     /**
-     * Get the URL to the user's CV.
+     * Get the URL to the student's CV.
      */
     public function CVUrl(): Attribute
     {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasCV;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Student extends Model
 {
     use HasFactory;
+    use HasCV;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +24,19 @@ class Student extends Model
     ];
 
     protected $with = ['socialMedia'];
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'cv_url',
+    ];
+
+    public function getCvUrlAttribute()
+    {
+        return $this->cv_path;
+    }
 
     public function enrollments(): HasMany
     {

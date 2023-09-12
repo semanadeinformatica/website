@@ -46,7 +46,6 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'cv_path' => null,
             'current_team_id' => null,
             'usertype_type' => Student::class,
             'usertype_id' => 0,
