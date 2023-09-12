@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/download', [FileController::class, 'download'])->name('file.download');
+Route::middleware('auth:sanctum')->get('/download', [FileController::class, 'download'])->name('file.download');

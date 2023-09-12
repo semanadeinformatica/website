@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\HasCV;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +15,6 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
-    use HasCV;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -61,7 +59,6 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
-        'cv_url',
     ];
 
     protected $with = [
