@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resumes', function (Blueprint $table) {
-            $table->id();
-            $table->text('resume');
-            $table->timestamps();
+        Schema::table('students', function (Blueprint $table) {
+            $table->string('cv_path', 2048)->nullable();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resumes');
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropColumn('cv_path');
+        });
     }
 };

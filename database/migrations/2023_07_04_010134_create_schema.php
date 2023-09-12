@@ -26,6 +26,9 @@ return new class extends Migration
         });
 
         // User tables
+        Schema::table('users', function (Blueprint $table) {
+            $table->morphs('usertype');
+        });
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
