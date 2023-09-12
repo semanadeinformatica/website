@@ -6,7 +6,6 @@ usage() {
     echo "maintenance on|off"
     printf '\ton\t- enables maintenance mode\n'
     printf '\toff\t- disables maintenance mode\n'
-    printf '\thelp\t- print this message\n'
 }
 
 if [[ $# == 0 ]]; then
