@@ -162,22 +162,25 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('social_media');
+        Schema::dropIfExists('update_enrollment_points');
+        Schema::dropIfExists('enrollment_product');
+        Schema::dropIfExists('enrollment_quest');
+        Schema::dropIfExists('enrollment_event');
+        Schema::dropIfExists('enrollments');
+        Schema::dropIfExists('quests');
+        Schema::dropIfExists('speakers');
+        Schema::dropIfExists('events');
+        Schema::dropIfExists('products');
+        Schema::dropIfExists('editions');
+        
+        Schema::dropIfExists('admins');
+        Schema::dropIfExists('companies');
+        Schema::dropIfExists('students');
+        
         Schema::table('users', function (Blueprint $table) {
             $table->dropMorphs('usertype');
         });
-        Schema::dropIfExists('students');
-        Schema::dropIfExists('companies');
-        Schema::dropIfExists('admins');
-        Schema::dropIfExists('editions');
-        Schema::dropIfExists('products');
-        Schema::dropIfExists('events');
-        Schema::dropIfExists('speakers');
-        Schema::dropIfExists('quests');
-        Schema::dropIfExists('enrollments');
-        Schema::dropIfExists('enrollment_event');
-        Schema::dropIfExists('enrollment_quest');
-        Schema::dropIfExists('enrollment_product');
-        Schema::dropIfExists('update_enrollment_points');
+        
+        Schema::dropIfExists('social_media');
     }
 };
