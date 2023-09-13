@@ -94,6 +94,19 @@ const submit = () => {
                 >
             </label>
 
+            <label class="flex items-center gap-2 self-stretch">
+                <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
+                since it makes it so that every account that exists has agreed to this -->
+                <Checkbox
+                    id="data_sharing_agreement"
+                    name="data_sharing_agreement"
+                    required
+                />
+
+                Concordo em ter as minhas informações pessoais partilhadas com
+                as empresas que participam na SINF.
+            </label>
+
             <Link
                 :href="route('login')"
                 class="font-semibold text-2023-teal underline"
