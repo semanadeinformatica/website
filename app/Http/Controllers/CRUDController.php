@@ -12,42 +12,40 @@ abstract class CRUDController extends Controller
 {
     /**
      * The model class name.
-     * 
+     *
      * @var class-string<T>
      */
     protected string $model;
 
     /**
      * The Inertia view subfolder in the CRUD folder.
-     * 
-     * @var string
      */
     protected string $view;
 
     /**
      * The validation rules.
-     * 
+     *
      * @var array<int, string>
      */
     protected array $rules = [];
 
     /**
      * The validation rules for the store method.
-     * 
+     *
      * @var array<int, string>|null
      */
     protected ?array $storeRules;
 
     /**
      * The validation rules for the update method.
-     * 
+     *
      * @var array<int, string>|null
      */
     protected ?array $updateRules;
 
     /**
      * The array to include with the views.
-     * 
+     *
      * @return array<mixed, mixed>
      */
     protected function with(): array
@@ -105,8 +103,7 @@ abstract class CRUDController extends Controller
      * The returned array will be used to create the new model,
      * unless null is returned, in which case no model will be created.
      *
-     * @param array<string, mixed> $new The validated values.
-     * 
+     * @param  array<string, mixed>  $new The validated values.
      * @return array<string, mixed>|null
      */
     protected function created(array $new): ?array
@@ -131,10 +128,9 @@ abstract class CRUDController extends Controller
      * Gets called after the validation of the update method.
      * The returned array will be used to update the model, unless
      * null is returned, in which case the model will not be updated.
-     * 
-     * @param array<string, mixed> $old The old values of the model.
-     * @param array<string, mixed> $new The validated values.
-     * 
+     *
+     * @param  array<string, mixed>  $old The old values of the model.
+     * @param  array<string, mixed>  $new The validated values.
      * @return array<string, mixed>|null
      */
     protected function updated(array $old, array $new): ?array
@@ -161,10 +157,8 @@ abstract class CRUDController extends Controller
      * Gets called before the model is deleted.
      * If true is returned, the model will be deleted.
      * If false is returned, the model will not be deleted.
-     * 
-     * @param array<string, mixed> $old The old values of the model.
-     * 
-     * @return bool
+     *
+     * @param  array<string, mixed>  $old The old values of the model.
      */
     protected function destroyed(array $old): bool
     {
@@ -174,9 +168,10 @@ abstract class CRUDController extends Controller
     public function destroy($id)
     {
         $model = $this->model::find($id);
-        
-        if ($this->destroyed($model->toArray()))
+
+        if ($this->destroyed($model->toArray())) {
             $model->delete();
+        }
 
         return redirect()->back();
     }
