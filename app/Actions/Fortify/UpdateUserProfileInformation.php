@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +30,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
 
         if (isset($input['cv'])) {
-            $user->updateCV($input['cv']);
+            $student = Student::where('user_id', $user->id)->first();
+            $student->updateCV($input['cv']);
         }
 
         if ($input['email'] !== $user->email &&
