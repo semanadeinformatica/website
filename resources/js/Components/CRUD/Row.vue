@@ -4,10 +4,12 @@ import Cell from "./Cell.vue";
 import { Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
-defineProps<{
+interface Props {
     item: Model;
     name: string;
-}>();
+}
+
+defineProps<Props>();
 </script>
 
 <template>
