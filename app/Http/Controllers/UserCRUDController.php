@@ -77,24 +77,19 @@ class UserCRUDController extends CRUDController
             throw new \Exception('Cannot change user type');
         }
 
-        if ($type === Company::class) {
-            $type::find($old['usertype_id'])->update([
-                'tier' => strtoupper($new['company_tier']),
-            ]);
-        }
-
         if ($new['type'] !== 'admin' && isset($new['social_media'])) {
-            $socialMedia = SocialMedia::find($old['usertype_id']);
-            if ($socialMedia === null) {
+            $socialMedia = SocialMedia::find($old['social_media_id']);
+            if ($socialMedia === null)
                 $socialMedia = SocialMedia::create($new['social_media']);
-            } else {
+            else
                 $socialMedia->update($new['social_media']);
-            }
         }
 
         return [
             'name' => $new['name'],
             'email' => $new['email'],
+            'tier' => $type === Company::class ? strtoupper($new['company_tier']) : null,
+            'social_media_id' => $socialMedia?->id ?? null,
         ];
     }
 }
