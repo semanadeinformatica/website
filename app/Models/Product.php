@@ -20,6 +20,7 @@ class Product extends Model
         'name',
         'price',
         'stock',
+        'edition_id',
     ];
 
     public function edition(): BelongsTo

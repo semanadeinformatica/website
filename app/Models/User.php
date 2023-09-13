@@ -61,8 +61,27 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    protected $with = [
+        'usertype',
+    ];
+
     public function usertype(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->usertype_type === Admin::class;
+    }
+
+    public function isCompany(): bool
+    {
+        return $this->usertype_type === Company::class;
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->usertype_type === Student::class;
     }
 }

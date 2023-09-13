@@ -23,6 +23,7 @@ class Event extends Model
         'date_end',
         'topic',
         'capacity',
+        'edition_id',
     ];
 
     /**

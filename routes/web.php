@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\EditionCRUDController;
+use App\Http\Controllers\EventCRUDController;
+use App\Http\Controllers\ProductCRUDController;
+use App\Http\Controllers\QuestCRUDController;
+use App\Http\Controllers\SpeakerCRUDController;
+use App\Http\Controllers\UserCRUDController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,12 +30,24 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
+    function () {
+        Route::get('/dashboard', function () {
+            return Inertia::render('Dashboard');
+        })->name('dashboard');
+
+        Route::prefix('admin')
+            ->middleware('can:admin')
+            ->name('admin.')
+            ->group(function () {
+                Route::resources([
+                    '/editions' => EditionCRUDController::class,
+                    '/events' => EventCRUDController::class,
+                    '/products' => ProductCRUDController::class,
+                    '/quests' => QuestCRUDController::class,
+                    '/speakers' => SpeakerCRUDController::class,
+                    '/users' => UserCRUDController::class,
+                ]);
+            });
+    }
+);

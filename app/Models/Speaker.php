@@ -20,7 +20,10 @@ class Speaker extends Model
         'title',
         'description',
         'organization',
+        'event_id',
     ];
+
+    protected $with = ['socialMedia'];
 
     public function event(): BelongsTo
     {

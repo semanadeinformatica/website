@@ -3,6 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Edition;
+use App\Models\Event;
+use App\Models\Product;
+use App\Models\Quest;
+use App\Models\Speaker;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +19,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        User::factory(100)->create();
+        $companies = User::factory(10)->company()->create();
+        User::factory(10)->admin()->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $edition = Edition::factory()->create();
+
+        $events = Event::factory(10)->recycle($edition)->create();
+        Speaker::factory(10)->recycle($events)->create();
+
+        foreach ($companies as $company) {
+            Quest::factory()->recycle($edition)->for($company, 'requirement')->create();
+        }
+
+        Product::factory(10)->recycle($edition)->create();
     }
 }

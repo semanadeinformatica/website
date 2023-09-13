@@ -35,7 +35,8 @@ class CreateNewUser implements CreatesNewUsers
             'usertype_type' => Student::class,
         ]);
         $student = Student::create(['user_id' => $user->id]);
-        $user->usertype_id = $student->id;
+        $user->usertype()->associate($student);
+        $user->save();
 
         return $user;
     }

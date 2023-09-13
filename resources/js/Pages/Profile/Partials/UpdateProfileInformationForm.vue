@@ -8,7 +8,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import type User from "@/Types/User";
+import type { User } from "@/Types/User";
 import route from "ziggy-js";
 
 interface Props {
