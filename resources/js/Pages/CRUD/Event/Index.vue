@@ -32,9 +32,9 @@ const editions = computed<Record<number, string>>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header sort-by="points">Data de Início</Header>
-                <Header sort-by="points">Data de Fim</Header>
-                <Header sort-by="points">Edição</Header>
+                <Header sort-by="date_start">Data de Início</Header>
+                <Header sort-by="date_end">Data de Fim</Header>
+                <Header sort-by="edition_id">Edição</Header>
             </HeaderRow>
         </template>
 
