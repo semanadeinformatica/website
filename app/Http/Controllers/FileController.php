@@ -11,6 +11,6 @@ class FileController extends Controller
 
     public function download(Request $request)
     {
-        return $this->downloadFromUrl($request->url, $request->storageDisk);
+        return $this->downloadFromUrl($request->url);
     }
 }

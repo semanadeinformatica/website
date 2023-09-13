@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\CVController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Jetstream\Http\Controllers\CurrentTeamController;
 use Laravel\Jetstream\Http\Controllers\Inertia\ApiTokenController;
@@ -39,9 +38,6 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
         Route::delete('/user/profile-photo', [ProfilePhotoController::class, 'destroy'])
             ->name('current-user-photo.destroy');
-
-        Route::delete('/user/cv', [CVController::class, 'destroy'])
-            ->name('current-user-cv.destroy');
 
         if (Jetstream::hasAccountDeletionFeatures()) {
             Route::delete('/user', [CurrentUserController::class, 'destroy'])
