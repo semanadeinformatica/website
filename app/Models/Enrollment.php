@@ -17,6 +17,8 @@ class Enrollment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'edition_id',
+        'student_id',
     ];
 
     public function edition(): BelongsTo

@@ -17,28 +17,41 @@ abstract class CRUDController extends Controller
 
     protected array $updateRules;
 
-    protected array $include = [];
+    protected function with(): array
+    {
+        return [];
+    }
 
     public function index()
     {
         $items = $this->model::paginate(10);
 
+        $with = $this->with();
+
         return Inertia::render("CRUD/$this->view/Index", [
             'items' => $items,
+            'with' => $with,
         ]);
     }
 
     public function create()
     {
-        return Inertia::render("CRUD/$this->view/Create");
+        $with = $this->with();
+
+        return Inertia::render("CRUD/$this->view/Create", [
+            'with' => $with,
+        ]);
     }
 
     public function edit($id)
     {
         $item = $this->model::find($id);
 
+        $with = $this->with();
+
         return Inertia::render("CRUD/$this->view/Edit", [
             'item' => $item,
+            'with' => $with,
         ]);
     }
 
