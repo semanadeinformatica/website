@@ -55,7 +55,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.users.store"));
+    form.put(route("admin.users.update", user));
 };
 </script>
 
@@ -163,7 +163,7 @@ const submit = () => {
                 </div>
             </details>
 
-            <PrimaryButton type="submit">Criar</PrimaryButton>
+            <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
     </CardLayout>
 </template>
