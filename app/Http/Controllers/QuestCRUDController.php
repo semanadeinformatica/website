@@ -30,14 +30,14 @@ class QuestCRUDController extends CRUDController
 
     protected function created(array $new): ?array
     {
-        $requirement = explode(";", $new['requirement']);
-        
-        $requirement_type = match($requirement[0]) {
+        $requirement = explode(';', $new['requirement']);
+
+        $requirement_type = match ($requirement[0]) {
             'company' => Company::class,
             default => null,
         };
         $requirement_id = $requirement[1];
-        
+
         return [
             'name' => $new['name'],
             'points' => $new['points'],
@@ -50,9 +50,9 @@ class QuestCRUDController extends CRUDController
 
     protected function updated(array $old, array $new): ?array
     {
-        $requirement = explode(";", $new['requirement']);
+        $requirement = explode(';', $new['requirement']);
 
-        $requirement_type = match($requirement[0]) {
+        $requirement_type = match ($requirement[0]) {
             'company' => Company::class,
             default => null,
         };

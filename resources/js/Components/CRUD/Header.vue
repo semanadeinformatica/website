@@ -8,7 +8,7 @@ defineProps<Props>();
 
 <template>
     <th class="px-4 py-2 text-start last:text-right">
-        <slot></slot
-        ><v-icon v-if="sortBy" name="io-swap-vertical" class="ml-2" />
+        <slot></slot>
+        <v-icon v-if="sortBy" name="io-swap-vertical" class="ml-2" />
     </th>
 </template>

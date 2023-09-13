@@ -130,15 +130,9 @@ const submit = () => {
                     />
                 </div>
             </details>
-            
-            <select
-                v-model="form.event_id"
-                required
-                class="self-stretch"
-            >
-                <option value="" disabled selected hidden>
-                    Evento
-                </option>
+
+            <select v-model="form.event_id" required class="self-stretch">
+                <option value="" disabled selected hidden>Evento</option>
                 <option
                     v-for="event in $props.with.events"
                     :key="event.id"

@@ -56,14 +56,8 @@ const submit = () => {
                 :error-message="form.errors.stock"
             />
 
-            <select
-                v-model="form.edition_id"
-                required
-                class="self-stretch"
-            >
-                <option value="" disabled selected hidden>
-                    Edição
-                </option>
+            <select v-model="form.edition_id" required class="self-stretch">
+                <option value="" disabled selected hidden>Edição</option>
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"

@@ -79,10 +79,11 @@ class UserCRUDController extends CRUDController
 
         if ($new['type'] !== 'admin' && isset($new['social_media'])) {
             $socialMedia = SocialMedia::find($old['social_media_id']);
-            if ($socialMedia === null)
+            if ($socialMedia === null) {
                 $socialMedia = SocialMedia::create($new['social_media']);
-            else
+            } else {
                 $socialMedia->update($new['social_media']);
+            }
         }
 
         return [

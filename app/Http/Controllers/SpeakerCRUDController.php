@@ -60,10 +60,11 @@ class SpeakerCRUDController extends CRUDController
     {
         if (isset($new['social_media'])) {
             $socialMedia = SocialMedia::find($old['social_media_id']);
-            if ($socialMedia === null)
+            if ($socialMedia === null) {
                 $socialMedia = SocialMedia::create($new['social_media']);
-            else
+            } else {
                 $socialMedia->update($new['social_media']);
+            }
         }
 
         return [
@@ -72,7 +73,7 @@ class SpeakerCRUDController extends CRUDController
             'description' => $new['description'],
             'organization' => $new['organization'],
             'event_id' => $new['event_id'],
-            'social_media_id' => $socialMedia?->id ?? null
+            'social_media_id' => $socialMedia?->id ?? null,
         ];
     }
 }
