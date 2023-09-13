@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
+use App\Models\Company;
+use App\Models\Student;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 
@@ -18,6 +21,15 @@ class UserFactory extends Factory
      */
     protected $model = User::class;
 
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->usertype()->save(Student::factory()->create([
+                'user_id' => $user->id,
+            ]));
+        });
+    }
+
     /**
      * Define the model's default state.
      *
@@ -26,18 +38,38 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('password'), // password
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
             'current_team_id' => null,
-            'usertype_type' => App\Models\Student::class,
+            'usertype_type' => Student::class,
             'usertype_id' => 0,
         ];
+    }
+
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state([
+            'usertype_type' => Admin::class,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a company.
+     */
+    public function company(): static
+    {
+        return $this->state([
+            'usertype_type' => Company::class,
+        ]);
     }
 
     /**

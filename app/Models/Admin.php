@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Admin extends Model
 {
@@ -19,8 +19,8 @@ class Admin extends Model
         'user_id',
     ];
 
-    public function user(): MorphOne
+    public function user(): BelongsTo
     {
-        return $this->morphOne(User::class, 'usertype');
+        return $this->belongsTo(User::class);
     }
 }
