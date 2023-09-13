@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Company;
 use App\Models\Edition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +20,7 @@ class QuestFactory extends Factory
         return [
             'name' => fake()->words(3, true),
             'points' => fake()->numberBetween(1, 100),
-            'category' => fake()->randomElement(["COMPANY" , "TALK" , "WORKSHOP" , "MILESTONE" , "TEAMBUILDING"]),
+            'category' => fake()->randomElement(['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']),
             'edition_id' => Edition::factory(),
         ];
     }

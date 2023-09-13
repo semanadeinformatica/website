@@ -21,7 +21,7 @@ class EventFactory extends Factory
             'name' => fake()->words(3, true),
             'topic' => fake()->sentence(),
             'date_start' => fake()->dateTimeBetween('now', '+1 year'),
-            'date_end' => fn(array $attributes) => fake()->dateTimeBetween($attributes['date_start'], '+1 year'),
+            'date_end' => fn (array $attributes) => fake()->dateTimeBetween($attributes['date_start'], '+1 year'),
             'capacity' => fake()->optional()->numberBetween(10, 100),
             'edition_id' => Edition::factory(),
         ];

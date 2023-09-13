@@ -28,9 +28,10 @@ class DatabaseSeeder extends Seeder
         $events = Event::factory(10)->recycle($edition)->create();
         Speaker::factory(10)->recycle($events)->create();
 
-        foreach ($companies as $company)
+        foreach ($companies as $company) {
             Quest::factory()->recycle($edition)->for($company, 'requirement')->create();
-        
+        }
+
         Product::factory(10)->recycle($edition)->create();
     }
 }
