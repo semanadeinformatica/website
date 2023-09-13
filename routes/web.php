@@ -6,6 +6,8 @@ use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\UserCRUDController;
+use App\Http\Controllers\CVController;
+use App\Http\Controllers\FileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,5 +51,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/users' => UserCRUDController::class,
                 ]);
             });
+            
+        Route::prefix('user')->group(function () {
+            Route::prefix('cv')->group(function () {
+                Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
+                Route::get('/download', [FileController::class, 'download'])->name('file.download');
+            });
+        });
     }
 );
