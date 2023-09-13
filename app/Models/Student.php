@@ -33,11 +33,6 @@ class Student extends Model
         'cv_url',
     ];
 
-    public function getCvUrlAttribute()
-    {
-        return $this->cv_path;
-    }
-
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);

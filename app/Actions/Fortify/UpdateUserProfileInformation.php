@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
@@ -22,7 +23,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-            'cv' => ['nullable', 'mimes:pdf', 'max:4096'],
+            'cv' => ['nullable', File::types(['pdf'])->max(4 * 1024)],
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
@@ -30,7 +31,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
 
         if (isset($input['cv'])) {
-            $student = Student::where('user_id', $user->id)->first();
+            $student = Student::find($user->id);
             $student->updateCV($input['cv']);
         }
 

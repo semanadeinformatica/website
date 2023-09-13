@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 trait HasCV
 {
     /**
-     * Update the student's CV.
+     * Update the user's CV.
      *
      * @param  string  $storagePath
      * @return void
@@ -17,20 +17,20 @@ trait HasCV
     public function updateCV(UploadedFile $cv, $storagePath = 'cvs')
     {
         tap($this->cv_path, function ($previous) use ($cv, $storagePath) {
+            if ($previous) {
+                Storage::disk($this->CVDisk())->delete($previous);
+            }
+
             $this->forceFill([
                 'cv_path' => $cv->storePublicly(
                     $storagePath, ['disk' => $this->CVDisk()]
                 ),
             ])->save();
-
-            if ($previous) {
-                Storage::disk($this->CVDisk())->delete($previous);
-            }
         });
     }
 
     /**
-     * Delete the student's CV.
+     * Delete the user's CV.
      *
      * @return void
      */
@@ -50,7 +50,7 @@ trait HasCV
     }
 
     /**
-     * Get the URL to the student's CV.
+     * Get the URL to the user's CV.
      */
     public function CVUrl(): Attribute
     {
@@ -66,6 +66,6 @@ trait HasCV
      */
     protected function CVDisk()
     {
-        return isset($_ENV['VAPOR_ARTIFACT_NAME']) ? 's3' : config('jetstream.cv_disk', 'public');
+        return config('jetstream.cv_disk', 'public');
     }
 }
