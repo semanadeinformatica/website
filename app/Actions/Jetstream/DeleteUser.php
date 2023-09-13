@@ -2,6 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
+use App\Models\Student;
 use App\Models\User;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 
@@ -12,8 +13,11 @@ class DeleteUser implements DeletesUsers
      */
     public function delete(User $user): void
     {
+        $student = Student::where('user_id', $user->id)->first();
+        if ($student) {
+            $student->deleteCV();
+        }
         $user->deleteProfilePhoto();
-        $user->deleteCV();
         $user->tokens->each->delete();
         $user->delete();
     }
