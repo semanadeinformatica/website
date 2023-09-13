@@ -18,6 +18,7 @@ class CompanyFactory extends Factory
     {
         return [
             'user_id' => 0,
+            'tier' => fake()->randomElement(['PLATINUM', 'GOLD', 'SILVER']),
         ];
     }
 }
