@@ -13,7 +13,7 @@ const attribution =
     <div
         class="align-center flex h-full w-full justify-center overflow-hidden rounded"
     >
-        <l-map
+        <LMap
             v-model:zoom="zoom"
             class="cursor-auto border border-solid border-black"
             :minZoom="4"
@@ -21,23 +21,23 @@ const attribution =
             :zoomAnimation="true"
             :center="center"
             :use-global-leaflet="false"
-            style="height: 300px; width: 600px"
+            style="height: 400px; width: 800px"
         >
-            <l-tile-layer
+            <LTileLayer
                 :url="url"
                 :attribution="attribution"
                 layer-type="base"
             />
-            <l-marker :lat-lng="[41.17835293313974, -8.595830311142494]">
-                <l-icon>
+            <LMarker :lat-lng="[41.17835293313974, -8.595830311142494]">
+                <LIcon>
                     <v-icon
                         class="absolute -bottom-[9px] -right-[14px]"
                         name="io-location-sharp"
                         fill="#d94f04"
                         scale="2"
                     ></v-icon>
-                </l-icon>
-            </l-marker>
-        </l-map>
+                </LIcon>
+            </LMarker>
+        </LMap>
     </div>
 </template>

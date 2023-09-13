@@ -28,7 +28,9 @@ defineProps<Props>();
             </header>
 
             <!-- Page Content -->
-            <slot />
+            <main class="bg-2023-bg">
+                <slot />
+            </main>
             <Footer></Footer>
         </div>
     </div>

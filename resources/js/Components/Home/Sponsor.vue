@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { VueFinalModal, ModalsContainer } from "vue-final-modal";
+import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 
-const getInitialValues = () => ({
+const options = ref({
     modelValue: false,
 });
 
-const options = ref(getInitialValues());
-
-const props = defineProps<{
+defineProps<{
     src: string;
     description: number;
     title: number;
@@ -19,11 +17,11 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="ml-auto mr-auto" :class="props.position">
+    <div class="ml-auto mr-auto cursor-pointer" :style="position">
         <img
             class="ml-auto mr-auto"
-            :src="props.src"
-            :alt="props.title + ''"
+            :src="src"
+            :alt="title + ''"
             @click="options.modelValue = true"
         />
         <VueFinalModal
@@ -32,18 +30,18 @@ const props = defineProps<{
             content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center felx-col"
         >
             <img
-                :src="props.src"
-                class="absolute -top-20 w-[200px] border border-solid border-black shadow-xl shadow-2023-teal-dark"
+                :src="src"
+                class="absolute -top-20 w-48 border border-solid border-black shadow-xl shadow-2023-teal-dark"
             />
             <div
                 class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"
             >
                 <a
                     class="text-xl font-bold underline"
-                    :href="props.url"
+                    :href="url"
                     target="_blank"
                 >
-                    Title: {{ props.title }}
+                    Title: {{ title }}
                     <v-icon
                         class="ml-1"
                         name="io-open"
@@ -52,7 +50,7 @@ const props = defineProps<{
                     ></v-icon>
                 </a>
                 <p class="text-justify">
-                    {{ props.description }}
+                    {{ description }}
                     <br />
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Natus adipisci voluptatem quod reprehenderit commodi nostrum
@@ -61,12 +59,5 @@ const props = defineProps<{
                 </p>
             </div>
         </VueFinalModal>
-        <ModalsContainer />
     </div>
 </template>
-
-<style>
-.vfm__overlay {
-    background-color: rgba(248, 245, 231, 0.5);
-}
-</style>

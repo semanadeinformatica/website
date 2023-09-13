@@ -3,31 +3,65 @@ import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import Sponsor from "./Sponsor.vue";
 
-const carousel_plat = ref<typeof Carousel | null>(null);
-const carousel_gold = ref<typeof Carousel | null>(null);
-const carousel_silver = ref<typeof Carousel | null>(null);
+const carousel = ref<typeof Carousel | null>(null);
 
-const next = (carousel: typeof Carousel | null) => {
-    carousel?.next();
+const shadowColor: Record<string, string> = {
+    orange: "shadow-2023-orange",
+    "teal-dark": "shadow-2023-teal-dark",
+    "red-dark": "shadow-2023-red-dark",
 };
 
-const prev = (carousel: typeof Carousel | null) => {
-    carousel?.prev();
+const textColor: Record<string, string> = {
+    orange: "text-2023-orange",
+    "teal-dark": "text-2023-teal-dark",
+    "red-dark": "text-2023-red-dark",
 };
-defineProps<{
-    tier: string;
+
+const next = () => {
+    carousel.value?.next();
+};
+
+const prev = () => {
+    carousel.value?.prev();
+};
+
+const props = defineProps<{
+    sponsors: number;
+    color: string;
+    title: string;
 }>();
+
+const numCols: number =
+    props.sponsors > 3
+        ? props.sponsors % 2
+            ? Math.ceil(props.sponsors / 2) * 2
+            : Math.ceil(props.sponsors / 2)
+        : props.sponsors;
+const numRows: number = props.sponsors > 3 ? 2 : 1;
+
+const calculateSponsorPosition = (sponsor: number) => {
+    const span = props.sponsors > 3 ? (props.sponsors % 2 ? 2 : 1) : 1;
+    const col =
+        props.sponsors % 2 ? sponsor : sponsor % Math.ceil(props.sponsors / 2);
+    const row = props.sponsors > 3 ? (sponsor % 2 ? 1 : 2) : 1;
+    console.log(`grid-area: ${col} ${col + span} ${row} ${row + 1};`);
+
+    return `grid-area: ${row} / ${col} / ${row + 1} / ${col + span} ;`;
+};
 </script>
 
 <template>
-    <div v-if="tier == 'plat'">
-        <p class="text-2xl font-bold text-2023-orange">Platinum</p>
+    <div>
+        <p class="text-2xl font-bold" :class="textColor[color]">{{ title }}</p>
         <div
-            class="grid grid-cols-3 justify-around gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-orange max-lg:hidden"
+            class="grid justify-around gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
+            :class="shadowColor[color]"
+            :style="`grid-template-columns: repeat(${numCols}, 1fr); grid-template-rows: repeat(${numRows}, 1fr);`"
         >
             <Sponsor
-                v-for="sponsor in 3"
+                v-for="sponsor in sponsors"
                 :key="sponsor"
+                :position="calculateSponsorPosition(sponsor)"
                 src="https://picsum.photos/300/200"
                 :url="'https://google.com'"
                 :title="sponsor"
@@ -35,134 +69,31 @@ defineProps<{
             ></Sponsor>
         </div>
         <div
-            class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-orange lg:hidden"
+            class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
+            :class="shadowColor[color]"
         >
-            <Carousel ref="carousel_plat" :wrap-around="true" :autoplay="2000">
-                <Slide v-for="sponsor in 3" :key="sponsor">
+            <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
+                <Slide v-for="sponsor in sponsors" :key="sponsor">
                     <Sponsor
                         src="https://picsum.photos/300/200"
-                        position=""
                         :url="'https://google.com'"
                         :title="sponsor"
                         :description="sponsor"
                     ></Sponsor>
                 </Slide>
             </Carousel>
-            <button
-                class="absolute left-2 top-[calc(50%-20px)]"
-                @click="prev(carousel_plat)"
-            >
+            <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">
                 <v-icon name="fa-arrow-left" fill="#f29325" scale="2"></v-icon>
             </button>
-            <button
-                class="absolute right-2 top-[calc(50%-20px)]"
-                @click="next(carousel_plat)"
-            >
+            <button class="absolute right-2 top-[calc(50%-20px)]" @click="next">
                 <v-icon name="fa-arrow-right" fill="#f29325" scale="2"></v-icon>
             </button>
         </div>
     </div>
-    <div v-else-if="tier == 'gold'">
-        <p class="text-2xl font-bold text-2023-teal-dark">Gold</p>
-        <div
-            class="grid grid-cols-8 grid-rows-2 gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-teal-dark max-lg:hidden"
-        >
-            <Sponsor
-                v-for="sponsor in 7"
-                :key="sponsor"
-                src="https://picsum.photos/300/200"
-                :position="`col-start-${sponsor} col-span-2 ${
-                    sponsor % 2 ? `` : `row-start-2`
-                }`"
-                :url="'https://google.com'"
-                :title="sponsor"
-                :description="sponsor"
-            ></Sponsor>
-        </div>
-        <div
-            class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-teal-dark lg:hidden"
-        >
-            <Carousel ref="carousel_gold" :wrap-around="true" :autoplay="2000">
-                <Slide v-for="slide in 4" :key="slide">
-                    <div class="mx-5 grid grid-cols-2 gap-4">
-                        <Sponsor
-                            v-for="sponsor in 2"
-                            :key="sponsor"
-                            src="https://picsum.photos/300/200"
-                            :url="'https://google.com'"
-                            :title="sponsor"
-                            :description="sponsor"
-                        ></Sponsor>
-                    </div>
-                </Slide>
-            </Carousel>
-            <button
-                class="absolute left-2 top-[calc(50%-20px)]"
-                @click="prev(carousel_gold)"
-            >
-                <v-icon name="fa-arrow-left" fill="#025259" scale="2"></v-icon>
-            </button>
-            <button
-                class="absolute right-2 top-[calc(50%-20px)]"
-                @click="next(carousel_gold)"
-            >
-                <v-icon name="fa-arrow-right" fill="#025259" scale="2"></v-icon>
-            </button>
-        </div>
-    </div>
-    <div v-else-if="tier == 'silver'">
-        <p class="text-2xl font-bold text-2023-red-dark">Silver</p>
-        <div
-            class="align-center grid grid-cols-8 grid-rows-2 justify-center gap-4 border border-solid border-black p-10 shadow-2xl shadow-2023-red-dark max-lg:hidden"
-        >
-            <Sponsor
-                v-for="sponsor in 7"
-                :key="sponsor"
-                src="https://picsum.photos/300/200"
-                :position="`col-start-${sponsor} col-span-2 ${
-                    sponsor % 2 ? `` : `row-start-2`
-                }`"
-                :url="'https://google.com'"
-                :title="sponsor"
-                :description="sponsor"
-            ></Sponsor>
-        </div>
-        <div
-            class="relative border border-solid border-black p-10 shadow-2xl shadow-2023-red-dark lg:hidden"
-        >
-            <Carousel
-                ref="carousel_silver"
-                :wrap-around="true"
-                :autoplay="2000"
-            >
-                <Slide v-for="slide in 4" :key="slide">
-                    <div class="mx-5 grid grid-cols-4 grid-rows-2 gap-4">
-                        <Sponsor
-                            v-for="sponsor in 3"
-                            :key="sponsor"
-                            src="https://picsum.photos/300/200"
-                            :position="`col-start-${sponsor} col-span-2 ${
-                                sponsor % 2 ? `` : `row-start-2`
-                            }`"
-                            :url="'https://google.com'"
-                            :title="sponsor"
-                            :description="sponsor"
-                        ></Sponsor>
-                    </div>
-                </Slide>
-            </Carousel>
-            <button
-                class="absolute left-2 top-[calc(50%-20px)]"
-                @click="prev(carousel_silver)"
-            >
-                <v-icon name="fa-arrow-left" fill="#b15d5d" scale="2"></v-icon>
-            </button>
-            <button
-                class="absolute right-2 top-[calc(50%-20px)]"
-                @click="next(carousel_silver)"
-            >
-                <v-icon name="fa-arrow-right" fill="#b15d5d" scale="2"></v-icon>
-            </button>
-        </div>
-    </div>
 </template>
+
+<style>
+.vfm__overlay {
+    background-color: rgba(248, 245, 231, 0.5);
+}
+</style>
