@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(100)->create();
         $companies = User::factory(10)->company()->create();
-        User::factory(10)->admin()->create();
+        User::factory()->admin()->create([
+            'email' => 'admin@example.com',
+        ]);
 
         $edition = Edition::factory()->create();
 
