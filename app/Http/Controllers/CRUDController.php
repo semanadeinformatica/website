@@ -11,11 +11,13 @@ abstract class CRUDController extends Controller
 
     protected string $view;
 
-    protected array $rules;
+    protected array $rules = [];
 
     protected array $storeRules;
 
     protected array $updateRules;
+
+    protected array $include = [];
 
     public function index()
     {
@@ -55,7 +57,7 @@ abstract class CRUDController extends Controller
             $this->model::create($newValues);
         }
 
-        return redirect()->back();
+        return redirect()->action([static::class, 'index']);
     }
 
     protected function updated(array $old, array $new): ?array
@@ -68,12 +70,14 @@ abstract class CRUDController extends Controller
         $validated = $request->validate($this->updateRules ?? $this->rules);
 
         $model = $this->model::find($id);
+
         $newValues = $this->updated($model->toArray(), $validated);
+
         if ($newValues !== null) {
             $model->update($newValues);
         }
 
-        return redirect()->back();
+        return redirect()->action([static::class, 'index']);
     }
 
     public function destroy($id)
