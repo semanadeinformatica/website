@@ -2,7 +2,7 @@
 import type { ButtonHTMLAttributes } from "vue";
 
 interface Props {
-    type: ButtonHTMLAttributes["type"];
+    type?: ButtonHTMLAttributes["type"];
 }
 
 withDefaults(defineProps<Props>(), { type: "submit" });
