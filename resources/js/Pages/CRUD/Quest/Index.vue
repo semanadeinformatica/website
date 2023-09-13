@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Product from "@/Types/Product";
+import type Quest from "@/Types/Quest";
 import type Paginated from "@/Types/Paginated";
 import CRUDLayout from "@/Layouts/CRUDLayout.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
@@ -10,7 +10,7 @@ import { computed } from "vue";
 import type Edition from "@/Types/Edition";
 
 interface Props {
-    items: Paginated<Product>;
+    items: Paginated<Quest>;
     with: {
         editions: Edition[];
     };
@@ -26,23 +26,21 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Product" :items="items" name="products">
-        <template #heading>Produtos</template>
+    <CRUDLayout title="Quest" :items="items" name="quests">
+        <template #heading>Quests</template>
 
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header sort-by="price">Preço</Header>
-                <Header sort-by="points">Stock</Header>
+                <Header sort-by="points">Pontos</Header>
                 <Header sort-by="edition_id">Edição</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
-            <Row :item="item" name="products">
+            <Row :item="item" name="quests">
                 <Cell>{{ item.name }}</Cell>
-                <Cell>{{ item.price }}</Cell>
-                <Cell>{{ item.stock }}</Cell>
+                <Cell>{{ item.points }}</Cell>
                 <Cell>{{ editions[item.edition_id] }}</Cell>
             </Row>
         </template>

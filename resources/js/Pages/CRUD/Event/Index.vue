@@ -43,7 +43,7 @@ const editions = computed<Record<number, string>>(() =>
                 <Cell>{{ item.name }}</Cell>
                 <Cell>{{ new Date(item.date_start).toLocaleString() }} </Cell>
                 <Cell>{{ new Date(item.date_end).toLocaleString() }} </Cell>
-                <Cell>{{ editions[item.edition_id] }} </Cell>
+                <Cell>{{ editions[item.edition_id] }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

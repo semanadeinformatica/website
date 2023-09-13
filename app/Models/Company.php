@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Company extends Model
 {
@@ -26,5 +27,10 @@ class Company extends Model
     public function socialMedia(): BelongsTo
     {
         return $this->belongsTo(SocialMedia::class);
+    }
+
+    public function user(): MorphOne
+    {
+        return $this->morphOne(User::class, 'usertype');
     }
 }

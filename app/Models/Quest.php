@@ -22,6 +22,8 @@ class Quest extends Model
         'points',
         'category',
         'edition_id',
+        'requirement_type',
+        'requirement_id',
     ];
 
     public function edition(): BelongsTo
