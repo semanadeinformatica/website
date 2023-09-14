@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\UserCRUDController;
+use App\Http\Controllers\SponsorCRUDController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/quests' => QuestCRUDController::class,
                     '/speakers' => SpeakerCRUDController::class,
                     '/users' => UserCRUDController::class,
+                    '/sponsors' => SponsorCRUDController::class,
                 ]);
             });
 

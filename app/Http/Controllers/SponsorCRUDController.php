@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
-use App\Models\Product;
 
-class ProductCRUDController extends CRUDController
+class SponsorCRUDController extends CRUDController
 {
     protected string $model = Sponsor::class;
 
