@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Admin;
+use App\Models\Company;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Speaker;
 use App\Models\Sponsor;
-use App\Models\Admin;
-use App\Models\Company;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-
     const DEFAULT_ADMIN_EMAIL = 'admin@example.com';
 
-    private function cleanDatabase() {
+    private function cleanDatabase()
+    {
         DB::beginTransaction();
 
         User::truncate();
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Quest::truncate();
         Sponsor::truncate();
         Product::truncate();
-    
+
         DB::commit();
     }
 
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         User::factory(100)->create();
         $companies = User::factory(10)->company()->create();
 
-        if (!User::where("email", "=", DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
+        if (! User::where('email', '=', DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
             User::factory()->admin()->create([
                 'email' => DatabaseSeeder::DEFAULT_ADMIN_EMAIL,
             ]);

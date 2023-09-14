@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Company from "@/Types/Company";
@@ -24,13 +23,12 @@ const form = useForm({
 
 const submit = () => {
     form.post(route("admin.sponsors.store"));
-}
+};
 </script>
 
 <template>
     <CardLayout title="Atribuir Patrocínio">
         <form class="contents" @submit.prevent="submit">
-
             <select v-model="form.edition_id" required class="self-stretch">
                 <option value="" disabled selected hidden>Edição</option>
                 <option
@@ -53,11 +51,7 @@ const submit = () => {
                 </option>
             </select>
 
-            <select
-                v-model="form.tier"
-                required
-                class="self-stretch"
-            >
+            <select v-model="form.tier" required class="self-stretch">
                 <option value="" disabled selected hidden>
                     Tipo de patrocínio
                 </option>
