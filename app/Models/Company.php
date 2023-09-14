@@ -16,7 +16,6 @@ class Company extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'tier',
         'user_id',
         'social_media_id',
     ];
