@@ -15,4 +15,7 @@
 .carousel__slide--active div {
     transform: scale(1.1);
 }
+.carousel__slide--active {
+    z-index: 99;
+}
 </style>

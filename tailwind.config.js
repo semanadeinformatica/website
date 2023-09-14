@@ -48,6 +48,7 @@ export default {
             },
             screens: {
                 ml: "900px",
+                xs: "500px"
             },
         },
     },
