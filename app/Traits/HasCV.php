@@ -52,7 +52,7 @@ trait HasCV
     /**
      * Get the URL to the user's CV.
      */
-    public function CVUrl(): Attribute
+    public function CvUrl(): Attribute
     {
         return Attribute::get(function () {
             return Storage::disk($this->CVDisk())->url($this->cv_path);
