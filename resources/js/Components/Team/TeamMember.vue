@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const borderColor: Record<string, string> = {
     orange: "border-2023-orange",
     "teal-dark": "border-2023-teal-dark",
@@ -25,25 +24,37 @@ const iconColor: Record<string, string> = {
 };
 
 defineProps<{
-    color: string,
-    person: unknown,
+    color: string;
+    person: unknown;
 }>();
 </script>
 
 <template>
-    <div class="flex flex-col items-center relative">
-        <img :src="person.src" :alt="`${person.name}'s' image`" class="rounded-full border-4" :class="borderColor[color]">
-        <div class="w-fit absolute bottom-2">
+    <div class="relative flex flex-col items-center">
+        <img
+            :src="person.src"
+            :alt="`${person.name}'s' image`"
+            class="rounded-full border-4"
+            :class="borderColor[color]"
+        />
+        <div class="absolute bottom-2 w-fit">
             <a :href="person.linkedin">
-                <v-icon :fill="iconColor[color]" name="io-logo-linkedin" scale="1.4"></v-icon>
+                <v-icon
+                    :fill="iconColor[color]"
+                    name="io-logo-linkedin"
+                    scale="1.4"
+                ></v-icon>
             </a>
             <a v-if="person.github" :href="person.github">
-                <v-icon :fill="iconColor[color]" name="io-logo-github" scale="1.4"></v-icon>
+                <v-icon
+                    :fill="iconColor[color]"
+                    name="io-logo-github"
+                    scale="1.4"
+                ></v-icon>
             </a>
         </div>
     </div>
     <p class="font-bold" :class="textColor[color]">{{ person.name }}</p>
 </template>
 
-<style>
-</style>
+<style></style>
