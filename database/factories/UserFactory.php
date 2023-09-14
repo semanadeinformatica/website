@@ -24,9 +24,10 @@ class UserFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (User $user) {
-            $user->usertype()->save($user->usertype_type::factory()->create([
+            $user->usertype()->associate($user->usertype_type::factory()->create([
                 'user_id' => $user->id,
             ]));
+            $user->save();
         });
     }
 

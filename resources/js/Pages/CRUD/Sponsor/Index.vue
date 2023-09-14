@@ -35,7 +35,7 @@ const companies = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Sponsor" :items="items" name="Sponsor">
+    <CRUDLayout title="Sponsor" :items="items" name="sponsors">
         <template #heading>Patrocínios</template>
 
         <template #header>
@@ -47,7 +47,7 @@ const companies = computed<Record<number, string>>(() =>
         </template>
 
         <template #row="{ item }">
-            <Row name="users" :item="item">
+            <Row name="sponsors" :item="item">
                 <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ companies[item.company_id] }}</Cell>
                 <Cell>{{ item.tier }}</Cell>

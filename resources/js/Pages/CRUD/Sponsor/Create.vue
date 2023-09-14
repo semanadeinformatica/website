@@ -49,7 +49,7 @@ const submit = () => {
                     :key="company.id"
                     :value="company.id"
                 >
-                    {{ company.user?.name }}
+                    {{ company.user?.name ?? company.id }}
                 </option>
             </select>
 

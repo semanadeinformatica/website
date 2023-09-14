@@ -21,11 +21,11 @@ const { item: sponsor } = defineProps<Props>();
 const form = useForm({
     edition_id: sponsor.edition_id,
     company_id: sponsor.company_id,
-    tier: sponsor.tier,
+    tier: sponsor.tier.toLowerCase(),
 });
 
 const submit = () => {
-    form.put(route("admin.sponsors.update"));
+    form.put(route("admin.sponsors.update", sponsor));
 }
 </script>
 
