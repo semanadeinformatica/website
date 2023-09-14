@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import AppLayout from '@/Layouts/AppLayout.vue';
+import SINFTeam from '@/Components/Team/SINFTeam.vue';
+
+const mockTeam =[
+    {
+        name: "person 1",
+        src: "https://picsum.photos/200",
+        linkedin: "google.com"
+    },{
+        name: "person 2",
+        src: "https://picsum.photos/200",
+        linkedin: "google.com"
+
+    },{
+        name: "person 3",
+        src: "https://picsum.photos/200",
+        linkedin: "google.com"
+
+    },{
+        name: "person 4",
+        src: "https://picsum.photos/200",
+        linkedin: "google.com"
+
+    },{
+        name: "person 5",
+        src: "https://picsum.photos/200",
+        linkedin: "google.com",
+        github: "google.com"
+    },
+] 
+</script>
+
+<template>
+    <AppLayout title="Team">
+        <div class="p-10 border border-black flex flex-col gap-6">
+            <SINFTeam title="Coordenação Geral" color="orange" :people="mockTeam"></SINFTeam>
+            <SINFTeam title="Informática" color="teal-dark" :people="mockTeam"></SINFTeam>
+            <SINFTeam title="Imagem" color="red" :people="mockTeam"></SINFTeam>
+            <SINFTeam title="Programa" color="red-dark" :people="mockTeam"></SINFTeam>
+            <SINFTeam title="Tesouraria" color="teal" :people="mockTeam"></SINFTeam>
+        </div>
+    </AppLayout>
+</template>
+
+<style>
+main {
+    padding: 2rem;
+    padding-inline: 6rem;
+}
+</style>

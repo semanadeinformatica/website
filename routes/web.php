@@ -28,6 +28,10 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
+Route::get('/team', function () {
+    return Inertia::render('Team');
+});
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::get('/dashboard', function () {
