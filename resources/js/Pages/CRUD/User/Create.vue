@@ -9,7 +9,6 @@ const form = useForm({
     name: "",
     email: "",
     type: "" as "student" | "company" | "admin",
-    company_tier: "" as "platinum" | "gold" | "silver",
     social_media: {
         email: "",
         facebook: "",
@@ -57,20 +56,6 @@ const submit = () => {
                 <option value="student">Estudante</option>
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
-            </select>
-
-            <select
-                v-if="form.type == 'company'"
-                v-model="form.company_tier"
-                required
-                class="self-stretch"
-            >
-                <option value="" disabled selected hidden>
-                    Tipo de empresa
-                </option>
-                <option value="platinum">Platina</option>
-                <option value="gold">Ouro</option>
-                <option value="silver">Prata</option>
             </select>
 
             <details v-if="form.type !== 'admin'" class="self-stretch">
