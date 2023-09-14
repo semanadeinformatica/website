@@ -24,6 +24,7 @@ class Student extends Model
     ];
 
     protected $with = ['socialMedia'];
+
     /**
      * The accessors to append to the model's array form.
      *
