@@ -46,6 +46,10 @@ export default {
                 "2023-maintenance-jump":
                     "2023-jump 2s cubic-bezier(0.46, 0.03, 0.52, 0.96) infinite",
             },
+            screens: {
+                ml: "900px",
+                xs: "500px",
+            },
         },
     },
 
