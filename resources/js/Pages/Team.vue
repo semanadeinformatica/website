@@ -47,8 +47,13 @@ const mockTeam = [
             ></SINFTeam>
             <SINFTeam title="Imagem" color="red" :people="mockTeam"></SINFTeam>
             <SINFTeam
-                title="Programa"
+                title="Imagem e Comunicação"
                 color="red-dark"
+                :people="mockTeam"
+            ></SINFTeam>
+            <SINFTeam
+                title="Operações"
+                color="teal"
                 :people="mockTeam"
             ></SINFTeam>
             <SINFTeam
@@ -56,6 +61,27 @@ const mockTeam = [
                 color="teal"
                 :people="mockTeam"
             ></SINFTeam>
+            <SINFTeam
+                title="Programa"
+                color="teal"
+                :people="mockTeam"
+            ></SINFTeam>
+            <SINFTeam
+                title="Competição de Programação"
+                color="teal"
+                :people="mockTeam"
+            ></SINFTeam>
+            <SINFTeam
+                title="Competição de CTF"
+                color="teal"
+                :people="mockTeam"
+            ></SINFTeam>
+            <SINFTeam
+                title="Relações Externas"
+                color="teal"
+                :people="mockTeam"
+            ></SINFTeam>
+
         </div>
     </AppLayout>
 </template>
