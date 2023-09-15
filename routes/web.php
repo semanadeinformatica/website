@@ -19,6 +19,7 @@ use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -86,8 +87,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
 
         Route::prefix('user')->group(function () {
-            Route::prefix('/{user}')->where(['user', '[0-9]+'])->controller('App\Http\Controllers\StudentController')->group(function () {
-                Route::get('', 'show')->name('user.profile');
+            Route::prefix('/{student}')->whereNumber('student')->controller(StudentController::class)->group(function () {
+                Route::get('', 'show')->name('student.profile');
             });
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
