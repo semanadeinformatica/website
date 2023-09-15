@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import Sponsor from "./Sponsor.vue";
+import type SponsorType from "@/Types/Sponsor";
 
 const carousel = ref<typeof Carousel | null>(null);
 
@@ -26,24 +27,28 @@ const prev = () => {
 };
 
 const props = defineProps<{
-    sponsors: number;
+    sponsors: SponsorType[];
     color: string;
     title: string;
 }>();
 
 const numCols: number =
-    props.sponsors > 3
-        ? props.sponsors % 2
-            ? Math.ceil(props.sponsors / 2) * 2
-            : Math.ceil(props.sponsors / 2)
-        : props.sponsors;
-const numRows: number = props.sponsors > 3 ? 2 : 1;
+    props.sponsors.length > 3
+        ? props.sponsors.length % 2
+            ? Math.ceil(props.sponsors.length / 2) * 2
+            : Math.ceil(props.sponsors.length / 2)
+        : props.sponsors.length;
+const numRows: number = props.sponsors.length > 3 ? 2 : 1;
 
 const calculateSponsorPosition = (sponsor: number) => {
-    const span = props.sponsors > 3 ? (props.sponsors % 2 ? 2 : 1) : 1;
+    const span =
+        props.sponsors.length > 3 ? (props.sponsors.length % 2 ? 2 : 1) : 1;
     const col =
-        props.sponsors % 2 ? sponsor : sponsor % Math.ceil(props.sponsors / 2);
-    const row = props.sponsors > 3 ? (sponsor % 2 ? 1 : 2) : 1;
+        props.sponsors.length % 2
+            ? sponsor
+            : sponsor % Math.ceil(props.sponsors.length / 2);
+    const row = props.sponsors.length > 3 ? (sponsor % 2 ? 1 : 2) : 1;
+    console.log(`grid-area: ${col} ${col + span} ${row} ${row + 1};`);
 
     return `grid-area: ${row} / ${col} / ${row + 1} / ${col + span} ;`;
 };
@@ -58,13 +63,10 @@ const calculateSponsorPosition = (sponsor: number) => {
             :style="`grid-template-columns: repeat(${numCols}, 1fr); grid-template-rows: repeat(${numRows}, 1fr);`"
         >
             <Sponsor
-                v-for="sponsor in sponsors"
-                :key="sponsor"
-                :position="calculateSponsorPosition(sponsor)"
-                src="https://picsum.photos/300/200"
-                :url="'https://google.com'"
-                :title="sponsor"
-                :description="sponsor"
+                v-for="(sponsor, i) in sponsors"
+                :key="sponsor.id"
+                :position="calculateSponsorPosition(i)"
+                :sponsor="sponsor"
             ></Sponsor>
         </div>
         <div
@@ -72,13 +74,8 @@ const calculateSponsorPosition = (sponsor: number) => {
             :class="shadowColor[color]"
         >
             <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
-                <Slide v-for="sponsor in sponsors" :key="sponsor">
-                    <Sponsor
-                        src="https://picsum.photos/300/200"
-                        :url="'https://google.com'"
-                        :title="sponsor"
-                        :description="sponsor"
-                    ></Sponsor>
+                <Slide v-for="sponsor in sponsors" :key="sponsor.id">
+                    <Sponsor :sponsor="sponsor"></Sponsor>
                 </Slide>
             </Carousel>
             <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">

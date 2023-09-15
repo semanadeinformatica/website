@@ -4,6 +4,27 @@ import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import Map from "@/Components/Home/Map.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import { ModalsContainer } from "vue-final-modal";
+import type Edition from "@/Types/Edition";
+import { computed } from "vue";
+import type Sponsor from "@/Types/Sponsor";
+
+interface Props {
+    edition: Edition;
+}
+
+const { edition } = defineProps<Props>();
+
+const sponsors = computed(
+    () =>
+        edition.sponsors?.reduce(
+            (acc, sponsor) => {
+                acc[sponsor.tier] ??= [];
+                acc[sponsor.tier].push(sponsor);
+                return acc;
+            },
+            {} as Record<Sponsor["tier"], Sponsor[]>,
+        ) ?? {} as Record<Sponsor["tier"], Sponsor[]>
+);
 </script>
 
 <template>
@@ -39,7 +60,7 @@ import { ModalsContainer } from "vue-final-modal";
                 />
                 <span
                     class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
-                    >2023</span
+                    >{{ edition.year }}</span
                 >
             </div>
             <p
@@ -102,17 +123,17 @@ import { ModalsContainer } from "vue-final-modal";
             </p>
             <SponsorBanner
                 title="Platinum"
-                :sponsors="3"
+                :sponsors="sponsors.PLATINUM"
                 color="orange"
             ></SponsorBanner>
             <SponsorBanner
                 title="Gold"
-                :sponsors="6"
+                :sponsors="sponsors.GOLD"
                 color="teal-dark"
             ></SponsorBanner>
             <SponsorBanner
                 title="Silver"
-                :sponsors="7"
+                :sponsors="sponsors.SILVER"
                 color="red-dark"
             ></SponsorBanner>
         </section>
