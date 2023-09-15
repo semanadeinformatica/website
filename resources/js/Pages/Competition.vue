@@ -7,16 +7,15 @@ import Podium from "@/Components/Podium.vue";
 <template>
     <AppLayout title="Competition">
         <Podium></Podium>
-        <main class="bg-2023-bg">
-
             <!-- RULES -->
             
             <section
-                class="relative flex top-[150px] grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
+                class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
             >
-                <h1
-                    class="absolute -top-[36px] left-[37%] border border-solid border-black bg-2023-red p-3 text-5xl font-bold text-white shadow-md shadow-2023-bg"
-                > Regulamento </h1>
+                <h2
+                    class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
+                > Regulamento 
+                </h2>
 
                 <p class="p-20 text-lg text-white max-lg:pb-10">
                     A Semana de Informática (SINF), organizada pelo Núcleo de
@@ -49,6 +48,5 @@ import Podium from "@/Components/Podium.vue";
                     <p>Participar!</p>
                 </button>
             </section>
-        </main>
     </AppLayout>
 </template>
