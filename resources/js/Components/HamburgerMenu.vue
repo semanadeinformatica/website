@@ -68,9 +68,14 @@ const props = defineProps<{
         <section class="py-6">
             <h2 class="pb-3 text-center font-bold text-2023-orange">Edições</h2>
             <div class="flex flex-row justify-center gap-5">
-                <ResponsiveNavLink :href="route('dashboard')" :active="false">
-                    2023
-                </ResponsiveNavLink>
+                <template v-for="edition in props.options['editions']">
+                    <ResponsiveNavLink
+                        :href="route('dashboard')"
+                        :active="edition == '2023'"
+                    >
+                        {{ edition }}
+                    </ResponsiveNavLink>
+                </template>
             </div>
         </section>
     </div>

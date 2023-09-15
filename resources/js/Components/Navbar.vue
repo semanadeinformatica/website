@@ -28,6 +28,7 @@ const edition_routes = ["2022", "2021", "2020", "2019", "2018"];
 const options = {
     pages: page_routes,
     activities: activity_routes,
+    editions: edition_routes,
 };
 </script>
 
