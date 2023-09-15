@@ -40,7 +40,7 @@ const submit = () => {
                 :error-message="form.errors.email"
             />
 
-            <PrimaryButton disabled="form.processing">
+            <PrimaryButton :disabled="form.processing">
                 Enviar email
             </PrimaryButton>
         </form>
