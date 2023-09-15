@@ -39,12 +39,12 @@ import Podium from "@/Components/Podium.vue";
             </section>
 
             <!-- PARTICIPATE -->
-            <section class="relative flex  content-center items-center justify-center py-20">
-                <h2 class="absolute flex top-[15px] justify-center p-3 text-3xl font-bold text-2023-red">
+            <section class="relative flex content-center items-center justify-center py-20">
+                <h2 class="absolute flex top-[15px] justify-center p-3 text-3xl font-bold text-2023-red m-4">
                     Vamos a isto?
                 </h2>
 
-                <button class="container mx-auto w-[180px] h-[50px] justify-center bg-2023-teal-dark border border-black text-white text-2xl text-center font-bold pb-2">
+                <button class="w-[180px] h-[50px] justify-center content-center bg-2023-teal-dark border border-black text-white text-2xl text-center font-bold mt-5 hover:bg-2023-teal">
                     <p>Participar!</p>
                 </button>
             </section>
