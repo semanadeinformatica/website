@@ -1,20 +1,12 @@
-<script setup>
-import { Head, Link } from "@inertiajs/vue3";
+<script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-// import for podium (?)
-
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-});
+import Podium from "@/Components/Podium.vue";
 
 </script>
 
 <template>
-    <Podium></Podium>
     <AppLayout title="Competition">
+        <Podium></Podium>
         <main class="bg-2023-bg">
 
             <!-- RULES -->

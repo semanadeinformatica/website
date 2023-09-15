@@ -43,6 +43,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             return Inertia::render('Dashboard');
         })->name('dashboard');
 
+        Route::get('/competition', function () {
+            return Inertia::render('Competition');
+        })->name('competition');
+
         Route::prefix('admin')
             ->middleware('can:admin')
             ->name('admin.')
