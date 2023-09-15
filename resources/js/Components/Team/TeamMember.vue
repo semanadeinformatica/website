@@ -25,7 +25,7 @@ const iconColor: Record<string, string> = {
 
 defineProps<{
     color: string;
-    person: { name: string; src: string; linkedin: string };
+    person: { name: string; src: string; linkedin?: string; github?: string };
 }>();
 </script>
 

@@ -20,7 +20,7 @@ const textColor: Record<string, string> = {
 defineProps<{
     title: string;
     color: string;
-    people: { name: string; src: string; linkedin: string }[];
+    people: { name: string; src: string; linkedin?: string; github?: string }[];
 }>();
 </script>
 
@@ -34,8 +34,8 @@ defineProps<{
         </p>
         <section class="flex flex-row flex-wrap justify-center gap-4">
             <div
-                v-for="person in people"
-                :key="person"
+                v-for="(person, idx) in people"
+                :key="idx"
                 class="flex flex-col items-center"
             >
                 <TeamMember :person="person" :color="color"></TeamMember>
