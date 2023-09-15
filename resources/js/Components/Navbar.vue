@@ -23,6 +23,8 @@ const activity_routes = {
     "Dinâmicas de grupo": "group-dynamics",
 };
 
+const edition_routes = ["2022", "2021", "2020", "2019", "2018"];
+
 const options = {
     pages: page_routes,
     activities: activity_routes,
@@ -30,7 +32,7 @@ const options = {
 </script>
 
 <template>
-    <nav class="relative flex border-b-2 border-black bg-2023-bg py-6">
+    <nav class="relative z-30 flex border-b-2 border-black bg-2023-bg py-6">
         <div class="flex h-full w-full pl-5 md:hidden">
             <img
                 class="flex md:hidden"
@@ -71,9 +73,11 @@ const options = {
                         <DropdownTrigger> 2023 </DropdownTrigger>
                     </template>
                     <template #content>
-                        <DropdownLink :href="route('dashboard')">
-                            2023
-                        </DropdownLink>
+                        <template v-for="edition in edition_routes">
+                            <DropdownLink :href="route('dashboard')">
+                                {{ edition }}
+                            </DropdownLink>
+                        </template>
                     </template>
                 </Dropdown>
             </div>
