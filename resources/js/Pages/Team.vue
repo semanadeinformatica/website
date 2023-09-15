@@ -45,7 +45,6 @@ const mockTeam = [
                 color="teal-dark"
                 :people="mockTeam"
             ></SINFTeam>
-            <SINFTeam title="Imagem" color="red" :people="mockTeam"></SINFTeam>
             <SINFTeam
                 title="Imagem e Comunicação"
                 color="red-dark"
@@ -81,7 +80,6 @@ const mockTeam = [
                 color="teal"
                 :people="mockTeam"
             ></SINFTeam>
-
         </div>
     </AppLayout>
 </template>
