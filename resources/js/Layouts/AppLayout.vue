@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import Banner from "@/Components/Banner.vue";
+import Navbar from "@/Components/Navbar.vue";
 import Footer from "../Components/Footer.vue";
 
 interface Props {
@@ -14,9 +14,9 @@ defineProps<Props>();
     <div>
         <Head :title="title" />
         <Banner />
-        <div class="min-h-screen bg-2023-bg">
+        <div>
             <Navbar />
-            <main>
+            <main class="min-h-screen bg-2023-bg">
                 <slot />
             </main>
             <Footer></Footer>
