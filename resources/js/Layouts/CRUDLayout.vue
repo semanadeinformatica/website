@@ -33,7 +33,9 @@ watch(query, (query) => {
 
 <template>
     <AppLayout :title="title">
-        <div class="flex flex-col items-stretch gap-4 bg-2023-bg p-12">
+        <div
+            class="flex min-h-screen flex-col items-stretch gap-4 bg-2023-bg p-12"
+        >
             <header
                 class="flex flex-row flex-wrap items-center justify-between gap-4"
             >
