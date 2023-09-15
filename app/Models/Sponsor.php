@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Company extends Model
+class Sponsor extends Model
 {
     use HasFactory;
 
@@ -16,19 +16,18 @@ class Company extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'social_media_id',
+        'tier',
+        'edition_id',
+        'company_id',
     ];
 
-    protected $with = ['socialMedia'];
-
-    public function socialMedia(): BelongsTo
+    public function edition(): BelongsTo
     {
-        return $this->belongsTo(SocialMedia::class);
+        return $this->belongsTo(Edition::class);
     }
 
-    public function user(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Company::class);
     }
 }

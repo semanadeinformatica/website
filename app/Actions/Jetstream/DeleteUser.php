@@ -2,9 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
-use App\Models\Student;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 
 class DeleteUser implements DeletesUsers
@@ -14,15 +12,10 @@ class DeleteUser implements DeletesUsers
      */
     public function delete(User $user): void
     {
-        $student = $user->whereHasMorph(
-            'usertype',
-            Student::class,
-            function (Builder $query) use ($user) {
-                $query->where('user_id', $user->id);
-            })->get()->first();
-        if ($student) {
-            $student->deleteCV();
+        if ($user->isStudent()) {
+            $user->usertype->deleteCv();
         }
+
         $user->deleteProfilePhoto();
         $user->tokens->each->delete();
         $user->delete();

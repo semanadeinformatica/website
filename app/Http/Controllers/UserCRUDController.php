@@ -19,7 +19,6 @@ class UserCRUDController extends CRUDController
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
         'type' => 'required|in:student,company,admin',
-        'company_tier' => 'exclude_unless:type,company|required_if:type,company|in:platinum,gold,silver',
         'social_media.email' => 'sometimes|nullable|string|email',
         'social_media.facebook' => 'sometimes|nullable|string',
         'social_media.github' => 'sometimes|nullable|string',
@@ -45,11 +44,7 @@ class UserCRUDController extends CRUDController
             'usertype_id' => '0',
             'usertype_type' => $type,
         ]);
-        $usertypeProps = match ($new['type']) {
-            'student' => ['user_id' => $user->id],
-            'company' => ['user_id' => $user->id, 'tier' => strtoupper($new['company_tier'])],
-            'admin' => ['user_id' => $user->id],
-        };
+        $usertypeProps = ['user_id' => $user->id];
         $usertype = $type::create($usertypeProps);
         $user->usertype()->associate($usertype);
         $user->save();
@@ -89,7 +84,6 @@ class UserCRUDController extends CRUDController
         return [
             'name' => $new['name'],
             'email' => $new['email'],
-            'tier' => $type === Company::class ? strtoupper($new['company_tier']) : null,
             'social_media_id' => $socialMedia?->id ?? null,
         ];
     }
