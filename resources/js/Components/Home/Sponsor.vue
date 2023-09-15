@@ -31,7 +31,7 @@ defineProps<Props>();
         >
             <img
                 :src="sponsor.company?.user?.profile_photo_url"
-                class="absolute -top-20 max-w-48 max-h-40 border border-solid border-black shadow-xl shadow-2023-teal-dark"
+                class="absolute -top-20 w-auto h-40 border border-solid border-black shadow-xl shadow-2023-teal-dark"
             />
             <div
                 class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"

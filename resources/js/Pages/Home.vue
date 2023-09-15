@@ -111,7 +111,7 @@ const sponsors = computed(
             >
                 Speakers
             </p>
-            <SpeakersCarousel></SpeakersCarousel>
+            <SpeakersCarousel :speakers="edition.speakers ?? []"></SpeakersCarousel>
         </section>
         <!-- SPONSORS -->
         <section class="flex flex-col gap-10 px-20 py-24">
