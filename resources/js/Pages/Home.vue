@@ -23,7 +23,7 @@ const sponsors = computed(
                 return acc;
             },
             {} as Record<Sponsor["tier"], Sponsor[]>,
-        ) ?? {} as Record<Sponsor["tier"], Sponsor[]>
+        ) ?? ({} as Record<Sponsor["tier"], Sponsor[]>),
 );
 </script>
 
@@ -111,7 +111,9 @@ const sponsors = computed(
             >
                 Speakers
             </p>
-            <SpeakersCarousel :speakers="edition.speakers ?? []"></SpeakersCarousel>
+            <SpeakersCarousel
+                :speakers="edition.speakers ?? []"
+            ></SpeakersCarousel>
         </section>
         <!-- SPONSORS -->
         <section class="flex flex-col gap-10 px-20 py-24">

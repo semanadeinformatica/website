@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Edition;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -14,8 +13,8 @@ class HomeController extends Controller
             'speakers',
             'sponsors' => [
                 'company' => [
-                    'user'
-                ]
+                    'user',
+                ],
             ],
         ])->first();
 
