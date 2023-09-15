@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SINFTeam from "@/Components/Team/SINFTeam.vue";
 
-const mockTeam = [
+const mockTeam: { name: string; src: string; linkedin: string }[] = [
     {
         name: "person 1",
         src: "https://picsum.photos/200",

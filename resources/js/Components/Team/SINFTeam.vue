@@ -20,7 +20,7 @@ const textColor: Record<string, string> = {
 defineProps<{
     title: string;
     color: string;
-    people: unknown;
+    people: { name: string; src: string; linkedin: string }[];
 }>();
 </script>
 
