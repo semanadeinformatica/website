@@ -8,6 +8,7 @@ export default interface Event extends Model {
     topic: string;
     capacity?: number;
     event_day_id: number;
-
+    edition_id: number;
+    description: string;
     speakers?: Speaker[];
 }
