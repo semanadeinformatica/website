@@ -61,23 +61,10 @@ import { ModalsContainer } from "vue-final-modal";
                 Sobre nós
             </h2>
             <p class="p-20 text-lg text-white max-lg:pb-10">
-                A Semana de Informática (SINF), organizada pelo Núcleo de
-                Informática da Associação de Estudantes da Faculdade de
-                Engenharia da Universidade do Porto (NIAEFEUP), foi criada com o
-                intuito de permitir aos estudantes, independentemente do curso,
-                desenvolver as suas capacidades nas diversas áreas da
-                Informática, promovendo a sua interação com o mundo empresarial
-                através de eventos sociais.
+                {{ $t("homePage.aboutUsText1") }}
             </p>
             <p class="p-20 text-lg text-white max-lg:py-10">
-                A edição de 2023 decorre entre os dias 25 e 31 de outubro. Os
-                participantes têm a seu dispor palestras e workshops onde
-                entrarão em contacto com diversas tecnologias e conceitos que
-                não intervêm no percurso académico, focando-se portanto nas
-                skills técnicas, assim como um pitch, sessões de entrevistas e
-                visitas a empresas, fomentando o seu contacto com empresas de
-                topo a nível nacional e internacional, podendo desenvolver as
-                suas soft skills.
+                {{ $t("homePage.aboutUsText2") }}
             </p>
         </section>
         <!-- CALL TO ACTION -->

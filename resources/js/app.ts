@@ -26,7 +26,7 @@ const appName =
 const i18n = createI18n({
     locale: "pt",
     fallbackLocale: "en",
-    messages
+    messages,
 });
 
 createInertiaApp({

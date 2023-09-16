@@ -8,10 +8,10 @@ interface Props {
 const { event } = defineProps<Props>();
 
 const formatTimeString = (time: string): string => {
-    const [hours, minutes,] = time.split(':');
+    const [hours, minutes] = time.split(":");
 
     return `${hours}h${minutes}`;
-}
+};
 </script>
 
 <template>
@@ -22,7 +22,9 @@ const formatTimeString = (time: string): string => {
             >
         </h2>
         <p class="text-2023-teal">
-            {{ formatTimeString(event.time_start) }}&nbsp;-&nbsp;{{ formatTimeString(event.time_end) }}
+            {{ formatTimeString(event.time_start) }}&nbsp;-&nbsp;{{
+                formatTimeString(event.time_end)
+            }}
         </p>
         <span
             class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2023-orange font-semibold text-white"
