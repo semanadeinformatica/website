@@ -39,4 +39,9 @@ class Edition extends Model
     {
         return $this->hasMany(Quest::class);
     }
+
+    public function sponsors(): HasMany
+    {
+        return $this->hasMany(Sponsor::class);
+    }
 }
