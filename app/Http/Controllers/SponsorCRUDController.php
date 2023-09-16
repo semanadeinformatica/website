@@ -27,7 +27,7 @@ class SponsorCRUDController extends CRUDController
         ];
     }
 
-    protected function updated(array $old, array $new): ?array
+    protected function updated($old, array $new): ?array
     {
         return [
             'edition_id' => $new['edition_id'],

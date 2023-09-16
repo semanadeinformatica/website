@@ -28,6 +28,13 @@ class UserCRUDController extends CRUDController
         'social_media.website' => 'sometimes|nullable|string|url',
     ];
 
+    protected function updateRules($old): array
+    {
+        return array_merge($this->rules, [
+            'email' => 'required|string|email|max:255|unique:users,email,'.$old->id,
+        ]);
+    }
+
     protected function created(array $new): ?array
     {
         $type = match ($new['type']) {
@@ -59,7 +66,7 @@ class UserCRUDController extends CRUDController
         return null;
     }
 
-    protected function updated(array $old, array $new): ?array
+    protected function updated($old, array $new): ?array
     {
         $type = match ($new['type']) {
             'student' => Student::class,
@@ -67,13 +74,13 @@ class UserCRUDController extends CRUDController
             'admin' => Admin::class,
         };
 
-        if ($old['usertype_type'] !== $type) {
+        if ($old->usertype_type !== $type) {
             // This should never happen
             throw new \Exception('Cannot change user type');
         }
 
         if ($new['type'] !== 'admin' && isset($new['social_media'])) {
-            $socialMedia = SocialMedia::find($old['social_media_id']);
+            $socialMedia = $old->social_media;
             if ($socialMedia === null) {
                 $socialMedia = SocialMedia::create($new['social_media']);
             } else {

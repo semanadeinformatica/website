@@ -48,7 +48,7 @@ class QuestCRUDController extends CRUDController
         ];
     }
 
-    protected function updated(array $old, array $new): ?array
+    protected function updated($old, array $new): ?array
     {
         $requirement = explode(';', $new['requirement']);
 

@@ -25,23 +25,31 @@ abstract class CRUDController extends Controller
     /**
      * The validation rules.
      *
-     * @var array<int, string>
+     * @var array<string, string | array<int|string>>
      */
     protected array $rules = [];
 
     /**
      * The validation rules for the store method.
      *
-     * @var array<int, string>|null
+     * @param  T  $old The old model.
+     * @return array<string, string | array<int|string>>
      */
-    protected ?array $storeRules;
+    protected function storeRules(): array
+    {
+        return $this->rules;
+    }
 
     /**
      * The validation rules for the update method.
      *
-     * @var array<int, string>|null
+     * @param  T  $old The old model.
+     * @return array<string, string | array<int|string>>
      */
-    protected ?array $updateRules;
+    protected function updateRules($old): array
+    {
+        return $this->rules;
+    }
 
     /**
      * The array to include with the views.
@@ -113,7 +121,7 @@ abstract class CRUDController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate($this->storeRules ?? $this->rules);
+        $validated = $request->validate($this->storeRules());
 
         $newValues = $this->created($validated);
 
@@ -129,22 +137,22 @@ abstract class CRUDController extends Controller
      * The returned array will be used to update the model, unless
      * null is returned, in which case the model will not be updated.
      *
-     * @param  array<string, mixed>  $old The old values of the model.
+     * @param  T  $old The old model.
      * @param  array<string, mixed>  $new The validated values.
      * @return array<string, mixed>|null
      */
-    protected function updated(array $old, array $new): ?array
+    protected function updated($old, array $new): ?array
     {
         return $new;
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate($this->updateRules ?? $this->rules);
-
         $model = $this->model::find($id);
 
-        $newValues = $this->updated($model->toArray(), $validated);
+        $validated = $request->validate($this->updateRules($model));
+
+        $newValues = $this->updated($model, $validated);
 
         if ($newValues !== null) {
             $model->update($newValues);
@@ -158,9 +166,9 @@ abstract class CRUDController extends Controller
      * If true is returned, the model will be deleted.
      * If false is returned, the model will not be deleted.
      *
-     * @param  array<string, mixed>  $old The old values of the model.
+     * @param  T  $old The old model.
      */
-    protected function destroyed(array $old): bool
+    protected function destroyed($old): bool
     {
         return true;
     }
