@@ -7,19 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Sponsor extends Model
+class EventDay extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'tier',
+        'date',
+        'theme',
         'edition_id',
-        'company_id',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
     ];
 
     public function edition(): BelongsTo
@@ -27,9 +26,9 @@ class Sponsor extends Model
         return $this->belongsTo(Edition::class);
     }
 
-    public function company(): BelongsTo
+    public function events(): HasMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->hasMany(Event::class);
     }
 
     public function stands(): HasMany

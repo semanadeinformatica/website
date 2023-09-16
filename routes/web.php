@@ -6,12 +6,12 @@ use App\Http\Controllers\EditionCRUDController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProductCRUDController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\UserCRUDController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -34,9 +34,7 @@ Route::get('/team', function () {
     return Inertia::render('Team');
 });
 
-Route::get('/program', function () {
-    return Inertia::render('Program');
-})->name('program');
+Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {

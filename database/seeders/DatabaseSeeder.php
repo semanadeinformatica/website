@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Edition;
 use App\Models\Event;
+use App\Models\EventDay;
 use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Speaker;
@@ -57,8 +58,12 @@ class DatabaseSeeder extends Seeder
 
         $edition = Edition::factory()->create();
 
-        $events = Event::factory(10)->recycle($edition)->create();
-        Speaker::factory(10)->recycle($events)->create();
+        $event_days = EventDay::factory(7)->recycle($edition)->create();
+
+        foreach ($event_days as $day) {
+            $events = Event::factory(10)->recycle($day)->create();
+            Speaker::factory(10)->recycle($events)->create();
+        }
 
         foreach ($companies as $company) {
             Quest::factory()->recycle($edition)->for($company->usertype, 'requirement')->create();

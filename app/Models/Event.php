@@ -19,26 +19,16 @@ class Event extends Model
      */
     protected $fillable = [
         'name',
-        'date_start',
-        'date_end',
+        'time_start',
+        'time_end',
         'topic',
         'capacity',
-        'edition_id',
+        'event_day_id',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'date_start' => 'datetime',
-        'date_end' => 'datetime',
-    ];
-
-    public function edition(): BelongsTo
+    public function event_day(): BelongsTo
     {
-        return $this->belongsTo(Edition::class);
+        return $this->belongsTo(EventDay::class);
     }
 
     public function enrollments(): BelongsToMany

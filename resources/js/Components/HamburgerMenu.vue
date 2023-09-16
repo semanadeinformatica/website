@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import route from "ziggy-js";
+import route, {
+    type QueryParams,
+    type RouteParamsWithQueryOverload,
+} from "ziggy-js";
+
+interface Route {
+    label: string;
+    _query?: QueryParams;
+}
+type Routes = Record<string, Route>;
 
 const open = ref(false);
 
 const props = defineProps<{
     options: {
-        pages: Record<string, string>; // FIXME: fix typing
-        activities: Record<string, string>; // FIXME: fix typing
+        pages: Routes;
+        activities: Routes;
         editions: number[];
     };
 }>();
@@ -46,9 +55,16 @@ const props = defineProps<{
         v-show="open"
         class="absolute left-0 top-[5.6rem] z-50 m-0 flex w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
     >
-        <template v-for="(label, page) in props.options.pages" :key="page">
+        <template
+            v-for="({ label, _query }, page) in props.options.pages"
+            :key="page"
+        >
             <ResponsiveNavLink
-                :href="route(route().has(page) ? page : 'home')"
+                :href="
+                    route(route().has(page) ? page : 'home', {
+                        _query,
+                    } as RouteParamsWithQueryOverload)
+                "
                 :active="page === route().current()"
             >
                 {{ label }}
@@ -59,14 +75,18 @@ const props = defineProps<{
                 Atividades
             </h2>
             <template
-                v-for="(activity, page) in props.options.activities"
+                v-for="({ label, _query }, page) in props.options.activities"
                 :key="page"
             >
                 <ResponsiveNavLink
-                    :href="route(route().has(page) ? page : 'home')"
+                    :href="
+                        route(route().has(page) ? page : 'home', {
+                            _query,
+                        } as RouteParamsWithQueryOverload)
+                    "
                     :active="page === route().current()"
                 >
-                    {{ activity }}
+                    {{ label }}
                 </ResponsiveNavLink>
             </template>
         </section>

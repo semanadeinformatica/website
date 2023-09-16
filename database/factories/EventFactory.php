@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Edition;
+use App\Models\EventDay;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,10 +20,10 @@ class EventFactory extends Factory
         return [
             'name' => fake()->words(3, true),
             'topic' => fake()->sentence(),
-            'date_start' => fake()->dateTimeBetween('now', '+1 year'),
-            'date_end' => fn (array $attributes) => fake()->dateTimeBetween($attributes['date_start'], '+1 year'),
+            'time_start' => fake()->time(),
+            'time_end' => fake()->time(),
             'capacity' => fake()->optional()->numberBetween(10, 100),
-            'edition_id' => Edition::factory(),
+            'event_day_id' => EventDay::factory(),
         ];
     }
 }

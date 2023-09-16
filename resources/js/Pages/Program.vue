@@ -2,24 +2,14 @@
 import { computed, onMounted, ref, watch } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProgramDayPanel from "@/Components/Program/ProgramDayPanel.vue";
+import type EventDay from "@/Types/EventDay";
+import route from "ziggy-js";
 
-const mockDays = [
-    {
-        theme: "Tema do dia 1",
-    },
-    {
-        theme: "Tema do dia 2",
-    },
-    {
-        theme: "Tema do dia 3",
-    },
-    {
-        theme: "Tema do dia 4",
-    },
-    {
-        theme: "Tema do dia 5",
-    },
-];
+interface Props {
+    eventDays: EventDay[];
+}
+
+const { eventDays } = defineProps<Props>();
 
 /**
  * The idea behind this code is that whenever the "day index" changes, we re-compute all the data needed to render the information about that day.
@@ -36,9 +26,19 @@ onMounted(() => {
 const currentSelectedDay = computed(
     () =>
         currentSelectedDayIdx.value >= 0
-            ? mockDays[currentSelectedDayIdx.value]
+            ? eventDays[currentSelectedDayIdx.value]
             : null, // First day as default - Nuno Pereira
 );
+
+const updateURL = () => {
+    history.pushState(
+        null,
+        "",
+        route(route().current() ?? "program", {
+            day: currentSelectedDayIdx.value + 1,
+        }),
+    );
+};
 
 watch(currentSelectedDayIdx, (newValue, oldValue) => {
     // See if this is faster using refs to the list items
@@ -68,12 +68,13 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                     id="daySelection"
                     class="flex w-fit flex-row flex-wrap gap-4"
                 >
-                    <template v-for="(_, idx) in mockDays" :key="idx">
+                    <template v-for="(_, idx) in eventDays" :key="idx">
                         <li
-                            class="transition inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white"
+                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white transition"
                             @click="
                                 () => {
                                     currentSelectedDayIdx = idx;
+                                    updateURL();
                                 }
                             "
                         >
@@ -81,7 +82,9 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                         </li>
                     </template>
                 </ul>
-                <span class="text-2023-orange font-bold">23 de outubro</span>
+                <span class="font-bold text-2023-orange">{{
+                    currentSelectedDay?.date
+                }}</span>
                 <p
                     class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
                 >

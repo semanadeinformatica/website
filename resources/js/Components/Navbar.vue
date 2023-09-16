@@ -4,23 +4,39 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownTrigger from "@/Components/DropdownTrigger.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
-import route from "ziggy-js";
+import route, {
+    type QueryParams,
+    type RouteParamsWithQueryOverload,
+} from "ziggy-js";
 
-const pageRoutes = {
-    aboutus: "Sobre nós",
-    speakers: "Speakers",
-    program: "Programa",
-    team: "Equipa",
-    sponsors: "Patrocínios",
-    contacts: "Contacts",
+interface Route {
+    label: string;
+    _query?: QueryParams;
+}
+type Routes = Record<string, Route>;
+
+const pageRoutes: Routes = {
+    aboutus: {
+        label: "Sobre nós",
+    },
+    speakers: { label: "Speakers" },
+    program: {
+        label: "Programa",
+        _query: {
+            day: 1,
+        },
+    },
+    team: { label: "Equipa" },
+    sponsors: { label: "Patrocínios" },
+    contacts: { label: "Contacts" },
 };
 
-const activityRoutes = {
-    talks: "Palestras",
-    workshops: "Workshops",
-    ctf: "CTF",
-    competition: "Competition",
-    groupdynamics: "Dinâmicas de Grupo",
+const activityRoutes: Routes = {
+    talks: { label: "Palestras" },
+    workshops: { label: "Workshops" },
+    ctf: { label: "CTF" },
+    competition: { label: "Competition" },
+    groupdynamics: { label: "Dinâmicas de Grupo" },
 };
 
 const editionRoutes = [2022, 2021, 2020, 2019, 2018];
@@ -30,8 +46,6 @@ const options = {
     activities: activityRoutes,
     editions: editionRoutes,
 };
-
-console.log(route().current());
 </script>
 
 <template>
@@ -44,9 +58,16 @@ console.log(route().current());
             />
         </div>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
-            <template v-for="(label, page) in pageRoutes" :key="page">
+            <template
+                v-for="({ label, _query }, page) in pageRoutes"
+                :key="page"
+            >
                 <NavLink
-                    :href="route(route().has(page) ? page : 'home')"
+                    :href="
+                        route(route().has(page) ? page : 'home', {
+                            _query,
+                        } as RouteParamsWithQueryOverload)
+                    "
                     :active="page === route().current()"
                 >
                     {{ label }}
@@ -62,11 +83,15 @@ console.log(route().current());
                     </template>
                     <template #content>
                         <template
-                            v-for="(label, page) in activityRoutes"
+                            v-for="({ label, _query }, page) in activityRoutes"
                             :key="page"
                         >
                             <DropdownLink
-                                :href="route(route().has(page) ? page : 'home')"
+                                :href="
+                                    route(route().has(page) ? page : 'home', {
+                                        _query,
+                                    } as RouteParamsWithQueryOverload)
+                                "
                             >
                                 {{ label }}
                             </DropdownLink>
