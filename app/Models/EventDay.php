@@ -17,6 +17,15 @@ class EventDay extends Model
         'edition_id',
     ];
 
+    protected $with = [
+        'stands' => [
+            'sponsor' => [
+                'company',
+            ],
+        ],
+        'events',
+    ];
+
     protected $casts = [
         'date' => 'datetime',
     ];

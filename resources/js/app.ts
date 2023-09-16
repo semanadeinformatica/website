@@ -7,6 +7,8 @@ import { createVfm } from "vue-final-modal";
 // @ts-expect-error: Ziggy does not have type declarations
 import { ZiggyVue } from "ziggy";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { createI18n } from "vue-i18n";
+import messages from "./messages";
 
 const vfm = createVfm();
 
@@ -21,6 +23,12 @@ addIcons(...Fa);
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
+const i18n = createI18n({
+    locale: "pt",
+    fallbackLocale: "en",
+    messages
+});
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -32,6 +40,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(vfm)
+            .use(i18n)
             .use(ZiggyVue, Ziggy)
             .component("v-icon", OhVueIcon)
             .mount(el);

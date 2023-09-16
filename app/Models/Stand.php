@@ -15,12 +15,12 @@ class Stand extends Model
         'event_day_id',
     ];
 
-    public function event_days(): BelongsTo
+    public function event_day(): BelongsTo
     {
         return $this->belongsTo(EventDay::class);
     }
 
-    public function sponsors(): BelongsTo
+    public function sponsor(): BelongsTo
     {
         return $this->belongsTo(Sponsor::class);
     }

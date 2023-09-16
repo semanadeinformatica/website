@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Edition;
+use App\Models\EventDay;
 use App\Models\Sponsor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class StandFactory extends Factory
     public function definition(): array
     {
         return [
-            'edition_id' => Edition::factory(),
+            'event_day_id' => EventDay::factory(),
             'sponsor_id' => Sponsor::factory(),
         ];
     }

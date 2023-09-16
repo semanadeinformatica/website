@@ -26,12 +26,13 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(EventDay::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Sponsor::class)->constrained()->cascadeOnDelete();
+            // $table->unique(['event_day_id', 'sponsor_id']); // TODO: this breaks seeders
             $table->timestamps();
         });
 
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeignIdFor(Edition::class); // TODO: figure out why this does not work
-            $table->dropColumn(['edition_id']); // TODO: figure out why this is needed
+            $table->dropForeignIdFor(Edition::class);
+            $table->dropColumn(['edition_id']);
             $table->dropColumn(['date_start', 'date_end']);
             $table->foreignIdFor(EventDay::class)->constrained()->cascadeOnDelete();
             $table->time('time_start');
@@ -48,8 +49,8 @@ return new class extends Migration
         Schema::dropIfExists('stands');
 
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeignIdFor(EventDay::class); // TODO: figure out why this does not work
-            $table->dropColumn(['event_day_id']); // TODO: figure out why this is needed
+            $table->dropForeignIdFor(EventDay::class);
+            $table->dropColumn(['event_day_id']);
             $table->dropColumn(['time_start', 'time_end']);
             $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->dateTime('date_start');

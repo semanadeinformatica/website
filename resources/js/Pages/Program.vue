@@ -28,7 +28,7 @@ const currentSelectedDay = computed(
     () =>
         currentSelectedDayIdx.value >= 0
             ? eventDays[currentSelectedDayIdx.value]
-            : null, // First day as default - Nuno Pereira
+            : null, // We might not have any days yet, use this as flag for fallback UI - Nuno Pereira
 );
 
 const updateURL = () => {
@@ -59,12 +59,11 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
 
     nextItem?.classList.toggle("selected");
 });
-
 </script>
 
 <template>
     <AppLayout title="Programa">
-        <div class="px-40 py-20">
+        <div class="flex flex-col items-center px-40 py-20">
             <section class="flex flex-col items-center gap-5">
                 <ul
                     id="daySelection"
@@ -72,7 +71,7 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                 >
                     <template v-for="(_, idx) in eventDays" :key="idx">
                         <li
-                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white transition"
+                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal text-xl font-bold text-white transition"
                             @click="
                                 () => {
                                     currentSelectedDayIdx = idx;
@@ -89,13 +88,13 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                         month: "long",
                         day: "2-digit",
                     }).format(
-                        new Date(currentSelectedDay?.date || Date.now()) // wtf - Nuno Pereira
+                        new Date(currentSelectedDay?.date || Date.now()), // wtf - Nuno Pereira
                     )
                 }}</span>
                 <p
-                    class="mr-2 border max-w-2xl border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                    class="mr-2 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
                 >
-                    {{ currentSelectedDay?.theme }}
+                    {{ currentSelectedDay?.theme || "Tema do dia" }}
                 </p>
             </section>
             <ProgramDayPanel :day="currentSelectedDay" />
