@@ -28,6 +28,6 @@ class ProgramController extends Controller
             // return;
         }
 
-        return Inertia::render('Program', ['eventDays' => $eventDays]);
+        return Inertia::render('Program', ['eventDays' => $eventDays->toArray()]);
     }
 }

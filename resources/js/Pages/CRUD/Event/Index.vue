@@ -35,9 +35,9 @@ const event_days = computed<Record<number, string>>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header sort-by="date_start">Data de Início</Header>
-                <Header sort-by="date_end">Data de Fim</Header>
-                <Header>Edição</Header>
+                <Header sort-by="time_start">Hora de Início</Header>
+                <Header sort-by="time_end">Hora de Fim</Header>
+                <Header sort-by="event_day_id">Dia do evento</Header>
             </HeaderRow>
         </template>
 

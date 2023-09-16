@@ -11,13 +11,14 @@ interface Props {
 
 const { eventDays } = defineProps<Props>();
 
+// HACK: fix this if better solution found
+
 /**
  * The idea behind this code is that whenever the "day index" changes, we re-compute all the data needed to render the information about that day.
  * However, the watch runs before any relevant DOM elements exists, and as such this would never make the first option selected on page load.
  * By changing only the index on pageMount, we can circumvent this. The downside is that the initial value must be different from 0. -1 is a sane choice for this.
  * One could argue that we don't need the index but this makes it easier for us to implement programmatic navigation: it's just a matter of incrementing or decrementing the index
  */
-// HACK: fix this if better solution found
 const currentSelectedDayIdx = ref(-1);
 onMounted(() => {
     currentSelectedDayIdx.value = 0;
@@ -58,6 +59,7 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
 
     nextItem?.classList.toggle("selected");
 });
+
 </script>
 
 <template>
@@ -83,10 +85,15 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                     </template>
                 </ul>
                 <span class="font-bold text-2023-orange">{{
-                    currentSelectedDay?.date
+                    new Intl.DateTimeFormat("pt-PT", {
+                        month: "long",
+                        day: "2-digit",
+                    }).format(
+                        new Date(currentSelectedDay?.date || Date.now()) // wtf - Nuno Pereira
+                    )
                 }}</span>
                 <p
-                    class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                    class="mr-2 border max-w-2xl border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
                 >
                     {{ currentSelectedDay?.theme }}
                 </p>
