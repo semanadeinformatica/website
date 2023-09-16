@@ -37,7 +37,6 @@ Route::get('/team', function () {
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
-
 Route::get('/competition', function () {
     return Inertia::render('Competition');
 })->name('competition');
@@ -47,7 +46,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
-
 
         Route::prefix('admin')
             ->middleware('can:admin')
