@@ -27,7 +27,7 @@ const speakers = computed(
             social_media: speaker.social_media,
             event_id: speaker.event_id,
             created_at: speaker.created_at,
-            updated_at: speaker.updated_at
+            updated_at: speaker.updated_at,
         })),
 );
 </script>
