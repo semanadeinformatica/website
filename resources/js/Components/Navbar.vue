@@ -6,30 +6,32 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
 import route from "ziggy-js";
 
-const page_routes = {
-    "Sobre nós": "about-us",
-    Speakers: "speakers",
-    Programa: "program",
-    Equipa: "team",
-    Sponsors: "sponsors",
-    Contactos: "contacts",
+const pageRoutes = {
+    aboutus: "Sobre nós",
+    speakers: "Speakers",
+    program: "Programa",
+    team: "Equipa",
+    sponsors: "Patrocínios",
+    contacts: "Contacts",
 };
 
-const activity_routes = {
-    Palestras: "talks",
-    Workshops: "workshops",
-    CTF: "ctf",
-    Competição: "competition",
-    "Dinâmicas de grupo": "group-dynamics",
+const activityRoutes = {
+    talks: "Palestras",
+    workshops: "Workshops",
+    ctf: "CTF",
+    competition: "Competition",
+    groupdynamics: "Dinâmicas de Grupo",
 };
 
-const edition_routes = ["2022", "2021", "2020", "2019", "2018"];
+const editionRoutes = [2022, 2021, 2020, 2019, 2018];
 
 const options = {
-    pages: page_routes,
-    activities: activity_routes,
-    editions: edition_routes,
+    pages: pageRoutes,
+    activities: activityRoutes,
+    editions: editionRoutes,
 };
+
+console.log(route().current());
 </script>
 
 <template>
@@ -42,12 +44,12 @@ const options = {
             />
         </div>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
-            <template v-for="page in Object.keys(page_routes)" :key="page">
+            <template v-for="(label, page) in pageRoutes" :key="page">
                 <NavLink
-                    :href="route('dashboard')"
-                    :active="page == 'Sponsors'"
+                    :href="route(route().has(page) ? page : 'home')"
+                    :active="page === route().current()"
                 >
-                    {{ page }}
+                    {{ label }}
                 </NavLink>
             </template>
         </div>
@@ -60,11 +62,13 @@ const options = {
                     </template>
                     <template #content>
                         <template
-                            v-for="activity in Object.keys(activity_routes)"
-                            :key="activity"
+                            v-for="(label, page) in activityRoutes"
+                            :key="page"
                         >
-                            <DropdownLink :href="route('dashboard')">
-                                {{ activity }}
+                            <DropdownLink
+                                :href="route(route().has(page) ? page : 'home')"
+                            >
+                                {{ label }}
                             </DropdownLink>
                         </template>
                     </template>
@@ -76,7 +80,7 @@ const options = {
                     </template>
                     <template #content>
                         <template
-                            v-for="edition in edition_routes"
+                            v-for="edition in editionRoutes"
                             :key="edition"
                         >
                             <DropdownLink :href="route('dashboard')">

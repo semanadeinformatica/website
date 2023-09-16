@@ -28,7 +28,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Home');
-});
+})->name('home');
 
 Route::get('/team', function () {
     return Inertia::render('Team');
@@ -36,7 +36,7 @@ Route::get('/team', function () {
 
 Route::get('/program', function () {
     return Inertia::render('Program');
-});
+})->name('program');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {

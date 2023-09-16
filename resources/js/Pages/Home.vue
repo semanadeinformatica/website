@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AppLayout from "../Layouts/AppLayout.vue";
-import SpeakersCarousel from "../Components/Home/SpeakersCarousel.vue";
-import Map from "../Components/Home/Map.vue";
-import SponsorBanner from "../Components/Home/SponsorBanner.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
+import Map from "@/Components/Home/Map.vue";
+import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import { ModalsContainer } from "vue-final-modal";
 </script>
 
@@ -10,7 +10,7 @@ import { ModalsContainer } from "vue-final-modal";
     <AppLayout title="Home">
         <!-- LOGO & DATE -->
         <section
-            class="flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
+            class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
         >
             <img
                 id="svg-1"

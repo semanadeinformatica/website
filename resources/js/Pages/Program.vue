@@ -1,72 +1,99 @@
 <script setup lang="ts">
-import AppLayout from "../Layouts/AppLayout.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import ProgramDayPanel from "@/Components/Program/ProgramDayPanel.vue";
 
-import { Carousel, Slide } from "vue3-carousel";
-import "vue3-carousel/dist/carousel.css";
-import { ref } from "vue";
-
-const carousel = ref<typeof Carousel | null>(null);
-
-const next = () => {
-    carousel.value?.next();
-};
-
-const prev = () => {
-    carousel.value?.prev();
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const slideTo = (index: number, _event: MouseEvent) => {
-    carousel.value?.slideTo(index);
-};
-
-const breakpoints = {
-    1024: {
-        itemsToShow: 5,
+const mockDays = [
+    {
+        theme: "Tema do dia 1",
     },
-};
+    {
+        theme: "Tema do dia 2",
+    },
+    {
+        theme: "Tema do dia 3",
+    },
+    {
+        theme: "Tema do dia 4",
+    },
+    {
+        theme: "Tema do dia 5",
+    },
+];
+
+/**
+ * The idea behind this code is that whenever the "day index" changes, we re-compute all the data needed to render the information about that day.
+ * However, the watch runs before any relevant DOM elements exists, and as such this would never make the first option selected on page load.
+ * By changing only the index on pageMount, we can circumvent this. The downside is that the initial value must be different from 0. -1 is a sane choice for this.
+ */
+// HACK: fix this if better solution found
+const currentSelectedDayIdx = ref(-1);
+onMounted(() => {
+    currentSelectedDayIdx.value = 0;
+});
+
+const currentSelectedDay = computed(
+    () =>
+        currentSelectedDayIdx.value >= 0
+            ? mockDays[currentSelectedDayIdx.value]
+            : null, // First day as default - Nuno Pereira
+);
+
+watch(currentSelectedDayIdx, (newValue, oldValue) => {
+    // See if this is faster using refs to the list items
+    const previousItemSelector = `li:nth-of-type(${(oldValue ?? -1) + 1})`;
+    const nextItemSelector = `li:nth-of-type(${newValue + 1})`;
+
+    const itemContainer = document.querySelector("#daySelection");
+
+    const previousItem = itemContainer?.querySelector(
+        previousItemSelector,
+    ) as HTMLElement;
+    const nextItem = itemContainer?.querySelector(
+        nextItemSelector,
+    ) as HTMLElement;
+
+    if (oldValue !== undefined) previousItem?.classList.toggle("selected");
+
+    nextItem?.classList.toggle("selected");
+});
 </script>
 
 <template>
     <AppLayout title="Programa">
-        <section class="">
-            <div class="">
-                <Carousel
-                    ref="carousel"
-                    :autoplay="0"
-                    :items-to-show="5"
-                    :breakpoints="breakpoints"
+        <div class="px-40 py-20">
+            <section class="flex flex-col items-center gap-5">
+                <ul
+                    id="daySelection"
+                    class="flex w-fit flex-row flex-wrap gap-4"
                 >
-                    <Slide v-for="(slide, idx) in 7" :key="slide">
-                        <span
-                            class="item inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark text-center text-xl text-white transition-colors duration-500"
-                            @click="(event) => slideTo(idx, event)"
+                    <template v-for="(_, idx) in mockDays" :key="idx">
+                        <li
+                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white"
+                            @click="
+                                () => {
+                                    currentSelectedDayIdx = idx;
+                                }
+                            "
                         >
-                            {{ slide }}
-                        </span>
-                    </Slide>
-                </Carousel>
-                <button @click="prev">
-                    <v-icon
-                        name="fa-arrow-left"
-                        fill="#007172"
-                        scale="2"
-                    ></v-icon>
-                </button>
-                <button @click="next">
-                    <v-icon
-                        name="fa-arrow-right"
-                        fill="#007172"
-                        scale="2"
-                    ></v-icon>
-                </button>
-            </div>
-        </section>
+                            {{ idx + 1 }}
+                        </li>
+                    </template>
+                </ul>
+                <span class="text-2023-orange">23 de outubro</span>
+                <p
+                    class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                >
+                    {{ currentSelectedDay?.theme }}
+                </p>
+            </section>
+            <ProgramDayPanel :day="currentSelectedDay" />
+        </div>
     </AppLayout>
 </template>
 
 <style>
-.carousel__slide--active .item {
+.selected {
     background-color: rgb(242, 147, 37);
 }
 </style>
