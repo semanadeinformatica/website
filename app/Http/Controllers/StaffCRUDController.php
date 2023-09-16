@@ -14,28 +14,28 @@ class StaffCRUDController extends CRUDController
     protected string $view = 'Staff';
 
     protected array $rules = [
-        'student_id' => 'required|integer',
-        'department_id' => 'required|integer',
+        'student_id' => 'required|exists:students,id',
+        'department_id' => 'required|exists:departments,id',
         'coordinator' => 'sometimes|boolean',
     ];
 
-    protected function created(array $new): ?array
-    {
-        return [
-            'coordinator' => $new['coordinator'],
-            'department_id' => $new['department_id'],
-            'student_id' => $new['student_id'],
-        ];
-    }
+    // protected function created(array $new): ?array
+    // {
+    //     return [
+    //         'coordinator' => $new['coordinator'],
+    //         'department_id' => $new['department_id'],
+    //         'student_id' => $new['student_id'],
+    //     ];
+    // }
 
-    protected function updated(array $old, array $new): ?array
-    {
-        return [
-            'coordinator' => $new['coordinator'],
-            'department_id' => $new['department_id'],
-            'student_id' => $new['student_id'],
-        ];
-    }
+    // protected function updated(array $old, array $new): ?array
+    // {
+    //     return [
+    //         'coordinator' => $new['coordinator'],
+    //         'department_id' => $new['department_id'],
+    //         'student_id' => $new['student_id'],
+    //     ];
+    // }
 
     protected function with(): array
     {

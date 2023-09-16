@@ -16,21 +16,21 @@ class DepartmentCRUDController extends CRUDController
         'name' => 'required|string',
     ];
 
-    protected function created(array $new): ?array
-    {
-        return [
-            'edition_id' => $new['edition_id'],
-            'name' => $new['name'],
-        ];
-    }
+    // protected function created(array $new): ?array
+    // {
+    //     return [
+    //         'edition_id' => $new['edition_id'],
+    //         'name' => $new['name'],
+    //     ];
+    // }
 
-    protected function updated(array $old, array $new): ?array
-    {
-        return [
-            'edition_id' => $new['edition_id'],
-            'name' => $new['name'],
-        ];
-    }
+    // protected function updated(array $old, array $new): ?array
+    // {
+    //     return [
+    //         'edition_id' => $new['edition_id'],
+    //         'name' => $new['name'],
+    //     ];
+    // }
 
     protected function with(): array
     {

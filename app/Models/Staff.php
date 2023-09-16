@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Staff extends Model
 {
@@ -17,9 +16,9 @@ class Staff extends Model
         'student_id',
     ];
 
-    public function student(): HasMany
+    public function student(): BelongsTo
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     public function team(): BelongsTo

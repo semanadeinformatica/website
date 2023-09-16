@@ -29,17 +29,6 @@ const submit = () => {
 <template>
     <CardLayout title="Editar Departamento">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </select>
-
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -51,6 +40,17 @@ const submit = () => {
                 :error-message="form.errors.name"
             >
             </TextInput>
+
+            <select v-model="form.edition_id" required class="self-stretch">
+                <option value="" disabled selected hidden>Edição</option>
+                <option
+                    v-for="edition in $props.with.editions"
+                    :key="edition.id"
+                    :value="edition.id"
+                >
+                    {{ edition.name }}
+                </option>
+            </select>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>

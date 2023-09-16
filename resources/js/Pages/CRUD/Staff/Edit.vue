@@ -75,7 +75,6 @@ const submit = () => {
                     id="coordinator"
                     v-model="form.coordinator"
                     :checked="false"
-                    :value="false"
                 />
             </label>
 

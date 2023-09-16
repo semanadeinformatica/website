@@ -61,7 +61,7 @@ const submit = () => {
                     :key="student.id"
                     :value="student.id"
                 >
-                    {{ `${student.user?.name} - ${student.user?.id} ` }}
+                    {{ `${student.user?.name} - ${student.user?.id}` }}
                 </option>
             </select>
 
@@ -71,6 +71,7 @@ const submit = () => {
                     id="coordinator"
                     v-model="form.coordinator"
                     :checked="false"
+                    value="false"
                 />
             </label>
 
