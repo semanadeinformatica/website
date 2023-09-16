@@ -21,7 +21,7 @@ watch(selected, (newValue, oldValue) => {
 
 onMounted(() => {
     selected.value = document.querySelector(
-        "ul#tab-picker > li:first-of-type",
+        "#tab-picker > button:first-of-type",
     ) as HTMLElement;
 });
 
@@ -30,14 +30,14 @@ const { day } = defineProps<Props>();
 
 <template>
     <section class="h-full w-full pt-8">
-        <ul
+        <div
             id="tab-picker"
             class="flex flex-row justify-center gap-4 font-bold text-2023-teal"
         >
-            <li class="transition" @click="toggle">Palestras</li>
-            <li class="transition" @click="toggle">Atividades</li>
-            <li class="transition" @click="toggle">Bancas</li>
-        </ul>
+            <button class="transition" @click="toggle">Palestras</button>
+            <button class="transition" @click="toggle">Atividades</button>
+            <button class="transition" @click="toggle">Bancas</button>
+        </div>
     </section>
     <WithTimeline>
         <div class="flex flex-col gap-8">

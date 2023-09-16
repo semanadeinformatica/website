@@ -22,12 +22,19 @@ class ProgramController extends Controller
         }
 
         $eventDays = $edition->event_days;
+        $totalDays = count($eventDays);
 
-        if ($queryDay > count($eventDays)) {
+        if ($queryDay > $totalDays) {
 
             // return;
         }
 
-        return Inertia::render('Program', ['eventDays' => $eventDays->toArray()]);
+        $eventDay = $eventDays->get($queryDay - 1);
+
+        return Inertia::render('Program', [
+            'eventDay' => fn () => $eventDay->toArray(),
+            'queryDay' => fn () => intval($queryDay),
+            'totalDays' => fn () => intval($totalDays),
+        ]);
     }
 }
