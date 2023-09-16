@@ -42,6 +42,10 @@ Route::get('/competition', function () {
     return Inertia::render('Competition');
 })->name('competition');
 
+Route::get('/event', function () {
+    return Inertia::render('Event');
+});
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::get('/dashboard', function () {
