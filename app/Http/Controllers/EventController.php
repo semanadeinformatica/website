@@ -10,9 +10,7 @@ class EventController extends Controller
     public function show()
     {
         $event = Event::with([
-            'speakers' => [
-                'socialMedia',
-            ],
+            'speakers',
         ])->first();
 
         return Inertia::render('Event', [

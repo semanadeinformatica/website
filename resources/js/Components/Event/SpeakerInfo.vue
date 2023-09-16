@@ -1,12 +1,34 @@
 <script setup lang="ts">
 import type Speaker from "@/Types/Speaker";
+import { IoAccessibility } from "oh-vue-icons/icons/io";
+import { computed } from "vue";
 
 interface Props {
     speaker: Speaker;
     reverse?: number;
 }
 
-defineProps<Props>();
+const { speaker, reverse } = defineProps<Props>();
+
+const socials = computed(() => {
+    return {
+        email: speaker.social_media?.email,
+        github: speaker.social_media?.github,
+        instagram: speaker.social_media?.instagram,
+        linkedin: speaker.social_media?.linkedin,
+        twitter: speaker.social_media?.twitter,
+        website: speaker.social_media?.website,
+    };
+});
+
+const socialIcon: Record<string, string> = {
+    email: "io-mail",
+    github: "io-logo-github",
+    instagram: "io-logo-instagram",
+    linkedin: "io-logo-linkedin",
+    twitter: "io-logo-twitter",
+    website: "io-globe",
+};
 </script>
 
 <template>
@@ -24,7 +46,7 @@ defineProps<Props>();
                 class="flex w-fit flex-row justify-center gap-6"
                 :class="reverse ? 'flex-row-reverse self-end' : ''"
             >
-                <div>
+                <div :class="reverse ? 'flex flex-col items-end' : ''">
                     <h2 class="text-3xl font-bold uppercase">
                         {{ speaker.name }}
                     </h2>
@@ -32,9 +54,18 @@ defineProps<Props>();
                         >{{ speaker.title }} @{{ speaker.organization }}</span
                     >
                 </div>
-
-                <div class="flex items-center gap-1">
-                    <v-icon name="io-globe-outline"></v-icon>
+                <div v-if="socials" class="flex items-center gap-1">
+                    <a
+                        v-for="(social, name) in socials"
+                        :key="social"
+                        :href="social"
+                    >
+                        <v-icon
+                            v-if="social"
+                            :name="socialIcon[name]"
+                            scale="1.4"
+                        ></v-icon>
+                    </a>
                 </div>
             </div>
             <p class="col-span-2 row-start-2 max-w-xl text-justify">
