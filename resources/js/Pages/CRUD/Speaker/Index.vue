@@ -32,7 +32,7 @@ const events = computed<Record<number, string>>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header sort-by="event_id">Evento</Header>
+                <Header>Evento</Header>
             </HeaderRow>
         </template>
 

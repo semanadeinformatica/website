@@ -21,7 +21,7 @@ defineProps<Props>();
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header>Email</Header>
+                <Header sort-by="email">Email</Header>
                 <Header>Tipo</Header>
             </HeaderRow>
         </template>

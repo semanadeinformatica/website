@@ -61,9 +61,12 @@ abstract class CRUDController extends Controller
         return [];
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = $this->model::paginate(10);
+        $sort_by = $request->query('sort_by', 'id');
+        $sort_dir = $request->query('sort_dir', 'asc');
+
+        $items = $this->model::orderBy($sort_by, $sort_dir)->paginate()->withQueryString();
 
         $with = $this->with();
 
