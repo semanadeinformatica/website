@@ -10,6 +10,8 @@ import type Sponsor from "@/Types/Sponsor";
 
 interface Props {
     edition: Edition;
+    activity_count: number;
+    talk_count: number;
 }
 
 const { edition } = defineProps<Props>();
@@ -98,10 +100,10 @@ const sponsors = computed(
             <div
                 class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
             >
-                <span class="text-center">7 dias</span>
-                <span class="text-center">70 bancas</span>
-                <span class="text-center">4 talks</span>
-                <span class="text-center">1 workshops</span>
+                <span class="text-center">? dias</span>
+                <span class="text-center">? bancas</span>
+                <span class="text-center">{{ talk_count }} palestras</span>
+                <span class="text-center">{{ activity_count }} atividades</span>
             </div>
         </section>
         <!-- SPEAKERS -->

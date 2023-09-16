@@ -69,9 +69,11 @@ class UserFactory extends Factory
     public function company(): static
     {
         return $this->state([
-            'name' => fake()->company(),
             'usertype_type' => Company::class,
-        ]);
+        ])->afterMaking(function (User $user) {
+            $user->name = fake()->company();
+            $user->email = fake()->unique()->companyEmail();
+        });
     }
 
     /**

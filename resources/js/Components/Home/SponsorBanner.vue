@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import Sponsor from "./Sponsor.vue";
 import type SponsorType from "@/Types/Sponsor";
@@ -32,41 +32,32 @@ const props = defineProps<{
     title: string;
 }>();
 
-const numCols: number =
+const numCols = computed(() =>
     props.sponsors.length > 3
-        ? props.sponsors.length % 2
-            ? Math.ceil(props.sponsors.length / 2) * 2
-            : Math.ceil(props.sponsors.length / 2)
-        : props.sponsors.length;
-const numRows: number = props.sponsors.length > 3 ? 2 : 1;
-
-const calculateSponsorPosition = (sponsor: number) => {
-    const span =
-        props.sponsors.length > 3 ? (props.sponsors.length % 2 ? 2 : 1) : 1;
-    const col =
-        props.sponsors.length % 2
-            ? sponsor
-            : sponsor % Math.ceil(props.sponsors.length / 2);
-    const row = props.sponsors.length > 3 ? (sponsor % 2 ? 1 : 2) : 1;
-    console.log(`grid-area: ${col} ${col + span} ${row} ${row + 1};`);
-
-    return `grid-area: ${row} / ${col} / ${row + 1} / ${col + span} ;`;
-};
+        ? Math.ceil(props.sponsors.length / 2) * 2
+        : props.sponsors.length * 2,
+);
 </script>
 
 <template>
     <div>
         <p class="text-2xl font-bold" :class="textColor[color]">{{ title }}</p>
         <div
-            class="grid justify-around gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
+            class="grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
             :class="shadowColor[color]"
-            :style="`grid-template-columns: repeat(${numCols}, 1fr); grid-template-rows: repeat(${numRows}, 1fr);`"
+            :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
         >
             <Sponsor
                 v-for="(sponsor, i) in sponsors"
                 :key="sponsor.id"
-                :position="calculateSponsorPosition(i)"
                 :sponsor="sponsor"
+                :class="
+                    sponsors.length > 3 &&
+                    sponsors.length % 2 &&
+                    i == Math.ceil(props.sponsors.length / 2)
+                        ? 'col-start-2'
+                        : ''
+                "
             ></Sponsor>
         </div>
         <div
