@@ -19,24 +19,6 @@ class StaffCRUDController extends CRUDController
         'coordinator' => 'sometimes|boolean',
     ];
 
-    // protected function created(array $new): ?array
-    // {
-    //     return [
-    //         'coordinator' => $new['coordinator'],
-    //         'department_id' => $new['department_id'],
-    //         'student_id' => $new['student_id'],
-    //     ];
-    // }
-
-    // protected function updated(array $old, array $new): ?array
-    // {
-    //     return [
-    //         'coordinator' => $new['coordinator'],
-    //         'department_id' => $new['department_id'],
-    //         'student_id' => $new['student_id'],
-    //     ];
-    // }
-
     protected function with(): array
     {
         return [
