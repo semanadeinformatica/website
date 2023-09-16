@@ -65,7 +65,7 @@ const submit = () => {
                     :key="student.id"
                     :value="student.id"
                 >
-                    {{ `${student.user?.name} - ${student.user?.id}` }}
+                    {{ student.user?.name }} - {{ student.user?.id }}
                 </option>
             </select>
 

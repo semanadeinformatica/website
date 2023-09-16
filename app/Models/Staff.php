@@ -21,7 +21,7 @@ class Staff extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function team(): BelongsTo
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
