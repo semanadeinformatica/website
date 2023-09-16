@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edition;
 use App\Models\Event;
+use App\Models\EventDay;
 
 class EventCRUDController extends CRUDController
 {
@@ -13,11 +13,11 @@ class EventCRUDController extends CRUDController
 
     protected array $rules = [
         'name' => 'required|string',
-        'date_start' => 'required|date',
-        'date_end' => 'required|date|after:date_start',
+        'time_start' => 'required|time',
+        'time_end' => 'required|time|after:date_start',
         'topic' => 'required|string',
         'capacity' => 'nullable|numeric|integer',
-        'edition_id' => 'required|exists:editions,id',
+        'event_day_id' => 'required|exists:event_days,id',
     ];
 
     protected array $search = ['name', 'topic', 'capacity'];
@@ -25,7 +25,7 @@ class EventCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'editions' => Edition::all(),
+            'event_days' => EventDay::all(),
         ];
     }
 }

@@ -2,15 +2,15 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import type Edition from "@/Types/Edition";
 import type Event from "@/Types/Event";
+import type EventDay from "@/Types/EventDay";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 interface Props {
     item: Event;
     with: {
-        editions: Edition[];
+        event_days: EventDay[];
     };
 }
 
@@ -18,11 +18,11 @@ const { item: event } = defineProps<Props>();
 
 const form = useForm({
     name: event.name,
-    date_start: event.date_start.substring(0, 16),
-    date_end: event.date_end.substring(0, 16),
+    time_start: event.time_start.substring(0, 16),
+    time_end: event.time_end.substring(0, 16),
     topic: event.topic,
     capacity: event.capacity?.toString() ?? "",
-    edition_id: event.edition_id,
+    event_day_id: event.event_day_id,
 });
 
 const submit = () => {
@@ -45,21 +45,21 @@ const submit = () => {
             />
 
             <TextInput
-                id="date_start"
-                v-model="form.date_start"
-                label="Data de início"
-                type="datetime-local"
+                id="time_start"
+                v-model="form.time_start"
+                label="DataHora de início"
+                type="time-local"
                 required
-                :error-message="form.errors.date_start"
+                :error-message="form.errors.time_start"
             />
 
             <TextInput
-                id="date_end"
-                v-model="form.date_end"
+                id="time_end"
+                v-model="form.time_end"
                 label="Data de fim"
-                type="datetime-local"
+                type="time-local"
                 required
-                :error-message="form.errors.date_end"
+                :error-message="form.errors.time_end"
             />
 
             <TextInput
@@ -79,14 +79,14 @@ const submit = () => {
                 :error-message="form.errors.capacity"
             />
 
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <select v-model="form.event_day_id" required class="self-stretch">
+                <option value="" disabled selected hidden>Dia do evento</option>
                 <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
+                    v-for="day in $props.with.event_days"
+                    :key="day.id"
+                    :value="day.id"
                 >
-                    {{ edition.name }}
+                    {{ day.date.getDay() }}
                 </option>
             </select>
 

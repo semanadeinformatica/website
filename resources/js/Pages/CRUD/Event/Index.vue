@@ -6,21 +6,24 @@ import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
 import Header from "@/Components/CRUD/Header.vue";
-import type Edition from "@/Types/Edition";
 import { computed } from "vue";
+import type EventDay from "@/Types/EventDay";
 
 interface Props {
     items: Paginated<Event>;
     with: {
-        editions: Edition[];
+        event_days: EventDay[];
     };
 }
 
 const props = defineProps<Props>();
 
-const editions = computed<Record<number, string>>(() =>
+const event_days = computed<Record<number, string>>(() =>
     Object.fromEntries(
-        props.with.editions.map((edition) => [edition.id, edition.name]),
+        props.with.event_days.map((event_day) => [
+            event_day.id,
+            event_day.date.getDate() + "",
+        ]),
     ),
 );
 </script>
@@ -41,9 +44,9 @@ const editions = computed<Record<number, string>>(() =>
         <template #row="{ item }">
             <Row :item="item" name="events">
                 <Cell>{{ item.name }}</Cell>
-                <Cell>{{ new Date(item.date_start).toLocaleString() }} </Cell>
-                <Cell>{{ new Date(item.date_end).toLocaleString() }} </Cell>
-                <Cell>{{ editions[item.edition_id] }}</Cell>
+                <Cell>{{ new Date(item.time_start).toLocaleString() }} </Cell>
+                <Cell>{{ new Date(item.time_end).toLocaleString() }} </Cell>
+                <Cell>{{ event_days[item.event_day_id] }}</Cell>
             </Row>
         </template>
     </CRUDLayout>
