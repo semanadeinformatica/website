@@ -87,7 +87,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
 
         Route::prefix('user')->group(function () {
-            Route::prefix('/{student}')->whereNumber('student')->controller(StudentController::class)->group(function () {
+            Route::prefix('/{student}')->whereNumber('student')->middleware('can:view_student,student')->controller(StudentController::class)->group(function () {
                 Route::get('', 'show')->name('student.profile');
             });
             Route::prefix('cv')->group(function () {

@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Company;
+use App\Models\Student;
+use App\Models\VisitHistory;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,5 +28,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('admin', fn ($user) => $user->isAdmin());
         Gate::define('participant', fn ($user) => $user->isParticipant());
         Gate::define('company', fn ($user) => $user->isCompany());
+        Gate::define('view_student', fn ($user, Student $student) => ($user->id == $student->user_id) || (($user->usertype_type == Company::class) && VisitHistory::where('company_id', $user->usertype_id)->where('student_id', $student->id)->exists()));
     }
 }
