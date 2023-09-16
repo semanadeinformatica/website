@@ -25,6 +25,7 @@ const mockDays = [
  * The idea behind this code is that whenever the "day index" changes, we re-compute all the data needed to render the information about that day.
  * However, the watch runs before any relevant DOM elements exists, and as such this would never make the first option selected on page load.
  * By changing only the index on pageMount, we can circumvent this. The downside is that the initial value must be different from 0. -1 is a sane choice for this.
+ * One could argue that we don't need the index but this makes it easier for us to implement programmatic navigation: it's just a matter of incrementing or decrementing the index
  */
 // HACK: fix this if better solution found
 const currentSelectedDayIdx = ref(-1);
@@ -69,7 +70,7 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                 >
                     <template v-for="(_, idx) in mockDays" :key="idx">
                         <li
-                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white"
+                            class="transition inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal-dark font-bold text-white"
                             @click="
                                 () => {
                                     currentSelectedDayIdx = idx;
@@ -80,7 +81,7 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
                         </li>
                     </template>
                 </ul>
-                <span class="text-2023-orange">23 de outubro</span>
+                <span class="text-2023-orange font-bold">23 de outubro</span>
                 <p
                     class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
                 >
@@ -92,7 +93,7 @@ watch(currentSelectedDayIdx, (newValue, oldValue) => {
     </AppLayout>
 </template>
 
-<style>
+<style scoped>
 .selected {
     background-color: rgb(242, 147, 37);
 }
