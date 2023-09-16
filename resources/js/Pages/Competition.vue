@@ -12,7 +12,7 @@ import Podium from "@/Components/Podium.vue";
             class="relative mt-5 grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
         >
             <h2
-                class="absolute -top-9 left-1/2 transform -translate-x-1/2 border border-solid border-black bg-2023-red p-3 text-5xl font-bold text-white shadow-md shadow-2023-bg"
+                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-5xl font-bold text-white shadow-md shadow-2023-bg"
             >
                 Regulamento
             </h2>
@@ -40,13 +40,13 @@ import Podium from "@/Components/Podium.vue";
 
         <!-- PARTICIPATE -->
         <section
-            class="relative flex content-center items-center justify-center py-20"
+            class="relative flex content-center items-center justify-center py-24"
         >
-            <h2
-                class="absolute top-[15px] m-4 flex justify-center p-3 text-3xl font-bold text-2023-red"
+            <h1
+                class="absolute top-[15px] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
             >
                 Vamos a isto?
-            </h2>
+            </h1>
 
             <button
                 class="mt-5 h-[50px] w-[180px] content-center justify-center border border-black bg-2023-teal-dark text-center text-2xl font-bold text-white hover:bg-2023-teal"
