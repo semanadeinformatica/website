@@ -41,7 +41,8 @@ class EventDay extends Model
 
     public function events(): HasMany
     {
-        return $this->hasMany(Event::class);
+        // FIXME: I do not like having to put the ordering here but it is what it is - Nuno Pereira
+        return $this->hasMany(Event::class)->orderBy('time_start', 'asc');
     }
 
     public function stands(): HasMany

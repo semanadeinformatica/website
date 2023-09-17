@@ -30,7 +30,6 @@ const items = computed(() => {
             return [];
     }
 });
-
 const stands = (items: Stand[] | Event[]): items is Stand[] => {
     return items.length > 0 && "sponsor_id" in items[0]; // HACK: dangerous - Nuno Pereira
 };
