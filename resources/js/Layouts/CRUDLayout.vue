@@ -25,6 +25,7 @@ watch(query, (query) => {
         {
             preserveState: true,
             preserveScroll: true,
+            only: ["items"],
         },
     );
 });
@@ -55,7 +56,14 @@ watch(query, (query) => {
 
             <div v-else class="text-xl">Nenhum item encontrado</div>
 
-            <PaginationLinks :links="items.links" />
+            <PaginationLinks
+                :links="items.links"
+                :link-props="{
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ['items'],
+                }"
+            />
         </div>
     </AppLayout>
 </template>
