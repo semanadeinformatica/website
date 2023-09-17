@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import route from "ziggy-js";
+import route, {
+    type QueryParams,
+    type RouteParamsWithQueryOverload,
+} from "ziggy-js";
+
+interface Route {
+    label: string;
+    _query?: QueryParams;
+}
+type Routes = Record<string, Route>;
 
 const open = ref(false);
 
 const props = defineProps<{
-    options: { [x: string]: object };
+    options: {
+        pages: Routes;
+        activities: Routes;
+        editions: number[];
+    };
 }>();
 </script>
 
@@ -42,12 +55,19 @@ const props = defineProps<{
         v-show="open"
         class="absolute left-0 top-[5.6rem] z-50 m-0 flex w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
     >
-        <template v-for="page in Object.keys(props.options['pages'])">
+        <template
+            v-for="({ label, _query }, page) in props.options.pages"
+            :key="page"
+        >
             <ResponsiveNavLink
-                :href="route('dashboard')"
-                :active="page == 'Sponsors'"
+                :href="
+                    route(route().has(page) ? page : 'home', {
+                        _query,
+                    } as RouteParamsWithQueryOverload)
+                "
+                :active="page === route().current()"
             >
-                {{ page }}
+                {{ label }}
             </ResponsiveNavLink>
         </template>
         <section class="pt-6">
@@ -55,23 +75,31 @@ const props = defineProps<{
                 Atividades
             </h2>
             <template
-                v-for="activity in Object.keys(props.options['activities'])"
+                v-for="({ label, _query }, page) in props.options.activities"
+                :key="page"
             >
                 <ResponsiveNavLink
-                    :href="route('dashboard')"
-                    :active="activity == 'CTF'"
+                    :href="
+                        route(route().has(page) ? page : 'home', {
+                            _query,
+                        } as RouteParamsWithQueryOverload)
+                    "
+                    :active="page === route().current()"
                 >
-                    {{ activity }}
+                    {{ label }}
                 </ResponsiveNavLink>
             </template>
         </section>
         <section class="py-6">
             <h2 class="pb-3 text-center font-bold text-2023-orange">Edições</h2>
             <div class="flex flex-row justify-center gap-5">
-                <template v-for="edition in props.options['editions']">
+                <template
+                    v-for="edition in props.options.editions"
+                    :key="`navbar-edition-link-${edition}`"
+                >
                     <ResponsiveNavLink
                         :href="route('dashboard')"
-                        :active="edition == '2023'"
+                        :active="edition === new Date().getFullYear()"
                     >
                         {{ edition }}
                     </ResponsiveNavLink>

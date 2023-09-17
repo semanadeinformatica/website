@@ -44,7 +44,6 @@ const calculateSponsorPosition = (sponsor: number) => {
     const col =
         props.sponsors % 2 ? sponsor : sponsor % Math.ceil(props.sponsors / 2);
     const row = props.sponsors > 3 ? (sponsor % 2 ? 1 : 2) : 1;
-    console.log(`grid-area: ${col} ${col + span} ${row} ${row + 1};`);
 
     return `grid-area: ${row} / ${col} / ${row + 1} / ${col + span} ;`;
 };

@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\Edition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Speaker>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\EventDay>
  */
-class SpeakerFactory extends Factory
+class EventDayFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,9 @@ class SpeakerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'event_id' => Event::factory(),
-            'organization' => fake()->optional()->company(),
+            'edition_id' => Edition::factory(),
+            'date' => fake()->date(),
+            'theme' => fake()->realText(),
         ];
     }
 }

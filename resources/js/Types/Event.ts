@@ -1,10 +1,13 @@
-import type Model from "./Model";
+import type Model from "@/Types/Model";
+import type Speaker from "@/Types/Speaker";
 
 export default interface Event extends Model {
     name: string;
-    date_start: string;
-    date_end: string;
+    time_start: string;
+    time_end: string;
     topic: string;
     capacity?: number;
-    edition_id: number;
+    event_day_id: number;
+
+    speakers?: Speaker[];
 }

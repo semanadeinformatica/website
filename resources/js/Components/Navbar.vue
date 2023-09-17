@@ -4,31 +4,47 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownTrigger from "@/Components/DropdownTrigger.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
-import route from "ziggy-js";
+import route, {
+    type QueryParams,
+    type RouteParamsWithQueryOverload,
+} from "ziggy-js";
 
-const page_routes = {
-    "Sobre nós": "about-us",
-    Speakers: "speakers",
-    Programa: "program",
-    Equipa: "team",
-    Sponsors: "sponsors",
-    Contactos: "contacts",
+interface Route {
+    label: string;
+    _query?: QueryParams;
+}
+type Routes = Record<string, Route>;
+
+const pageRoutes: Routes = {
+    aboutus: {
+        label: "Sobre nós",
+    },
+    speakers: { label: "Speakers" },
+    program: {
+        label: "Programa",
+        _query: {
+            day: 1,
+        },
+    },
+    team: { label: "Equipa" },
+    sponsors: { label: "Patrocínios" },
+    contacts: { label: "Contacts" },
 };
 
-const activity_routes = {
-    Palestras: "talks",
-    Workshops: "workshops",
-    CTF: "ctf",
-    Competição: "competition",
-    "Dinâmicas de grupo": "group-dynamics",
+const activityRoutes: Routes = {
+    talks: { label: "Palestras" },
+    workshops: { label: "Workshops" },
+    ctf: { label: "CTF" },
+    competition: { label: "Competition" },
+    groupdynamics: { label: "Dinâmicas de Grupo" },
 };
 
-const edition_routes = ["2022", "2021", "2020", "2019", "2018"];
+const editionRoutes = [2022, 2021, 2020, 2019, 2018];
 
 const options = {
-    pages: page_routes,
-    activities: activity_routes,
-    editions: edition_routes,
+    pages: pageRoutes,
+    activities: activityRoutes,
+    editions: editionRoutes,
 };
 </script>
 
@@ -42,12 +58,19 @@ const options = {
             />
         </div>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
-            <template v-for="page in Object.keys(page_routes)" :key="page">
+            <template
+                v-for="({ label, _query }, page) in pageRoutes"
+                :key="page"
+            >
                 <NavLink
-                    :href="route('dashboard')"
-                    :active="page == 'Sponsors'"
+                    :href="
+                        route(route().has(page) ? page : 'home', {
+                            _query,
+                        } as RouteParamsWithQueryOverload)
+                    "
+                    :active="page === route().current()"
                 >
-                    {{ page }}
+                    {{ label }}
                 </NavLink>
             </template>
         </div>
@@ -60,11 +83,17 @@ const options = {
                     </template>
                     <template #content>
                         <template
-                            v-for="activity in Object.keys(activity_routes)"
-                            :key="activity"
+                            v-for="({ label, _query }, page) in activityRoutes"
+                            :key="page"
                         >
-                            <DropdownLink :href="route('dashboard')">
-                                {{ activity }}
+                            <DropdownLink
+                                :href="
+                                    route(route().has(page) ? page : 'home', {
+                                        _query,
+                                    } as RouteParamsWithQueryOverload)
+                                "
+                            >
+                                {{ label }}
                             </DropdownLink>
                         </template>
                     </template>
@@ -76,7 +105,7 @@ const options = {
                     </template>
                     <template #content>
                         <template
-                            v-for="edition in edition_routes"
+                            v-for="edition in editionRoutes"
                             :key="edition"
                         >
                             <DropdownLink :href="route('dashboard')">

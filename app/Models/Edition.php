@@ -25,9 +25,9 @@ class Edition extends Model
         return $this->hasMany(Enrollment::class);
     }
 
-    public function events(): HasMany
+    public function event_days(): HasMany
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(EventDay::class);
     }
 
     public function products(): HasMany

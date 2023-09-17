@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\EventDay;
+use App\Models\Sponsor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Stand>
  */
-class EventFactory extends Factory
+class StandFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,12 +19,8 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->words(3, true),
-            'topic' => fake()->sentence(),
-            'time_start' => fake()->time(),
-            'time_end' => fake()->time(),
-            'capacity' => fake()->optional()->numberBetween(10, 100),
             'event_day_id' => EventDay::factory(),
+            'sponsor_id' => Sponsor::factory(),
         ];
     }
 }

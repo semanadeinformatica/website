@@ -8,10 +8,12 @@ use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Edition;
 use App\Models\Event;
+use App\Models\EventDay;
 use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Speaker;
 use App\Models\Sponsor;
+use App\Models\Stand;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -57,13 +59,20 @@ class DatabaseSeeder extends Seeder
 
         $edition = Edition::factory()->create();
 
-        $events = Event::factory(10)->recycle($edition)->create();
-        Speaker::factory(10)->recycle($events)->create();
+        $event_days = EventDay::factory(7)->recycle($edition)->create();
 
+        foreach ($event_days as $day) {
+            $events = Event::factory(10)->recycle($day)->create();
+            Speaker::factory(10)->recycle($events)->create();
+        }
+
+        $sponsors = [];
         foreach ($companies as $company) {
             Quest::factory()->recycle($edition)->for($company->usertype, 'requirement')->create();
-            Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create();
+            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create();
         }
+
+        Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();
 
         Product::factory(10)->recycle($edition)->create();
     }

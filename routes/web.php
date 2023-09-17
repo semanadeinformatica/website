@@ -4,14 +4,16 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
 use App\Http\Controllers\EventCRUDController;
+use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProductCRUDController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
+use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserCRUDController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -28,11 +30,13 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Home');
-});
+})->name('home');
 
 Route::get('/team', function () {
     return Inertia::render('Team');
-});
+})->name('team');
+
+Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
@@ -54,6 +58,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/sponsors' => SponsorCRUDController::class,
                     '/staff' => StaffCRUDController::class,
                     '/departments' => DepartmentCRUDController::class,
+                    '/stands' => StandCRUDController::class,
+                    '/eventDays' => EventDayCRUDController::class,
                 ]);
             });
 
