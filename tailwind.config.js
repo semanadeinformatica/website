@@ -1,6 +1,7 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
 import typography from "@tailwindcss/typography";
+import containers from "@tailwindcss/container-queries";
 import plugin from "tailwindcss/plugin";
 import transformThemeValue from "tailwindcss/lib/util/transformThemeValue";
 
@@ -56,6 +57,7 @@ export default {
     plugins: [
         forms,
         typography,
+        containers,
         plugin(function ({ matchUtilities, theme }) {
             matchUtilities(
                 {

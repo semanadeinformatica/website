@@ -12,7 +12,7 @@ defineProps<Props>();
 
 <template>
     <div
-        class="grid aspect-[5/2] place-content-stretch place-items-stretch font-black"
+        class="@container grid aspect-[5/2] place-content-stretch place-items-stretch"
         :class="[state == 'available' ? 'opacity-50 grayscale' : '']"
     >
         <svg
@@ -70,7 +70,7 @@ defineProps<Props>();
         </svg>
 
         <div
-            class="col-start-1 row-start-1 flex max-h-full text-white"
+            class="col-start-1 row-start-1 flex max-h-full text-[3.2cqi] font-black text-white"
             :class="[state == 'used' ? '' : 'ticket-clip-path']"
         >
             <div
@@ -81,18 +81,20 @@ defineProps<Props>();
                         : '',
                 ]"
             >
-                <span class="flex bg-2023-teal-dark px-4 py-2">
+                <span class="flex bg-2023-teal-dark px-[1em] py-[.5em]">
                     NR: 000000001
                 </span>
 
-                <div class="my-auto flex flex-col gap-1 px-4 py-2">
+                <div
+                    class="my-auto flex flex-col gap-[.25em] px-[1em] py-[.5em]"
+                >
                     <span>SALA: B208</span>
                     <span>HORA: 16:10</span>
                     <span>DATA: 1/10/2023</span>
                 </div>
             </div>
             <div
-                class="flex w-[68.4%] flex-col gap-4 bg-2023-orange py-[3.2%]"
+                class="flex w-[68.4%] flex-col gap-[1em] bg-2023-orange py-[3.2%]"
                 :class="[
                     state == 'used'
                         ? 'ticket-right-clip-path -ml-[.4%] origin-right translate-x-[3.7%] rotate-6'
@@ -100,12 +102,12 @@ defineProps<Props>();
                 ]"
             >
                 <span
-                    class="flex justify-end bg-2023-teal-dark px-4 py-2 text-right"
+                    class="flex justify-end bg-2023-teal-dark px-[1em] py-[.5em] text-right"
                 >
                     WORKSHOP
                 </span>
 
-                <span class="px-4">Capture the Flag 101</span>
+                <span class="px-[1em]">Capture the Flag 101</span>
             </div>
         </div>
     </div>
