@@ -9,7 +9,7 @@ import FancyButton from "@/Components/FancyButton.vue";
             class="relative flex h-full flex-col pt-20 max-xs:items-center"
         >
             <h2
-                class="absolute left-[calc(50%-277.3415px)] top-5 mx-auto border border-solid border-black bg-2023-red-dark px-2 py-2 text-2xl font-bold text-white shadow-md shadow-2023-bg max-sm:relative max-sm:left-0 max-sm:top-6 sm:px-10 sm:py-6 sm:text-6xl"
+                class="absolute self-center mr-7 top-5 mx-auto border border-solid border-black bg-2023-red-dark px-2 py-2 text-2xl font-bold text-white shadow-md shadow-2023-bg max-sm:relative max-sm:left-0 max-sm:top-6 sm:px-10 sm:py-6 sm:text-6xl"
             >
                 Tudo a postos?
             </h2>
