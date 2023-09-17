@@ -12,6 +12,12 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const usertypeMap = {
+    "App\\Models\\Admin": "Administrador",
+    "App\\Models\\Student": "Estudante",
+    "App\\Models\\Company": "Empresa"
+} as const satisfies Record<User['usertype_type'], string>;
 </script>
 
 <template>
@@ -30,7 +36,7 @@ defineProps<Props>();
             <Row name="users" :item="item">
                 <Cell>{{ item.name }}</Cell>
                 <Cell>{{ item.email }}</Cell>
-                <Cell>{{ item.usertype_type.split("\\").pop()! }}</Cell>
+                <Cell>{{ usertypeMap[item.usertype_type] }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

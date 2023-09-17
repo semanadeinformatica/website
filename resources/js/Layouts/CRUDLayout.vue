@@ -20,10 +20,13 @@ const query = ref(new URLSearchParams(location.search).get("query") ?? "");
 watch(query, (query) => {
     const ziggy = route();
 
-    router.replace(route(ziggy.current() ?? "#", { ...ziggy.params, query }), {
-        preserveState: true,
-        preserveScroll: true,
-    });
+    router.replace(
+        route(ziggy.current() ?? "#", { ...ziggy.params, query, page: 1 }),
+        {
+            preserveState: true,
+            preserveScroll: true,
+        },
+    );
 });
 </script>
 
