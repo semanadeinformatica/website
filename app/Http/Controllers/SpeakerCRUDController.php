@@ -26,6 +26,7 @@ class SpeakerCRUDController extends CRUDController
         'social_media.twitter' => 'sometimes|nullable|string',
         'social_media.website' => 'sometimes|nullable|string|url',
         'event_id' => 'required|exists:events,id',
+        'photo' => 'nullable|mimes:jpg,jpeg,png|max:1024',
     ];
 
     protected array $search = ['name', 'title', 'description', 'organization'];
@@ -55,6 +56,10 @@ class SpeakerCRUDController extends CRUDController
         }
         DB::commit();
 
+        if (isset($new['photo'])) {
+            $speaker->updateProfilePhoto($new['photo']);
+        }
+
         return null;
     }
 
@@ -67,6 +72,10 @@ class SpeakerCRUDController extends CRUDController
             } else {
                 $socialMedia->update($new['social_media']);
             }
+        }
+
+        if (isset($new['photo'])) {
+            $old->updateProfilePhoto($new['photo']);
         }
 
         return [
