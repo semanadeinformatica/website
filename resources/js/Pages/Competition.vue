@@ -43,13 +43,13 @@ import Podium from "@/Components/Podium.vue";
             class="relative flex content-center items-center justify-center py-24"
         >
             <h1
-                class="absolute top-[15px] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
+                class="absolute top-[1rem] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
             >
                 Vamos a isto?
             </h1>
 
             <button
-                class="mt-5 h-[50px] w-[180px] content-center justify-center border border-black bg-2023-teal-dark text-center text-2xl font-bold text-white hover:bg-2023-teal"
+                class="relative mt-5 h-[3rem] w-[10rem] content-center justify-center border border-black bg-2023-teal-dark text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
             >
                 <p>Participar!</p>
             </button>

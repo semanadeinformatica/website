@@ -3,8 +3,8 @@
 <template>
     <section class="relative flex justify-center py-28">
         <svg
-            width="75%"
-            height="75%"
+            width="60%"
+            height="60%"
             viewBox="0 0 1220 582"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +63,7 @@
                 y="3.5"
                 href="images/default_icon.png"
                 clip-path="url(#first)"
+                class="bg-opacity-0 hover:blur ease-in-out duration-300"
             />
             <clipPath id="second">
                 <rect
@@ -82,6 +83,7 @@
                 y="76.5"
                 href="images/default_icon.png"
                 clip-path="url(#second)"
+                class="bg-opacity-0 hover:blur ease-in-out duration-300"
             />
 
             <clipPath id="third">
@@ -102,6 +104,7 @@
                 y="98.5"
                 href="images/default_icon.png"
                 clip-path="url(#third)"
+                class="bg-opacity-0 hover:blur ease-in-out duration-300"
             />
 
             <path
