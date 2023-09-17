@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import type Event from "@/Types/Event";
-
 interface Props {
     state: "used" | "acquired" | "available";
-    color: string;
-    event: Event;
 }
 
 defineProps<Props>();
