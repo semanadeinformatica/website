@@ -26,6 +26,7 @@ class UserCRUDController extends CRUDController
         'social_media.linkedin' => 'sometimes|nullable|string',
         'social_media.twitter' => 'sometimes|nullable|string',
         'social_media.website' => 'sometimes|nullable|string|url',
+        'photo' => 'nullable|mimes:jpg,jpeg,png|max:1024',
     ];
 
     protected array $search = ['name', 'email'];
@@ -65,6 +66,10 @@ class UserCRUDController extends CRUDController
         }
         DB::commit();
 
+        if (isset($new['photo'])) {
+            $user->updateProfilePhoto($new['photo']);
+        }
+
         return null;
     }
 
@@ -88,6 +93,10 @@ class UserCRUDController extends CRUDController
             } else {
                 $socialMedia->update($new['social_media']);
             }
+        }
+
+        if (isset($new['photo'])) {
+            $old->updateProfilePhoto($new['photo']);
         }
 
         return [
