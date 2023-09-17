@@ -32,7 +32,8 @@ defineProps<Props>();
                 <div
                     class="relative m-6 flex w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
                 >
-                    <div class="flex w-full justify-around">
+                    <ModalsContainer />
+                    <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
                             :item="
                                 student ? student.user : $page.props.auth.user

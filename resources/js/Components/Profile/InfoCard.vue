@@ -10,7 +10,7 @@ defineProps<Props>();
 
 <template>
     <div
-        class="mr-[5px] flex w-fit border border-solid border-black bg-2023-bg p-3 text-2023-teal shadow shadow-2023-red-dark"
+        class="m-4 flex justify-between border border-solid border-black bg-2023-bg p-3 text-2023-teal shadow-xl shadow-2023-red-dark md:min-w-[30vw]"
     >
         <div class="flex-col">
             <p class="font-bold">{{ item?.name }}</p>
@@ -18,7 +18,7 @@ defineProps<Props>();
                 {{ item?.email }}
             </p>
         </div>
-        <button v-if="$page.props.auth.user.id == item?.id">
+        <button v-if="$page.props.auth.user.id == item?.id" class="self-start">
             <v-icon name="io-create" fill="2023-teal" scale="1.3"></v-icon>
         </button>
     </div>

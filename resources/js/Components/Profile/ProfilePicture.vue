@@ -27,8 +27,8 @@ const selectNewPhoto = () => {
 const uploadNewPhoto = () => {
     const photo = photoInput.value?.files?.[0];
     if (photo) {
-        form.photo = photoInput.value?.files?.[0] ?? null
-        form.post(route('user-profile-information.update'), {
+        form.photo = photoInput.value?.files?.[0] ?? null;
+        form.post(route("user-profile-information.update"), {
             errorBag: "updateProfileInformation",
             preserveScroll: true,
             onSuccess: () => clearPhotoFileInput,
@@ -46,7 +46,7 @@ const clearPhotoFileInput = () => {
 <template>
     <div class="flex items-end">
         <div
-            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-2023-teal"
+            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-2023-teal max-md:ml-8"
         >
             <img
                 :src="item?.profile_photo_url"
@@ -54,8 +54,17 @@ const clearPhotoFileInput = () => {
                 class="h-full w-full object-cover"
             />
         </div>
-        <input ref="photoInput" type="file" class="hidden" accept="image/*" @change="uploadNewPhoto" />
-        <button v-if="$page.props.auth.user.id == item?.id" @click.prevent="selectNewPhoto">
+        <input
+            ref="photoInput"
+            type="file"
+            class="hidden"
+            accept="image/*"
+            @change="uploadNewPhoto"
+        />
+        <button
+            v-if="$page.props.auth.user.id == item?.id"
+            @click.prevent="selectNewPhoto"
+        >
             <v-icon name="io-share" fill="2023-teal" scale="1.3"></v-icon>
         </button>
     </div>
