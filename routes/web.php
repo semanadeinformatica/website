@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\FileController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
+use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +52,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/speakers' => SpeakerCRUDController::class,
                     '/users' => UserCRUDController::class,
                     '/sponsors' => SponsorCRUDController::class,
+                    '/staff' => StaffCRUDController::class,
+                    '/departments' => DepartmentCRUDController::class,
                 ]);
             });
 

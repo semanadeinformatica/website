@@ -48,4 +48,9 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function staff(): HasMany
+    {
+        return $this->hasMany(Staff::class);
+    }
 }
