@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
 use App\Http\Controllers\EventCRUDController;
@@ -31,9 +32,7 @@ use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
 
-Route::get('/team', function () {
-    return Inertia::render('Team');
-})->name('team');
+Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 

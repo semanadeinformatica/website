@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type Department from "@/Types/Department";
 import TeamMember from "./TeamMember.vue";
 
 const shadowColor: Record<string, string> = {
@@ -18,9 +19,8 @@ const textColor: Record<string, string> = {
 };
 
 defineProps<{
-    title: string;
+    department: Department;
     color: string;
-    people: { name: string; src: string; linkedin?: string; github?: string }[];
 }>();
 </script>
 
@@ -30,15 +30,15 @@ defineProps<{
             class="w-fit border border-black p-2 px-6 text-center text-xl font-bold shadow"
             :class="textColor[color] || shadowColor[color]"
         >
-            {{ title }}
+            {{ department.name }}
         </p>
         <section class="flex flex-row flex-wrap justify-center gap-4">
             <div
-                v-for="(person, idx) in people"
+                v-for="(staff, idx) in department.staff"
                 :key="idx"
                 class="flex flex-col items-center"
             >
-                <TeamMember :person="person" :color="color"></TeamMember>
+                <TeamMember :staff="staff" :color="color"></TeamMember>
             </div>
         </section>
     </section>
