@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ImageInput from "@/Components/ImageInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -18,6 +19,7 @@ const form = useForm({
         twitter: "",
         website: "",
     },
+    photo: null as File | null,
 });
 
 const submit = () => {
@@ -28,6 +30,8 @@ const submit = () => {
 <template>
     <CardLayout title="Criar utilizador">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput v-model="form.photo" class="self-stretch" />
+
             <TextInput
                 id="name"
                 v-model="form.name"

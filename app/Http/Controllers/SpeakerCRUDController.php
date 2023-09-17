@@ -28,6 +28,8 @@ class SpeakerCRUDController extends CRUDController
         'event_id' => 'required|exists:events,id',
     ];
 
+    protected array $search = ['name', 'title', 'description', 'organization'];
+
     protected function with(): array
     {
         return [
@@ -56,10 +58,10 @@ class SpeakerCRUDController extends CRUDController
         return null;
     }
 
-    protected function updated(array $old, array $new): ?array
+    protected function updated($old, array $new): ?array
     {
         if (isset($new['social_media'])) {
-            $socialMedia = SocialMedia::find($old['social_media_id']);
+            $socialMedia = $old->socialMedia;
             if ($socialMedia === null) {
                 $socialMedia = SocialMedia::create($new['social_media']);
             } else {

@@ -33,8 +33,8 @@ const editions = computed<Record<number, string>>(() =>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="price">Preço</Header>
-                <Header sort-by="points">Stock</Header>
-                <Header sort-by="edition_id">Edição</Header>
+                <Header sort-by="stock">Stock</Header>
+                <Header>Edição</Header>
             </HeaderRow>
         </template>
 

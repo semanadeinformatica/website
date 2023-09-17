@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { PaginationLink } from "@/Types/Paginated";
-import { Link } from "@inertiajs/vue3";
+import { Link, type InertiaLinkProps } from "@inertiajs/vue3";
 
 interface Props {
     links: PaginationLink[];
+    linkProps?: Partial<InertiaLinkProps>;
 }
 
 defineProps<Props>();

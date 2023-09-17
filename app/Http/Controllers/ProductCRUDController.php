@@ -18,6 +18,8 @@ class ProductCRUDController extends CRUDController
         'edition_id' => 'required|exists:editions,id',
     ];
 
+    protected array $search = ['name', 'price', 'stock'];
+
     protected function with(): array
     {
         return [

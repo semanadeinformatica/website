@@ -33,7 +33,7 @@ const editions = computed<Record<number, string>>(() =>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="points">Pontos</Header>
-                <Header sort-by="edition_id">Edição</Header>
+                <Header>Edição</Header>
             </HeaderRow>
         </template>
 

@@ -42,7 +42,7 @@ const options = {
             />
         </div>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
-            <template v-for="page in Object.keys(page_routes)">
+            <template v-for="page in Object.keys(page_routes)" :key="page">
                 <NavLink
                     :href="route('dashboard')"
                     :active="page == 'Sponsors'"
@@ -61,6 +61,7 @@ const options = {
                     <template #content>
                         <template
                             v-for="activity in Object.keys(activity_routes)"
+                            :key="activity"
                         >
                             <DropdownLink :href="route('dashboard')">
                                 {{ activity }}
@@ -74,7 +75,10 @@ const options = {
                         <DropdownTrigger> 2023 </DropdownTrigger>
                     </template>
                     <template #content>
-                        <template v-for="edition in edition_routes">
+                        <template
+                            v-for="edition in edition_routes"
+                            :key="edition"
+                        >
                             <DropdownLink :href="route('dashboard')">
                                 {{ edition }}
                             </DropdownLink>

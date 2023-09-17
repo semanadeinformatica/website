@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ImageInput from "@/Components/ImageInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -13,6 +14,7 @@ interface Props {
 const { item: user } = defineProps<Props>();
 
 const form = useForm({
+    _method: "PUT",
     name: user.name,
     email: user.email,
     type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
@@ -49,16 +51,23 @@ const form = useForm({
                 ? user.usertype?.social_media?.website ?? ""
                 : "",
     },
+    photo: null as File | null,
 });
 
 const submit = () => {
-    form.put(route("admin.users.update", user));
+    form.post(route("admin.users.update", user));
 };
 </script>
 
 <template>
     <CardLayout title="Editar utilizador">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                v-model="form.photo"
+                :initial-preview="item.profile_photo_url"
+                class="self-stretch"
+            />
+
             <TextInput
                 id="name"
                 v-model="form.name"
