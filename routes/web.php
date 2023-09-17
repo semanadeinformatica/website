@@ -6,7 +6,6 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
-use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\FileController;
@@ -33,15 +32,13 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [HomeController::class, 'show'])->name('home');
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
 
-Route::get('/team', [DepartmentController::class, 'show'])->name('team');
-
-Route::get('/program', [ProgramController::class, 'show'])->name('program');
-
-Route::get('/competition', function () {
-    return Inertia::render('Competition');
-})->name('competition');
+Route::get('/team', function () {
+    return Inertia::render('Team');
+})->name('team');
 
 Route::get('/event', function () {
     return Inertia::render('Event');
