@@ -33,7 +33,7 @@ const sponsors = computed<Record<number, string>>(() =>
     Object.fromEntries(
         props.with.sponsors.map((sponsor) => [
             sponsor.id,
-            sponsor.company.user?.name ?? "",
+            sponsor.company?.user?.name ?? "",
         ]),
     ),
 );
