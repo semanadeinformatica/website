@@ -34,7 +34,7 @@ Route::get('/', function () {
 
 Route::get('/team', function () {
     return Inertia::render('Team');
-});
+})->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
