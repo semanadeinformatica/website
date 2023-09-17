@@ -31,6 +31,11 @@ class Edition extends Model
         return $this->hasMany(EventDay::class);
     }
 
+    public function events(): HasManyThrough
+    {
+        return $this->through('event_days')->has('events');
+    }
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
@@ -43,12 +48,17 @@ class Edition extends Model
 
     public function speakers(): HasManyThrough
     {
-        return $this->hasManyThrough(Speaker::class, Event::class);
+        return $this->through('events')->has('speakers');
     }
 
     public function sponsors(): HasMany
     {
         return $this->hasMany(Sponsor::class);
+    }
+
+    public function stands(): HasManyThrough
+    {
+        return $this->through('event_days')->has('stands');
     }
 
     public function departments(): HasMany

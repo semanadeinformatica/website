@@ -7,18 +7,23 @@ import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import { computed } from "vue";
 import type Sponsor from "@/Types/Sponsor";
+import type Speaker from "@/Types/Speaker";
 
 interface Props {
     edition: Edition;
-    activity_count: number;
-    talk_count: number;
+    sponsors: Sponsor[];
+    speakers: Speaker[];
+    activityCount: number;
+    talkCount: number;
+    dayCount: number;
+    standCount: number;
 }
 
-const { edition } = defineProps<Props>();
+const { edition, sponsors } = defineProps<Props>();
 
-const sponsors = computed(
+const sponsorGroups = computed(
     () =>
-        edition.sponsors?.reduce(
+        sponsors.reduce(
             (acc, sponsor) => {
                 acc[sponsor.tier] ??= [];
                 acc[sponsor.tier].push(sponsor);
@@ -100,10 +105,10 @@ const sponsors = computed(
             <div
                 class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
             >
-                <span class="text-center">? dias</span>
-                <span class="text-center">? bancas</span>
-                <span class="text-center">{{ talk_count }} palestras</span>
-                <span class="text-center">{{ activity_count }} atividades</span>
+                <span class="text-center">{{ dayCount }} dias</span>
+                <span class="text-center">{{ standCount }} bancas</span>
+                <span class="text-center">{{ talkCount }} palestras</span>
+                <span class="text-center">{{ activityCount }} atividades</span>
             </div>
         </section>
         <!-- SPEAKERS -->
@@ -127,17 +132,17 @@ const sponsors = computed(
             </p>
             <SponsorBanner
                 title="Platinum"
-                :sponsors="sponsors.PLATINUM"
+                :sponsors="sponsorGroups.PLATINUM"
                 color="orange"
             ></SponsorBanner>
             <SponsorBanner
                 title="Gold"
-                :sponsors="sponsors.GOLD"
+                :sponsors="sponsorGroups.GOLD"
                 color="teal-dark"
             ></SponsorBanner>
             <SponsorBanner
                 title="Silver"
-                :sponsors="sponsors.SILVER"
+                :sponsors="sponsorGroups.SILVER"
                 color="red-dark"
             ></SponsorBanner>
         </section>
