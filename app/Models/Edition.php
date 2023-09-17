@@ -45,8 +45,8 @@ class Edition extends Model
         return $this->hasMany(Sponsor::class);
     }
 
-    public function team(): HasMany
+    public function departments(): HasMany
     {
-        return $this->hasMany(Team::class);
+        return $this->hasMany(Department::class);
     }
 }

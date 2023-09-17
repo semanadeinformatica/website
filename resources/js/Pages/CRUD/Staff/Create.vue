@@ -46,11 +46,8 @@ const submit = () => {
                     :key="department.id"
                     :value="department.id"
                 >
-                    {{
-                        `${department.name} - ${
-                            editions[department.edition_id]
-                        }`
-                    }}
+                    {{ department.name }}
+                    - {{ editions[department.edition_id] }}
                 </option>
             </select>
 
