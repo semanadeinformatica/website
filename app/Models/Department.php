@@ -15,7 +15,7 @@ class Department extends Model
         'edition_id',
     ];
 
-    public function department(): BelongsTo
+    public function edition(): BelongsTo
     {
         return $this->belongsTo(Edition::class);
     }
