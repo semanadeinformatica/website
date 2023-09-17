@@ -8,7 +8,7 @@ defineProps<Props>();
 
 <template>
     <div
-        class="@container grid aspect-[5/2] place-content-stretch place-items-stretch"
+        class="grid aspect-[5/2] place-content-stretch place-items-stretch @container"
         :class="[state == 'available' ? 'opacity-50 grayscale' : '']"
     >
         <svg
