@@ -16,7 +16,7 @@ class ProgramController extends Controller
         }
 
         // We can do this here since we already fetched the edition from the DB, so we would not gain any performance from "short-circuiting" the validation
-        $eventDays = $edition->event_days;
+        $eventDays = $edition->event_days()->orderBy('date', 'ASC')->get();
         $totalDays = count($eventDays);
 
         $validated = $request->validate([
@@ -27,7 +27,7 @@ class ProgramController extends Controller
         $eventDay = $eventDays->get($queryDay - 1);
 
         return Inertia::render('Program', [
-            'eventDay' => fn () => $eventDay->toArray(),
+            'eventDay' => fn () => $eventDay,
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),
         ]);
