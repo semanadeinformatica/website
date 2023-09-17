@@ -18,6 +18,8 @@ class SponsorCRUDController extends CRUDController
         'company_id' => 'required|exists:companies,id',
     ];
 
+    protected array $search = ['tier'];
+
     protected function created(array $new): ?array
     {
         return [

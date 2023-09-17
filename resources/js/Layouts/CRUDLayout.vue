@@ -4,14 +4,27 @@ import PaginationLinks from "@/Components/PaginationLinks.vue";
 import type Model from "@/Types/Model";
 import type Paginated from "@/Types/Paginated";
 import AppLayout from "./AppLayout.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import route from "ziggy-js";
+import TextInput from "@/Components/TextInput.vue";
+import { ref, watch } from "vue";
 
 defineProps<{
     items: Paginated<T>;
     title: string;
     name: string;
 }>();
+
+const query = ref(new URLSearchParams(location.search).get("query") ?? "");
+
+watch(query, (query) => {
+    const ziggy = route();
+
+    router.replace(route(ziggy.current() ?? "#", { ...ziggy.params, query }), {
+        preserveState: true,
+        preserveScroll: true,
+    });
+});
 </script>
 
 <template>
@@ -20,7 +33,9 @@ defineProps<{
             <header
                 class="flex flex-row flex-wrap items-center justify-between gap-4"
             >
-                <h2 class="text-2xl"><slot name="heading"></slot></h2>
+                <h2 class="mr-auto text-2xl"><slot name="heading"></slot></h2>
+
+                <TextInput v-model="query" label="Pesquisar" type="search" />
 
                 <Link :href="route(`admin.${name}.create`)">Novo</Link>
             </header>

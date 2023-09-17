@@ -20,6 +20,8 @@ class EventCRUDController extends CRUDController
         'edition_id' => 'required|exists:editions,id',
     ];
 
+    protected array $search = ['name', 'topic', 'capacity'];
+
     protected function with(): array
     {
         return [

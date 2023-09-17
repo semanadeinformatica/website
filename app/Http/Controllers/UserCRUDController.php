@@ -28,6 +28,8 @@ class UserCRUDController extends CRUDController
         'social_media.website' => 'sometimes|nullable|string|url',
     ];
 
+    protected array $search = ['name', 'email'];
+
     protected function updateRules($old): array
     {
         return array_merge($this->rules, [

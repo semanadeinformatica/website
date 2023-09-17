@@ -30,6 +30,13 @@ abstract class CRUDController extends Controller
     protected array $rules = [];
 
     /**
+     * The columns to search in.
+     *
+     * @var array<int, string>
+     */
+    protected array $search = [];
+
+    /**
      * The validation rules for the store method.
      *
      * @param  T  $old The old model.
@@ -65,8 +72,22 @@ abstract class CRUDController extends Controller
     {
         $sort_by = $request->query('sort_by', 'id');
         $sort_dir = $request->query('sort_dir', 'asc');
+        $query = $this->model::orderBy($sort_by, $sort_dir);
 
-        $items = $this->model::orderBy($sort_by, $sort_dir)->paginate()->withQueryString();
+        $search = $request->query('query');
+
+        if ($search) {
+            $search = explode(' ', $search);
+            foreach ($search as $searchTerm) {
+                $query->where(function ($query) use ($searchTerm) {
+                    foreach ($this->search as $column) {
+                        $query->orWhere($column, 'ILIKE', "%{$searchTerm}%");
+                    }
+                });
+            }
+        }
+
+        $items = $query->paginate()->withQueryString();
 
         $with = $this->with();
 

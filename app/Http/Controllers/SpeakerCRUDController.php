@@ -28,6 +28,8 @@ class SpeakerCRUDController extends CRUDController
         'event_id' => 'required|exists:events,id',
     ];
 
+    protected array $search = ['name', 'title', 'description', 'organization'];
+
     protected function with(): array
     {
         return [

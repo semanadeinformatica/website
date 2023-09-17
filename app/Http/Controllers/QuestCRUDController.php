@@ -28,6 +28,8 @@ class QuestCRUDController extends CRUDController
         ];
     }
 
+    protected array $search = ['name', 'points', 'category'];
+
     protected function created(array $new): ?array
     {
         $requirement = explode(';', $new['requirement']);
