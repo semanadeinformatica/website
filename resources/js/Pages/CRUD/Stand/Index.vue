@@ -22,7 +22,10 @@ const props = defineProps<Props>();
 
 const eventDays = computed<Record<number, string>>(() =>
     Object.fromEntries(
-        props.with.eventDays.map((eventDay) => [eventDay.id, eventDay.date.toString()]),
+        props.with.eventDays.map((eventDay) => [
+            eventDay.id,
+            eventDay.date.toString(),
+        ]),
     ),
 );
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
 use App\Http\Controllers\EventCRUDController;
+use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
@@ -58,6 +59,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/staff' => StaffCRUDController::class,
                     '/departments' => DepartmentCRUDController::class,
                     '/stands' => StandCRUDController::class,
+                    '/eventDays' => EventDayCRUDController::class,
                 ]);
             });
 

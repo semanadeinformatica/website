@@ -16,11 +16,11 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 
 <template>
     <AppLayout title="Programa">
-        <div class="flex flex-col items-center px-40 py-20">
+        <div class="flex flex-col items-center px-10 py-20 md:px-40">
             <section class="flex flex-col items-center gap-5">
                 <div
                     id="daySelection"
-                    class="flex w-fit flex-row flex-wrap gap-4"
+                    class="flex w-fit flex-row flex-wrap justify-center gap-4"
                 >
                     <template v-for="(day, idx) in totalDays" :key="idx">
                         <Link

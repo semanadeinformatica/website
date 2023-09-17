@@ -8,14 +8,14 @@ import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 interface Props {
-    item: Stand,
+    item: Stand;
     with: {
         sponsors: Sponsor[];
         eventDays: EventDay[];
     };
 }
 
-const {item: stand} = defineProps<Props>();
+const { item: stand } = defineProps<Props>();
 
 const form = useForm({
     event_day_id: stand.event_day_id,

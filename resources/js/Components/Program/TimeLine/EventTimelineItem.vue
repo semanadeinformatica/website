@@ -26,6 +26,7 @@ const formatTimeString = (time: string): string => {
                 }}</Link></em
             >
         </h2>
+        <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>
         <ul v-if="event.speakers" class="flex flex-col">
             <li
                 v-for="speaker in event.speakers"

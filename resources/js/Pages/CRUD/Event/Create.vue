@@ -46,7 +46,7 @@ const submit = () => {
                 id="time_start"
                 v-model="form.time_start"
                 label="Hora de início"
-                type="time-local"
+                type="time"
                 step="60"
                 required
                 :error-message="form.errors.time_start"
@@ -56,7 +56,7 @@ const submit = () => {
                 id="time_end"
                 v-model="form.time_end"
                 label="Hora de fim"
-                type="time-local"
+                type="time"
                 step="60"
                 required
                 :error-message="form.errors.time_end"
@@ -86,7 +86,7 @@ const submit = () => {
                     :key="day.id"
                     :value="day.id"
                 >
-                    {{ day.date.getDay() }}
+                    {{ day.date }}
                 </option>
             </select>
 

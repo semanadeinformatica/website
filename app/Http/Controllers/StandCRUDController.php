@@ -13,8 +13,8 @@ class StandCRUDController extends CRUDController
     protected string $view = 'Stand';
 
     protected array $rules = [
-        'sponsor_id' => 'integer|in:sponsors,id',
-        'event_day_id' => 'integer|in:event_days,id',
+        'sponsor_id' => 'required|integer|in:sponsors,id',
+        'event_day_id' => 'required|integer|in:event_days,id',
     ];
 
     protected function with(): array
