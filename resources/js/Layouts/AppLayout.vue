@@ -19,7 +19,7 @@ defineProps<Props>();
         <div>
             <Navbar />
             <main class="min-h-screen bg-2023-bg">
-                <div class="flex flex-col items-center gap-4 p-4">
+                <div class="flex flex-col items-stretch gap-4 p-4 max-w-[calc(500px+theme(spacing.8))]">
                     <Ticket state="available" />
                     <Ticket state="acquired" />
                     <Ticket state="used" />
