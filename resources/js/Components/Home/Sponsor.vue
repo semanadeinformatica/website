@@ -18,7 +18,7 @@ defineProps<Props>();
 <template>
     <img
         v-bind="$attrs"
-        class="col-span-2 h-auto max-h-[200px] cursor-pointer object-contain"
+        class="col-span-2 h-auto max-h-[200px] w-full cursor-pointer object-contain"
         :src="sponsor.company?.user?.profile_photo_url"
         :alt="sponsor.company?.user?.name"
         @click="options.modelValue = true"
