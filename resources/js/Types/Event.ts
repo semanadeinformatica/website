@@ -1,4 +1,5 @@
-import type Model from "./Model";
+import type Model from "@/Types/Model";
+import type Speaker from "@/Types/Speaker";
 
 export default interface Event extends Model {
     name: string;
@@ -7,4 +8,6 @@ export default interface Event extends Model {
     topic: string;
     capacity?: number;
     event_day_id: number;
+
+    speakers?: Speaker[];
 }

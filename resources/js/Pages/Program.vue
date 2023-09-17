@@ -26,19 +26,21 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                         <Link
                             :href="
                                 route(route().current() ?? 'program', {
-                                    day
+                                    day,
                                 })
                             "
+                            as="span"
                             :only="['eventDay', 'queryDay']"
+                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal text-xl font-bold text-white transition"
+                            :class="{
+                                selected:
+                                    day ==
+                                    queryDay /* cringe Inertia gives us a string, no strict equality boo-hoo */,
+                            }"
                             preserve-state
                             preserve-scroll
                         >
-                            <span
-                                class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal text-xl font-bold text-white transition"
-                                :class="{ selected: day == queryDay /* cringe Inertia gives us a string, no strict equality boo-hoo */}"
-                            >
-                                {{ day }}
-                            </span>
+                            {{ day }}
                         </Link>
                     </template>
                 </div>
@@ -54,7 +56,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                     {{ eventDay.theme }}
                 </p>
             </section>
-            <ProgramDayPanel :day="eventDay" />
+            <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
         </div>
     </AppLayout>
 </template>

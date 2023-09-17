@@ -20,10 +20,14 @@ class EventDay extends Model
     protected $with = [
         'stands' => [
             'sponsor' => [
-                'company',
+                'company' => [
+                    'user',
+                ],
             ],
         ],
-        'events',
+        'events' => [
+            'speakers',
+        ],
     ];
 
     protected $casts = [
