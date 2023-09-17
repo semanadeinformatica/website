@@ -129,13 +129,13 @@ const formattedDate = (
                 id="aboutus"
                 class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
             >
-                Sobre nós
+                {{ $t("homePage.aboutUs.label") }}
             </h2>
             <p class="p-20 text-lg text-white max-lg:pb-10">
-                {{ $t("homePage.aboutUsText1") }}
+                {{ $t("homePage.aboutUs.text1") }}
             </p>
             <p class="p-20 text-lg text-white max-lg:py-10">
-                {{ $t("homePage.aboutUsText2") }}
+                {{ $t("homePage.aboutUs.text2") }}
             </p>
         </section>
         <!-- GENERAL INFO -->
@@ -143,7 +143,7 @@ const formattedDate = (
             <h2
                 class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
             >
-                Este ano temos...
+                {{ $t("homePage.joinUs") }}
             </h2>
             <template
                 v-if="
@@ -156,12 +156,19 @@ const formattedDate = (
                 <div
                     class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
-                    <span class="text-center">{{ days.length }} dias</span>
-                    <span class="text-center">{{ standCount }} bancas</span>
-                    <span class="text-center">{{ talkCount }} palestras</span>
-                    <span class="text-center"
-                        >{{ activityCount }} atividades</span
-                    >
+                <span class="text-center"
+                    >{{ days.length }} {{ $t("homePage.features.days") }}</span
+                >
+                <span class="text-center"
+                    >{{ standCount }} {{ $t("homePage.features.stalls") }}</span
+                >
+                <span class="text-center"
+                    >{{ talkCount }} {{ $t("homePage.features.talks") }}</span
+                >
+                <span class="text-center"
+                    >{{ activityCount }}
+                    {{ $t("homePage.features.workshops") }}</span
+                >
                 </div>
             </template>
             <template v-else>
@@ -180,7 +187,7 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                Oradores
+                {{ $t("homePage.speakers") }}
             </p>
             <template v-if="speakers.length != 0">
                 <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
@@ -199,21 +206,21 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                Patrocínios
+                {{ $t("homePage.sponsors.label") }}
             </p>
             <SponsorBanner
-                title="Platina"
                 :sponsors="sponsorGroups.PLATINUM"
+                :title="$t('homePage.sponsors.tier.plat')"
                 color="orange"
             ></SponsorBanner>
             <SponsorBanner
-                title="Ouro"
                 :sponsors="sponsorGroups.GOLD"
+                :title="$t('homePage.sponsors.tier.gold')"
                 color="teal-dark"
             ></SponsorBanner>
             <SponsorBanner
-                title="Prata"
                 :sponsors="sponsorGroups.SILVER"
+                :title="$t('homePage.sponsors.tier.silver')"
                 color="red-dark"
             ></SponsorBanner>
         </section>
