@@ -26,7 +26,7 @@ defineProps<{
             alt="Sticker"
         />
         <div
-            class="sticker-clip-path absolute flex h-full w-full translate-y-full items-center bg-black bg-opacity-50 p-10 text-center text-white transition-all duration-500 group-hover:translate-y-0"
+            class="sticker-clip-path absolute flex h-full w-full translate-y-full items-center justify-center bg-black bg-opacity-50 p-10 text-center text-white transition-all duration-500 group-hover:translate-y-0"
         >
             {{ text }}
         </div>
