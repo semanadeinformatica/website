@@ -61,7 +61,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/eventDays' => EventDayCRUDController::class,
                 ]);
 
-                Route::name('index')->get('/index', function () {
+                Route::name('index')->get('/', function () {
                     return Inertia::render('Admin');
                 });
             });

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { computed } from "vue";
 import route from "ziggy-js";
@@ -11,29 +10,29 @@ type Routes = Record<string, Route>;
 
 const pageRoutes: Routes = {
     "admin.editions.index": {
-        label: "Editions",
+        label: "Edições",
     },
-    "admin.events.index": { label: "Events" },
-    "admin.products.index": { label: "Products" },
+    "admin.events.index": { label: "Eventos" },
+    "admin.products.index": { label: "Produtos" },
     "admin.quests.index": { label: "Quests" },
     "admin.speakers.index": { label: "Speakers" },
     "admin.users.index": {
-        label: "Users",
+        label: "Utilizadores",
     },
     "admin.sponsors.index": {
-        label: "Sponsors",
+        label: "Patrocinadores",
     },
     "admin.staff.index": {
         label: "Staff",
     },
     "admin.departments.index": {
-        label: "Departments",
+        label: "Departmentos",
     },
     "admin.stands.index": {
-        label: "Stands",
+        label: "Bancas",
     },
     "admin.eventDays.index": {
-        label: "Event Days",
+        label: "Dias de Evento",
     },
 };
 
