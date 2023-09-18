@@ -63,7 +63,7 @@
                 y="3.5"
                 href="images/default_icon.png"
                 clip-path="url(#first)"
-                class="bg-opacity-0 hover:blur ease-in-out duration-300"
+                class="bg-opacity-0 duration-300 ease-in-out hover:blur"
             />
             <clipPath id="second">
                 <rect
@@ -83,7 +83,7 @@
                 y="76.5"
                 href="images/default_icon.png"
                 clip-path="url(#second)"
-                class="bg-opacity-0 hover:blur ease-in-out duration-300"
+                class="bg-opacity-0 duration-300 ease-in-out hover:blur"
             />
 
             <clipPath id="third">
@@ -104,7 +104,7 @@
                 y="98.5"
                 href="images/default_icon.png"
                 clip-path="url(#third)"
-                class="bg-opacity-0 hover:blur ease-in-out duration-300"
+                class="bg-opacity-0 duration-300 ease-in-out hover:blur"
             />
 
             <path

@@ -12,7 +12,7 @@ import Podium from "@/Components/Podium.vue";
             class="relative mt-5 grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
         >
             <h2
-                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-5xl font-bold text-white shadow-md shadow-2023-bg"
+                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
             >
                 Regulamento
             </h2>
