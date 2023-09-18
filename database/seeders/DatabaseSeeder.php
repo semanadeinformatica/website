@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\CompetitionInfo;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\EventDay;
@@ -89,5 +90,7 @@ class DatabaseSeeder extends Seeder
         Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();
 
         Product::factory(10)->recycle($edition)->create();
+
+        CompetitionInfo::factory()->recycle($edition)->recycle($participants)->create();
     }
 }
