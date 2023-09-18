@@ -98,7 +98,7 @@ const props = defineProps<{
                     :key="`navbar-edition-link-${edition}`"
                 >
                     <ResponsiveNavLink
-                        :href="route('dashboard')"
+                        :href="route('home')"
                         :active="edition === new Date().getFullYear()"
                     >
                         {{ edition }}

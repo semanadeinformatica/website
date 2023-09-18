@@ -3,7 +3,7 @@ import Table from "@/Components/CRUD/Table.vue";
 import PaginationLinks from "@/Components/PaginationLinks.vue";
 import type Model from "@/Types/Model";
 import type Paginated from "@/Types/Paginated";
-import AppLayout from "./AppLayout.vue";
+import AdminLayout from "./AdminLayout.vue";
 import { Link, router } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
@@ -32,7 +32,7 @@ watch(query, (query) => {
 </script>
 
 <template>
-    <AppLayout :title="title">
+    <AdminLayout :title="title">
         <div
             class="flex min-h-screen flex-col items-stretch gap-4 bg-2023-bg p-12"
         >
@@ -67,5 +67,5 @@ watch(query, (query) => {
                 }"
             />
         </div>
-    </AppLayout>
+    </AdminLayout>
 </template>

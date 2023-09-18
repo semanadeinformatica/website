@@ -108,7 +108,7 @@ const options = {
                             v-for="edition in editionRoutes"
                             :key="edition"
                         >
-                            <DropdownLink :href="route('dashboard')">
+                            <DropdownLink :href="route('home')">
                                 {{ edition }}
                             </DropdownLink>
                         </template>
