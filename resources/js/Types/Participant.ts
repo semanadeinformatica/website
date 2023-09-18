@@ -2,7 +2,7 @@ import type Model from "./Model";
 import type SocialMedia from "./SocialMedia";
 import type { User } from "./User";
 
-export default interface Student extends Model {
+export default interface Participant extends Model {
     user_id: number;
     user?: User;
     social_media_id?: number;

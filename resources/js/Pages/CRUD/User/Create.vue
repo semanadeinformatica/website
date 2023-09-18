@@ -9,7 +9,7 @@ import route from "ziggy-js";
 const form = useForm({
     name: "",
     email: "",
-    type: "" as "student" | "company" | "admin",
+    type: "" as "participant" | "company" | "admin",
     description: "",
     social_media: {
         email: "",
@@ -58,7 +58,7 @@ const submit = () => {
                 <option value="" disabled selected hidden>
                     Tipo de utilizador
                 </option>
-                <option value="student">Estudante</option>
+                <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
             </select>

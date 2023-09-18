@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Edition;
 use App\Models\Staff;
-use App\Models\Student;
+use App\Models\Participant;
 
 class StaffCRUDController extends CRUDController
 {
@@ -14,7 +14,7 @@ class StaffCRUDController extends CRUDController
     protected string $view = 'Staff';
 
     protected array $rules = [
-        'student_id' => 'required|exists:students,id',
+        'participant_id' => 'required|exists:participants,id',
         'department_id' => 'required|exists:departments,id',
         'coordinator' => 'sometimes|boolean',
     ];
@@ -22,7 +22,7 @@ class StaffCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'students' => Student::with('user')->get(),
+            'participants' => Participant::with('user')->get(),
             'departments' => Department::all(),
             'editions' => Edition::all(),
         ];

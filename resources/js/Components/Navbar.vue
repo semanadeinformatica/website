@@ -28,7 +28,7 @@ const pageRoutes: Routes = {
     },
     team: { label: "Equipa" },
     sponsors: { label: "Patrocínios" },
-    contacts: { label: "Contacts" },
+    contacts: { label: "Contactos" },
 };
 
 const activityRoutes: Routes = {

@@ -80,8 +80,8 @@ class User extends Authenticatable
         return $this->usertype_type === Company::class;
     }
 
-    public function isStudent(): bool
+    public function isParticipant(): bool
     {
-        return $this->usertype_type === Student::class;
+        return $this->usertype_type === Participant::class;
     }
 }

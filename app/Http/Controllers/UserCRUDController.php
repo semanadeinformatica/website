@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\SocialMedia;
-use App\Models\Student;
+use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +18,7 @@ class UserCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
-        'type' => 'required|in:student,company,admin',
+        'type' => 'required|in:participant,company,admin',
         'description' => 'sometimes|nullable|string',
         'social_media.email' => 'sometimes|nullable|string|email',
         'social_media.facebook' => 'sometimes|nullable|string',
@@ -42,7 +42,7 @@ class UserCRUDController extends CRUDController
     protected function created(array $new): ?array
     {
         $type = match ($new['type']) {
-            'student' => Student::class,
+            'participant' => Participant::class,
             'company' => Company::class,
             'admin' => Admin::class,
         };
@@ -80,7 +80,7 @@ class UserCRUDController extends CRUDController
     protected function updated($old, array $new): ?array
     {
         $type = match ($new['type']) {
-            'student' => Student::class,
+            'participant' => Participant::class,
             'company' => Company::class,
             'admin' => Admin::class,
         };

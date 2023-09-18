@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
             $table->boolean('coordinator');
-            $table->foreignIdFor(\App\Models\Student::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Department::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

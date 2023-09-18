@@ -12,7 +12,7 @@ class DeleteUser implements DeletesUsers
      */
     public function delete(User $user): void
     {
-        if ($user->isStudent()) {
+        if ($user->isParticipant()) {
             $user->usertype->deleteCv();
         }
 

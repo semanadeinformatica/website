@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Admin;
 use App\Models\Company;
-use App\Models\Student;
+use App\Models\Participant;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -48,7 +48,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
             'current_team_id' => null,
-            'usertype_type' => Student::class,
+            'usertype_type' => Participant::class,
             'usertype_id' => 0,
         ];
     }

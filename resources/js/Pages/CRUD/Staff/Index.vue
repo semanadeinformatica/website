@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Paginated from "@/Types/Paginated";
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
 import type Staff from "@/Types/Staff";
@@ -14,7 +14,7 @@ import { computed } from "vue";
 interface Props {
     items: Paginated<Staff>;
     with: {
-        students: Student[];
+        participants: Participant[];
         editions: Edition[];
         departments: Department[];
     };
@@ -31,11 +31,11 @@ const departments = computed<Record<number, string>>(() =>
     ),
 );
 
-const students = computed<Record<number, string>>(() =>
+const participants = computed<Record<number, string>>(() =>
     Object.fromEntries(
-        props.with.students.map((student) => [
-            student.id,
-            student.user?.name ?? "",
+        props.with.participants.map((participant) => [
+            participant.id,
+            participant.user?.name ?? "",
         ]),
     ),
 );
@@ -48,7 +48,7 @@ const students = computed<Record<number, string>>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header>Student ID</Header>
+                <Header>Participant ID</Header>
                 <Header>Departamento</Header>
                 <Header>Coordenador</Header>
             </HeaderRow>
@@ -56,8 +56,8 @@ const students = computed<Record<number, string>>(() =>
 
         <template #row="{ item }">
             <Row name="staff" :item="item">
-                <Cell>{{ students[item.student_id] }}</Cell>
-                <Cell>{{ item.student_id }}</Cell>
+                <Cell>{{ participants[item.participant_id] }}</Cell>
+                <Cell>{{ item.participant_id }}</Cell>
                 <Cell>{{ departments[item.department_id] }}</Cell>
                 <Cell>{{ item.coordinator ? "✓" : "❌" }}</Cell>
             </Row>

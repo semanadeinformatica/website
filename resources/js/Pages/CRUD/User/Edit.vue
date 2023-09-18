@@ -18,7 +18,7 @@ const form = useForm({
     name: user.name,
     email: user.email,
     type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
-        | "student"
+        | "participant"
         | "company"
         | "admin",
     description:
@@ -97,7 +97,7 @@ const submit = () => {
                 <option value="" disabled selected hidden>
                     Tipo de utilizador
                 </option>
-                <option value="student">Estudante</option>
+                <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
             </select>

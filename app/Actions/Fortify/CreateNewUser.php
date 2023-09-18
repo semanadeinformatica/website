@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\Student;
+use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -32,10 +32,10 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'usertype_id' => '0',
-            'usertype_type' => Student::class,
+            'usertype_type' => Participant::class,
         ]);
-        $student = Student::create(['user_id' => $user->id]);
-        $user->usertype()->associate($student);
+        $participant = Participant::create(['user_id' => $user->id]);
+        $user->usertype()->associate($participant);
         $user->save();
 
         return $user;
