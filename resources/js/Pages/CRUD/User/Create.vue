@@ -31,7 +31,13 @@ const submit = () => {
 <template>
     <CardLayout title="Criar utilizador">
         <form class="contents" @submit.prevent="submit">
-            <ImageInput v-model="form.photo" class="self-stretch" />
+            <ImageInput
+                id="photo"
+                v-model="form.photo"
+                label="Foto de perfil"
+                class="self-stretch"
+                :error-message="form.errors.photo"
+            />
 
             <TextInput
                 id="name"

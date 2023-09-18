@@ -45,9 +45,12 @@ const submit = () => {
     <CardLayout title="Editar apresentador">
         <form class="contents" @submit.prevent="submit">
             <ImageInput
+                id="photo"
                 v-model="form.photo"
                 :initial-preview="item.profile_photo_url"
+                label="Foto de perfil"
                 class="self-stretch"
+                :error-message="form.errors.photo"
             />
 
             <TextInput
