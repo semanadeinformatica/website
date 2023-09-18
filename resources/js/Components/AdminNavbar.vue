@@ -37,7 +37,7 @@ const pageRoutes: Routes = {
         </div>
         <div class="ml-2 lg:mx-4">
             <template v-if="$page.props.auth.user">
-                <Dropdown align="right" width="20">
+                <Dropdown align="right" width="32">
                     <template #trigger>
                         <img
                             class="h-10 w-10 cursor-pointer rounded-full object-cover"
@@ -47,7 +47,10 @@ const pageRoutes: Routes = {
                     </template>
                     <template #content>
                         <DropdownLink :href="route('profile.show')">
-                            Profile
+                            Perfil
+                        </DropdownLink>
+                        <DropdownLink :href="route('home')">
+                            Voltar ao site
                         </DropdownLink>
                         <DropdownLink :href="route('logout')" method="post">
                             Logout
