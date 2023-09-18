@@ -19,6 +19,7 @@ class UserCRUDController extends CRUDController
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
         'type' => 'required|in:student,company,admin',
+        'description' => 'sometimes|nullable|string',
         'social_media.email' => 'sometimes|nullable|string|email',
         'social_media.facebook' => 'sometimes|nullable|string',
         'social_media.github' => 'sometimes|nullable|string',
@@ -54,7 +55,10 @@ class UserCRUDController extends CRUDController
             'usertype_id' => '0',
             'usertype_type' => $type,
         ]);
-        $usertypeProps = ['user_id' => $user->id];
+        $usertypeProps = array_merge(['user_id' => $user->id], match ($new['type']) {
+            'company' => ['description' => $new['description']],
+            default => [],
+        });
         $usertype = $type::create($usertypeProps);
         $user->usertype()->associate($usertype);
         $user->save();
@@ -85,6 +89,12 @@ class UserCRUDController extends CRUDController
             // This should never happen
             throw new \Exception('Cannot change user type');
         }
+
+        $usertypeProps = match ($new['type']) {
+            'company' => ['description' => $new['description']],
+            default => [],
+        };
+        $old->usertype->update($usertypeProps);
 
         if ($new['type'] !== 'admin' && isset($new['social_media'])) {
             $socialMedia = $old->usertype->social_media;
