@@ -18,18 +18,18 @@ const textColor: Record<string, string> = {
     teal: "text-2023-teal",
 };
 
-const iconColor: Record<string, string> = {
-    orange: "#f29325",
-    "teal-dark": "#025259",
-    "red-dark": "#b15d5d",
-    red: "#d94f04",
-    teal: "#007172",
-};
-
 const socialIcon: Record<string, string> = {
     github: "io-logo-github",
     linkedin: "io-logo-linkedin",
     website: "io-globe",
+};
+
+const bgColor: Record<string, string> = {
+    orange: "bg-2023-orange",
+    "teal-dark": "bg-2023-teal-dark",
+    "red-dark": "bg-2023-red-dark",
+    red: "bg-2023-red",
+    teal: "bg-2023-teal",
 };
 
 const { color, staff } = defineProps<{
@@ -50,7 +50,7 @@ const socialMedia = computed(() => {
 
 <template>
     <div
-        class="group-hover group relative flex flex-col items-center overflow-y-hidden rounded-full border-4"
+        class="group-hover group relative flex w-fit flex-col items-center overflow-y-hidden rounded-full border-4"
         :class="borderColor[color]"
     >
         <img
@@ -59,22 +59,25 @@ const socialMedia = computed(() => {
             class="w-40"
         />
         <div
-            class="absolute -bottom-10 w-fit transition-all group-hover:bottom-4"
+            v-if="Object.keys(socialMedia).length > 0"
+            class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all group-hover:-bottom-7"
+            :class="bgColor[color]"
         >
             <a
                 v-for="(social, key, idx) in socialMedia"
                 :key="idx"
                 :href="social"
+                target="_blank"
             >
                 <v-icon
-                    :fill="iconColor[color]"
+                    fill="white"
                     :name="socialIcon[key]"
                     scale="1.4"
                 ></v-icon>
             </a>
         </div>
     </div>
-    <p class="font-bold" :class="textColor[color]">
+    <p class="max-w-[13em] text-center font-bold" :class="textColor[color]">
         {{ staff.student?.user?.name }}
     </p>
 </template>

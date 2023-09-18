@@ -34,6 +34,6 @@ const colors: Array<string> = [
 <style>
 main {
     padding: 2rem;
-    padding-inline: 6rem;
+    padding-inline: 4rem;
 }
 </style>
