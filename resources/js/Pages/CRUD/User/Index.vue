@@ -28,7 +28,15 @@ const usertypeMap = {
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="email">Email</Header>
-                <Header>Tipo</Header>
+                <Header
+                    filter-by="usertype_type"
+                    :filter-values="{
+                        'App\\Models\\Admin': 'Administrador',
+                        'App\\Models\\Student': 'Estudante',
+                        'App\\Models\\Company': 'Empresa',
+                    }"
+                    >Tipo</Header
+                >
             </HeaderRow>
         </template>
 

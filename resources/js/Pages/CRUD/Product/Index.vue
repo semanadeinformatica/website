@@ -34,7 +34,9 @@ const editions = computed<Record<number, string>>(() =>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="price">Preço</Header>
                 <Header sort-by="stock">Stock</Header>
-                <Header>Edição</Header>
+                <Header filter-by="edition_id" :filter-values="editions"
+                    >Edição</Header
+                >
             </HeaderRow>
         </template>
 

@@ -31,15 +31,17 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Edição</Header>
-                <Header>Nome</Header>
+                <Header sort-by="name">Nome</Header>
+                <Header filter-by="edition_id" :filter-values="editions"
+                    >Edição</Header
+                >
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="departments" :item="item">
-                <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ item.name }}</Cell>
+                <Cell>{{ editions[item.edition_id] }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

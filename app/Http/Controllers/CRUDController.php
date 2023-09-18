@@ -74,6 +74,14 @@ abstract class CRUDController extends Controller
         $sort_dir = $request->query('sort_dir', 'asc');
         $query = $this->model::orderBy($sort_by, $sort_dir);
 
+        $filter_by = $request->query('filter_by');
+
+        if ($filter_by) {
+            foreach ($filter_by as $column => $values) {
+                $query->whereIn($column, $values);
+            }
+        }
+
         $search = $request->query('query');
 
         if ($search) {
@@ -94,6 +102,9 @@ abstract class CRUDController extends Controller
         return Inertia::render("CRUD/$this->view/Index", [
             'items' => $items,
             'with' => $with,
+            'sortBy' => $sort_by,
+            'sortDir' => $sort_dir,
+            'filterBy' => $filter_by,
         ]);
     }
 

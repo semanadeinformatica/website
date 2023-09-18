@@ -45,7 +45,9 @@ const sponsors = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header>Empresa</Header>
+                <Header filter-by="sponsor_id" :filter-values="sponsors"
+                    >Empresa</Header
+                >
                 <Header sort-by="name">Data</Header>
             </HeaderRow>
         </template>
