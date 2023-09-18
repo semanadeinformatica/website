@@ -8,18 +8,19 @@ import type Edition from "@/Types/Edition";
 import { computed } from "vue";
 import type Sponsor from "@/Types/Sponsor";
 import type Speaker from "@/Types/Speaker";
+import type EventDay from "@/Types/EventDay";
 
 interface Props {
     edition: Edition;
     sponsors: Sponsor[];
     speakers: Speaker[];
+    days: EventDay[];
     activityCount: number;
     talkCount: number;
-    dayCount: number;
     standCount: number;
 }
 
-const { edition, sponsors } = defineProps<Props>();
+const { edition, sponsors, days } = defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
@@ -32,6 +33,29 @@ const sponsorGroups = computed(
             {} as Record<Sponsor["tier"], Sponsor[]>,
         ) ?? ({} as Record<Sponsor["tier"], Sponsor[]>),
 );
+
+const formattedDate = (
+    startDate: string,
+    separator: string,
+    endDate: string,
+) => {
+    const startDateArray = startDate.split(" ");
+    const endDateArray = endDate.split(" ");
+
+    let pointer = 0;
+
+    while (
+        startDateArray[startDateArray.length - pointer - 1] ===
+        endDateArray[endDateArray.length - pointer - 1]
+    )
+        pointer++;
+
+    startDate = startDateArray
+        .slice(0, startDateArray.length - pointer)
+        .join(" ");
+
+    return `${startDate} ${separator} ${endDate}`;
+};
 </script>
 
 <template>
@@ -76,7 +100,13 @@ const sponsorGroups = computed(
                 semana_de_informática
             </p>
             <p class="margin-0 text-2xl font-bold text-2023-teal">
-                25 a 31 de outubro
+                {{
+                    formattedDate(
+                        $d(new Date(days[0].date), "long"),
+                        $t("general.to"),
+                        $d(new Date(days[days.length - 1].date), "long"),
+                    )
+                }}
             </p>
         </section>
         <!-- ABOUT US -->
@@ -105,7 +135,7 @@ const sponsorGroups = computed(
             <div
                 class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
             >
-                <span class="text-center">{{ dayCount }} dias</span>
+                <span class="text-center">{{ days.length }} dias</span>
                 <span class="text-center">{{ standCount }} bancas</span>
                 <span class="text-center">{{ talkCount }} palestras</span>
                 <span class="text-center">{{ activityCount }} atividades</span>

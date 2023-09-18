@@ -24,9 +24,37 @@ const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 const i18n = createI18n({
+    legacy: false,
+    globalInjection: true,
     locale: "pt",
     fallbackLocale: "en",
     messages,
+    datetimeFormats: {
+        en: {
+            short: {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            },
+            long: {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            },
+        },
+        pt: {
+            short: {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            },
+            long: {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            },
+        },
+    },
 });
 
 createInertiaApp({

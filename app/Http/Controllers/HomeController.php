@@ -17,11 +17,11 @@ class HomeController extends Controller
 
         $sponsors = $edition->sponsors()->with(['company' => ['user']])->get();
         $speakers = $edition->speakers;
+        $days = $edition->event_days()->orderBy('date', 'ASC')->get();
 
         $event_count = $edition->events()->count();
         $activity_count = $edition->events()->where('capacity', '>', 0)->count();
         $talk_count = $event_count - $activity_count;
-        $day_count = $edition->event_days()->count();
         $stand_count = $edition->stands()->count();
 
         return Inertia::render('Home', [
@@ -30,7 +30,7 @@ class HomeController extends Controller
             'speakers' => $speakers,
             'activityCount' => $activity_count,
             'talkCount' => $talk_count,
-            'dayCount' => $day_count,
+            'days' => $days,
             'standCount' => $stand_count,
         ]);
     }
