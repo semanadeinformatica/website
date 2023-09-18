@@ -20,7 +20,6 @@ const form = useForm({
 const photoInput = ref<HTMLInputElement | null>(null);
 
 const selectNewPhoto = () => {
-    console.log(props.item?.profile_photo_url);
     photoInput.value?.click();
 };
 

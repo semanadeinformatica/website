@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfilePicture from "@/Components/Profile/ProfilePicture.vue";
 import InfoCard from "@/Components/Profile/InfoCard.vue";
+import CvArea from "@/Components/Profile/CvArea.vue";
 /*import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
 import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
@@ -30,7 +31,7 @@ defineProps<Props>();
                 "
             >
                 <div
-                    class="relative m-6 flex w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+                    class="relative m-6 w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
                 >
                     <ModalsContainer />
                     <div class="flex w-full justify-around max-md:flex-col">
@@ -45,6 +46,9 @@ defineProps<Props>();
                             "
                         />
                     </div>
+                    <CvArea
+                        :item="student ? student.user : $page.props.auth.user"
+                    />
                 </div>
             </template>
         </main>
