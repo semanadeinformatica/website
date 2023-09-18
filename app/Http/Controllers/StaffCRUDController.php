@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Edition;
-use App\Models\Staff;
 use App\Models\Participant;
+use App\Models\Staff;
 
 class StaffCRUDController extends CRUDController
 {

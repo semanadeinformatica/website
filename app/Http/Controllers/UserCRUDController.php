@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Company;
-use App\Models\SocialMedia;
 use App\Models\Participant;
+use App\Models\SocialMedia;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
