@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\SocialMedia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class ParticipantFactory extends Factory
     {
         return [
             'user_id' => 0,
+            'social_media_id' => SocialMedia::factory(),
         ];
     }
 }

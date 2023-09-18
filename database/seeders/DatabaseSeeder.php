@@ -6,14 +6,17 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Company;
+use App\Models\Department;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\EventDay;
 use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
+use App\Models\SocialMedia;
 use App\Models\Speaker;
 use App\Models\Sponsor;
+use App\Models\Staff;
 use App\Models\Stand;
 use App\Models\User;
 use Carbon\Carbon;
@@ -31,8 +34,11 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Company::truncate();
         Participant::truncate();
+        SocialMedia::truncate();
         Admin::truncate();
         Edition::truncate();
+        Department::truncate();
+        Staff::truncate();
         Event::truncate();
         Speaker::truncate();
         Quest::truncate();
@@ -49,7 +55,7 @@ class DatabaseSeeder extends Seeder
     {
         self::cleanDatabase();
 
-        User::factory(100)->create();
+        $students = User::factory(100)->create();
         $companies = User::factory(10)->company()->create();
 
         if (! User::where('email', '=', DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
@@ -65,6 +71,9 @@ class DatabaseSeeder extends Seeder
         $event_days = array_map(fn () => $event_day_factory->create([
             'date' => $start_date->addDays(1)->toDateString(),
         ]), range(0, 7));
+
+        $departments = Department::factory(10)->recycle($edition)->create();
+        Staff::factory(20)->recycle($departments)->recycle($students->pluck('usertype'))->create();
 
         foreach ($event_days as $day) {
             $events = Event::factory(10)->recycle($day)->create();
