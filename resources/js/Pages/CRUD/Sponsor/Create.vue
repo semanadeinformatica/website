@@ -29,8 +29,12 @@ const submit = () => {
 <template>
     <CardLayout title="Atribuir Patrocínio">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                label="Edição"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -38,10 +42,14 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.company_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Empresa</option>
+            <TextInput
+                v-model="form.company_id"
+                type="select"
+                required
+                label="Empresa"
+            >
                 <option
                     v-for="company in $props.with.companies"
                     :key="company.id"
@@ -49,16 +57,18 @@ const submit = () => {
                 >
                     {{ company.user?.name ?? company.id }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.tier" required class="self-stretch">
-                <option value="" disabled selected hidden>
-                    Tipo de patrocínio
-                </option>
+            <TextInput
+                v-model="form.tier"
+                type="select"
+                required
+                label="Tipo de patrocínio"
+            >
                 <option value="platinum">Platina</option>
                 <option value="gold">Ouro</option>
                 <option value="silver">Prata</option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

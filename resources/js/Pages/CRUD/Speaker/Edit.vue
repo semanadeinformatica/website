@@ -23,7 +23,7 @@ const form = useForm({
     title: speaker.title ?? "",
     description: speaker.description ?? "",
     organization: speaker.organization ?? "",
-    event_id: speaker.event_id,
+    event_id: speaker.event_id.toString(),
     social_media: {
         email: speaker?.social_media?.email ?? "",
         facebook: speaker?.social_media?.facebook ?? "",
@@ -142,8 +142,12 @@ const submit = () => {
                 </div>
             </details>
 
-            <select v-model="form.event_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Evento</option>
+            <TextInput
+                v-model="form.event_id"
+                type="select"
+                required
+                label="Evento"
+            >
                 <option
                     v-for="event in $props.with.events"
                     :key="event.id"
@@ -151,7 +155,7 @@ const submit = () => {
                 >
                     {{ event.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>

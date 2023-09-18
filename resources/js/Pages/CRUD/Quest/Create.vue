@@ -51,17 +51,25 @@ const submit = () => {
                 :error-message="form.errors.points"
             />
 
-            <select v-model="form.category" required class="self-stretch">
-                <option value="" disabled selected hidden>Categoria</option>
+            <TextInput
+                v-model="form.category"
+                type="select"
+                required
+                label="Categoria"
+            >
                 <option value="company">Empresa</option>
                 <option value="talk">Palestra</option>
                 <option value="workshop">Workshop</option>
                 <option value="milestone">Milestone</option>
                 <option value="teambuilding">Team Building</option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.requirement" required class="self-stretch">
-                <option value="" disabled selected hidden>Requisito</option>
+            <TextInput
+                v-model="form.requirement"
+                type="select"
+                required
+                label="Requisito"
+            >
                 <option value="" disabled>Empresa</option>
                 <option
                     v-for="company in $props.with.companies"
@@ -70,10 +78,14 @@ const submit = () => {
                 >
                     {{ company.user?.name ?? company.id }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                label="Edição"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -81,7 +93,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>

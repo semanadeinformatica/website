@@ -93,21 +93,24 @@ const submit = () => {
                 :error-message="form.errors.email"
             />
 
-            <select v-model="form.type" required class="self-stretch" disabled>
-                <option value="" disabled selected hidden>
-                    Tipo de utilizador
-                </option>
+            <TextInput
+                v-model="form.type"
+                type="select"
+                label="Tipo de utilizador"
+                required
+                disabled
+            >
                 <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
-            </select>
+            </TextInput>
 
             <TextInput
                 v-if="form.type === 'company'"
                 id="description"
                 v-model="form.description"
                 label="Descrição"
-                type="text"
+                type="textarea"
                 required
                 :error-message="form.errors.description"
             />

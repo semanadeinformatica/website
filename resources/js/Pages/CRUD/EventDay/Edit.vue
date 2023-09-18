@@ -17,7 +17,7 @@ interface Props {
 const { item: eventDay } = defineProps<Props>();
 
 const form = useForm({
-    edition_id: eventDay.edition_id,
+    edition_id: eventDay.edition_id.toString(),
     theme: eventDay.theme,
     date: eventDay.date + "",
 });
@@ -30,8 +30,12 @@ const submit = () => {
 <template>
     <CardLayout title="Novo Dia">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                label="Edição"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -39,7 +43,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <TextInput
                 id="theme"

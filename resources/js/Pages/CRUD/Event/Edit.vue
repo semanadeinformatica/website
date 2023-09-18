@@ -22,7 +22,7 @@ const form = useForm({
     time_end: event.time_end.substring(0, 16),
     topic: event.topic,
     capacity: event.capacity?.toString() ?? "",
-    event_day_id: event.event_day_id,
+    event_day_id: event.event_day_id.toString(),
 });
 
 const submit = () => {
@@ -79,8 +79,12 @@ const submit = () => {
                 :error-message="form.errors.capacity"
             />
 
-            <select v-model="form.event_day_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Dia do evento</option>
+            <TextInput
+                v-model="form.event_day_id"
+                type="select"
+                required
+                label="Dia do evento"
+            >
                 <option
                     v-for="day in $props.with.event_days"
                     :key="day.id"
@@ -88,7 +92,7 @@ const submit = () => {
                 >
                     {{ day.date }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>

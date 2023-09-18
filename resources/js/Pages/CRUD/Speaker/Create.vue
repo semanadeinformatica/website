@@ -135,8 +135,12 @@ const submit = () => {
                 </div>
             </details>
 
-            <select v-model="form.event_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Evento</option>
+            <TextInput
+                v-model="form.event_id"
+                type="select"
+                required
+                label="Evento"
+            >
                 <option
                     v-for="event in $props.with.events"
                     :key="event.id"
@@ -144,7 +148,7 @@ const submit = () => {
                 >
                     {{ event.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>

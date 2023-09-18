@@ -17,7 +17,7 @@ interface Props {
 const { item: department } = defineProps<Props>();
 
 const form = useForm({
-    edition_id: department.edition_id,
+    edition_id: department.edition_id.toString(),
     name: department.name,
 });
 
@@ -41,8 +41,12 @@ const submit = () => {
             >
             </TextInput>
 
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                label="Edição"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -50,7 +54,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
