@@ -1,8 +1,16 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import Map from "@/Components/Home/Map.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
+=======
+import AppLayout from "../Layouts/AppLayout.vue";
+import SpeakersCarousel from "../Components/Home/SpeakersCarousel.vue";
+import Map from "../Components/Home/Map.vue";
+import SponsorBanner from "../Components/Home/SponsorBanner.vue";
+import EnrollSection from "@/Components/Home/EnrollSection.vue";
+>>>>>>> 436606d (Moved section to home page as new call to action)
 import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import { computed } from "vue";
@@ -125,24 +133,8 @@ const formattedDate = (
                 {{ $t("homePage.aboutUsText2") }}
             </p>
         </section>
-        <!-- CALL TO ACTION -->
-        <section class="relative flex flex-col py-20 max-xs:items-center">
-            <h2
-                class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
-            >
-                Inscreve-te!
-            </h2>
-            <div
-                class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
-            >
-                <span class="text-center">{{ days.length }} dias</span>
-                <span class="text-center">{{ standCount }} bancas</span>
-                <span class="text-center">{{ talkCount }} palestras</span>
-                <span class="text-center">{{ activityCount }} atividades</span>
-            </div>
-        </section>
         <!-- SPEAKERS -->
-        <section class="grid-rows-[repeat(3, 1fr)] grid grid-cols-1 gap-10">
+        <section class="grid-rows-[repeat(3, 1fr)] grid grid-cols-1 gap-10 my-10">
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
@@ -176,6 +168,8 @@ const formattedDate = (
                 color="red-dark"
             ></SponsorBanner>
         </section>
+        <!-- CALL TO ACTION -->
+        <EnrollSection/>
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>

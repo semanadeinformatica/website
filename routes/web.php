@@ -60,10 +60,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             return Inertia::render('Dashboard');
         })->name('dashboard');
 
-        Route::get('/enroll', function () {
-            return Inertia::render('Enroll');
-        })->name('enroll');
-
         Route::prefix('admin')
             ->middleware('can:admin')
             ->name('admin.')
