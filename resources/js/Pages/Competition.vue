@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Podium from "@/Components/Podium.vue";
+import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
@@ -48,11 +49,12 @@ import Podium from "@/Components/Podium.vue";
                 Vamos a isto?
             </h1>
 
-            <button
+            <Link
+                href="/"
                 class="relative mt-5 content-center justify-center border border-black bg-2023-teal-dark px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
             >
-                <p>Participar!</p>
-            </button>
+                Participar!
+            </Link>
         </section>
     </AppLayout>
 </template>
