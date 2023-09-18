@@ -16,6 +16,7 @@ use App\Models\Sponsor;
 use App\Models\Stand;
 use App\Models\Student;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -59,7 +60,11 @@ class DatabaseSeeder extends Seeder
 
         $edition = Edition::factory()->create();
 
-        $event_days = EventDay::factory(7)->recycle($edition)->create();
+        $start_date = new Carbon(fake()->date());
+        $event_day_factory = EventDay::factory()->recycle($edition);
+        $event_days = array_map(fn () => $event_day_factory->create([
+            'date' => $start_date->addDays(1)->toDateString(),
+        ]), range(0, 7));
 
         foreach ($event_days as $day) {
             $events = Event::factory(10)->recycle($day)->create();

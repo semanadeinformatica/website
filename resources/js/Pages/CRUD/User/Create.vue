@@ -10,6 +10,7 @@ const form = useForm({
     name: "",
     email: "",
     type: "" as "student" | "company" | "admin",
+    description: "",
     social_media: {
         email: "",
         facebook: "",
@@ -61,6 +62,16 @@ const submit = () => {
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
             </select>
+
+            <TextInput
+                v-if="form.type === 'company'"
+                id="description"
+                v-model="form.description"
+                label="Descrição"
+                type="text"
+                required
+                :error-message="form.errors.description"
+            />
 
             <details v-if="form.type !== 'admin'" class="self-stretch">
                 <summary>Redes sociais</summary>

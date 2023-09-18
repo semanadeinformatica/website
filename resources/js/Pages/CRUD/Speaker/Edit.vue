@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ImageInput from "@/Components/ImageInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -17,6 +18,7 @@ interface Props {
 const { item: speaker } = defineProps<Props>();
 
 const form = useForm({
+    _method: "PUT",
     name: speaker.name,
     title: speaker.title ?? "",
     description: speaker.description ?? "",
@@ -31,16 +33,23 @@ const form = useForm({
         twitter: speaker?.social_media?.twitter ?? "",
         website: speaker?.social_media?.website ?? "",
     },
+    photo: null as File | null,
 });
 
 const submit = () => {
-    form.put(route("admin.speakers.update", speaker));
+    form.post(route("admin.speakers.update", speaker));
 };
 </script>
 
 <template>
     <CardLayout title="Editar apresentador">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                v-model="form.photo"
+                :initial-preview="item.profile_photo_url"
+                class="self-stretch"
+            />
+
             <TextInput
                 id="name"
                 v-model="form.name"

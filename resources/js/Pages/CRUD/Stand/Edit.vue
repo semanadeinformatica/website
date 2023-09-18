@@ -48,7 +48,7 @@ const submit = () => {
                     :key="sponsor.id"
                     :value="sponsor.id"
                 >
-                    {{ sponsor.company.user?.name ?? sponsor.company.id }}
+                    {{ sponsor.company?.user?.name ?? sponsor.company?.id }}
                 </option>
             </select>
 

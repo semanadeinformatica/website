@@ -17,6 +17,7 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
+            'description' => fake()->paragraph(),
             'user_id' => 0,
         ];
     }

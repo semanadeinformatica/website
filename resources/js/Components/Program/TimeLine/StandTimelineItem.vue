@@ -21,9 +21,9 @@ const shadowColorMap = {
 <template>
     <img
         :src="
-            company.user?.profile_photo_url ?? 'https://picsum.photos/400/200'
+            company?.user?.profile_photo_url ?? 'https://picsum.photos/400/200'
         "
-        :alt="`${company.user?.name ?? 'Company'}'s profile picture'`"
+        :alt="`${company?.user?.name ?? 'Company'}'s profile picture'`"
         class="border border-solid border-black shadow-lg"
         :class="shadowColorMap[tier]"
         width="200"

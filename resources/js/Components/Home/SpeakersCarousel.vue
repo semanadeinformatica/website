@@ -3,6 +3,13 @@ import { onMounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
+import type Speaker from "@/Types/Speaker";
+
+interface Props {
+    speakers: Speaker[];
+}
+
+defineProps<Props>();
 
 const carousel = ref<typeof Carousel | null>(null);
 
@@ -47,8 +54,8 @@ onMounted(async () => {
         :wrap-around="true"
         :breakpoints="breakpoints"
     >
-        <Slide v-for="slide in 10" :key="slide">
-            <SpeakerSlide />
+        <Slide v-for="speaker in speakers" :key="speaker.id">
+            <SpeakerSlide :speaker="speaker" />
         </Slide>
     </Carousel>
     <div class="align-center flex justify-center gap-3">

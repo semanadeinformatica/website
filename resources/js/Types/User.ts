@@ -9,7 +9,7 @@ interface BaseUser extends Model {
     email: string;
     name: string;
     profile_photo_path?: string;
-    profile_photo_url?: string;
+    profile_photo_url: string;
     two_factor_confirmed_at?: string;
     two_factor_enabled: boolean;
     usertype_id: number;
