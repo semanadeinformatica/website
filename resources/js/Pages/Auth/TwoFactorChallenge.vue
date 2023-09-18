@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
@@ -52,33 +50,30 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
-            <div v-if="!recovery">
-                <InputLabel for="code" value="Code" />
-                <TextInput
-                    id="code"
-                    ref="codeInput"
-                    v-model="form.code"
-                    type="text"
-                    inputmode="numeric"
-                    class="mt-1 block w-full"
-                    autofocus
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.code" />
-            </div>
+            <TextInput
+                v-if="!recovery"
+                id="code"
+                ref="codeInput"
+                v-model="form.code"
+                label="Code"
+                type="text"
+                inputmode="numeric"
+                autofocus
+                autocomplete="one-time-code"
+                :error-message="form.errors.code"
+            />
 
-            <div v-else>
-                <InputLabel for="recovery_code" value="Recovery Code" />
-                <TextInput
-                    id="recovery_code"
-                    ref="recoveryCodeInput"
-                    v-model="form.recovery_code"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.recovery_code" />
-            </div>
+            <TextInput
+                v-else
+                id="recovery_code"
+                ref="recoveryCodeInput"
+                v-model="form.recovery_code"
+                label="Recovery Code"
+                type="text"
+                class="mt-1 block w-full"
+                autocomplete="one-time-code"
+                :error-message="form.errors.recovery_code"
+            />
 
             <div class="mt-4 flex items-center justify-end">
                 <button

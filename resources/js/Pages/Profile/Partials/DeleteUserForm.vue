@@ -4,7 +4,6 @@ import { useForm } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import DialogModal from "@/Components/DialogModal.vue";
-import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
@@ -67,22 +66,16 @@ const closeModal = () => {
                     permanently deleted. Please enter your password to confirm
                     you would like to permanently delete your account.
 
-                    <div class="mt-4">
-                        <TextInput
-                            ref="passwordInput"
-                            v-model="form.password"
-                            type="password"
-                            class="mt-1 block w-3/4"
-                            placeholder="Password"
-                            autocomplete="current-password"
-                            @keyup.enter="deleteUser"
-                        />
-
-                        <InputError
-                            :message="form.errors.password"
-                            class="mt-2"
-                        />
-                    </div>
+                    <TextInput
+                        ref="passwordInput"
+                        v-model="form.password"
+                        type="password"
+                        class="mt-1 block w-3/4"
+                        label="Password"
+                        autocomplete="current-password"
+                        :error-message="form.errors.password"
+                        @keyup.enter="deleteUser"
+                    />
                 </template>
 
                 <template #footer>
