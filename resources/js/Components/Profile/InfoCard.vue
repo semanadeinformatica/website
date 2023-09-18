@@ -7,7 +7,7 @@ interface Props {
 
 defineProps<Props>();
 
-const socials: Record<string, { icon: string; color: string }> = {
+const socials = {
     facebook: {
         icon: "io-logo-facebook",
         color: "bg-2023-red",
@@ -47,12 +47,17 @@ const socials: Record<string, { icon: string; color: string }> = {
                 </p>
             </div>
             <div class="mt-10 flex">
-                <template v-for="social in socials" :key="social">
-                    <p v-if="item?.usertype?.social_media?.key">
+                <template v-for="(social, key) in socials" :key="social">
+                    <p
+                        v-if="
+                            item?.usertype_type !== 'App\\Models\\Admin' &&
+                            item?.usertype?.social_media?.[key]
+                        "
+                    >
                         <a
                             class="flex w-fit rounded-full p-2.5"
                             target="_blank"
-                            :href="item?.usertype?.social_media?.key"
+                            :href="item?.usertype?.social_media?.[key]"
                         >
                             <v-icon
                                 :name="social.icon"

@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
+import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
+import route from "ziggy-js";
 
 interface Props {
     item: User | undefined;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+let previewOpen = ref(false);
+
+const form = useForm({
+    _method: "PUT",
+    name: props.item?.name,
+    email: props.item?.email,
+    cv: null as File | null,
+});
 
 const cvInput = ref<HTMLInputElement | null>(null);
 
@@ -14,15 +25,37 @@ const selectCV = () => {
     cvInput.value?.click();
 };
 
-const uploadCV = () => {};
+const togglePreview = () => {
+    previewOpen.value = !previewOpen.value;
+};
+
+const uploadCV = () => {
+    const cv = cvInput.value?.files?.[0];
+    console.log(cvInput.value?.files?.[0]);
+    if (cv) {
+        form.cv = cvInput.value?.files?.[0] ?? null;
+        form.post(route("current-user-cv.update"), {
+            preserveScroll: true,
+            onSuccess: () => clearCVFileInput,
+        });
+    }
+};
+
+const clearCVFileInput = () => {
+    console.log("aaaaaa");
+    if (cvInput.value?.value) {
+        cvInput.value.value = "";
+    }
+};
 </script>
 
 <template>
     <div class="flex-col">
         <div
-            class="mx-32 mt-12 flex justify-between border border-solid border-black bg-2023-teal-dark p-3 font-bold text-white"
+            class="mx-32 mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-white"
+            :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
-            <div class="flex">
+            <div class="flex items-center">
                 <p>CV upload</p>
                 <button
                     v-if="$page.props.auth.user.id == item?.id"
@@ -35,14 +68,18 @@ const uploadCV = () => {};
                     ref="cvInput"
                     type="file"
                     class="hidden"
-                    accept="image/*"
+                    accept="application/pdf"
                     @change="uploadCV"
                 />
             </div>
-            <button>
+            <button
+                class="p-2"
+                :class="[previewOpen ? 'rotate-180' : '']"
+                @click="togglePreview"
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 pl-1 text-2023-bg"
+                    class="w-6 text-white"
                     viewBox="0 0 512 512"
                 >
                     <path
@@ -51,13 +88,21 @@ const uploadCV = () => {};
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="48"
-                        d="M112 184l180 160 180-160"
+                        d="M70 184l180 160 180-160"
                     />
                 </svg>
             </button>
         </div>
         <div
-            class="mx-32 mb-12 mt-3 border border-2 border-solid border-black p-3 text-2023-red"
+            class="mx-32 items-center border-x border-b border-solid border-black bg-2023-teal-dark p-6 font-bold text-white"
+            :class="[previewOpen ? 'flex' : 'hidden']"
+        >
+            <p v-if="item?.usertype_type === 'App\\Models\\Student'">
+                {{ item?.usertype?.cv_url }}
+            </p>
+        </div>
+        <div
+            class="mx-32 mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red"
         >
             <p>
                 <span class="font-bold">Porque é que o deves fazer? </span>
