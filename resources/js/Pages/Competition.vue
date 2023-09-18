@@ -49,7 +49,7 @@ import Podium from "@/Components/Podium.vue";
             </h1>
 
             <button
-                class="relative mt-5 h-[3rem] w-[10rem] content-center justify-center border border-black bg-2023-teal-dark text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
+                class="relative mt-5 content-center justify-center border border-black bg-2023-teal-dark px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
             >
                 <p>Participar!</p>
             </button>
