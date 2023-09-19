@@ -107,12 +107,10 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="mx-32 items-center border-x border-b border-solid border-black bg-2023-teal-dark p-6 font-bold text-white"
+            class="mx-36 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-white"
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
-            <p v-if="item?.usertype_type === 'App\\Models\\Student'">
-                {{ item?.usertype?.cv_url }}
-            </p>
+            <vue-pdf-embed v-if="item?.usertype_type === 'App\\Models\\Participant'" width="900" source="http://localhost:8000/storage/cvs/CV.pdf"></vue-pdf-embed>
         </div>
         <div
             class="mx-32 mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red"
