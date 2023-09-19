@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -15,7 +15,7 @@ class CVController extends Controller
      */
     public function destroy(Request $request)
     {
-        Student::where("user_id", $request->user()->id)->first()->deleteCV();
+        Participant::where('user_id', $request->user()->id)->first()->deleteCV();
 
         return back(303)->with('status', 'cv-deleted');
     }
@@ -27,7 +27,7 @@ class CVController extends Controller
      */
     public function update(Request $request)
     {
-        Student::where("user_id", $request->user()->id)->first()->updateCV($request->cv);
+        Participant::where('user_id', $request->user()->id)->first()->updateCV($request->cv);
 
         return back(303)->with('status', 'cv-updated');
     }

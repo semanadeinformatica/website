@@ -16,7 +16,7 @@ class VisitHistory extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'student_id',
+        'participant_id',
         'company_id',
     ];
 
@@ -25,8 +25,8 @@ class VisitHistory extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function student(): BelongsTo
+    public function participant(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Participant::class);
     }
 }

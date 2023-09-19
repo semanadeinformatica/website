@@ -10,7 +10,7 @@ class ParticipantController extends Controller
     public function show(Participant $participant)
     {
         return Inertia::render('Profile/Show', [
-            'student' => $participant->load('user')->toArray(),
+            'participant' => $participant->load('user')->toArray(),
         ]);
     }
 }

@@ -8,7 +8,7 @@ import { createVfm } from "vue-final-modal";
 import { ZiggyVue } from "ziggy";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { createI18n } from "vue-i18n";
-import VuePdfEmbed from 'vue-pdf-embed';
+import VuePdfEmbed from "vue-pdf-embed";
 import messages from "./messages";
 
 const vfm = createVfm();

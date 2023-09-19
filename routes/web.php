@@ -11,6 +11,7 @@ use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestCRUDController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\SpeakerCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -87,8 +87,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
 
         Route::prefix('user')->group(function () {
-            Route::prefix('/{student}')->whereNumber('student')->middleware('can:view_student,student')->controller(StudentController::class)->group(function () {
-                Route::get('', 'show')->name('student.profile');
+            Route::prefix('/{participant}')->whereNumber('participant')->middleware('can:view_participant,participant')->controller(ParticipantController::class)->group(function () {
+                Route::get('', 'show')->name('participant.profile');
             });
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');

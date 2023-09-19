@@ -9,12 +9,12 @@ import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthe
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
     sessions: Session[];
-    student: Student;
+    participant: Participant;
 }
 
 defineProps<Props>();
@@ -25,9 +25,9 @@ defineProps<Props>();
         <main class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
             <template
                 v-if="
-                    student ||
+                    participant ||
                     $page.props.auth.user.usertype_type ===
-                        'App\\Models\\Student'
+                        'App\\Models\\Participant'
                 "
             >
                 <div
@@ -37,17 +37,25 @@ defineProps<Props>();
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
                             :item="
-                                student ? student.user : $page.props.auth.user
+                                participant
+                                    ? participant.user
+                                    : $page.props.auth.user
                             "
                         />
                         <InfoCard
                             :item="
-                                student ? student.user : $page.props.auth.user
+                                participant
+                                    ? participant.user
+                                    : $page.props.auth.user
                             "
                         />
                     </div>
                     <CvArea
-                        :item="student ? student.user : $page.props.auth.user"
+                        :item="
+                            participant
+                                ? participant.user
+                                : $page.props.auth.user
+                        "
                     />
                 </div>
             </template>
