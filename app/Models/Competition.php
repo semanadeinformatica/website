@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CompetitionInfo extends Model
+class Competition extends Model
 {
     use HasFactory;
 
@@ -16,9 +16,6 @@ class CompetitionInfo extends Model
         'date_start',
         'date_end',
         'edition_id',
-        'first_place',
-        'second_place',
-        'third_place',
     ];
 
     protected $casts = [
@@ -34,20 +31,5 @@ class CompetitionInfo extends Model
     public function teams(): HasMany
     {
         return $this->hasMany(CompetitionTeam::class);
-    }
-
-    public function firstPlace(): BelongsTo
-    {
-        return $this->belongsTo(CompetitionTeam::class, 'first_place');
-    }
-
-    public function secondPlace(): BelongsTo
-    {
-        return $this->belongsTo(CompetitionTeam::class, 'second_place');
-    }
-
-    public function thirdPlace(): BelongsTo
-    {
-        return $this->belongsTo(CompetitionTeam::class, 'third_place');
     }
 }

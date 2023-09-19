@@ -7,9 +7,9 @@ use App\Models\Edition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CompetitionInfo>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Competition>
  */
-class CompetitionInfoFactory extends Factory
+class CompetitionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -23,9 +23,6 @@ class CompetitionInfoFactory extends Factory
             'date_start' => fake()->date(),
             'date_end' => fake()->date(),
             'edition_id' => Edition::factory(),
-            'first_place' => CompetitionTeam::factory(),
-            'second_place' => CompetitionTeam::factory(),
-            'third_place' => CompetitionTeam::factory(),
         ];
     }
 }

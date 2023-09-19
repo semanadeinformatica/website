@@ -7,7 +7,8 @@ namespace Database\Seeders;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Department;
-use App\Models\CompetitionInfo;
+use App\Models\Competition;
+use App\Models\CompetitionTeam;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\EventDay;
@@ -91,6 +92,7 @@ class DatabaseSeeder extends Seeder
 
         Product::factory(10)->recycle($edition)->create();
 
-        CompetitionInfo::factory()->recycle($edition)->recycle($participants)->create();
+        $competition = Competition::factory()->recycle($edition)->create();
+        CompetitionTeam::factory(30)->recycle($competition)->create();
     }
 }

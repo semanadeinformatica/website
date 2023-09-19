@@ -47,7 +47,7 @@ const submit = () => {
             <TextInput
                 id="time_start"
                 v-model="form.time_start"
-                label="DataHora de início"
+                label="Hora de início"
                 type="time"
                 required
                 :error-message="form.errors.time_start"
@@ -56,7 +56,7 @@ const submit = () => {
             <TextInput
                 id="time_end"
                 v-model="form.time_end"
-                label="Data de fim"
+                label="Hora de fim"
                 type="time"
                 required
                 :error-message="form.errors.time_end"

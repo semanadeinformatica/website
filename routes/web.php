@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CompetitionInfoCRUDController;
+use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionTeamCRUDController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
@@ -64,8 +64,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/departments' => DepartmentCRUDController::class,
                     '/stands' => StandCRUDController::class,
                     '/eventDays' => EventDayCRUDController::class,
-                    '/competitionInfo' => CompetitionInfoCRUDController::class,
-                    '/competitionTeam' => CompetitionTeamCRUDController::class,
+                    '/competitions' => CompetitionCRUDController::class,
+                    '/competitionTeams' => CompetitionTeamCRUDController::class,
                 ]);
 
                 Route::name('index')->get('/', function () {

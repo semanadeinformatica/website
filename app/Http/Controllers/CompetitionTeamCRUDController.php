@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Competition;
 use App\Models\CompetitionTeam;
-use App\Models\Student;
 
 class CompetitionTeamCRUDController extends CRUDController
 {
@@ -13,6 +13,8 @@ class CompetitionTeamCRUDController extends CRUDController
 
     protected array $rules = [
         'name' => 'required|string',
+        'points' => 'required|integer',
+        'competition_id' => 'required|integer|exists:competitions,id'
     ];
 
     protected array $search = ['name'];
@@ -20,7 +22,7 @@ class CompetitionTeamCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'students' => Student::all(),
+            'competitions' => Competition::with('edition')->get(),
         ];
     }
 }

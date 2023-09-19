@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\CompetitionInfo;
+use App\Models\Competition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,8 @@ class CompetitionTeamFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'competition_id' => CompetitionInfo::factory(),
+            'points' => fake()->numberBetween(0),
+            'competition_id' => Competition::factory(),
         ];
     }
 }

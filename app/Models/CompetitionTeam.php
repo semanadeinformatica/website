@@ -13,7 +13,8 @@ class CompetitionTeam extends Model
 
     protected $fillable = [
         'name',
-        'competition_info_id',
+        'points',
+        'competition_id',
     ];
 
     public function members(): BelongsToMany
@@ -23,6 +24,6 @@ class CompetitionTeam extends Model
 
     public function competition(): BelongsTo
     {
-        return $this->belongsTo(CompetitionInfo::class);
+        return $this->belongsTo(Competitionq::class);
     }
 }
