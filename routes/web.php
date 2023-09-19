@@ -37,6 +37,10 @@ Route::get('/team', function () {
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
+Route::get('/competition', function () {
+    return Inertia::render('Competition');
+})->name('competition');
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::get('/dashboard', function () {
