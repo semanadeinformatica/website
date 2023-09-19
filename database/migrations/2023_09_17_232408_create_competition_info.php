@@ -3,11 +3,12 @@
 use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\Edition;
-use App\Models\Student;
-use function DatabaseHelpers\createManyToManyRelation;
+use App\Models\Participant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+
+use function DatabaseHelpers\createManyToManyRelation;
 
 return new class extends Migration
 {
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->text('theme');
             $table->timestamps();
         });
-     
+
         Schema::create('competition_teams', function (Blueprint $table) {
             $table->id();
             $table->text('name');
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        createManyToManyRelation(CompetitionTeam::class, Student::class);
+        createManyToManyRelation(CompetitionTeam::class, Participant::class);
     }
 
     /**
@@ -42,7 +43,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('competitions');
-        Schema::dropIfExists('competition_info_student');
+        Schema::dropIfExists('competition_info_participant');
         Schema::dropIfExists('competition_teams');
     }
 };

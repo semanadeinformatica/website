@@ -17,7 +17,7 @@ defineProps<Props>();
 const form = useForm({
     competition_id: "",
     name: "",
-    points: '0',
+    points: "0",
 });
 
 const submit = () => {
@@ -38,7 +38,7 @@ const submit = () => {
                 autocomplete="name"
                 :error-message="form.errors.name"
             />
-            
+
             <TextInput
                 id="points"
                 v-model="form.points"

@@ -14,7 +14,7 @@ class CompetitionTeamCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string',
         'points' => 'required|integer',
-        'competition_id' => 'required|integer|exists:competitions,id'
+        'competition_id' => 'required|integer|exists:competitions,id',
     ];
 
     protected array $search = ['name'];

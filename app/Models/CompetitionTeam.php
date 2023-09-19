@@ -19,11 +19,11 @@ class CompetitionTeam extends Model
 
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Participant::class);
     }
 
     public function competition(): BelongsTo
     {
-        return $this->belongsTo(Competitionq::class);
+        return $this->belongsTo(Competition::class);
     }
 }

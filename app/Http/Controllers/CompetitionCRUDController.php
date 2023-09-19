@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Competition;
-use App\Models\CompetitionTeam;
 use App\Models\Edition;
 
 class CompetitionCRUDController extends CRUDController

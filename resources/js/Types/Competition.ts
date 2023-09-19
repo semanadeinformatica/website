@@ -11,5 +11,4 @@ export default interface Competition extends Model {
     edition?: Edition;
 
     teams?: CompetitionTeam[];
-
 }

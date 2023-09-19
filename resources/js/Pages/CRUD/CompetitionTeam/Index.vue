@@ -20,13 +20,20 @@ const props = defineProps<Props>();
 
 const editions = computed<Record<number, string>>(() =>
     Object.fromEntries(
-        props.with.competitions.map((competition) => [competition.id, competition.edition?.name ?? competition.id.toString()]),
+        props.with.competitions.map((competition) => [
+            competition.id,
+            competition.edition?.name ?? competition.id.toString(),
+        ]),
     ),
 );
 </script>
 
 <template>
-    <CRUDLayout title="Competition Teams" :items="items" name="competitionTeams">
+    <CRUDLayout
+        title="Competition Teams"
+        :items="items"
+        name="competitionTeams"
+    >
         <template #heading>Equipas na Competição de Programação</template>
 
         <template #header>
@@ -42,7 +49,7 @@ const editions = computed<Record<number, string>>(() =>
             <Row name="competitionTeams" :item="item">
                 <Cell>{{ editions[item.competition_id] }}</Cell>
                 <Cell>{{ item.name }}</Cell>
-                <Cell>{{ item.students?.length ?? 'N/A' }}</Cell>
+                <Cell>{{ item.participants?.length ?? "N/A" }}</Cell>
                 <Cell>{{ item.points }}</Cell>
             </Row>
         </template>

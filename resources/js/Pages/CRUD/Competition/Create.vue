@@ -49,7 +49,7 @@ const submit = () => {
                 autofocus
                 :error-message="form.errors.date_start"
             />
-            
+
             <TextInput
                 id="date_end"
                 v-model="form.date_end"

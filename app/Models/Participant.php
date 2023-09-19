@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Participant extends Model
 {
-    use HasFactory;
     use HasCV;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
