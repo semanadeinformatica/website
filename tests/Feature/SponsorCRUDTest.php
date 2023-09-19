@@ -4,6 +4,6 @@ namespace Tests\Feature;
 
 use Tests\CRUDTestCase;
 
-class UserCRUDTest extends CRUDTestCase
+class SponsorCRUDTest extends CRUDTestCase
 {
 }

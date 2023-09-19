@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 abstract class CRUDTestCase extends TestCase
 {
@@ -23,6 +24,11 @@ abstract class CRUDTestCase extends TestCase
 
         $this->user = User::factory()->create();
         $this->admin = User::factory()->admin()->create();
+
+        $basename = Str::replaceEnd('CRUDTest', '', class_basename($this));
+
+        $this->model ??= "App\\Models\\{$basename}";
+        $this->controller ??= "App\\Http\\Controllers\\{$basename}CRUDController";
     }
 
     public function test_index_screen_cannot_be_rendered(): void

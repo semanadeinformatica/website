@@ -4,14 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
-use App\Models\Sponsor;
 
 class SponsorCRUDController extends CRUDController
 {
-    protected string $model = Sponsor::class;
-
-    protected string $view = 'Sponsor';
-
     protected array $rules = [
         'tier' => 'required|in:platinum,gold,silver',
         'edition_id' => 'required|exists:editions,id',

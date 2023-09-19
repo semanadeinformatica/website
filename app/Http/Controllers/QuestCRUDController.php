@@ -4,14 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
-use App\Models\Quest;
 
 class QuestCRUDController extends CRUDController
 {
-    protected string $model = Quest::class;
-
-    protected string $view = 'Quest';
-
     protected array $rules = [
         'name' => 'required|string',
         'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
