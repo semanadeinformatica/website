@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -26,8 +27,7 @@ class CVController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->user()->usertype());
-        $request->user()->usertype()->updateCV($request->cv);
+        Student::where("user_id", $request->user()->id)->first()->updateCV($request->cv);
 
         return back(303)->with('status', 'cv-updated');
     }
