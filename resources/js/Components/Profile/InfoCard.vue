@@ -1,11 +1,69 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
+import { useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
+import { VueFinalModal } from "vue-final-modal";
+import "vue-final-modal/style.css";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+
+const options = ref({
+    modelValue: false,
+});
 
 interface Props {
     item: User | undefined;
 }
 
-defineProps<Props>();
+const { item: user } = defineProps<Props>();
+
+const form = useForm({
+    _method: "PUT",
+    name: user?.name ? user.name : "",
+    email: user?.email ? user.email : "",
+    description:
+        user?.usertype_type === "App\\Models\\Company"
+            ? user.usertype?.description ?? ""
+            : "",
+    type: (user?.usertype_type.split("\\").pop() ?? "").toLowerCase() as
+        | "participant"
+        | "company"
+        | "admin",
+    social_media: {
+        email:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.email ?? ""
+                : "",
+        facebook:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.facebook ?? ""
+                : "",
+        github:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.github ?? ""
+                : "",
+        instagram:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.instagram ?? ""
+                : "",
+        linkedin:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.linkedin ?? ""
+                : "",
+        twitter:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.twitter ?? ""
+                : "",
+        website:
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.website ?? ""
+                : "",
+    },
+});
+
+const submit = () => {
+    // change this
+};
 
 const socials = {
     facebook: {
@@ -69,7 +127,11 @@ const socials = {
                 </template>
             </div>
         </div>
-        <button v-if="$page.props.auth.user.id == item?.id" class="self-start">
+        <button
+            v-if="$page.props.auth.user.id == item?.id"
+            class="self-start"
+            @click="options.modelValue = !options.modelValue"
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-8 text-2023-teal"
@@ -93,5 +155,112 @@ const socials = {
                 />
             </svg>
         </button>
+        <VueFinalModal
+            v-model="options.modelValue"
+            class="flex items-center justify-center"
+            content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center flex-col"
+        >
+            <div
+                class="relative m-6 flex flex-col items-center gap-8 border border-black p-8 pt-14 sm:max-w-lg"
+            >
+                <h2
+                    class="absolute top-0 z-10 inline-block -translate-y-2/3 border border-black bg-2023-bg px-6 py-3 text-2xl font-bold text-2023-teal-dark shadow-xl shadow-2023-orange"
+                >
+                    Edita as tuas informações
+                </h2>
+
+                <form class="contents" @submit.prevent="submit">
+                    <TextInput
+                        id="name"
+                        v-model="form.name"
+                        label="Nome"
+                        type="text"
+                        required
+                        autofocus
+                        autocomplete="name"
+                        :error-message="form.errors.name"
+                    />
+
+                    <TextInput
+                        id="email"
+                        v-model="form.email"
+                        label="Email"
+                        type="email"
+                        required
+                        autocomplete="email"
+                        :error-message="form.errors.email"
+                    />
+
+                    <TextInput
+                        v-if="form.type === 'company'"
+                        id="description"
+                        v-model="form.description"
+                        label="Descrição"
+                        type="text"
+                        required
+                        :error-message="form.errors.description"
+                    />
+
+                    <details v-if="form.type !== 'admin'" class="self-stretch">
+                        <summary>Redes sociais</summary>
+
+                        <div class="mt-4 flex flex-col gap-4">
+                            <TextInput
+                                id="social_media.email"
+                                v-model="form.social_media.email"
+                                label="Email"
+                                type="email"
+                                autocomplete="email"
+                                :error-message="form.errors.social_media"
+                            />
+
+                            <TextInput
+                                id="social_media.facebook"
+                                v-model="form.social_media.facebook"
+                                label="Facebook"
+                                type="text"
+                            />
+
+                            <TextInput
+                                id="social_media.github"
+                                v-model="form.social_media.github"
+                                label="Github"
+                                type="text"
+                            />
+
+                            <TextInput
+                                id="social_media.instagram"
+                                v-model="form.social_media.instagram"
+                                label="Instagram"
+                                type="text"
+                            />
+
+                            <TextInput
+                                id="social_media.linkedin"
+                                v-model="form.social_media.linkedin"
+                                label="Linkedin"
+                                type="text"
+                            />
+
+                            <TextInput
+                                id="social_media.twitter"
+                                v-model="form.social_media.twitter"
+                                label="Twitter"
+                                type="text"
+                            />
+
+                            <TextInput
+                                id="social_media.website"
+                                v-model="form.social_media.website"
+                                label="Website"
+                                type="url"
+                            />
+                        </div>
+                    </details>
+
+                    <PrimaryButton type="submit">Editar</PrimaryButton>
+                </form>
+            </div>
+        </VueFinalModal>
     </div>
 </template>

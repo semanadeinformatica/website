@@ -111,10 +111,21 @@ const clearCVFileInput = () => {
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
             <vue-pdf-embed
-                v-if="item?.usertype_type === 'App\\Models\\Participant'"
+                v-if="
+                    item?.usertype_type === 'App\\Models\\Participant' &&
+                    item.usertype?.cv_path
+                "
                 width="900"
                 :source="item.usertype?.cv_url"
             ></vue-pdf-embed>
+            <p
+                v-if="
+                    item?.usertype_type === 'App\\Models\\Participant' &&
+                    !item.usertype?.cv_path
+                "
+            >
+                Nenhum CV disponível
+            </p>
         </div>
         <div
             class="mx-32 mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red"
