@@ -15,7 +15,7 @@ class CVController extends Controller
      */
     public function destroy(Request $request)
     {
-        $request->user()->deleteCV();
+        Student::where("user_id", $request->user()->id)->first()->deleteCV();
 
         return back(303)->with('status', 'cv-deleted');
     }

@@ -39,10 +39,10 @@ const uploadCV = () => {
             onSuccess: () => clearCVFileInput,
         });
     }
+    clearCVFileInput();
 };
 
 const clearCVFileInput = () => {
-    console.log("aaaaaa");
     if (cvInput.value?.value) {
         cvInput.value.value = "";
     }
