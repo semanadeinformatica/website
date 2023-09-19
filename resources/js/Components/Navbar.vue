@@ -8,6 +8,8 @@ import route, {
     type QueryParams,
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";
+import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 interface Route {
     label: string;
@@ -46,6 +48,10 @@ const options = {
     activities: activityRoutes,
     editions: editionRoutes,
 };
+
+const isAdmin = computed(() => {
+    return usePage().props.auth.user.usertype_type == "App\\Models\\Admin";
+});
 </script>
 
 <template>
@@ -108,7 +114,7 @@ const options = {
                             v-for="edition in editionRoutes"
                             :key="edition"
                         >
-                            <DropdownLink :href="route('dashboard')">
+                            <DropdownLink :href="route('home')">
                                 {{ edition }}
                             </DropdownLink>
                         </template>
@@ -118,7 +124,7 @@ const options = {
 
             <div class="ml-2 lg:mx-4">
                 <template v-if="$page.props.auth.user">
-                    <Dropdown align="right" width="20">
+                    <Dropdown align="right" :width="isAdmin ? '32' : '20'">
                         <template #trigger>
                             <img
                                 class="h-10 w-10 cursor-pointer rounded-full object-cover"
@@ -128,7 +134,13 @@ const options = {
                         </template>
                         <template #content>
                             <DropdownLink :href="route('profile.show')">
-                                Profile
+                                Perfil
+                            </DropdownLink>
+                            <DropdownLink
+                                v-if="isAdmin"
+                                :href="route('admin.index')"
+                            >
+                                Administração
                             </DropdownLink>
                             <DropdownLink :href="route('logout')" method="post">
                                 Logout

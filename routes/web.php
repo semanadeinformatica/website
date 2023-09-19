@@ -60,6 +60,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/stands' => StandCRUDController::class,
                     '/eventDays' => EventDayCRUDController::class,
                 ]);
+
+                Route::name('index')->get('/', function () {
+                    return Inertia::render('Admin');
+                });
             });
 
         Route::prefix('user')->group(function () {
