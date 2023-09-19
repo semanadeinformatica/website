@@ -39,7 +39,7 @@ const { color, staff } = defineProps<{
 
 const socialMedia = computed(() => {
     return Object.fromEntries(
-        Object.entries(staff.student?.social_media ?? {}).filter(
+        Object.entries(staff.participant?.social_media ?? {}).filter(
             ([key, value]) =>
                 ["github", "linkedin", "website"].includes(key) &&
                 value != null,
@@ -54,8 +54,8 @@ const socialMedia = computed(() => {
         :class="borderColor[color]"
     >
         <img
-            :src="staff.student?.user?.profile_photo_url"
-            :alt="`${staff.student?.user?.name}'s image`"
+            :src="staff.participant?.user?.profile_photo_url"
+            :alt="`${staff.participant?.user?.name}'s image`"
             class="w-40"
         />
         <div
@@ -78,7 +78,7 @@ const socialMedia = computed(() => {
         </div>
     </div>
     <p class="max-w-[13em] text-center font-bold" :class="textColor[color]">
-        {{ staff.student?.user?.name }}
+        {{ staff.participant?.user?.name }}
     </p>
 </template>
 

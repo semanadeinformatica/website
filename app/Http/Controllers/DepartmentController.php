@@ -11,7 +11,7 @@ class DepartmentController extends Controller
     {
         $departments = Department::with([
             'staff' => [
-                'student' => [
+                'participant' => [
                     'user',
                 ],
             ],

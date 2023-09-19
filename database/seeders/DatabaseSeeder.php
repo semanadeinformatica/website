@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
     {
         self::cleanDatabase();
 
-        $students = User::factory(100)->create();
+        $participants = User::factory(100)->create();
         $companies = User::factory(10)->company()->create();
 
         if (! User::where('email', '=', DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         ]), range(0, 7));
 
         $departments = Department::factory(10)->recycle($edition)->create();
-        Staff::factory(20)->recycle($departments)->recycle($students->pluck('usertype'))->create();
+        Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
 
         foreach ($event_days as $day) {
             $events = Event::factory(10)->recycle($day)->create();

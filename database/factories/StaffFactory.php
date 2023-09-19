@@ -18,7 +18,7 @@ class StaffFactory extends Factory
     {
         return [
             'coordinator' => fake()->boolean(20),
-            'student_id' => \App\Models\Student::factory(),
+            'participant_id' => \App\Models\Participant::factory(),
             'department_id' => \App\Models\Department::factory(),
         ];
     }
