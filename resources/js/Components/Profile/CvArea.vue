@@ -59,10 +59,23 @@ const clearCVFileInput = () => {
                 <p>CV upload</p>
                 <button
                     v-if="$page.props.auth.user.id == item?.id"
-                    class="mx-2"
+                    class="mx-3"
                     @click.prevent="selectCV"
                 >
-                    <v-icon name="io-share" fill="white" scale="1.3"></v-icon>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 text-white"
+                        viewBox="0 0 512 512"
+                    >
+                        <path
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="36"
+                            d="M56 262 v150 h400 M456 262 v150 M256 312 v-250 l-80 80 M256 62 l80 80"
+                        />
+                    </svg>
                 </button>
                 <input
                     ref="cvInput"
