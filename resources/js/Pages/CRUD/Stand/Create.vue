@@ -28,8 +28,13 @@ const submit = () => {
 <template>
     <CardLayout title="Associar Banca">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.event_day_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Dia do evento</option>
+            <TextInput
+                v-model="form.event_day_id"
+                type="select"
+                required
+                label="Dia do evento"
+                :error-message="form.errors.event_day_id"
+            >
                 <option
                     v-for="event_day in $props.with.eventDays"
                     :key="event_day.id"
@@ -37,10 +42,15 @@ const submit = () => {
                 >
                     {{ event_day.date }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.sponsor_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Empresa</option>
+            <TextInput
+                v-model="form.sponsor_id"
+                type="select"
+                required
+                label="Empresa"
+                :error-message="form.errors.sponsor_id"
+            >
                 <option
                     v-for="sponsor in $props.with.sponsors"
                     :key="sponsor.id"
@@ -48,7 +58,7 @@ const submit = () => {
                 >
                     {{ sponsor.company?.user?.name ?? sponsor.company?.id }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Associar</PrimaryButton>
         </form>

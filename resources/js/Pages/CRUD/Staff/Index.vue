@@ -47,17 +47,23 @@ const participants = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Nome</Header>
-                <Header>Participant ID</Header>
-                <Header>Departamento</Header>
-                <Header>Coordenador</Header>
+                <Header filter-by="student_id" :filter-values="participants"
+                    >Participante</Header
+                >
+                <Header filter-by="department_id" :filter-values="departments"
+                    >Departamento</Header
+                >
+                <Header
+                    filter-by="coordinator"
+                    :filter-values="{ true: '✓', false: '❌' }"
+                    >Coordenador</Header
+                >
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="staff" :item="item">
                 <Cell>{{ participants[item.participant_id] }}</Cell>
-                <Cell>{{ item.participant_id }}</Cell>
                 <Cell>{{ departments[item.department_id] }}</Cell>
                 <Cell>{{ item.coordinator ? "✓" : "❌" }}</Cell>
             </Row>

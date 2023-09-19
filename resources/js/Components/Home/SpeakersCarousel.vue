@@ -58,12 +58,12 @@ onMounted(async () => {
             <SpeakerSlide :speaker="speaker" />
         </Slide>
     </Carousel>
-    <div class="align-center flex justify-center gap-3">
+    <div class="align-center flex justify-center gap-3 text-2023-teal">
         <button @click="prev">
-            <v-icon name="fa-arrow-left" fill="#007172" scale="2"></v-icon>
+            <v-icon name="io-arrow-back" scale="2"></v-icon>
         </button>
         <button @click="next">
-            <v-icon name="fa-arrow-right" fill="#007172" scale="2"></v-icon>
+            <v-icon name="io-arrow-forward" scale="2"></v-icon>
         </button>
     </div>
 </template>

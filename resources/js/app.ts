@@ -13,12 +13,14 @@ import messages from "./messages";
 const vfm = createVfm();
 
 import * as IoIcons from "oh-vue-icons/icons/io";
-import * as FaIcons from "oh-vue-icons/icons/fa";
 
 const Io = Object.values({ ...IoIcons });
-const Fa = Object.values({ ...FaIcons });
-addIcons(...Io);
-addIcons(...Fa);
+addIcons(
+    ...Io.map((i) => ({
+        ...i,
+        raw: i.raw.replace('stroke="#000"', 'stroke="currentColor"'),
+    })),
+);
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

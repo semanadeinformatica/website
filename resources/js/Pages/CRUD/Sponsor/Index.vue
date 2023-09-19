@@ -34,6 +34,12 @@ const companies = computed<Record<number, string>>(() =>
         ]),
     ),
 );
+
+const tiers = {
+    PLATINUM: "Platina",
+    GOLD: "Ouro",
+    SILVER: "Prata",
+};
 </script>
 
 <template>
@@ -42,9 +48,15 @@ const companies = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Edição</Header>
-                <Header>Empresa</Header>
-                <Header>Tipo de patrocínio</Header>
+                <Header filter-by="edition_id" :filter-values="editions"
+                    >Edição</Header
+                >
+                <Header filter-by="company_id" :filter-values="companies"
+                    >Empresa</Header
+                >
+                <Header filter-by="tier" :filter-values="tiers"
+                    >Tipo de patrocínio</Header
+                >
             </HeaderRow>
         </template>
 
@@ -52,7 +64,7 @@ const companies = computed<Record<number, string>>(() =>
             <Row name="sponsors" :item="item">
                 <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ companies[item.company_id] }}</Cell>
-                <Cell>{{ item.tier }}</Cell>
+                <Cell>{{ tiers[item.tier] }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

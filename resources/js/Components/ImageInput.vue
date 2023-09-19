@@ -3,6 +3,8 @@ import { ref } from "vue";
 
 interface Props {
     modelValue: File | null;
+    label?: string;
+    id?: string;
     initialPreview?: string;
     errorMessage?: string;
 }
@@ -35,7 +37,7 @@ const updatePreview = () => {
 </script>
 
 <template>
-    <label>
+    <label class="flex cursor-pointer flex-col items-center">
         <input
             ref="input"
             type="file"
@@ -47,13 +49,18 @@ const updatePreview = () => {
             v-if="preview"
             :src="preview"
             alt=""
-            class="h-auto max-h-20 w-full object-contain"
+            class="max-h-40 w-auto border border-black object-contain shadow-md shadow-2023-red"
         />
-        <div
-            v-else
-            class="flex h-20 w-full flex-col items-center justify-center border-2 border-dashed border-black"
+
+        <v-icon v-else name="io-image" class="h-20 w-20" />
+
+        <span class="sr-only">{{ label }}</span>
+
+        <span
+            v-show="errorMessage"
+            :id="`${id}-error`"
+            class="mt-2 font-semibold text-2023-red"
+            >{{ errorMessage }}</span
         >
-            <span class="text-2023-teal">Selecionar imagem</span>
-        </div>
     </label>
 </template>

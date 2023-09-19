@@ -31,7 +31,13 @@ const submit = () => {
 <template>
     <CardLayout title="Criar utilizador">
         <form class="contents" @submit.prevent="submit">
-            <ImageInput v-model="form.photo" class="self-stretch" />
+            <ImageInput
+                id="photo"
+                v-model="form.photo"
+                label="Foto de perfil"
+                class="self-stretch"
+                :error-message="form.errors.photo"
+            />
 
             <TextInput
                 id="name"
@@ -54,21 +60,24 @@ const submit = () => {
                 :error-message="form.errors.email"
             />
 
-            <select v-model="form.type" required class="self-stretch">
-                <option value="" disabled selected hidden>
-                    Tipo de utilizador
-                </option>
+            <TextInput
+                v-model="form.type"
+                type="select"
+                label="Tipo de utilizador"
+                required
+                :error-message="form.errors.type"
+            >
                 <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
                 <option value="admin">Administrador</option>
-            </select>
+            </TextInput>
 
             <TextInput
                 v-if="form.type === 'company'"
                 id="description"
                 v-model="form.description"
                 label="Descrição"
-                type="text"
+                type="textarea"
                 required
                 :error-message="form.errors.description"
             />

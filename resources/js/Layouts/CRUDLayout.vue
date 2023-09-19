@@ -46,7 +46,7 @@ watch(query, (query) => {
                 <Link :href="route(`admin.${name}.create`)">Novo</Link>
             </header>
 
-            <Table v-if="items.data.length > 0" :items="items.data">
+            <Table :items="items.data">
                 <template #header>
                     <slot name="header"></slot>
                 </template>
@@ -55,8 +55,6 @@ watch(query, (query) => {
                     <slot name="row" :item="item"></slot>
                 </template>
             </Table>
-
-            <div v-else class="text-xl">Nenhum item encontrado</div>
 
             <PaginationLinks
                 :links="items.links"

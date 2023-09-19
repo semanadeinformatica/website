@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick } from "vue";
 import DialogModal from "./DialogModal.vue";
-import InputError from "./InputError.vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import SecondaryButton from "./SecondaryButton.vue";
 import TextInput from "./TextInput.vue";
@@ -89,19 +88,15 @@ const closeModal = () => {
             <template #content>
                 {{ content }}
 
-                <div class="mt-4">
-                    <TextInput
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                        @keyup.enter="confirmPassword"
-                    />
-
-                    <InputError :message="form.error" class="mt-2" />
-                </div>
+                <TextInput
+                    ref="passwordInput"
+                    v-model="form.password"
+                    type="password"
+                    label="Password"
+                    autocomplete="current-password"
+                    :error-message="form.error"
+                    @keyup.enter="confirmPassword"
+                />
             </template>
 
             <template #footer>

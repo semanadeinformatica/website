@@ -4,8 +4,6 @@ import { router, useForm, usePage } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import DangerButton from "@/Components/DangerButton.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -182,26 +180,20 @@ const disableTwoFactorAuthentication = () => {
                         </p>
                     </div>
 
-                    <div v-if="confirming" class="mt-4">
-                        <InputLabel for="code" value="Code" />
-
-                        <TextInput
-                            id="code"
-                            v-model="confirmationForm.code"
-                            type="text"
-                            name="code"
-                            class="mt-1 block w-1/2"
-                            inputmode="numeric"
-                            autofocus
-                            autocomplete="one-time-code"
-                            @keyup.enter="confirmTwoFactorAuthentication"
-                        />
-
-                        <InputError
-                            :message="confirmationForm.errors.code"
-                            class="mt-2"
-                        />
-                    </div>
+                    <TextInput
+                        v-if="confirming"
+                        id="code"
+                        v-model="confirmationForm.code"
+                        type="text"
+                        name="code"
+                        label="Code"
+                        class="mt-1 block w-1/2"
+                        inputmode="numeric"
+                        autofocus
+                        autocomplete="one-time-code"
+                        :error-message="confirmationForm.errors.code"
+                        @keyup.enter="confirmTwoFactorAuthentication"
+                    />
                 </div>
 
                 <div v-if="recoveryCodes.length > 0 && !confirming">

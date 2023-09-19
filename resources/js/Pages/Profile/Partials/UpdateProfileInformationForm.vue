@@ -3,8 +3,6 @@ import { ref } from "vue";
 import { Link, router, useForm } from "@inertiajs/vue3";
 import ActionMessage from "@/Components/ActionMessage.vue";
 import FormSection from "@/Components/FormSection.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -99,7 +97,7 @@ const clearPhotoFileInput = () => {
                     @change="updatePhotoPreview"
                 />
 
-                <InputLabel for="photo" value="Photo" />
+                <label for="photo">Photo</label>
 
                 <!-- Current Profile Photo -->
                 <div v-show="!photoPreview" class="mt-2">
@@ -137,33 +135,31 @@ const clearPhotoFileInput = () => {
                     Remove Photo
                 </SecondaryButton>
 
-                <InputError :message="form.errors.photo" class="mt-2" />
+                <span class="mt-2">{{ form.errors.photo }}</span>
             </div>
 
             <!-- Name -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="name"
-                />
-                <InputError :message="form.errors.name" class="mt-2" />
-            </div>
+            <TextInput
+                id="name"
+                v-model="form.name"
+                label="Name"
+                type="text"
+                class="mt-1 block w-full"
+                autocomplete="name"
+                :error-message="form.errors.name"
+            />
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
                 <TextInput
                     id="email"
                     v-model="form.email"
+                    label="Email"
                     type="email"
                     class="mt-1 block w-full"
                     autocomplete="username"
+                    :error-message="form.errors.email"
                 />
-                <InputError :message="form.errors.email" class="mt-2" />
 
                 <div
                     v-if="
@@ -210,4 +206,3 @@ const clearPhotoFileInput = () => {
         </template>
     </FormSection>
 </template>
-@/Types/User

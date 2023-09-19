@@ -23,7 +23,7 @@ const form = useForm({
     title: speaker.title ?? "",
     description: speaker.description ?? "",
     organization: speaker.organization ?? "",
-    event_id: speaker.event_id,
+    event_id: speaker.event_id.toString(),
     social_media: {
         email: speaker?.social_media?.email ?? "",
         facebook: speaker?.social_media?.facebook ?? "",
@@ -45,9 +45,12 @@ const submit = () => {
     <CardLayout title="Editar apresentador">
         <form class="contents" @submit.prevent="submit">
             <ImageInput
+                id="photo"
                 v-model="form.photo"
                 :initial-preview="item.profile_photo_url"
+                label="Foto de perfil"
                 class="self-stretch"
+                :error-message="form.errors.photo"
             />
 
             <TextInput
@@ -142,8 +145,13 @@ const submit = () => {
                 </div>
             </details>
 
-            <select v-model="form.event_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Evento</option>
+            <TextInput
+                v-model="form.event_id"
+                type="select"
+                required
+                label="Evento"
+                :error-message="form.errors.event_id"
+            >
                 <option
                     v-for="event in $props.with.events"
                     :key="event.id"
@@ -151,7 +159,7 @@ const submit = () => {
                 >
                     {{ event.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>

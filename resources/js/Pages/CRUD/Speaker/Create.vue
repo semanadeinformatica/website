@@ -41,7 +41,13 @@ const submit = () => {
 <template>
     <CardLayout title="Criar apresentador">
         <form class="contents" @submit.prevent="submit">
-            <ImageInput v-model="form.photo" class="self-stretch" />
+            <ImageInput
+                id="photo"
+                v-model="form.photo"
+                label="Foto de perfil"
+                class="self-stretch"
+                :error-message="form.errors.photo"
+            />
 
             <TextInput
                 id="name"
@@ -135,8 +141,13 @@ const submit = () => {
                 </div>
             </details>
 
-            <select v-model="form.event_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Evento</option>
+            <TextInput
+                v-model="form.event_id"
+                type="select"
+                required
+                label="Evento"
+                :error-message="form.errors.event_id"
+            >
                 <option
                     v-for="event in $props.with.events"
                     :key="event.id"
@@ -144,7 +155,7 @@ const submit = () => {
                 >
                     {{ event.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>

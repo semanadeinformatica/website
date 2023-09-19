@@ -40,8 +40,8 @@ const numCols = computed(() =>
 </script>
 
 <template>
-    <div>
-        <p class="text-2xl font-bold" :class="textColor[color]">{{ title }}</p>
+    <div :class="textColor[color]">
+        <p class="text-2xl font-bold">{{ title }}</p>
         <div
             class="grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
             :class="shadowColor[color]"
@@ -70,10 +70,10 @@ const numCols = computed(() =>
                 </Slide>
             </Carousel>
             <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">
-                <v-icon name="fa-arrow-left" fill="#f29325" scale="2"></v-icon>
+                <v-icon name="io-arrow-back" scale="2"></v-icon>
             </button>
             <button class="absolute right-2 top-[calc(50%-20px)]" @click="next">
-                <v-icon name="fa-arrow-right" fill="#f29325" scale="2"></v-icon>
+                <v-icon name="io-arrow-forward" scale="2"></v-icon>
             </button>
         </div>
     </div>

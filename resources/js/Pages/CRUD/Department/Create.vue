@@ -38,7 +38,13 @@ const submit = () => {
                 :error-message="form.errors.name"
             />
 
-            <select v-model="form.edition_id" required class="self-stretch">
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                class="self-stretch"
+                :error-message="form.errors.edition_id"
+            >
                 <option value="" disabled selected hidden>Edição</option>
                 <option
                     v-for="edition in $props.with.editions"
@@ -47,7 +53,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>

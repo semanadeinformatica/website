@@ -39,8 +39,13 @@ const submit = () => {
 <template>
     <CardLayout title="Adicionar Staff">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.department_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Departamento</option>
+            <TextInput
+                v-model="form.department_id"
+                type="select"
+                required
+                label="Departamento"
+                :error-message="form.errors.department_id"
+            >
                 <option
                     v-for="department in $props.with.departments"
                     :key="department.id"
@@ -49,10 +54,15 @@ const submit = () => {
                     {{ department.name }}
                     - {{ editions[department.edition_id] }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.participant_id" required class="self-stretch">
-                <option value="" disabled selected hidden>User</option>
+            <TextInput
+                v-model="form.participant_id"
+                type="select"
+                required
+                label="Participante"
+                :error-message="form.errors.participant_id"
+            >
                 <option
                     v-for="participant in $props.with.participants"
                     :key="participant.id"
@@ -60,7 +70,7 @@ const submit = () => {
                 >
                     {{ participant.user?.name }} - {{ participant.user?.id }}
                 </option>
-            </select>
+            </TextInput>
 
             <label for="coordinator" class="flex flex-row items-center gap-6">
                 Coordenador
