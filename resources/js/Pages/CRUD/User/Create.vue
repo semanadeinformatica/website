@@ -65,6 +65,7 @@ const submit = () => {
                 type="select"
                 label="Tipo de utilizador"
                 required
+                :error-message="form.errors.type"
             >
                 <option value="participant">Participante</option>
                 <option value="company">Empresa</option>

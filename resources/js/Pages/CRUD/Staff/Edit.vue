@@ -46,6 +46,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Departamento"
+                :error-message="form.errors.department_id"
             >
                 <option
                     v-for="department in $props.with.departments"
@@ -62,6 +63,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Participante"
+                :error-message="form.errors.participant_id"
             >
                 <option
                     v-for="participant in $props.with.participants"

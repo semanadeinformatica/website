@@ -150,6 +150,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Evento"
+                :error-message="form.errors.event_id"
             >
                 <option
                     v-for="event in $props.with.events"

@@ -84,6 +84,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Dia do evento"
+                :error-message="form.errors.event_day_id"
             >
                 <option
                     v-for="day in $props.with.event_days"

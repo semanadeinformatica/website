@@ -33,6 +33,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Dia do evento"
+                :error-message="form.errors.event_day_id"
             >
                 <option
                     v-for="event_day in $props.with.eventDays"
@@ -48,6 +49,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Empresa"
+                :error-message="form.errors.sponsor_id"
             >
                 <option
                     v-for="sponsor in $props.with.sponsors"

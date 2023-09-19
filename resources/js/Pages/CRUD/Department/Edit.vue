@@ -46,6 +46,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Edição"
+                :error-message="form.errors.edition_id"
             >
                 <option
                     v-for="edition in $props.with.editions"

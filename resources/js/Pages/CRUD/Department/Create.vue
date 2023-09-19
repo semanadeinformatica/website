@@ -43,6 +43,7 @@ const submit = () => {
                 type="select"
                 required
                 class="self-stretch"
+                :error-message="form.errors.edition_id"
             >
                 <option value="" disabled selected hidden>Edição</option>
                 <option

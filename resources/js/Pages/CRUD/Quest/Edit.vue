@@ -61,6 +61,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Categoria"
+                :error-message="form.errors.category"
             >
                 <option value="company">Empresa</option>
                 <option value="talk">Palestra</option>
@@ -74,6 +75,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Requisito"
+                :error-message="form.errors.requirement"
             >
                 <option value="" disabled>Empresa</option>
                 <option
@@ -90,6 +92,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Edição"
+                :error-message="form.errors.edition_id"
             >
                 <option
                     v-for="edition in $props.with.editions"

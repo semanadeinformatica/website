@@ -34,6 +34,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Edição"
+                :error-message="form.errors.edition_id"
             >
                 <option
                     v-for="edition in $props.with.editions"
@@ -49,6 +50,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Empresa"
+                :error-message="form.errors.company_id"
             >
                 <option
                     v-for="company in $props.with.companies"
@@ -64,6 +66,7 @@ const submit = () => {
                 type="select"
                 required
                 label="Tipo de patrocínio"
+                :error-message="form.errors.tier"
             >
                 <option value="platinum">Platina</option>
                 <option value="gold">Ouro</option>
