@@ -10,7 +10,7 @@ on:
     branches:
       - main
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
@@ -20,14 +20,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
           extensions: ${{ env.PHP_EXTENSIONS }}
           coverage: none
- 
+
       - name: Install PHP dependencies
         run: composer install -n --prefer-dist
 
@@ -39,7 +39,10 @@ jobs:
 
       - name: Install Node dependencies
         run: npm ci
- 
+
+      - name: Docker Layer Caching
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
+
       - name: Run Sail
         run: |
           ./sail up -d
@@ -47,7 +50,7 @@ jobs:
           sleep 5
 
       - name: Run tests
-        run: ./sail test
+        run: ./sail test --parallel
 
   pint:
     name: Check PHP code style
@@ -55,17 +58,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
           extensions: ${{ env.PHP_EXTENSIONS }}
           coverage: none
- 
+
       - name: Run composer install
         run: composer install -n --prefer-dist
- 
+
+      - name: Docker Layer Caching
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
+
       - name: Run Sail
         run: ./sail up -d
 
@@ -78,7 +84,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -87,7 +93,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run Prettier
         run: npm run format
 
@@ -97,7 +103,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -106,7 +112,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run Eslint
         run: npm run lint
 
@@ -116,7 +122,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -125,6 +131,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run vue-tsc
         run: npm run type-check
