@@ -1,39 +1,20 @@
 <script setup lang="ts">
+import type Department from "@/Types/Department";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SINFTeam from "@/Components/Team/SINFTeam.vue";
 
-const mockTeam: {
-    name: string;
-    src: string;
-    linkedin?: string;
-    github?: string;
-}[] = [
-    {
-        name: "person 1",
-        src: "https://picsum.photos/200",
-        linkedin: "google.com",
-    },
-    {
-        name: "person 2",
-        src: "https://picsum.photos/200",
-        linkedin: "google.com",
-    },
-    {
-        name: "person 3",
-        src: "https://picsum.photos/200",
-        linkedin: "google.com",
-    },
-    {
-        name: "person 4",
-        src: "https://picsum.photos/200",
-        linkedin: "google.com",
-    },
-    {
-        name: "person 5",
-        src: "https://picsum.photos/200",
-        linkedin: "google.com",
-        github: "google.com",
-    },
+interface Props {
+    departments: Department[];
+}
+
+const { departments } = defineProps<Props>();
+
+const colors: Array<string> = [
+    "orange",
+    "teal-dark",
+    "red-dark",
+    "red",
+    "teal",
 ];
 </script>
 
@@ -41,49 +22,10 @@ const mockTeam: {
     <AppLayout title="Team">
         <div class="flex flex-col gap-6 border border-black p-10">
             <SINFTeam
-                title="Coordenação Geral"
-                color="orange"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Informática"
-                color="teal-dark"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Imagem e Comunicação"
-                color="red-dark"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Operações"
-                color="teal"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Tesouraria"
-                color="teal"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Programa"
-                color="teal"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Competição de Programação"
-                color="teal"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Competição de CTF"
-                color="teal"
-                :people="mockTeam"
-            ></SINFTeam>
-            <SINFTeam
-                title="Relações Externas"
-                color="teal"
-                :people="mockTeam"
+                v-for="department in departments"
+                :key="department.id"
+                :color="colors[department.id % colors.length]"
+                :department="department"
             ></SINFTeam>
         </div>
     </AppLayout>
@@ -92,6 +34,6 @@ const mockTeam: {
 <style>
 main {
     padding: 2rem;
-    padding-inline: 6rem;
+    padding-inline: 4rem;
 }
 </style>

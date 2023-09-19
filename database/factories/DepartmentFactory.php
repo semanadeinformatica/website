@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\SocialMedia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Company>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Department>
  */
-class CompanyFactory extends Factory
+class DepartmentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,8 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => fake()->paragraph(),
-            'user_id' => 0,
-            'social_media_id' => SocialMedia::factory(),
+            'name' => fake()->unique()->word(),
+            'edition_id' => \App\Models\Edition::factory(),
         ];
     }
 }
