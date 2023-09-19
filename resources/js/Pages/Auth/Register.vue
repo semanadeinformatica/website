@@ -25,7 +25,7 @@ const submit = () => {
     <CardLayout title="Registar" heading="Regista-te!">
         <form @submit.prevent="submit" class="contents">
             <TextInput
-                label="Name"
+                label="Nome"
                 id="name"
                 v-model="form.name"
                 type="text"

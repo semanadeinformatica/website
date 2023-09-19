@@ -9,12 +9,12 @@ use App\Models\Company;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\EventDay;
+use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Speaker;
 use App\Models\Sponsor;
 use App\Models\Stand;
-use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         User::truncate();
         Company::truncate();
-        Student::truncate();
+        Participant::truncate();
         Admin::truncate();
         Edition::truncate();
         Event::truncate();

@@ -15,7 +15,7 @@ return new class extends Migration
         // Visit history
         Schema::create('visit_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Student::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -39,14 +39,14 @@ return new class extends Migration
 
                                 SELECT requirement_id INTO v_company_id FROM quests WHERE id = NEW.quest_id;
 
-                                INSERT INTO visit_history (student_id, company_id, created_at, updated_at)
+                                INSERT INTO visit_history (participant_id, company_id, created_at, updated_at)
                                 SELECT
-                                    e.student_id,
+                                    e.participant_id,
                                     v_company_id,
                                     NOW(),
                                     NOW()
                                 FROM enrollments e
-                                LEFT JOIN students s ON e.student_id = s.id
+                                LEFT JOIN participants s ON e.participant_id = s.id
                                 LEFT JOIN users u ON s.user_id = u.id
                                 WHERE e.id = NEW.enrollment_id;
                             END IF;

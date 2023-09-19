@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 import type Staff from "@/Types/Staff";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
@@ -13,7 +13,7 @@ import { computed } from "vue";
 interface Props {
     item: Staff;
     with: {
-        students: Student[];
+        participants: Participant[];
         editions: Edition[];
         departments: Department[];
     };
@@ -23,7 +23,7 @@ const props = defineProps<Props>();
 
 const form = useForm({
     department_id: props.item.department_id,
-    student_id: props.item.student_id,
+    participant_id: props.item.participant_id,
     coordinator: props.item.coordinator,
 });
 
@@ -55,14 +55,14 @@ const submit = () => {
                 </option>
             </select>
 
-            <select v-model="form.student_id" required class="self-stretch">
+            <select v-model="form.participant_id" required class="self-stretch">
                 <option value="" disabled selected hidden>User</option>
                 <option
-                    v-for="student in $props.with.students"
-                    :key="student.id"
-                    :value="student.id"
+                    v-for="participant in $props.with.participants"
+                    :key="participant.id"
+                    :value="participant.id"
                 >
-                    {{ student.user?.name }} - {{ student.user?.id }}
+                    {{ participant.user?.name }} - {{ participant.user?.id }}
                 </option>
             </select>
 

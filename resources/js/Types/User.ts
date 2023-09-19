@@ -1,7 +1,7 @@
 import type Admin from "./Admin";
 import type Company from "./Company";
 import type Model from "./Model";
-import type Student from "./Student";
+import type Participant from "./Participant";
 
 interface BaseUser extends Model {
     current_team_id?: number;
@@ -15,9 +15,9 @@ interface BaseUser extends Model {
     usertype_id: number;
 }
 
-interface StudentUser extends BaseUser {
-    usertype_type: "App\\Models\\Student";
-    usertype?: Student;
+interface ParticipantUser extends BaseUser {
+    usertype_type: "App\\Models\\Participant";
+    usertype?: Participant;
 }
 
 interface CompanyUser extends BaseUser {
@@ -30,4 +30,4 @@ interface AdminUser extends BaseUser {
     usertype?: Admin;
 }
 
-export type User = StudentUser | CompanyUser | AdminUser;
+export type User = ParticipantUser | CompanyUser | AdminUser;

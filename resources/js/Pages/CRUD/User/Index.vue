@@ -15,7 +15,7 @@ defineProps<Props>();
 
 const usertypeMap = {
     "App\\Models\\Admin": "Administrador",
-    "App\\Models\\Student": "Estudante",
+    "App\\Models\\Participant": "Participante",
     "App\\Models\\Company": "Empresa",
 } as const satisfies Record<User["usertype_type"], string>;
 </script>

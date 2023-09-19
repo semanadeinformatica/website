@@ -13,12 +13,12 @@ class Staff extends Model
     protected $fillable = [
         'coordinator',
         'department_id',
-        'student_id',
+        'participant_id',
     ];
 
-    public function student(): BelongsTo
+    public function participant(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Participant::class);
     }
 
     public function department(): BelongsTo

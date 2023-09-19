@@ -29,7 +29,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->morphs('usertype');
         });
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
@@ -104,13 +104,13 @@ return new class extends Migration
         // Enrollment
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Student::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
 
             // this will be calculated by a trigger
             $table->integer('points')->unsigned()->default(0);
             $table->timestamps();
-            $table->unique(['student_id', 'edition_id']);
+            $table->unique(['participant_id', 'edition_id']);
         });
 
         // Many to many
@@ -175,7 +175,7 @@ return new class extends Migration
 
         Schema::dropIfExists('admins');
         Schema::dropIfExists('companies');
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('participants');
 
         Schema::table('users', function (Blueprint $table) {
             $table->dropMorphs('usertype');

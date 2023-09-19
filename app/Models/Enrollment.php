@@ -18,7 +18,7 @@ class Enrollment extends Model
      */
     protected $fillable = [
         'edition_id',
-        'student_id',
+        'participant_id',
     ];
 
     public function edition(): BelongsTo
@@ -41,8 +41,8 @@ class Enrollment extends Model
         return $this->belongsToMany(Quest::class);
     }
 
-    public function student(): BelongsTo
+    public function participant(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Participant::class);
     }
 }
