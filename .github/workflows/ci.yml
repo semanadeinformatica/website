@@ -70,7 +70,7 @@ jobs:
         run: ./sail up -d
 
       - name: Run Pint
-        run: ./sail pint --test
+        run: ./sail pint -v --test
 
   prettier:
     name: Check Typescript code style
