@@ -19,7 +19,6 @@ class Quest extends Model
      */
     protected $fillable = [
         'name',
-        'points',
         'category',
         'edition_id',
         'requirement_type',

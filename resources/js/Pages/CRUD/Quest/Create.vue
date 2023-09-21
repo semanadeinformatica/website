@@ -18,7 +18,6 @@ defineProps<Props>();
 
 const form = useForm({
     name: "",
-    points: "",
     category: "",
     requirement: "",
     edition_id: "",
@@ -41,14 +40,6 @@ const submit = () => {
                 autofocus
                 autocomplete="name"
                 :error-message="form.errors.name"
-            />
-
-            <TextInput
-                id="points"
-                v-model="form.points"
-                label="Pontos"
-                type="number"
-                :error-message="form.errors.points"
             />
 
             <TextInput

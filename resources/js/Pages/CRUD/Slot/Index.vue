@@ -32,7 +32,8 @@ const quests = computed<number[]>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="total_quests">Número mínimo de tarefas</Header>
-                <Header sort-by="total_quests"
+                <Header sort-by="points">Pontos</Header>
+                <Header
                     >Número de tarefas correspondentes a este
                     <span class="italic">slot</span></Header
                 >
@@ -42,9 +43,10 @@ const quests = computed<number[]>(() =>
         <template #row="{ item }">
             <Row :item="item" name="slots">
                 <Cell>{{ item.total_quests }}</Cell>
+                <Cell>{{ item.points }}</Cell>
                 <Cell>{{
-                    item.quests?.filter((q) => quests.includes(q.id)).length ??
-                    "N/A"
+                    item.quests?.filter((q: Quest) => quests.includes(q.id))
+                        .length ?? "N/A"
                 }}</Cell>
             </Row>
         </template>

@@ -3,6 +3,7 @@ import type Quest from "@/Types/Quest";
 
 export default interface Slot extends Model {
     total_quests: number;
+    points: number;
 
     quests?: Quest[];
 }

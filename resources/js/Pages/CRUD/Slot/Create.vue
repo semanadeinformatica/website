@@ -16,18 +16,12 @@ defineProps<Props>();
 
 const form = useForm({
     total_quests: "0",
+    points: "0",
     selected_quests: [] as string[],
 });
 
 const submit = () => {
-    form.transform((data) => {
-        let selected_quests = data.selected_quests;
-
-        return {
-            ...data,
-            selected_quests: [selected_quests],
-        };
-    }).post(route("admin.slots.store"));
+    form.post(route("admin.slots.store"));
 };
 </script>
 
@@ -40,6 +34,14 @@ const submit = () => {
                 label="Numero mínimo de tarefas"
                 type="number"
                 :error-message="form.errors.total_quests"
+            />
+
+            <TextInput
+                id="points"
+                v-model="form.points"
+                label="Pontos"
+                type="number"
+                :error-message="form.errors.points"
             />
 
             <TextInput

@@ -18,18 +18,12 @@ const { item: slot } = defineProps<Props>();
 
 const form = useForm({
     total_quests: slot.total_quests.toString(),
+    points: slot.points.toString(),
     selected_quests: slot.quests?.map((q) => q.id.toString()) ?? [],
 });
 
 const submit = () => {
-    form.transform((data) => {
-        let selected_quests = data.selected_quests;
-
-        return {
-            ...data,
-            selected_quests: [selected_quests],
-        };
-    }).put(route("admin.slots.update", slot));
+    form.put(route("admin.slots.update", slot));
 };
 </script>
 
@@ -42,6 +36,14 @@ const submit = () => {
                 label="Numero mínimo de tarefas"
                 type="number"
                 :error-message="form.errors.total_quests"
+            />
+
+            <TextInput
+                id="points"
+                v-model="form.points"
+                label="Pontos"
+                type="number"
+                :error-message="form.errors.points"
             />
 
             <TextInput

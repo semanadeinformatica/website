@@ -12,6 +12,7 @@ class Slot extends Model
 
     protected $fillable = [
         'total_quests',
+        'points',
     ];
 
     protected $with = [

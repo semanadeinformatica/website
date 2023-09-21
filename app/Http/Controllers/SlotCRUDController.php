@@ -15,6 +15,7 @@ class SlotCRUDController extends CRUDController
     protected array $rules = [
         'total_quests' => 'required|integer',
         'selected_quests' => 'sometimes|array',
+        'points' => 'required|integer',
     ];
 
     protected function created(array $new): ?array

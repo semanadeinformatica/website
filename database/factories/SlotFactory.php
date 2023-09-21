@@ -18,6 +18,7 @@ class SlotFactory extends Factory
     {
         return [
             'total_quests' => fake()->numberBetween(1, 30),
+            'points' => fake()->numberBetween(1, 50),
         ];
     }
 }
