@@ -19,6 +19,8 @@ const { item: competition } = defineProps<Props>();
 const form = useForm({
     edition_id: competition.edition_id,
     theme: competition.theme,
+    date_start: new Date(competition.date_start).toDateString(),
+    date_end: new Date(competition.date_end).toDateString(),
 });
 
 const submit = () => {
@@ -27,7 +29,7 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Criar Competição">
+    <CardLayout title="Editar Competição">
         <form class="contents" @submit.prevent="submit">
             <TextInput
                 id="theme"
@@ -38,6 +40,26 @@ const submit = () => {
                 autofocus
                 autocomplete="name"
                 :error-message="form.errors.theme"
+            />
+
+            <TextInput
+                id="date_start"
+                v-model="form.date_start"
+                label="Data de início"
+                type="date"
+                required
+                autofocus
+                :error-message="form.errors.date_start"
+            />
+
+            <TextInput
+                id="date_end"
+                v-model="form.date_end"
+                label="Data de fim"
+                type="date"
+                required
+                autofocus
+                :error-message="form.errors.date_end"
             />
 
             <select v-model="form.edition_id" required class="self-stretch">
@@ -51,7 +73,7 @@ const submit = () => {
                 </option>
             </select>
 
-            <PrimaryButton type="submit">Criar</PrimaryButton>
+            <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
     </CardLayout>
 </template>

@@ -63,7 +63,7 @@ const submit = () => {
                 </option>
             </select>
 
-            <PrimaryButton type="submit">Editar</PrimaryButton>
+            <PrimaryButton type="submit">Associar</PrimaryButton>
         </form>
     </CardLayout>
 </template>

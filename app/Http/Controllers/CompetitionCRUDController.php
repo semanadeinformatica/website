@@ -14,7 +14,7 @@ class CompetitionCRUDController extends CRUDController
     protected array $rules = [
         'theme' => 'required|string',
         'date_start' => 'required|date',
-        'date_end' => 'required|date',
+        'date_end' => 'required|date|after:date_start',
         'edition_id' => 'required|integer|exists:editions,id',
     ];
 
