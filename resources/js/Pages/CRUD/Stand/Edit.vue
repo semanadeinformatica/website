@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.stands.store"));
+    form.put(route("admin.stands.store", stand));
 };
 </script>
 

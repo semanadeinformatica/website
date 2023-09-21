@@ -34,6 +34,12 @@ const pageRoutes: Routes = {
     "admin.eventDays.index": {
         label: "Dias de Evento",
     },
+    "admin.competitions.index": {
+        label: "Competições",
+    },
+    "admin.competitionTeams.index": {
+        label: "Equipas nas Competições",
+    },
 };
 
 const numCols = computed(() => {
