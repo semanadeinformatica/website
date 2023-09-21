@@ -166,8 +166,7 @@ const formattedDate = (
                     >{{ talkCount }} {{ $t("events.talks") }}</span
                 >
                 <span class="text-center"
-                    >{{ activityCount }}
-                    {{ $t("events.workshops") }}</span
+                    >{{ activityCount }} {{ $t("events.workshops") }}</span
                 >
                 </div>
             </template>

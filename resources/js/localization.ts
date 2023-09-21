@@ -1,4 +1,4 @@
-import type { I18nOptions,  } from "vue-i18n";
+import type { I18nOptions } from "vue-i18n";
 
 const messages = {
     en: {
@@ -20,9 +20,9 @@ const messages = {
                     },
                 },
             },
-            program: {}
+            program: {},
         },
-        components:{
+        components: {
             program: {},
         },
         events: {
@@ -76,7 +76,7 @@ const messages = {
                     },
                 },
             },
-            program: {}
+            program: {},
         },
         components: {
             program: {},
@@ -155,6 +155,6 @@ const config: I18nOptions = {
             },
         },
     },
-}
+};
 
 export default config;
