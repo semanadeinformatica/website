@@ -113,9 +113,9 @@ const formattedDate = (
                 {{
                     days.length > 0
                         ? formattedDate(
-                              $d(new Date(days[0].date), "long"),
+                              $d(new Date(days[0].date), "longYear"),
                               $t("general.to"),
-                              $d(new Date(days[days.length - 1].date), "long"),
+                              $d(new Date(days[days.length - 1].date), "longYear"),
                           )
                         : ""
                 }}
@@ -129,13 +129,13 @@ const formattedDate = (
                 id="aboutus"
                 class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
             >
-                {{ $t("homePage.aboutUs.label") }}
+                {{ $t("pages.home.aboutUs.label") }}
             </h2>
             <p class="p-20 text-lg text-white max-lg:pb-10">
-                {{ $t("homePage.aboutUs.text1") }}
+                {{ $t("pages.home.aboutUs.text1") }}
             </p>
             <p class="p-20 text-lg text-white max-lg:py-10">
-                {{ $t("homePage.aboutUs.text2") }}
+                {{ $t("pages.home.aboutUs.text2") }}
             </p>
         </section>
         <!-- GENERAL INFO -->
@@ -143,7 +143,7 @@ const formattedDate = (
             <h2
                 class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
             >
-                {{ $t("homePage.joinUs") }}
+                {{ $t("pages.home.joinUs") }}
             </h2>
             <template
                 v-if="
@@ -157,17 +157,17 @@ const formattedDate = (
                     class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
                 <span class="text-center"
-                    >{{ days.length }} {{ $t("homePage.features.days") }}</span
+                    >{{ days.length }} {{ $t("events.days") }}</span
                 >
                 <span class="text-center"
-                    >{{ standCount }} {{ $t("homePage.features.stalls") }}</span
+                    >{{ standCount }} {{ $t("events.stalls") }}</span
                 >
                 <span class="text-center"
-                    >{{ talkCount }} {{ $t("homePage.features.talks") }}</span
+                    >{{ talkCount }} {{ $t("events.talks") }}</span
                 >
                 <span class="text-center"
                     >{{ activityCount }}
-                    {{ $t("homePage.features.workshops") }}</span
+                    {{ $t("events.workshops") }}</span
                 >
                 </div>
             </template>
@@ -187,7 +187,7 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                {{ $t("homePage.speakers") }}
+                {{ $t("pages.home.speakers") }}
             </p>
             <template v-if="speakers.length != 0">
                 <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
@@ -206,21 +206,21 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                {{ $t("homePage.sponsors.label") }}
+                {{ $t("pages.home.sponsors.label") }}
             </p>
             <SponsorBanner
                 :sponsors="sponsorGroups.PLATINUM"
-                :title="$t('homePage.sponsors.tier.plat')"
+                :title="$t('pages.home.sponsors.tier.plat')"
                 color="orange"
             ></SponsorBanner>
             <SponsorBanner
                 :sponsors="sponsorGroups.GOLD"
-                :title="$t('homePage.sponsors.tier.gold')"
+                :title="$t('pages.home.sponsors.tier.gold')"
                 color="teal-dark"
             ></SponsorBanner>
             <SponsorBanner
                 :sponsors="sponsorGroups.SILVER"
-                :title="$t('homePage.sponsors.tier.silver')"
+                :title="$t('pages.home.sponsors.tier.silver')"
                 color="red-dark"
             ></SponsorBanner>
         </section>

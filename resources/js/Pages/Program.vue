@@ -53,10 +53,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                     </template>
                 </div>
                 <span class="font-bold text-2023-orange">{{
-                    new Intl.DateTimeFormat("pt-PT", {
-                        month: "long",
-                        day: "2-digit",
-                    }).format(new Date(eventDay.date))
+                    $d(new Date(eventDay.date), "long")
                 }}</span>
             </section>
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />

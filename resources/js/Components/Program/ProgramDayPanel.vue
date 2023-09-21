@@ -57,7 +57,7 @@ onMounted(() => {
                 data-type="talk"
                 @click="toggle"
             >
-                Palestras
+                {{ $t("events.talks") }}
             </button>
             <button
                 v-if="(day.workshops?.length ?? 0) > 0"
@@ -65,7 +65,7 @@ onMounted(() => {
                 data-type="activity"
                 @click="toggle"
             >
-                Atividades
+                {{ $t("events.workshops") }}
             </button>
             <button
                 v-if="(day.stands?.length ?? 0) > 0"
@@ -73,7 +73,7 @@ onMounted(() => {
                 data-type="stand"
                 @click="toggle"
             >
-                Bancas
+                {{ $t("events.stands") }}
             </button>
         </div>
     </section>
