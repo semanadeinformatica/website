@@ -52,7 +52,7 @@ const clearCVFileInput = () => {
 <template>
     <div class="flex-col">
         <div
-            class="mx-32 mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-white"
+            class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-white md:mx-32"
             :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
             <div class="flex items-center">
@@ -107,7 +107,7 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="mx-36 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-white"
+            class="mx-36 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-white max-md:mx-2"
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
             <vue-pdf-embed
@@ -128,7 +128,7 @@ const clearCVFileInput = () => {
             </p>
         </div>
         <div
-            class="mx-32 mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red"
+            class="mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red md:mx-32"
         >
             <p>
                 <span class="font-bold">Porque é que o deves fazer? </span>
