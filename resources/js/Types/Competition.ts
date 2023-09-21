@@ -4,8 +4,8 @@ import type CompetitionTeam from "@/Types/Competition";
 
 export default interface Competition extends Model {
     theme: string;
-    date_start: Date;
-    date_end: Date;
+    date_start: string;
+    date_end: string;
 
     edition_id: number;
     edition?: Edition;

@@ -38,10 +38,10 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Edição</Header>
-                <Header>Nome</Header>
+                <Header>Edição</Header>
+                <Header sort-by="name">Nome</Header>
                 <Header>Nª Membros</Header>
-                <Header>Pontos</Header>
+                <Header sort-by="points">Pontos</Header>
             </HeaderRow>
         </template>
 

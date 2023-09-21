@@ -17,7 +17,7 @@ interface Props {
 const { item: competitionTeam } = defineProps<Props>();
 
 const form = useForm({
-    competition_id: competitionTeam.competition_id,
+    competition_id: competitionTeam.competition_id + "",
     name: competitionTeam.name,
     points: competitionTeam.points + "",
 });
@@ -52,16 +52,21 @@ const submit = () => {
                 :error-message="form.errors.points"
             />
 
-            <select v-model="form.competition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Competição</option>
+            <TextInput
+                v-model="form.competition_id"
+                type="select"
+                required
+                label="Competição"
+                :error-message="form.errors.competition_id"
+            >
                 <option
                     v-for="competition in $props.with.competitions"
                     :key="competition.id"
                     :value="competition.id"
                 >
-                    {{ competition.id }}
+                    {{ competition.edition?.name ?? competition.id }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Associar</PrimaryButton>
         </form>

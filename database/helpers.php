@@ -17,8 +17,7 @@ function createManyToManyRelation($model1, $model2)
     // We need to ensure lexicographical order because Laravel
     $models = [$model1, $model2];
     sort($models, SORT_STRING);
-    $model1 = $models[0];
-    $model2 = $models[1];
+    [$model1, $model2] = $models;
 
     if (is_string($model1)) {
         $model1 = new $model1;

@@ -17,7 +17,7 @@ interface Props {
 const { item: competition } = defineProps<Props>();
 
 const form = useForm({
-    edition_id: competition.edition_id,
+    edition_id: competition.edition_id.toString(),
     theme: competition.theme,
     date_start: new Date(competition.date_start).toDateString(),
     date_end: new Date(competition.date_end).toDateString(),
@@ -62,8 +62,13 @@ const submit = () => {
                 :error-message="form.errors.date_end"
             />
 
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                v-model="form.edition_id"
+                type="select"
+                required
+                label="Edição"
+                :error-message="form.errors.edition_id"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -71,7 +76,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
