@@ -8,7 +8,7 @@ import { createVfm } from "vue-final-modal";
 import { ZiggyVue } from "ziggy";
 import { addIcons } from "oh-vue-icons";
 import { createI18n } from "vue-i18n";
-import messages from "./messages";
+import config from "./localization";
 
 const vfm = createVfm();
 
@@ -25,53 +25,7 @@ addIcons(
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
-const i18n = createI18n({
-    legacy: false,
-    globalInjection: true,
-    locale: "pt",
-    fallbackLocale: "en",
-    messages,
-    datetimeFormats: {
-        en: {
-            short: {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-            },
-            long: {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            },
-            day: {
-                day: "numeric",
-            },
-            hourMinute: {
-                hour: "numeric",
-                minute: "numeric",
-            },
-        },
-        pt: {
-            short: {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-            },
-            long: {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            },
-            day: {
-                day: "numeric",
-            },
-            hourMinute: {
-                hour: "numeric",
-                minute: "numeric",
-            },
-        },
-    },
-});
+const i18n = createI18n(config);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

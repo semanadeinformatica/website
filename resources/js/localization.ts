@@ -1,3 +1,5 @@
+import type { I18nOptions,  } from "vue-i18n";
+
 const messages = {
     en: {
         homePage: {
@@ -101,4 +103,38 @@ const messages = {
     },
 };
 
-export default messages;
+const config: I18nOptions = {
+    legacy: false,
+    globalInjection: true,
+    locale: "pt",
+    fallbackLocale: "en",
+    messages,
+    datetimeFormats: {
+        en: {
+            short: {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            },
+            long: {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            },
+        },
+        pt: {
+            short: {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            },
+            long: {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            },
+        },
+    },
+}
+
+export default config;
