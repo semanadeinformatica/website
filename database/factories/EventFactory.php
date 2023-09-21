@@ -23,8 +23,6 @@ class EventFactory extends Factory
             'time_start' => fake()->time(),
             'time_end' => fake()->time(),
             'description' => fake()->text($maxNbChars = 500),
-            'date_start' => fake()->dateTimeBetween('now', '+1 year'),
-            'date_end' => fn (array $attributes) => fake()->dateTimeBetween($attributes['date_start'], '+1 year'),
             'capacity' => fake()->optional()->numberBetween(10, 100),
             'event_day_id' => EventDay::factory(),
         ];

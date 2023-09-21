@@ -16,8 +16,6 @@ class EventCRUDController extends CRUDController
         'time_start' => 'required|date_format:"H:i"',
         'time_end' => 'required|date_format:"H:i"|after:time_start',
         'description' => 'required|string',
-        'date_start' => 'required|date',
-        'date_end' => 'required|date|after:date_start',
         'topic' => 'required|string',
         'capacity' => 'nullable|numeric|integer',
         'event_day_id' => 'required|exists:event_days,id',

@@ -19,8 +19,6 @@ const form = useForm({
     time_start: "",
     time_end: "",
     description: "",
-    date_start: "",
-    date_end: "",
     topic: "",
     capacity: "",
     event_day_id: "",
