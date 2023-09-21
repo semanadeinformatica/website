@@ -36,6 +36,11 @@ class Quest extends Model
         return $this->belongsToMany(Enrollment::class);
     }
 
+    public function slots(): BelongsToMany
+    {
+        return $this->belongsToMany(Slot::class);
+    }
+
     public function requirement(): MorphTo
     {
         return $this->morphTo();

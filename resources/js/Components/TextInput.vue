@@ -1,20 +1,50 @@
 <script setup lang="ts">
 import { onMounted, ref, type InputHTMLAttributes } from "vue";
 
-interface Props {
-    modelValue: string;
+interface BaseProps {
     label?: string;
     id?: string;
     placeholder?: string;
     errorMessage?: string;
-    type?: InputHTMLAttributes["type"] | "select" | "textarea";
 }
+
+interface InputProps extends BaseProps {
+    type: InputHTMLAttributes["type"];
+    modelValue: string;
+}
+
+interface BaseSelectProps extends BaseProps {
+    type: "select";
+}
+
+interface MultiSelectProps extends BaseSelectProps {
+    multiple: true;
+    modelValue: string[];
+}
+
+interface SingleSelectProps extends BaseSelectProps {
+    multiple?: false;
+    modelValue: string;
+}
+
+type SelectProps = MultiSelectProps | SingleSelectProps;
+
+interface TextAreaProps extends BaseProps {
+    type: "textarea";
+    modelValue: string;
+}
+
+type Props = InputProps | SelectProps | TextAreaProps;
+const isSelect = (p: Props): p is SelectProps => {
+    return p.type === "select";
+};
 
 interface Emits {
     (event: "update:modelValue", value: string): void;
 }
 
-defineProps<Props>();
+// Need to instantiate 'props' here otherwise TS would not correctly infer the types I wanted from the '$props' variable. - Nuno Pereira
+const props = defineProps<Props>();
 defineEmits<Emits>();
 
 const input = ref<
@@ -38,16 +68,22 @@ const visible = ref(false);
 <template>
     <div class="relative flex flex-col items-stretch self-stretch">
         <select
-            v-if="type === 'select'"
+            v-if="isSelect(props)"
             :id="id"
             ref="input"
             :class="baseClass"
             :value="modelValue"
             v-bind="$attrs"
+            :multiple="props.multiple"
             @input="
                 $emit(
                     'update:modelValue',
-                    ($event.currentTarget as HTMLSelectElement).value,
+                    props.multiple
+                        ? [
+                              ...($event.currentTarget as HTMLSelectElement)
+                                  .selectedOptions,
+                          ].map((o) => o.value)
+                        : ($event.currentTarget as HTMLSelectElement).value,
                 )
             "
         >

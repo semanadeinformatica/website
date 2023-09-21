@@ -40,6 +40,9 @@ const pageRoutes: Routes = {
     "admin.competitionTeams.index": {
         label: "Equipas nas Competições",
     },
+    "admin.slots.index": {
+        label: "Slots de tarefas",
+    },
 };
 
 const numCols = computed(() => {
