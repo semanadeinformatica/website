@@ -14,6 +14,7 @@ defineProps<Props>();
 <template>
     <div>
         <Head :title="title" />
+        <Banner />
         <div>
             <Navbar />
             <main class="min-h-screen bg-2023-bg">
