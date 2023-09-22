@@ -52,7 +52,7 @@ const clearCVFileInput = () => {
 <template>
     <div class="flex-col">
         <div
-            class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-white md:mx-32"
+            class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-2023-bg md:mx-32"
             :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
             <div class="flex items-center">
@@ -64,7 +64,7 @@ const clearCVFileInput = () => {
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 text-white"
+                        class="w-6 text-2023-bg"
                         viewBox="0 0 512 512"
                     >
                         <path
@@ -92,7 +92,7 @@ const clearCVFileInput = () => {
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 text-white"
+                    class="w-6 text-2023-bg"
                     viewBox="0 0 512 512"
                 >
                     <path
@@ -107,17 +107,33 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="mx-36 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-white max-md:mx-2"
+            class="mx-36 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-2023-bg max-md:mx-2"
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
-            <vue-pdf-embed
+            <object
                 v-if="
                     item?.usertype_type === 'App\\Models\\Participant' &&
                     item.usertype?.cv_path
                 "
-                width="900"
-                :source="item.usertype?.cv_url"
-            ></vue-pdf-embed>
+                :data="item.usertype?.cv_url + '#toolbar&view=FitH'"
+                width="100%"
+                type="application/pdf"
+                style="aspect-ratio: 1 / 1.41"
+                class="max-md:hidden"
+            ></object>
+            <a
+                v-if="
+                    item?.usertype_type === 'App\\Models\\Participant' &&
+                    item.usertype?.cv_path
+                "
+                target="_blank"
+                :href="item.usertype?.cv_url"
+            >
+                <div class="flex text-2023-bg">
+                    <p class="mr-1">CV</p>
+                    <v-icon name="io-open" scale="1.3"></v-icon>
+                </div>
+            </a>
             <p
                 v-if="
                     item?.usertype_type === 'App\\Models\\Participant' &&
