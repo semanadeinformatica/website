@@ -73,9 +73,7 @@ const speakerColor = () => {
                         : ""
                 }}
                 @
-                {{
-                    event.event_day ? formatTimeString(event.time_start) : ""
-                }}
+                {{ event.event_day ? formatTimeString(event.time_start) : "" }}
                 - {{ event.room }}
             </h1>
         </section>
