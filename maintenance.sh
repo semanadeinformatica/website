@@ -15,15 +15,15 @@ fi
 
 case "$1" in
     "on")
-        "${EXECUTABLE[@]}" down
+        if [[ -n "$2" ]]; then
+            "${EXECUTABLE[@]}" down --secret="$2"
+        else
+            "${EXECUTABLE[@]}" down
+        fi
         ;;
 
     "off")
-        if [[ -n "$2" ]]; then
-            "${EXECUTABLE[@]}" up --secret="$2"
-        else
-            "${EXECUTABLE[@]}" up
-        fi
+        "${EXECUTABLE[@]}" up
         ;;
 
     *)
