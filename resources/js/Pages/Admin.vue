@@ -12,7 +12,6 @@ const pageRoutes = {
     "admin.products.index": "models.product",
     "admin.quests.index": "models.quest",
     "admin.slots.index": "models.slot",
-    "admin.speakers.index": "models.speaker",
     "admin.sponsors.index": "models.sponsor",
     "admin.staff.index": "models.staff",
     "admin.stands.index": "models.stand",
