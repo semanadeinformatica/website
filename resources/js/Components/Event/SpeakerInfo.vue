@@ -62,17 +62,13 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex flex-col items-center gap-5">
             <img
-                class="border-2 w-52 border-black shadow-lg"
+                class="w-52 border-2 border-black shadow-lg"
                 :class="shadowColor[color]"
                 :src="speaker.profile_photo_url"
                 alt=""
             />
             <div class="flex items-center gap-1">
-                <a
-                    v-for="social in socials"
-                    :key="social"
-                    :href="social"
-                >
+                <a v-for="social in socials" :key="social" :href="social">
                     <v-icon
                         v-if="social"
                         :name="socialIcon[social]"
@@ -82,20 +78,30 @@ const iconColor: Record<string, string> = {
                 </a>
             </div>
         </div>
-        <div class="flex flex-col justify-center gap-10" :class="textColor[color]">
+        <div
+            class="flex flex-col justify-center gap-10"
+            :class="textColor[color]"
+        >
             <div
                 class="flex w-fit flex-row justify-center gap-6"
                 :class="reverse ? 'flex-row-reverse self-end' : ''"
             >
-                <div :class="reverse ? 'flex flex-col items-end text-right' : ''" >
+                <div
+                    :class="reverse ? 'flex flex-col items-end text-right' : ''"
+                >
                     <h2 class="text-3xl font-bold uppercase">
                         {{ speaker.name }}
                     </h2>
-                    <h3 class="font-bold text-xl">{{ speaker.title }}</h3>
-                    <h3 class="font-bold text-xl">{{ speaker.organization }}</h3>
+                    <h3 class="text-xl font-bold">{{ speaker.title }}</h3>
+                    <h3 class="text-xl font-bold">
+                        {{ speaker.organization }}
+                    </h3>
                 </div>
             </div>
-            <p class="col-span-2 row-start-2 max-w-4xl" :class="reverse ? 'text-right' : ''">
+            <p
+                class="col-span-2 row-start-2 max-w-4xl"
+                :class="reverse ? 'text-right' : ''"
+            >
                 {{ speaker.description }}
             </p>
         </div>

@@ -20,7 +20,6 @@ use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 /*
@@ -34,7 +33,6 @@ use Inertia\Inertia;
 |
 */
 
-
 Route::get('/', [HomeController::class, 'show'])->name('home');
 
 Route::get('/team', [DepartmentController::class, 'show'])->name('team');
@@ -46,7 +44,7 @@ Route::get('/competition', function () {
 })->name('competition');
 
 Route::prefix('/event')->name('event')->group(function () {
-    
+
     Route::redirect('/', '/program');
 
     Route::prefix('{event}')->group(function () {
