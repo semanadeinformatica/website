@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\SocialMedia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +18,11 @@ class SpeakerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'event_id' => Event::factory(),
             'organization' => fake()->company(),
             'title' => fake()->jobTitle(),
             'description' => fake()->paragraph(),
+            'user_id' => 0,
+            'social_media_id' => SocialMedia::factory(),
         ];
     }
 }

@@ -65,6 +65,7 @@ class DatabaseSeeder extends Seeder
 
         $participants = User::factory(100)->create();
         $companies = User::factory(static::PLATINUM_COUNT + static::GOLD_COUNT + static::SILVER_COUNT)->company()->create();
+        $speakers = User::factory(10)->speaker()->create();
 
         if (! User::where('email', '=', static::DEFAULT_ADMIN_EMAIL)->exists()) {
             User::factory()->admin()->create([
@@ -84,8 +85,8 @@ class DatabaseSeeder extends Seeder
         Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
 
         foreach ($event_days as $day) {
-            $events = Event::factory(10)->recycle($day)->create();
-            Speaker::factory(10)->recycle($events)->create();
+            Event::factory(2)->recycle($day)->hasUsers($speakers->random(fake()->numberBetween(1, 2)))->create();
+            Event::factory(1)->recycle($day)->hasUsers($companies->random(fake()->numberBetween(1, 5)))->create();
         }
 
         $sponsors = [];
