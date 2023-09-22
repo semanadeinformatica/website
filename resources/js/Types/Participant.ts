@@ -7,4 +7,6 @@ export default interface Participant extends Model {
     user?: User;
     social_media_id?: number;
     social_media?: SocialMedia;
+    cv_path?: string;
+    cv_url?: string;
 }

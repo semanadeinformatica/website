@@ -26,7 +26,7 @@ defineProps<Props>();
     <VueFinalModal
         v-model="options.modelValue"
         class="flex items-center justify-center"
-        content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center felx-col"
+        content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center flex-col"
     >
         <img
             :src="sponsor.company?.user?.profile_photo_url"

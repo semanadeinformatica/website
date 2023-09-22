@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
+import ProfilePicture from "@/Components/Profile/ProfilePicture.vue";
+import InfoCard from "@/Components/Profile/InfoCard.vue";
+import CvArea from "@/Components/Profile/CvArea.vue";
+/*import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
 import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
-import SectionBorder from "@/Components/SectionBorder.vue";
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
-import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
+import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
+import type Participant from "@/Types/Participant";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
     sessions: Session[];
+    participant: Participant;
 }
 
 defineProps<Props>();
@@ -18,56 +22,42 @@ defineProps<Props>();
 
 <template>
     <AppLayout title="Profile">
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+        <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
+            <template
+                v-if="
+                    participant ||
+                    $page.props.auth.user.usertype_type ===
+                        'App\\Models\\Participant'
+                "
             >
-                Profile
-            </h2>
-        </template>
-
-        <div>
-            <div class="mx-auto max-w-7xl py-10 sm:px-6 lg:px-8">
-                <div v-if="$page.props.jetstream.canUpdateProfileInformation">
-                    <UpdateProfileInformationForm
-                        :user="$page.props.auth.user"
-                    />
-
-                    <SectionBorder />
-                </div>
-
-                <div v-if="$page.props.jetstream.canUpdatePassword">
-                    <UpdatePasswordForm class="mt-10 sm:mt-0" />
-
-                    <SectionBorder />
-                </div>
-
                 <div
-                    v-if="
-                        $page.props.jetstream.canManageTwoFactorAuthentication
-                    "
+                    class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
                 >
-                    <TwoFactorAuthenticationForm
-                        :requires-confirmation="confirmsTwoFactorAuthentication"
-                        class="mt-10 sm:mt-0"
+                    <div class="flex w-full justify-around max-md:flex-col">
+                        <ProfilePicture
+                            :item="
+                                participant
+                                    ? participant.user
+                                    : $page.props.auth.user
+                            "
+                        />
+                        <InfoCard
+                            :item="
+                                participant
+                                    ? participant.user
+                                    : $page.props.auth.user
+                            "
+                        />
+                    </div>
+                    <CvArea
+                        :item="
+                            participant
+                                ? participant.user
+                                : $page.props.auth.user
+                        "
                     />
-
-                    <SectionBorder />
                 </div>
-
-                <LogoutOtherBrowserSessionsForm
-                    :sessions="sessions"
-                    class="mt-10 sm:mt-0"
-                />
-
-                <template
-                    v-if="$page.props.jetstream.hasAccountDeletionFeatures"
-                >
-                    <SectionBorder />
-
-                    <DeleteUserForm class="mt-10 sm:mt-0" />
-                </template>
-            </div>
+            </template>
         </div>
     </AppLayout>
 </template>
