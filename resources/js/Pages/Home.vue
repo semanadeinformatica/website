@@ -181,12 +181,7 @@ const formattedDate = (
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
-        <EnrollSection
-            :days="days.length"
-            :activities="activityCount"
-            :talks="talkCount"
-            :stands="standCount"
-        />
+        <EnrollSection />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>
