@@ -143,7 +143,7 @@ const formattedDate = (
             <h2
                 class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
             >
-                {{ $t("pages.home.joinUs") }}
+                {{ $t("pages.home.thisYear") }}
             </h2>
             <template
                 v-if="
