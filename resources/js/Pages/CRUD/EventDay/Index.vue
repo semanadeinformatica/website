@@ -43,7 +43,7 @@ const editions = computed<Record<number, string>>(() =>
             <Row :item="item" name="eventDays">
                 <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ item.theme }} </Cell>
-                <Cell>{{ item.date }} </Cell>
+                <Cell>{{ $d(item.date, "short") }} </Cell>
             </Row>
         </template>
     </CRUDLayout>
