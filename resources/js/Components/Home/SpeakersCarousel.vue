@@ -49,7 +49,7 @@ onMounted(async () => {
     <Carousel
         ref="carousel"
         snap-align="center"
-        :autoplay="0"
+        :autoplay="2000"
         :items-to-show="2"
         :wrap-around="true"
         :breakpoints="breakpoints"
