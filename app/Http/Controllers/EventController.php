@@ -7,14 +7,10 @@ use Inertia\Inertia;
 
 class EventController extends Controller
 {
-    public function show()
+    public function show(Event $event)
     {
-        $event = Event::with([
-            'speakers',
-        ])->first();
-
         return Inertia::render('Event', [
-            'event' => $event,
+            'event' => $event->load(['speakers', 'event_day']),
         ]);
     }
 }

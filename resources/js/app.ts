@@ -43,6 +43,13 @@ const i18n = createI18n({
                 month: "long",
                 day: "numeric",
             },
+            day: {
+                day: "numeric",
+            },
+            hourMinute: {
+                hour: "numeric",
+                minute: "numeric",
+            },
         },
         pt: {
             short: {
@@ -54,6 +61,13 @@ const i18n = createI18n({
                 year: "numeric",
                 month: "long",
                 day: "numeric",
+            },
+            day: {
+                day: "numeric",
+            },
+            hourMinute: {
+                hour: "numeric",
+                minute: "numeric",
             },
         },
     },

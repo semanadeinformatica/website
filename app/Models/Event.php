@@ -21,8 +21,6 @@ class Event extends Model
         'name',
         'time_start',
         'time_end',
-        'date_start',
-        'date_end',
         'topic',
         'capacity',
         'event_day_id',

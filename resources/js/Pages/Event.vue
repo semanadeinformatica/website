@@ -11,11 +11,6 @@ interface Props {
 
 const { event } = defineProps<Props>();
 
-const date_start = new Date(event.date_start);
-const date_day = `${date_start.getDay()}/${date_start.getMonth()}`;
-const date_time = `${date_start.getHours()}:${date_start.getMinutes()}`;
-// const date_str = `${date_start.getDay()}/${date_start.getMonth()} @ ${date_start.getHours()}:${date_start.getMinutes()}`;
-
 const speakers = computed(
     () =>
         event.speakers?.map((speaker) => ({
@@ -30,17 +25,30 @@ const speakers = computed(
             updated_at: speaker.updated_at,
         })),
 );
+
+// FIXME: duplicated :P
+const formatTimeString = (time: string): string => {
+    const [hours, minutes] = time.split(":");
+
+    return `${hours}h${minutes}`;
+};
+
+const speakerColor = () => {
+    const pos = Math.floor(Math.random() * 5);
+    return ["orange", "teal-dark", "red-dark", "red", "teal"][pos];
+}
 </script>
 
 <template>
     <AppLayout title="Event">
         <!-- speaker/event intro -->
-        <section class="flex flex-col">
+        <section class="flex flex-col mx-9 pt-10">
             <SpeakerInfo
                 v-for="(speaker, idx) in speakers"
                 :key="speaker.id"
                 :speaker="speaker"
                 :reverse="idx % 2"
+                :color="speakerColor()"
             ></SpeakerInfo>
         </section>
         <!-- details -->
@@ -48,49 +56,29 @@ const speakers = computed(
             class="relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-2023-teal-dark px-16 py-24"
         >
             <h1
-                class="absolute -top-7 left-40 border border-black bg-2023-red p-2 px-3 text-2xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
+                class="absolute -top-7 flex mr-2 border border-black bg-2023-red p-2 px-3 text-2xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
             >
                 {{ event.name }}
             </h1>
             <div class="max-w-3xl text-justify font-bold text-white">
                 {{ event.description }}
             </div>
-            <div
-                class="absolute -bottom-10 right-32 flex flex-row items-center gap-5 max-lg:right-auto"
+            <h1
+                class="absolute -bottom-5 flex mr-2 border border-black bg-2023-red-dark p-2 px-3 text-xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
             >
-                <div class="relative w-fit">
-                    <img
-                        class="w-16"
-                        src="../../../public/images/mini-calendar.svg"
-                        alt=""
-                    />
-                    <span
-                        class="absolute left-1/2 top-1/2 w-fit -translate-x-1/2 -translate-y-1/2 pt-4 text-xl font-bold text-2023-teal-dark"
-                        >{{ date_day }}</span
-                    >
-                </div>
-                <div class="relative h-fit">
-                    <img
-                        class="w-20"
-                        src="../../../public/images/alarm-clock.svg"
-                        alt=""
-                    />
-                    <span
-                        class="absolute left-1/2 top-1/2 w-fit -translate-x-1/2 -translate-y-1/2 pt-1 text-xl font-bold text-2023-red"
-                        >{{ date_time }}</span
-                    >
-                </div>
-            </div>
+                Dia {{ event.event_day?.date ? $d(event.event_day?.date, 'day') : '💣'}} @ {{ event.event_day ? formatTimeString(event.time_start) : '' }} - B315
+            </h1>
         </section>
         <!-- sign up -->
-        <section
+        <div
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
             <p class="w-fit text-3xl font-bold text-2023-red">Vamos a isto?</p>
-            <PrimaryButton class="w-fit text-xl font-bold"
-                >Participar</PrimaryButton
-            >
-        </section>
+            <a class="flex flex-col text-center bg-2023-teal-dark text-white text-xl font-bold p-3 px-5 border border-black shadow-2023-red transition-all cursor-pointer hover:shadow-md">
+                Inscreve-te
+                <span class="text-base">{{ event.capacity }} lugares</span>
+            </a>
+        </div>
     </AppLayout>
 </template>
 
