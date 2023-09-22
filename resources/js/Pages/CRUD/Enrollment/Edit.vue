@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -11,7 +11,7 @@ import type Enrollment from "@/Types/Enrollment";
 interface Props {
     item: Enrollment;
     with: {
-        students: Student[];
+        participants: Participant[];
         editions: Edition[];
     };
 }
@@ -19,7 +19,7 @@ interface Props {
 const { item: enrollment } = defineProps<Props>();
 
 const form = useForm({
-    student_id: enrollment.student_id,
+    participant_id: enrollment.participant_id,
     edition_id: enrollment.edition_id,
     points: enrollment.points.toString(),
 });
@@ -32,14 +32,14 @@ const submit = () => {
 <template>
     <CardLayout title="Editar inscrição">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.student_id" required class="self-stretch">
+            <select v-model="form.participant_id" required class="self-stretch">
                 <option value="" selected hidden>User</option>
                 <option
-                    v-for="student in $props.with.students"
-                    :key="student.id"
-                    :value="student.id"
+                    v-for="participant in $props.with.participants"
+                    :key="participant.id"
+                    :value="participant.id"
                 >
-                    {{ student.user?.name }} - {{ student.user?.id }}
+                    {{ participant.user?.name }} - {{ participant.user?.id }}
                 </option>
             </select>
 

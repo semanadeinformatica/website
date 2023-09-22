@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Edition;
 use App\Models\Enrollment;
-use App\Models\Student;
+use App\Models\Participant;
 
 class EnrollmentCRUDController extends CRUDController
 {
@@ -13,17 +13,16 @@ class EnrollmentCRUDController extends CRUDController
     protected string $view = 'Enrollment';
 
     protected array $rules = [
-        'student_id' => 'required|exists:students,id',
+        'participant_id' => 'required|exists:participants,id',
         'edition_id' => 'required|exists:editions,id',
-        'points' => 'required|integer',
     ];
 
-    protected array $search = ['student_id', 'edition_id', 'points'];
+    protected array $search = ['participant_id', 'edition_id'];
 
     protected function with(): array
     {
         return [
-            'students' => Student::with('user')->get(),
+            'participants' => Participant::with('user')->get(),
             'editions' => Edition::all(),
         ];
     }

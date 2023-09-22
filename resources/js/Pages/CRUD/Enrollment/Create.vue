@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -9,7 +9,7 @@ import route from "ziggy-js";
 
 interface Props {
     with: {
-        students: Student[];
+        participants: Participant[];
         editions: Edition[];
     };
 }
@@ -17,7 +17,7 @@ interface Props {
 defineProps<Props>();
 
 const form = useForm({
-    student_id: "",
+    participant_id: "",
     edition_id: "",
     points: 0,
 });
@@ -30,14 +30,14 @@ const submit = () => {
 <template>
     <CardLayout title="Criar inscrição">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.student_id" required class="self-stretch">
+            <select v-model="form.participant_id" required class="self-stretch">
                 <option value="" disabled selected hidden>User</option>
                 <option
-                    v-for="student in $props.with.students"
-                    :key="student.id"
-                    :value="student.id"
+                    v-for="participant in $props.with.participants"
+                    :key="participant.id"
+                    :value="participant.id"
                 >
-                    {{ student.user?.name }} - {{ student.user?.id }}
+                    {{ participant.user?.name }} - {{ participant.user?.id }}
                 </option>
             </select>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Enrollment from "@/Types/Enrollment";
 import type Paginated from "@/Types/Paginated";
-import type Student from "@/Types/Student";
+import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import CRUDLayout from "@/Layouts/CRUDLayout.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
@@ -13,18 +13,18 @@ import { computed } from "vue";
 interface Props {
     items: Paginated<Enrollment>;
     with: {
-        students: Student[];
+        participants: Participant[];
         editions: Edition[];
     };
 }
 
 const props = defineProps<Props>();
 
-const students = computed<Record<number, string>>(() =>
+const participants = computed<Record<number, string>>(() =>
     Object.fromEntries(
-        props.with.students.map((student) => [
-            student.id,
-            student.user?.name ?? "",
+        props.with.participants.map((participant) => [
+            participant.id,
+            participant.user?.name ?? "",
         ]),
     ),
 );
@@ -42,7 +42,7 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="student_id">Nome do Estudante</Header>
+                <Header sort-by="participant_id">Nome do Estudante</Header>
                 <Header sort-by="edition_id">Nome da Edição</Header>
                 <Header sort-by="points">Pontos</Header>
             </HeaderRow>
@@ -50,7 +50,7 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #row="{ item }">
             <Row :item="item" name="enrollments">
-                <Cell>{{ students[item.student_id] }}</Cell>
+                <Cell>{{ participants[item.participant_id] }}</Cell>
                 <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ item.points }}</Cell>
             </Row>
