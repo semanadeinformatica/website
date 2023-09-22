@@ -11,28 +11,36 @@ defineProps<Props>();
 const socials = {
     facebook: {
         icon: "io-logo-facebook",
-        color: "bg-2023-red",
+        color: "red",
     },
     linkedin: {
         icon: "io-logo-linkedin",
-        color: "bg-2023-red-dark",
+        color: "red-dark",
     },
     github: {
         icon: "io-logo-github",
-        color: "bg-2023-red",
+        color: "teal-dark",
     },
     twitter: {
         icon: "io-logo-twitter",
-        color: "bg-2023-red-dark",
+        color: "orange",
     },
     instagram: {
         icon: "io-logo-instagram",
-        color: "bg-2023-red",
+        color: "red-dark",
     },
     website: {
         icon: "io-logo-globe",
-        color: "bg-2023-red-dark",
+        color: "teal",
     },
+};
+
+const iconColor: Record<string, string> = {
+    orange: "#f29325",
+    "teal-dark": "#025259",
+    "red-dark": "#b15d5d",
+    red: "#d94f04",
+    teal: "#007172",
 };
 </script>
 
@@ -62,8 +70,8 @@ const socials = {
                         >
                             <v-icon
                                 :name="social.icon"
-                                :fill="social.color"
                                 scale="1.3"
+                                :fill="iconColor[social.color]"
                             ></v-icon>
                         </a>
                     </p>

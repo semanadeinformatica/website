@@ -22,7 +22,7 @@ defineProps<Props>();
 
 <template>
     <AppLayout title="Profile">
-        <main class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
+        <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
             <template
                 v-if="
                     participant ||
@@ -31,7 +31,7 @@ defineProps<Props>();
                 "
             >
                 <div
-                    class="relative m-6 w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+                    class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
                 >
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
@@ -58,6 +58,6 @@ defineProps<Props>();
                     />
                 </div>
             </template>
-        </main>
+        </div>
     </AppLayout>
 </template>

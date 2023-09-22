@@ -31,15 +31,13 @@ const togglePreview = () => {
 
 const uploadCV = () => {
     const cv = cvInput.value?.files?.[0];
-    console.log(cvInput.value?.files?.[0]);
     if (cv) {
         form.cv = cvInput.value?.files?.[0] ?? null;
         form.post(route("current-user-cv.update"), {
             preserveScroll: true,
-            onSuccess: () => clearCVFileInput,
+            onSuccess: () => clearCVFileInput(),
         });
     }
-    clearCVFileInput();
 };
 
 const clearCVFileInput = () => {
@@ -56,7 +54,7 @@ const clearCVFileInput = () => {
             :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
             <div class="flex items-center">
-                <p>CV upload</p>
+                <p>CV</p>
                 <button
                     v-if="$page.props.auth.user.id == item?.id"
                     class="mx-3"
@@ -86,7 +84,7 @@ const clearCVFileInput = () => {
                 />
             </div>
             <button
-                class="p-2"
+                class="p-2 px-6"
                 :class="[previewOpen ? 'rotate-180' : '']"
                 @click="togglePreview"
             >
@@ -126,6 +124,7 @@ const clearCVFileInput = () => {
                     item?.usertype_type === 'App\\Models\\Participant' &&
                     item.usertype?.cv_path
                 "
+                class="md:hidden"
                 target="_blank"
                 :href="item.usertype?.cv_url"
             >
@@ -144,6 +143,11 @@ const clearCVFileInput = () => {
             </p>
         </div>
         <div
+            v-if="
+                item?.usertype_type === 'App\\Models\\Participant' &&
+                !item?.usertype?.cv_path &&
+                $page.props.auth.user.id == item.id
+            "
             class="mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red md:mx-32"
         >
             <p>
