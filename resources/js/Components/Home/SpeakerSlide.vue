@@ -16,7 +16,7 @@ defineProps<Props>();
             alt=""
         />
         <p class="max-w-[200px] break-words py-4 text-lg text-2023-teal-dark">
-            {{ speaker.name }}
+            {{ speaker.name.split(' ')[0] }} {{ speaker.name.split(' ')[speaker.name.split(' ').length - 1] }}
         </p>
     </div>
 </template>
