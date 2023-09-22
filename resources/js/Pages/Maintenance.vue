@@ -1,6 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Head } from "@inertiajs/vue3";
+</script>
 
 <template>
+    <Head title="Brevemente..." />
+    <!-- TODO: localization -->
     <main class="min-h-screen bg-2023-bg">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-evenly gap-[60px] py-[65px]"
