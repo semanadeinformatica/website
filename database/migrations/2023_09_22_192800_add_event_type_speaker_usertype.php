@@ -22,6 +22,7 @@ return new class extends Migration
         Schema::table('speakers', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
             $table->dropColumn('name');
+            $table->dropColumn('profile_photo_path');
             $table->dropConstrainedForeignIdFor(Event::class);
         });
 
@@ -38,6 +39,7 @@ return new class extends Migration
 
         Schema::table('speakers', function (Blueprint $table) {
             $table->string('name');
+            $table->string('profile_photo_path', 2048)->nullable();
             $table->foreignIdFor(Event::class)->constrained()->cascadeOnDelete();
             $table->dropConstrainedForeignIdFor(User::class);
         });

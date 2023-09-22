@@ -2,6 +2,7 @@ import type Admin from "./Admin";
 import type Company from "./Company";
 import type Model from "./Model";
 import type Participant from "./Participant";
+import type Speaker from "./Speaker";
 
 interface BaseUser extends Model {
     current_team_id?: number;
@@ -25,9 +26,14 @@ interface CompanyUser extends BaseUser {
     usertype?: Company;
 }
 
+interface SpeakerUser extends BaseUser {
+    usertype_type: "App\\Models\\Speaker";
+    usertype?: Speaker;
+}
+
 interface AdminUser extends BaseUser {
     usertype_type: "App\\Models\\Admin";
     usertype?: Admin;
 }
 
-export type User = ParticipantUser | CompanyUser | AdminUser;
+export type User = ParticipantUser | CompanyUser | SpeakerUser | AdminUser;

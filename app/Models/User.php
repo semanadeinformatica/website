@@ -84,4 +84,9 @@ class User extends Authenticatable
     {
         return $this->usertype_type === Participant::class;
     }
+
+    public function isSpeaker(): bool
+    {
+        return $this->usertype_type === Speaker::class;
+    }
 }
