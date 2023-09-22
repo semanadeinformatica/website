@@ -16,22 +16,22 @@ interface BaseUser extends Model {
     usertype_id: number;
 }
 
-interface ParticipantUser extends BaseUser {
+export interface ParticipantUser extends BaseUser {
     usertype_type: "App\\Models\\Participant";
     usertype?: Participant;
 }
 
-interface CompanyUser extends BaseUser {
+export interface CompanyUser extends BaseUser {
     usertype_type: "App\\Models\\Company";
     usertype?: Company;
 }
 
-interface SpeakerUser extends BaseUser {
+export interface SpeakerUser extends BaseUser {
     usertype_type: "App\\Models\\Speaker";
     usertype?: Speaker;
 }
 
-interface AdminUser extends BaseUser {
+export interface AdminUser extends BaseUser {
     usertype_type: "App\\Models\\Admin";
     usertype?: Admin;
 }

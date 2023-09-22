@@ -85,8 +85,8 @@ class DatabaseSeeder extends Seeder
         Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
 
         foreach ($event_days as $day) {
-            Event::factory(2)->recycle($day)->hasUsers($speakers->random(fake()->numberBetween(1, 2)))->create();
-            Event::factory(1)->recycle($day)->hasUsers($companies->random(fake()->numberBetween(1, 5)))->create();
+            Event::factory(2)->recycle($day)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
+            Event::factory(1)->recycle($day)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
         }
 
         $sponsors = [];

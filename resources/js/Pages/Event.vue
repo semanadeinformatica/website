@@ -3,6 +3,7 @@ import type Event from "@/Types/Event";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import { computed } from "vue";
+import type { SpeakerUser } from "@/Types/User";
 
 interface Props {
     event: Event;
@@ -12,19 +13,18 @@ const { event } = defineProps<Props>();
 
 const speakers = computed(
     () =>
-        event.speakers?.map((speaker) => ({
-            id: speaker.id,
-            name: speaker.name,
-            title: speaker.title,
-            description: speaker.description,
-            organization: speaker.organization,
-            social_media: speaker.social_media,
-            profile_photo_url: speaker.profile_photo_url,
-            event_id: speaker.event_id,
-            created_at: speaker.created_at,
-            updated_at: speaker.updated_at,
-        })),
+        (event.users?.filter(
+            (u) => u.usertype_type == "App\\Models\\Speaker",
+        ) ?? []) as SpeakerUser[],
 );
+
+// It's for you bb 😘 @toni-santos
+// const companies = computed(
+//     () =>
+//         (event.users?.filter(
+//             (u) => u.usertype_type == "App\\Models\\Company",
+//         ) ?? []) as CompanyUser[],
+// );
 
 // FIXME: duplicated :P
 const formatTimeString = (time: string): string => {
@@ -44,9 +44,9 @@ const speakerColor = () => {
         <!-- speaker/event intro -->
         <section class="mx-9 flex flex-col gap-6 pt-10">
             <SpeakerInfo
-                v-for="(speaker, idx) in speakers"
-                :key="speaker.id"
-                :speaker="speaker"
+                v-for="(user, idx) in speakers"
+                :key="user.id"
+                :user="user"
                 :reverse="idx % 2"
                 :color="speakerColor()"
             ></SpeakerInfo>

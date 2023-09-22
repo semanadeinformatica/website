@@ -1,6 +1,6 @@
 import type Model from "@/Types/Model";
 import type EventDay from "@/Types/EventDay";
-import type Speaker from "@/Types/Speaker";
+import type { User } from "./User";
 
 export default interface Event extends Model {
     name: string;
@@ -12,6 +12,6 @@ export default interface Event extends Model {
     edition_id: number;
     description: string;
     room: string;
-    speakers?: Speaker[];
+    users?: User[];
     event_day?: EventDay;
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type Speaker from "@/Types/Speaker";
+import type { User } from "@/Types/User";
 
 interface Props {
-    speaker: Speaker;
+    speaker: User;
 }
 
 defineProps<Props>();

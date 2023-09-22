@@ -1,25 +1,13 @@
 <script setup lang="ts">
-import type Speaker from "@/Types/Speaker";
-import { computed } from "vue";
+import type { SpeakerUser } from "@/Types/User";
 
 interface Props {
-    speaker: Speaker;
+    user: SpeakerUser;
     reverse?: number;
     color: string;
 }
 
-const { speaker } = defineProps<Props>();
-
-const socials = computed(() => {
-    return {
-        email: speaker.social_media?.email,
-        github: speaker.social_media?.github,
-        instagram: speaker.social_media?.instagram,
-        linkedin: speaker.social_media?.linkedin,
-        twitter: speaker.social_media?.twitter,
-        website: speaker.social_media?.website,
-    };
-});
+defineProps<Props>();
 
 const socialIcon: Record<string, string> = {
     email: "io-mail",
@@ -64,11 +52,15 @@ const iconColor: Record<string, string> = {
             <img
                 class="w-52 border-2 border-black shadow-lg"
                 :class="shadowColor[color]"
-                :src="speaker.profile_photo_url"
+                :src="user.profile_photo_url"
                 alt=""
             />
             <div class="flex items-center gap-1">
-                <a v-for="social in socials" :key="social" :href="social">
+                <a
+                    v-for="social in user.usertype?.social_media ?? {}"
+                    :key="social"
+                    :href="social"
+                >
                     <v-icon
                         v-if="social"
                         :name="socialIcon[social]"
@@ -90,11 +82,11 @@ const iconColor: Record<string, string> = {
                     :class="reverse ? 'flex flex-col items-end text-right' : ''"
                 >
                     <h2 class="text-3xl font-bold uppercase">
-                        {{ speaker.name }}
+                        {{ user.name }}
                     </h2>
-                    <h3 class="text-xl font-bold">{{ speaker.title }}</h3>
+                    <h3 class="text-xl font-bold">{{ user.usertype?.title }}</h3>
                     <h3 class="text-xl font-bold">
-                        {{ speaker.organization }}
+                        {{ user.usertype?.organization }}
                     </h3>
                 </div>
             </div>
@@ -102,7 +94,7 @@ const iconColor: Record<string, string> = {
                 class="col-span-2 row-start-2 max-w-4xl"
                 :class="reverse ? 'text-right' : ''"
             >
-                {{ speaker.description }}
+                {{ user.usertype?.description }}
             </p>
         </div>
     </div>

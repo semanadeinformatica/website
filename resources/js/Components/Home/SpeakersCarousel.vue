@@ -3,10 +3,10 @@ import { onMounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
-import type Speaker from "@/Types/Speaker";
+import type { User } from "@/Types/User";
 
 interface Props {
-    speakers: Speaker[];
+    speakers: User[];
 }
 
 defineProps<Props>();

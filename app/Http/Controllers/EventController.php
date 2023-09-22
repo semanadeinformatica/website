@@ -10,7 +10,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         return Inertia::render('Event', [
-            'event' => $event->load(['speakers', 'event_day']),
+            'event' => $event->load(['users', 'event_day']),
         ]);
     }
 }

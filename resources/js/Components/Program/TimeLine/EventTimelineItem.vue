@@ -27,15 +27,20 @@ const formatTimeString = (time: string): string => {
             >
         </h2>
         <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>
-        <ul v-if="event.speakers" class="flex flex-col">
+        <ul v-if="event.users" class="flex flex-col">
             <li
-                v-for="speaker in event.speakers"
+                v-for="speaker in event.users"
                 :key="speaker.id"
                 class="font-bold text-2023-teal"
             >
                 {{ speaker.name
-                }}<span v-if="speaker.organization">
-                    | {{ speaker.organization }}</span
+                }}<span
+                    v-if="
+                        speaker.usertype_type === 'App\\Models\\Speaker' &&
+                        speaker.usertype?.organization
+                    "
+                >
+                    | {{ speaker.usertype?.organization }}</span
                 >
             </li>
         </ul>

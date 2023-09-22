@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,6 +10,7 @@ class HomeController extends Controller
 {
     public function show(Request $request)
     {
+        /** @var Edition */
         $edition = $request->input('edition');
 
         if ($edition === null) {
@@ -16,7 +18,7 @@ class HomeController extends Controller
         }
 
         $sponsors = $edition->sponsors()->with(['company' => ['user']])->get();
-        $speakers = $edition->speakers;
+        $speakers = $edition->speakers()->get();
         $days = $edition->event_days()->orderBy('date', 'ASC')->get();
 
         $event_count = $edition->events()->count();

@@ -26,7 +26,9 @@ class EventDay extends Model
             ],
         ],
         'events' => [
-            'speakers',
+            'users' => [
+                'usertype',
+            ],
         ],
     ];
 
