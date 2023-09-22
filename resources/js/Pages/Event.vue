@@ -86,7 +86,9 @@ const speakerColor = () => {
                 class="flex cursor-pointer flex-col border border-black bg-2023-teal-dark p-3 px-5 text-center text-xl font-bold text-white shadow-2023-red transition-all hover:shadow-md"
             >
                 Inscreve-te
-                <span v-if="event.capacity" class="text-base">{{ event.capacity }} lugares</span>
+                <span v-if="event.capacity" class="text-base"
+                    >{{ event.capacity }} lugares</span
+                >
             </a>
         </div>
     </AppLayout>
