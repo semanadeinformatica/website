@@ -140,7 +140,7 @@ return [
     */
 
     'maintenance' => [
-        'driver' => 'file',
+        'driver' => env('MAINTENANCE_DRIVER', 'file'),
         // 'store'  => 'redis',
     ],
 
