@@ -19,7 +19,6 @@ class Quest extends Model
      */
     protected $fillable = [
         'name',
-        'points',
         'category',
         'edition_id',
         'requirement_type',
@@ -34,6 +33,11 @@ class Quest extends Model
     public function enrollments(): BelongsToMany
     {
         return $this->belongsToMany(Enrollment::class);
+    }
+
+    public function slots(): BelongsToMany
+    {
+        return $this->belongsToMany(Slot::class);
     }
 
     public function requirement(): MorphTo

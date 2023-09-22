@@ -20,7 +20,6 @@ const { item: quest } = defineProps<Props>();
 
 const form = useForm({
     name: quest.name,
-    points: quest.points.toString(),
     category: quest.category.toLowerCase(),
     requirement:
         (quest.requirement_type.split("\\").pop() ?? "").toLowerCase() +
@@ -46,14 +45,6 @@ const submit = () => {
                 autofocus
                 autocomplete="name"
                 :error-message="form.errors.name"
-            />
-
-            <TextInput
-                id="points"
-                v-model="form.points"
-                label="Pontos"
-                type="number"
-                :error-message="form.errors.points"
             />
 
             <TextInput

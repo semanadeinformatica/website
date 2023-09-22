@@ -36,6 +36,11 @@ class Enrollment extends Model
         return $this->belongsToMany(Product::class);
     }
 
+    public function slots(): BelongsToMany
+    {
+        return $this->belongsToMany(Slot::class);
+    }
+
     public function quests(): BelongsToMany
     {
         return $this->belongsToMany(Quest::class);

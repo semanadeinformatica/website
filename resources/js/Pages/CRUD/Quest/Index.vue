@@ -32,7 +32,6 @@ const editions = computed<Record<number, string>>(() =>
         <template #header>
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
-                <Header sort-by="points">Pontos</Header>
                 <Header filter-by="edition_id" :filter-values="editions"
                     >Edição</Header
                 >
@@ -42,7 +41,6 @@ const editions = computed<Record<number, string>>(() =>
         <template #row="{ item }">
             <Row :item="item" name="quests">
                 <Cell>{{ item.name }}</Cell>
-                <Cell>{{ item.points }}</Cell>
                 <Cell>{{ editions[item.edition_id] }}</Cell>
             </Row>
         </template>

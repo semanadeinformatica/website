@@ -14,7 +14,6 @@ class QuestCRUDController extends CRUDController
 
     protected array $rules = [
         'name' => 'required|string',
-        'points' => 'required|integer',
         'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
         'requirement' => 'required|regex:/^(company;[0-9]+)$/',
         'edition_id' => 'required|exists:editions,id',
@@ -28,7 +27,7 @@ class QuestCRUDController extends CRUDController
         ];
     }
 
-    protected array $search = ['name', 'points', 'category'];
+    protected array $search = ['name', 'category'];
 
     protected function created(array $new): ?array
     {
@@ -42,7 +41,6 @@ class QuestCRUDController extends CRUDController
 
         return [
             'name' => $new['name'],
-            'points' => $new['points'],
             'category' => strtoupper($new['category']),
             'requirement_type' => $requirement_type,
             'requirement_id' => $requirement_id,
@@ -62,7 +60,6 @@ class QuestCRUDController extends CRUDController
 
         return [
             'name' => $new['name'],
-            'points' => $new['points'],
             'category' => strtoupper($new['category']),
             'requirement_type' => $requirement_type,
             'requirement_id' => $requirement_id,
