@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->string('room')->nullable();
         });
+        Schema::table('speakers', function (Blueprint $table) {
+            $table->text('description')->nullable()->change();
+        });
+
     }
 
     /**
@@ -24,5 +28,9 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->dropColumn('room');
         });
+        Schema::table('speakers', function (Blueprint $table) {
+            $table->string('description')->nullable()->change();
+        });
+
     }
 };
