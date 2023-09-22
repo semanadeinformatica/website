@@ -33,7 +33,6 @@ defineProps<Props>();
                 <div
                     class="relative m-6 w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
                 >
-                    <ModalsContainer />
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
                             :item="
