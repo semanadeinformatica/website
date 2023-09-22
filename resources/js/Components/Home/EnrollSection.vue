@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FancyButton from "@/Components/FancyButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 interface Props {
     days: number;
@@ -21,20 +22,21 @@ const { days, activities, talks, stands } = defineProps<Props>();
             Tudo a postos?
         </h2>
         <div
-            class="mx-10 flex h-full flex-1 flex-col items-center border border-solid border-black bg-2023-bg p-3 text-center font-bold text-white shadow-2xl shadow-2023-teal sm:p-12"
+            class="mx-10 flex h-full flex-1 flex-col items-center bg-2023-bg p-3 text-center font-bold text-white sm:p-12"
         >
-            <p class="w-full pt-10 text-xl text-2023-teal sm:text-4xl">
-                A SINF está a tua espera!
-            </p>
-            <div
-                class="flex flex-row flex-wrap justify-center gap-4 p-3 text-xl font-bold text-2023-teal max-lg:grid-cols-2 max-xs:grid-cols-1 sm:p-12"
-            >
-                <span class="text-center">{{ days }} dias</span>
-                <span class="text-center">{{ stands }} bancas</span>
-                <span class="text-center">{{ talks }} palestras</span>
-                <span class="text-center">{{ activities }} atividades</span>
+            <div class="relative pt-12">
+                <img
+                    class="w-96 max-ml:w-[300px]"
+                    src="images/sinf logo.png"
+                    alt="Stylized SINF logo"
+                />
             </div>
-            <FancyButton> Inscrever-me </FancyButton>
+            <p class="w-full py-12 text-xl text-2023-teal sm:text-4xl">
+                Estamos à tua espera!
+            </p>
+            <PrimaryButton color="red-dark" textSize="sm:text-4xl"
+                >Inscrever-me</PrimaryButton
+            >
             <div class="flex h-full w-full">
                 <picture class="mx-auto my-10 h-auto max-w-full object-none">
                     <source
