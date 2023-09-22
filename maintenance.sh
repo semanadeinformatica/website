@@ -14,16 +14,18 @@ if [[ $# == 0 ]]; then
 fi
 
 case "$1" in
-    "on"|"off")
-
-        STATE="up"
-
-        if [[ "$1" == "on" ]]; then
-            STATE="down"
-        fi
-
-        "${EXECUTABLE[@]}" "$STATE"
+    "on")
+        "${EXECUTABLE[@]}" down
         ;;
+
+    "off")
+        if [[ -n "$2" ]]; then
+            "${EXECUTABLE[@]}" up --secret="$2"
+        else
+            "${EXECUTABLE[@]}" up
+        fi
+        ;;
+
     *)
         usage
         ;;
