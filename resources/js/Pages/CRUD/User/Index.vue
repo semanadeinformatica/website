@@ -32,7 +32,7 @@ const usertypeMap = {
                     filter-by="usertype_type"
                     :filter-values="{
                         'App\\Models\\Admin': 'Administrador',
-                        'App\\Models\\Student': 'Estudante',
+                        'App\\Models\\Participant': 'Participante',
                         'App\\Models\\Company': 'Empresa',
                     }"
                     >Tipo</Header

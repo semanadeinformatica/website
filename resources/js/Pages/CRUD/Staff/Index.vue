@@ -47,7 +47,7 @@ const participants = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header filter-by="student_id" :filter-values="participants"
+                <Header filter-by="participant_id" :filter-values="participants"
                     >Participante</Header
                 >
                 <Header filter-by="department_id" :filter-values="departments"
