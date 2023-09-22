@@ -1,16 +1,9 @@
 <script setup lang="ts">
-<<<<<<< HEAD
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import Map from "@/Components/Home/Map.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
-=======
-import AppLayout from "../Layouts/AppLayout.vue";
-import SpeakersCarousel from "../Components/Home/SpeakersCarousel.vue";
-import Map from "../Components/Home/Map.vue";
-import SponsorBanner from "../Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
->>>>>>> 436606d (Moved section to home page as new call to action)
 import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import { computed } from "vue";
@@ -28,7 +21,8 @@ interface Props {
     standCount: number;
 }
 
-const { edition, sponsors, days } = defineProps<Props>();
+const { edition, sponsors, days, activityCount, talkCount, standCount } =
+    defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
@@ -134,7 +128,9 @@ const formattedDate = (
             </p>
         </section>
         <!-- SPEAKERS -->
-        <section class="grid-rows-[repeat(3, 1fr)] grid grid-cols-1 gap-10 my-10">
+        <section
+            class="grid-rows-[repeat(3, 1fr)] my-10 grid grid-cols-1 gap-10"
+        >
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
@@ -169,7 +165,12 @@ const formattedDate = (
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
-        <EnrollSection/>
+        <EnrollSection
+            :days="days.length"
+            :activities="activityCount"
+            :talks="talkCount"
+            :stands="standCount"
+        />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>
