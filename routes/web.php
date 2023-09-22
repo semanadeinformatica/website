@@ -70,7 +70,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/events' => EventCRUDController::class,
                     '/products' => ProductCRUDController::class,
                     '/quests' => QuestCRUDController::class,
-                    '/speakers' => SpeakerCRUDController::class,
                     '/users' => UserCRUDController::class,
                     '/sponsors' => SponsorCRUDController::class,
                     '/staff' => StaffCRUDController::class,
