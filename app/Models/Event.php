@@ -26,6 +26,7 @@ class Event extends Model
         'event_day_id',
         'edition_id',
         'description',
+        'room',
     ];
 
     public function event_day(): BelongsTo

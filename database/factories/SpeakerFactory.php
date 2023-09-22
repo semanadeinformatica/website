@@ -20,7 +20,9 @@ class SpeakerFactory extends Factory
         return [
             'name' => fake()->name(),
             'event_id' => Event::factory(),
-            'organization' => fake()->optional()->company(),
+            'organization' => fake()->company(),
+            'title' => fake()->jobTitle(),
+            'description' => fake()->paragraph(),
         ];
     }
 }

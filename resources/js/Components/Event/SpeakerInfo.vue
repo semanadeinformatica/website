@@ -8,7 +8,7 @@ interface Props {
     color: string;
 }
 
-const { speaker, reverse } = defineProps<Props>();
+const { speaker } = defineProps<Props>();
 
 const socials = computed(() => {
     return {
@@ -62,9 +62,9 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex flex-col items-center gap-5">
             <img
-                class="border-2 border-black shadow-lg"
+                class="border-2 w-52 border-black shadow-lg"
                 :class="shadowColor[color]"
-                src="https://picsum.photos/300/300"
+                :src="speaker.profile_photo_url"
                 alt=""
             />
             <div class="flex items-center gap-1">
@@ -87,17 +87,16 @@ const iconColor: Record<string, string> = {
                 class="flex w-fit flex-row justify-center gap-6"
                 :class="reverse ? 'flex-row-reverse self-end' : ''"
             >
-                <div :class="reverse ? 'flex flex-col items-end' : ''">
+                <div :class="reverse ? 'flex flex-col items-end text-right' : ''" >
                     <h2 class="text-3xl font-bold uppercase">
                         {{ speaker.name }}
                     </h2>
-                    <h3 class="font-bold text-xl">titulo{{ speaker.title }}</h3>
-                    <h3 class="font-bold text-xl">org :P{{ speaker.organization }}</h3>
+                    <h3 class="font-bold text-xl">{{ speaker.title }}</h3>
+                    <h3 class="font-bold text-xl">{{ speaker.organization }}</h3>
                 </div>
             </div>
             <p class="col-span-2 row-start-2 max-w-4xl" :class="reverse ? 'text-right' : ''">
                 {{ speaker.description }}
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis consectetur ipsa soluta labore molestias esse veritatis, asperiores repellat doloribus delectus dignissimos. Eligendi sapiente cumque nam iste, quos quaerat asperiores provident?
             </p>
         </div>
     </div>

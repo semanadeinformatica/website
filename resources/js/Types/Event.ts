@@ -11,6 +11,7 @@ export default interface Event extends Model {
     event_day_id: number;
     edition_id: number;
     description: string;
+    room: string;
     speakers?: Speaker[];
     event_day?: EventDay;
 }

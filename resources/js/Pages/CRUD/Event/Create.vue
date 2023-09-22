@@ -22,6 +22,7 @@ const form = useForm({
     topic: "",
     capacity: "",
     event_day_id: "",
+    room: "",
 });
 
 const submit = () => {
@@ -70,6 +71,15 @@ const submit = () => {
                 type="text"
                 required
                 :error-message="form.errors.topic"
+            />
+
+            <TextInput
+                id="room"
+                v-model="form.room"
+                label="Sala"
+                type="text"
+                required
+                :error-message="form.errors.room"
             />
 
             <TextInput
