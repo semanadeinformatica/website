@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionTeamCRUDController;
 use App\Http\Controllers\CVController;
@@ -47,12 +48,16 @@ Route::get('/competition', function () {
 })->name('competition');
 
 Route::prefix('/event')->name('event')->group(function () {
-
     Route::redirect('/', '/program');
 
     Route::prefix('{event}')->group(function () {
         Route::get('/', [EventController::class, 'show'])->name('.show');
     });
+});
+
+Route::prefix('/oauth/{provider}')->middleware('guest')->controller(OAuthController::class)->name('oauth')->group(function () {
+    Route::get('/redirect', 'redirectOAuth')->name('.redirect');
+    Route::get('/callback', 'handleOAuthCallback')->name('.callback');
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
