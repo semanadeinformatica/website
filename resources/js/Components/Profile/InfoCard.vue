@@ -12,26 +12,32 @@ const socials = {
     facebook: {
         icon: "io-logo-facebook",
         color: "red",
+        url_format: "https://facebook.com/",
     },
     linkedin: {
         icon: "io-logo-linkedin",
         color: "red-dark",
+        url_format: "https://linkedin.com/in/",
     },
     github: {
         icon: "io-logo-github",
         color: "teal-dark",
+        url_format: "https://github.com/",
     },
     twitter: {
         icon: "io-logo-twitter",
         color: "orange",
+        url_format: "https://twitter.com/",
     },
     instagram: {
         icon: "io-logo-instagram",
         color: "red-dark",
+        url_format: "https://instagram.com/",
     },
     website: {
         icon: "io-logo-globe",
         color: "teal",
+        url_format: "",
     },
 };
 
@@ -66,7 +72,10 @@ const iconColor: Record<string, string> = {
                         <a
                             class="flex w-fit rounded-full p-2.5"
                             target="_blank"
-                            :href="item?.usertype?.social_media?.[key]"
+                            :href="
+                                social.url_format +
+                                item?.usertype?.social_media?.[key]
+                            "
                         >
                             <v-icon
                                 :name="social.icon"
