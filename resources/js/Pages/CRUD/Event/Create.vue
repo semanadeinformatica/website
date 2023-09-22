@@ -18,9 +18,11 @@ const form = useForm({
     name: "",
     time_start: "",
     time_end: "",
+    description: "",
     topic: "",
     capacity: "",
     event_day_id: "",
+    room: "",
 });
 
 const submit = () => {
@@ -69,6 +71,25 @@ const submit = () => {
                 type="text"
                 required
                 :error-message="form.errors.topic"
+            />
+
+            <TextInput
+                id="room"
+                v-model="form.room"
+                label="Sala"
+                type="text"
+                required
+                :error-message="form.errors.room"
+            />
+
+            <TextInput
+                id="description"
+                v-model="form.description"
+                label="Descrição"
+                type="text"
+                step="60"
+                required
+                :error-message="form.errors.description"
             />
 
             <TextInput

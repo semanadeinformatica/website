@@ -23,6 +23,7 @@ class Speaker extends Model
         'description',
         'organization',
         'event_id',
+        'social_media_id',
     ];
 
     protected $appends = [

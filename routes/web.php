@@ -6,6 +6,7 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\FileController;
@@ -41,6 +42,15 @@ Route::get('/program', [ProgramController::class, 'show'])->name('program');
 Route::get('/competition', function () {
     return Inertia::render('Competition');
 })->name('competition');
+
+Route::prefix('/event')->name('event')->group(function () {
+
+    Route::redirect('/', '/program');
+
+    Route::prefix('{event}')->group(function () {
+        Route::get('/', [EventController::class, 'show'])->name('.show');
+    });
+});
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {

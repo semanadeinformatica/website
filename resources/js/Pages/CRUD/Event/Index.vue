@@ -18,8 +18,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-console.log(props.items);
-
 const event_days = computed<Record<number, string>>(() =>
     Object.fromEntries(
         props.with.event_days.map((event_day) => [
@@ -43,6 +41,7 @@ const event_days = computed<Record<number, string>>(() =>
                     >Dia do evento</Header
                 >
                 <Header sort-by="capacity">Capacidade</Header>
+                <Header sort-by="capacity">Sala</Header>
             </HeaderRow>
         </template>
 
@@ -53,6 +52,7 @@ const event_days = computed<Record<number, string>>(() =>
                 <Cell>{{ item.time_end }} </Cell>
                 <Cell>{{ event_days[item.event_day_id] }}</Cell>
                 <Cell>{{ item.capacity ?? "N/A" }}</Cell>
+                <Cell>{{ item.room }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

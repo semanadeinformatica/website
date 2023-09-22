@@ -22,6 +22,8 @@ class EventFactory extends Factory
             'topic' => fake()->sentence(),
             'time_start' => fake()->time(),
             'time_end' => fake()->time(),
+            'description' => fake()->text($maxNbChars = 500),
+            'room' => fake()->words(1, true),
             'capacity' => fake()->optional()->numberBetween(10, 100),
             'event_day_id' => EventDay::factory(),
         ];
