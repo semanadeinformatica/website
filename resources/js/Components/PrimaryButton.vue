@@ -26,7 +26,7 @@ withDefaults(defineProps<Props>(), {
     <button
         :type="type"
         class="text-md relative inline-flex items-center border border-black px-2 py-2 font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none sm:px-4"
-        :class="(buttonColor[color], textSize)"
+        :class="[buttonColor[color], textSize]"
     >
         <slot />
     </button>
