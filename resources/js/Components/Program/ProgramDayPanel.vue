@@ -56,7 +56,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="h-full w-full pt-8">
+    <section class="h-full w-full">
         <div
             id="tab-picker"
             class="flex flex-row justify-center gap-4 font-bold text-2023-teal"
@@ -72,6 +72,12 @@ onMounted(() => {
             </button>
         </div>
     </section>
+    <p
+        v-if="!stands(items)"
+        class="mr-2 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal mt-5"
+    >
+        {{ day.theme }}
+    </p>
     <WithTimeline>
         <div class="flex flex-col gap-8">
             <template v-if="stands(items)">
