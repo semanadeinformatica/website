@@ -49,6 +49,7 @@ class UserController extends UserProfileController
         return Inertia::render('Profile/Show', [
             'tickets' => $tickets->get(),
             'slots' => $slots->get(),
+            'user' => $user->load('usertype.socialMedia')->toArray(),
         ]);
     }
 

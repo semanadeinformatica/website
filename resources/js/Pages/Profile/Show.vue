@@ -14,12 +14,16 @@ import type Slot from "@/Types/Slot";
 import { h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
+import type Session from "@/Types/Session";
+import type { User } from "@/Types/User";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
     tickets: Event[];
     slots: Slot[];
     participant: Participant;
+    sessions: Session[];
+    user: User;
 }
 
 defineProps<Props>();
@@ -41,12 +45,8 @@ const buttons = {
 <template>
     <AppLayout title="Profile">
         <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
-            <template
-                v-if="
-                    participant ||
-                    $page.props.auth.user?.usertype_type ===
-                        'App\\Models\\Participant'
-                "
+            <div
+                class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
             >
                 <div
                     class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
@@ -76,7 +76,15 @@ const buttons = {
                     />
                     <InteractionArea :buttons="buttons"> </InteractionArea>
                 </div>
-            </template>
+                <CvArea
+                    v-if="
+                        $page.props.auth.user?.usertype_type ===
+                            'App\\Models\\Participant' ||
+                        user?.usertype_type === 'App\\Models\\Participant'
+                    "
+                    :item="user ?? $page.props.auth.user"
+                />
+            </div>
         </div>
     </AppLayout>
 </template>
