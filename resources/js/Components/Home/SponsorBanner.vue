@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import Sponsor from "./Sponsor.vue";
 import type SponsorType from "@/Types/Sponsor";
+import type { CompanyUser } from "@/Types/User";
 
 const carousel = ref<typeof Carousel | null>(null);
 
@@ -50,7 +51,7 @@ const numCols = computed(() =>
             <Sponsor
                 v-for="(sponsor, i) in sponsors"
                 :key="sponsor.id"
-                :sponsor="sponsor"
+                :company="sponsor.company?.user as CompanyUser"
                 :class="
                     sponsors.length > 3 &&
                     sponsors.length % 2 &&
@@ -66,7 +67,7 @@ const numCols = computed(() =>
         >
             <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
                 <Slide v-for="sponsor in sponsors" :key="sponsor.id">
-                    <Sponsor :sponsor="sponsor"></Sponsor>
+                    <Sponsor :company="sponsor.company?.user as CompanyUser"></Sponsor>
                 </Slide>
             </Carousel>
             <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">
