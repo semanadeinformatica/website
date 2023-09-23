@@ -10,6 +10,7 @@ import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfile
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
 import type Participant from "@/Types/Participant";
+import InteractionArea from "@/Components/Profile/InteractionArea.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -31,7 +32,7 @@ defineProps<Props>();
                 "
             >
                 <div
-                    class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+                    class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
                 >
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
@@ -56,6 +57,7 @@ defineProps<Props>();
                                 : $page.props.auth.user
                         "
                     />
+                    <InteractionArea> </InteractionArea>
                 </div>
             </template>
         </div>
