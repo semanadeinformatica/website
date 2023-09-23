@@ -28,6 +28,8 @@ class Event extends Model
         'room',
     ];
 
+    protected $with = ['users'];
+
     public function event_day(): BelongsTo
     {
         return $this->belongsTo(EventDay::class);

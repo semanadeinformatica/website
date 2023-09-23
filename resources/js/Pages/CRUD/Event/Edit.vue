@@ -4,6 +4,7 @@ import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Event from "@/Types/Event";
 import type EventDay from "@/Types/EventDay";
+import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
@@ -11,6 +12,7 @@ interface Props {
     item: Event;
     with: {
         event_days: EventDay[];
+        users: User[];
     };
 }
 
@@ -25,6 +27,7 @@ const form = useForm({
     capacity: event.capacity?.toString() ?? "",
     event_day_id: event.event_day_id.toString(),
     room: event.room,
+    users: event.users?.map((u) => u.id.toString()) ?? [],
 });
 
 const submit = () => {
@@ -51,6 +54,7 @@ const submit = () => {
                 v-model="form.time_start"
                 label="Hora de início"
                 type="time"
+                step="60"
                 required
                 :error-message="form.errors.time_start"
             />
@@ -60,6 +64,7 @@ const submit = () => {
                 v-model="form.time_end"
                 label="Hora de fim"
                 type="time"
+                step="60"
                 required
                 :error-message="form.errors.time_end"
             />
@@ -86,7 +91,7 @@ const submit = () => {
                 id="description"
                 v-model="form.description"
                 label="Descrição"
-                type="text"
+                type="textarea"
                 step="60"
                 required
                 :error-message="form.errors.description"
@@ -112,7 +117,24 @@ const submit = () => {
                     :key="day.id"
                     :value="day.id"
                 >
-                    {{ day.date }}
+                    {{ $d(day.date, "short") }}
+                </option>
+            </TextInput>
+
+            <TextInput
+                id="users[]"
+                v-model="form.users"
+                type="select"
+                label="Utilizadores"
+                multiple
+                :error-message="form.errors.users"
+            >
+                <option
+                    v-for="user in $props.with.users"
+                    :key="user.id"
+                    :value="user.id"
+                >
+                    {{ user.name }}
                 </option>
             </TextInput>
 
