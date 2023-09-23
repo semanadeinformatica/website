@@ -3,12 +3,11 @@
 use App\Models\Enrollment;
 use App\Models\Quest;
 use App\Models\Slot;
+use function DatabaseHelpers\createManyToManyRelation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-
-use function DatabaseHelpers\createManyToManyRelation;
 
 return new class extends Migration
 {

@@ -22,6 +22,7 @@ class CompetitionFactory extends Factory
             'date_start' => fake()->date(),
             'date_end' => fake()->date(),
             'edition_id' => Edition::factory(),
+            'name' => fake()->name(),
         ];
     }
 }

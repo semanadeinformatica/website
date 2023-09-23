@@ -40,7 +40,7 @@ const submit = () => {
                 autocomplete="name"
                 :error-message="form.errors.theme"
             />
-            
+
             <TextInput
                 id="theme"
                 v-model="form.theme"
