@@ -26,6 +26,20 @@ services:
             - pgsql
             - mailpit
             - redis
+
+    prod:
+      build:
+        context: .
+        dockerfile: Dockerfile
+        target: production
+      ports:
+        - '80:80'
+      networks:
+        - sail
+      depends_on:
+        - pgsql
+        - redis
+        
     pgsql:
         image: 'postgres:15'
         ports:
