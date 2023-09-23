@@ -29,6 +29,12 @@ class DatabaseSeeder extends Seeder
 {
     const DEFAULT_ADMIN_EMAIL = 'admin@example.com';
 
+    const PLATINUM_COUNT = 3;
+
+    const GOLD_COUNT = 7;
+
+    const SILVER_COUNT = 8;
+
     private function cleanDatabase()
     {
         DB::beginTransaction();
@@ -58,11 +64,12 @@ class DatabaseSeeder extends Seeder
         self::cleanDatabase();
 
         $participants = User::factory(100)->create();
-        $companies = User::factory(10)->company()->create();
+        $companies = User::factory(static::PLATINUM_COUNT + static::GOLD_COUNT + static::SILVER_COUNT)->company()->create();
+        $speakers = User::factory(10)->speaker()->create();
 
-        if (! User::where('email', '=', DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
+        if (! User::where('email', '=', static::DEFAULT_ADMIN_EMAIL)->exists()) {
             User::factory()->admin()->create([
-                'email' => DatabaseSeeder::DEFAULT_ADMIN_EMAIL,
+                'email' => static::DEFAULT_ADMIN_EMAIL,
             ]);
         }
 
@@ -72,20 +79,22 @@ class DatabaseSeeder extends Seeder
         $event_day_factory = EventDay::factory()->recycle($edition);
         $event_days = array_map(fn () => $event_day_factory->create([
             'date' => $start_date->addDays(1)->toDateString(),
-        ]), range(0, 7));
+        ]), range(1, 7));
 
         $departments = Department::factory(10)->recycle($edition)->create();
         Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
 
         foreach ($event_days as $day) {
-            $events = Event::factory(10)->recycle($day)->create();
-            Speaker::factory(10)->recycle($events)->create();
+            Event::factory(2)->recycle($day)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
+            Event::factory(1)->recycle($day)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
         }
 
         $sponsors = [];
-        foreach ($companies as $company) {
+        foreach ($companies as $i => $company) {
             Quest::factory()->recycle($edition)->for($company->usertype, 'requirement')->create();
-            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create();
+            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create([
+                'tier' => $i < static::PLATINUM_COUNT ? 'PLATINUM' : ($i < static::PLATINUM_COUNT + static::GOLD_COUNT ? 'GOLD' : 'SILVER'),
+            ]);
         }
 
         Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();

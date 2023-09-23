@@ -45,9 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_days');
-        Schema::dropIfExists('stands');
-
         Schema::table('events', function (Blueprint $table) {
             $table->dropForeignIdFor(EventDay::class);
             $table->dropColumn(['event_day_id']);
@@ -56,5 +53,8 @@ return new class extends Migration
             $table->dateTime('date_start');
             $table->dateTime('date_end');
         });
+
+        Schema::dropIfExists('stands');
+        Schema::dropIfExists('event_days');
     }
 };

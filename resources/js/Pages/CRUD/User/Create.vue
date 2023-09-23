@@ -9,8 +9,10 @@ import route from "ziggy-js";
 const form = useForm({
     name: "",
     email: "",
-    type: "" as "participant" | "company" | "admin",
+    type: "" as "participant" | "company" | "speaker" | "admin",
+    title: "",
     description: "",
+    organization: "",
     social_media: {
         email: "",
         facebook: "",
@@ -69,17 +71,35 @@ const submit = () => {
             >
                 <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
+                <option value="speaker">Orador</option>
                 <option value="admin">Administrador</option>
             </TextInput>
 
             <TextInput
-                v-if="form.type === 'company'"
+                v-if="form.type === 'speaker'"
+                id="title"
+                v-model="form.title"
+                label="Título"
+                type="text"
+                :error-message="form.errors.title"
+            />
+
+            <TextInput
+                v-if="form.type === 'company' || form.type === 'speaker'"
                 id="description"
                 v-model="form.description"
                 label="Descrição"
                 type="textarea"
-                required
                 :error-message="form.errors.description"
+            />
+
+            <TextInput
+                v-if="form.type === 'speaker'"
+                id="organization"
+                v-model="form.organization"
+                label="Organização"
+                type="text"
+                :error-message="form.errors.organization"
             />
 
             <details v-if="form.type !== 'admin'" class="self-stretch">

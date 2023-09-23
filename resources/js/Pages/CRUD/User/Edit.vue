@@ -20,10 +20,20 @@ const form = useForm({
     type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
         | "participant"
         | "company"
+        | "speaker"
         | "admin",
+    title:
+        user.usertype_type === "App\\Models\\Speaker"
+            ? user.usertype?.title ?? ""
+            : "",
     description:
-        user.usertype_type === "App\\Models\\Company"
+        user.usertype_type === "App\\Models\\Company" ||
+        user.usertype_type === "App\\Models\\Speaker"
             ? user.usertype?.description ?? ""
+            : "",
+    organization:
+        user.usertype_type === "App\\Models\\Speaker"
+            ? user.usertype?.organization ?? ""
             : "",
     social_media: {
         email:
@@ -106,17 +116,35 @@ const submit = () => {
             >
                 <option value="participant">Participante</option>
                 <option value="company">Empresa</option>
+                <option value="speaker">Orador</option>
                 <option value="admin">Administrador</option>
             </TextInput>
 
             <TextInput
-                v-if="form.type === 'company'"
+                v-if="form.type === 'speaker'"
+                id="title"
+                v-model="form.title"
+                label="Título"
+                type="text"
+                :error-message="form.errors.title"
+            />
+
+            <TextInput
+                v-if="form.type === 'company' || form.type === 'speaker'"
                 id="description"
                 v-model="form.description"
                 label="Descrição"
                 type="textarea"
-                required
                 :error-message="form.errors.description"
+            />
+
+            <TextInput
+                v-if="form.type === 'speaker'"
+                id="organization"
+                v-model="form.organization"
+                label="Organização"
+                type="text"
+                :error-message="form.errors.organization"
             />
 
             <details v-if="form.type !== 'admin'" class="self-stretch">

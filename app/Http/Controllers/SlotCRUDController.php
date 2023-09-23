@@ -14,21 +14,19 @@ class SlotCRUDController extends CRUDController
 
     protected array $rules = [
         'total_quests' => 'required|integer',
-        'selected_quests' => 'sometimes|array',
+        'quests' => 'sometimes|array|exists:quests,id',
         'points' => 'required|integer',
     ];
 
     protected function created(array $new): ?array
     {
-        $selectedQuests = $new['selected_quests'];
-        unset($new['selected_quests']);
+        $quests = $new['quests'];
+        unset($new['quests']);
 
         DB::beginTransaction();
         $slot = Slot::create($new);
 
-        $quests = Quest::find($selectedQuests);
-
-        $slot->quests()->attach($quests);
+        $slot->quests()->sync($quests);
         DB::commit();
 
         return null;
@@ -36,14 +34,10 @@ class SlotCRUDController extends CRUDController
 
     protected function updated($old, array $new): ?array
     {
-        $selectedQuests = $new['selected_quests'];
-        unset($new['selected_quests']);
+        $quests = $new['quests'];
+        unset($new['quests']);
 
-        DB::beginTransaction();
-        $quests = Quest::find($selectedQuests);
-
-        $old->quests()->attach($quests);
-        DB::commit();
+        $old->quests()->sync($quests);
 
         return $new;
     }

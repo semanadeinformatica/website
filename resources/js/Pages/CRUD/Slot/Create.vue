@@ -17,7 +17,7 @@ defineProps<Props>();
 const form = useForm({
     total_quests: "0",
     points: "0",
-    selected_quests: [] as string[],
+    quests: [] as string[],
 });
 
 const submit = () => {
@@ -45,12 +45,12 @@ const submit = () => {
             />
 
             <TextInput
-                id="selected_quests[]"
-                v-model="form.selected_quests"
+                id="quests[]"
+                v-model="form.quests"
                 type="select"
                 label="Tarefas"
                 multiple
-                :error-message="form.errors.selected_quests"
+                :error-message="form.errors.quests"
             >
                 <option
                     v-for="quest in $props.with.quests"

@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Participant;
 use App\Models\SocialMedia;
+use App\Models\Speaker;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,9 @@ class UserCRUDController extends CRUDController
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
         'type' => 'required|in:participant,company,admin',
+        'title' => 'sometimes|nullable|string',
         'description' => 'sometimes|nullable|string',
+        'organization' => 'sometimes|nullable|string',
         'social_media.email' => 'sometimes|nullable|string|email',
         'social_media.facebook' => 'sometimes|nullable|string',
         'social_media.github' => 'sometimes|nullable|string',
@@ -44,6 +47,7 @@ class UserCRUDController extends CRUDController
         $type = match ($new['type']) {
             'participant' => Participant::class,
             'company' => Company::class,
+            'speaker' => Speaker::class,
             'admin' => Admin::class,
         };
 
@@ -56,7 +60,14 @@ class UserCRUDController extends CRUDController
             'usertype_type' => $type,
         ]);
         $usertypeProps = array_merge(['user_id' => $user->id], match ($new['type']) {
-            'company' => ['description' => $new['description']],
+            'company' => [
+                'description' => $new['description'],
+            ],
+            'speaker' => [
+                'title' => $new['title'],
+                'description' => $new['description'],
+                'organization' => $new['organization'],
+            ],
             default => [],
         });
         $usertype = $type::create($usertypeProps);
@@ -82,6 +93,7 @@ class UserCRUDController extends CRUDController
         $type = match ($new['type']) {
             'participant' => Participant::class,
             'company' => Company::class,
+            'speaker' => Speaker::class,
             'admin' => Admin::class,
         };
 
@@ -91,7 +103,14 @@ class UserCRUDController extends CRUDController
         }
 
         $usertypeProps = match ($new['type']) {
-            'company' => ['description' => $new['description']],
+            'company' => [
+                'description' => $new['description'],
+            ],
+            'speaker' => [
+                'title' => $new['title'],
+                'description' => $new['description'],
+                'organization' => $new['organization'],
+            ],
             default => [],
         };
         $old->usertype->update($usertypeProps);

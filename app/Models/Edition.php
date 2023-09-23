@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Edition extends Model
 {
     use HasFactory;
+    use HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -48,7 +50,7 @@ class Edition extends Model
 
     public function speakers(): HasManyThrough
     {
-        return $this->through('events')->has('speakers');
+        return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])->whereHasMorph('usertype', Speaker::class);
     }
 
     public function sponsors(): HasMany

@@ -18,9 +18,7 @@ class ProgramController extends Controller
             return response('No edition found', 500);
         }
 
-        // We can do this here since we already fetched the edition from the DB, so we would not gain any performance from "short-circuiting" the validation
-        $eventDays = $edition->event_days()->orderBy('date', 'ASC')->get();
-        $totalDays = count($eventDays);
+        $totalDays = $edition->event_days()->count();
 
         $validator = Validator::make($request->all(), [
             'day' => 'sometimes|integer|min:1|max:'.$totalDays,
@@ -39,7 +37,7 @@ class ProgramController extends Controller
         $validated = $validator->validated();
         $queryDay = isset($validated['day']) ? $validated['day'] : ProgramController::DEFAULT_PROGRAM_DAY;
 
-        $eventDay = $eventDays->get($queryDay - 1);
+        $eventDay = $edition->event_days()->orderBy('date', 'ASC')->skip($queryDay - 1)->first();
 
         return Inertia::render('Program', [
             'eventDay' => fn () => $eventDay,

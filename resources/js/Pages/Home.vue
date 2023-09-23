@@ -8,13 +8,13 @@ import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import { computed } from "vue";
 import type Sponsor from "@/Types/Sponsor";
-import type Speaker from "@/Types/Speaker";
 import type EventDay from "@/Types/EventDay";
+import type { User } from "@/Types/User";
 
 interface Props {
     edition: Edition;
     sponsors: Sponsor[];
-    speakers: Speaker[];
+    speakers: User[];
     days: EventDay[];
     activityCount: number;
     talkCount: number;
@@ -152,9 +152,7 @@ const formattedDate = (
             >
                 Speakers
             </p>
-            <SpeakersCarousel
-                :speakers="edition.speakers ?? []"
-            ></SpeakersCarousel>
+            <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
         </section>
         <!-- SPONSORS -->
         <section class="flex flex-col gap-10 px-20 py-24">

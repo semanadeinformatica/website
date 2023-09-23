@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Participant;
+use App\Models\Speaker;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -74,6 +75,16 @@ class UserFactory extends Factory
             $user->name = fake()->company();
             $user->email = fake()->unique()->companyEmail();
         });
+    }
+
+    /**
+     * Indicate that the user is a speaker.
+     */
+    public function speaker(): static
+    {
+        return $this->state([
+            'usertype_type' => Speaker::class,
+        ]);
     }
 
     /**

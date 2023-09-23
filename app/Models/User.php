@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -70,6 +71,11 @@ class User extends Authenticatable
         return $this->morphTo();
     }
 
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->usertype_type === Admin::class;
@@ -83,5 +89,10 @@ class User extends Authenticatable
     public function isParticipant(): bool
     {
         return $this->usertype_type === Participant::class;
+    }
+
+    public function isSpeaker(): bool
+    {
+        return $this->usertype_type === Speaker::class;
     }
 }

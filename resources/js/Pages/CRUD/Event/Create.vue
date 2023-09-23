@@ -3,12 +3,14 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type EventDay from "@/Types/EventDay";
+import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 interface Props {
     with: {
         event_days: EventDay[];
+        users: User[];
     };
 }
 
@@ -23,6 +25,7 @@ const form = useForm({
     capacity: "",
     event_day_id: "",
     room: "",
+    users: [] as string[],
 });
 
 const submit = () => {
@@ -86,7 +89,7 @@ const submit = () => {
                 id="description"
                 v-model="form.description"
                 label="Descrição"
-                type="text"
+                type="textarea"
                 step="60"
                 required
                 :error-message="form.errors.description"
@@ -112,7 +115,24 @@ const submit = () => {
                     :key="day.id"
                     :value="day.id"
                 >
-                    {{ day.date }}
+                    {{ $d(day.date, "short") }}
+                </option>
+            </TextInput>
+
+            <TextInput
+                id="users[]"
+                v-model="form.users"
+                type="select"
+                label="Utilizadores"
+                multiple
+                :error-message="form.errors.users"
+            >
+                <option
+                    v-for="user in $props.with.users"
+                    :key="user.id"
+                    :value="user.id"
+                >
+                    {{ user.name }}
                 </option>
             </TextInput>
 
