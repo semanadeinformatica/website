@@ -9,12 +9,12 @@ import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthe
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
-import type Participant from "@/Types/Participant";
+import type { User } from "@/Types/User";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
     sessions: Session[];
-    participant: Participant;
+    user: User;
 }
 
 defineProps<Props>();
@@ -23,41 +23,22 @@ defineProps<Props>();
 <template>
     <AppLayout title="Profile">
         <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
-            <template
-                v-if="
-                    participant ||
-                    $page.props.auth.user?.usertype_type ===
-                        'App\\Models\\Participant'
-                "
+            <div
+                class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
             >
-                <div
-                    class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
-                >
-                    <div class="flex w-full justify-around max-md:flex-col">
-                        <ProfilePicture
-                            :item="
-                                participant
-                                    ? participant.user
-                                    : $page.props.auth.user
-                            "
-                        />
-                        <InfoCard
-                            :item="
-                                participant
-                                    ? participant.user
-                                    : $page.props.auth.user
-                            "
-                        />
-                    </div>
-                    <CvArea
-                        :item="
-                            participant
-                                ? participant.user
-                                : $page.props.auth.user
-                        "
-                    />
+                <div class="flex w-full justify-around max-md:flex-col">
+                    <ProfilePicture :item="user ?? $page.props.auth.user" />
+                    <InfoCard :item="user ?? $page.props.auth.user" />
                 </div>
-            </template>
+                <CvArea
+                    v-if="
+                        $page.props.auth.user?.usertype_type ===
+                            'App\\Models\\Participant' ||
+                        user?.usertype_type === 'App\\Models\\Participant'
+                    "
+                    :item="user ?? $page.props.auth.user"
+                />
+            </div>
         </div>
     </AppLayout>
 </template>
