@@ -5,6 +5,8 @@ import TextInput from "@/Components/TextInput.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
+import slugify from "slugify";
+import { watchEffect } from "vue";
 
 interface Props {
     with: {
@@ -20,7 +22,13 @@ const form = useForm({
     date_end: "",
     theme: "",
     name: "",
+    slug: "",
+    registration_link: "",
 });
+
+watchEffect(() => {
+    form.slug = slugify(form.name, { lower: true })
+})
 
 const submit = () => {
     form.post(route("admin.competitions.store"));
@@ -39,6 +47,16 @@ const submit = () => {
                 autofocus
                 autocomplete="name"
                 :error-message="form.errors.theme"
+            />
+
+            <TextInput
+                id="slug"
+                v-model="form.slug"
+                label="Nome que aparece no URL"
+                type="text"
+                required
+                autofocus
+                :error-message="form.errors.slug"
             />
 
             <TextInput
@@ -70,6 +88,17 @@ const submit = () => {
                 required
                 autofocus
                 :error-message="form.errors.date_end"
+            />
+
+            <TextInput
+                id="registration_link"
+                v-model="form.registration_link"
+                label="Link para registo"
+                type="text"
+                required
+                autofocus
+                autocomplete="registration_link"
+                :error-message="form.errors.registration_link"
             />
 
             <TextInput

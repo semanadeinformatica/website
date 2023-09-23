@@ -17,6 +17,8 @@ class Competition extends Model
         'date_end',
         'edition_id',
         'name',
+        'slug',
+        'registration_link'
     ];
 
     protected $casts = [

@@ -2,10 +2,21 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Podium from "@/Components/Podium.vue";
 import { Link } from "@inertiajs/vue3";
+import type Competition from "@/Types/Competition";
+
+interface Props {
+    competition: Competition
+}
+
+const { competition } = defineProps<Props>();
+
 </script>
 
 <template>
     <AppLayout title="Competition">
+
+        {{ competition }}
+
         <Podium></Podium>
         <!-- RULES -->
 
