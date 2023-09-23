@@ -19,8 +19,8 @@ interface Props {
 const { item: enrollment } = defineProps<Props>();
 
 const form = useForm({
-    participant_id: enrollment.participant_id,
-    edition_id: enrollment.edition_id,
+    participant_id: enrollment.participant_id.toString(),
+    edition_id: enrollment.edition_id.toString(),
     points: enrollment.points.toString(),
 });
 
