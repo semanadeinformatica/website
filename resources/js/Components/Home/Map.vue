@@ -14,7 +14,7 @@ const attribution =
         class="align-center flex h-full w-full justify-center overflow-hidden rounded"
     >
         <LMap
-            v-model:zoom="zoom"
+            :zoom="zoom"
             class="cursor-auto border border-solid border-black"
             :min-zoom="4"
             :max-zoom="18"
