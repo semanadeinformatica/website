@@ -67,7 +67,9 @@ const numCols = computed(() =>
         >
             <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
                 <Slide v-for="sponsor in sponsors" :key="sponsor.id">
-                    <Sponsor :company="sponsor.company?.user as CompanyUser"></Sponsor>
+                    <Sponsor
+                        :company="sponsor.company?.user as CompanyUser"
+                    ></Sponsor>
                 </Slide>
             </Carousel>
             <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">

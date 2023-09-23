@@ -56,7 +56,9 @@ const colorPicker = () => {
         <!-- details -->
         <section
             class="relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-2023-teal-dark px-16 py-24"
-            :class="[companies.length > 0 && speakers.length == 0 ? 'mt-20' : '']"
+            :class="[
+                companies.length > 0 && speakers.length == 0 ? 'mt-20' : '',
+            ]"
         >
             <h1
                 class="absolute -top-7 mr-2 flex border border-black bg-2023-red p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
@@ -81,11 +83,15 @@ const colorPicker = () => {
             </h1>
         </section>
         <!-- companies -->
-        <section class="mx-9 flex flex-row flex-wrap items-center justify-center gap-6 mt-24">
-            <div v-for="(company, idx) in companies" :key="idx" class="border border-black shadow shadow-2023-red w-[200px]">
-                <Sponsor
-                    :company="company"
-                ></Sponsor>
+        <section
+            class="mx-9 mt-24 flex flex-row flex-wrap items-center justify-center gap-6"
+        >
+            <div
+                v-for="(company, idx) in companies"
+                :key="idx"
+                class="w-[200px] border border-black shadow shadow-2023-red"
+            >
+                <Sponsor :company="company"></Sponsor>
             </div>
         </section>
         <!-- sign up -->

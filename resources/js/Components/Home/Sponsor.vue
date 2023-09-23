@@ -30,7 +30,7 @@ defineProps<Props>();
     >
         <img
             :src="company?.profile_photo_url"
-            class="absolute -top-20 h-40 w-auto border border-solid border-black shadow-xl justify-center mr-2 shadow-2023-teal-dark"
+            class="absolute -top-20 mr-2 h-40 w-auto justify-center border border-solid border-black shadow-xl shadow-2023-teal-dark"
         />
         <div
             class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"
