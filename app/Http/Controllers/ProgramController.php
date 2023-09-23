@@ -18,7 +18,6 @@ class ProgramController extends Controller
             return response('No edition found', 500);
         }
 
-        // We can do this here since we already fetched the edition from the DB, so we would not gain any performance from "short-circuiting" the validation
         $totalDays = $edition->event_days()->count();
 
         $validator = Validator::make($request->all(), [
