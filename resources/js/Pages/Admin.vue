@@ -31,6 +31,9 @@ const pageRoutes: Routes = {
     "admin.stands.index": {
         label: "Bancas",
     },
+    "admin.enrollments.index": {
+        label: "Inscrições",
+    },
     "admin.eventDays.index": {
         label: "Dias de Evento",
     },
