@@ -16,6 +16,7 @@ class Competition extends Model
         'date_start',
         'date_end',
         'edition_id',
+        'name',
     ];
 
     protected $casts = [

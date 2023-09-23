@@ -21,6 +21,7 @@ const form = useForm({
     theme: competition.theme,
     date_start: new Date(competition.date_start).toDateString(),
     date_end: new Date(competition.date_end).toDateString(),
+    name: competition.name,
 });
 
 const submit = () => {
@@ -31,6 +32,17 @@ const submit = () => {
 <template>
     <CardLayout title="Editar Competição">
         <form class="contents" @submit.prevent="submit">
+            <TextInput
+                id="name"
+                v-model="form.name"
+                label="Nome da competição"
+                type="text"
+                required
+                autofocus
+                autocomplete="name"
+                :error-message="form.errors.theme"
+            />
+
             <TextInput
                 id="theme"
                 v-model="form.theme"

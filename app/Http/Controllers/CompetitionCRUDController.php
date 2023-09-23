@@ -16,9 +16,10 @@ class CompetitionCRUDController extends CRUDController
         'date_start' => 'required|date',
         'date_end' => 'required|date|after:date_start',
         'edition_id' => 'required|integer|exists:editions,id',
+        'name' => 'required|string',
     ];
 
-    protected array $search = ['theme', 'date_start', 'date_end'];
+    protected array $search = ['theme', 'date_start', 'date_end', 'name'];
 
     protected function with(): array
     {
