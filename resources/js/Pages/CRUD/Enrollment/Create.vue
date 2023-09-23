@@ -19,7 +19,6 @@ defineProps<Props>();
 const form = useForm({
     participant_id: "",
     edition_id: "",
-    points: 0,
 });
 
 const submit = () => {
@@ -30,8 +29,14 @@ const submit = () => {
 <template>
     <CardLayout title="Criar inscrição">
         <form class="contents" @submit.prevent="submit">
-            <select v-model="form.participant_id" required class="self-stretch">
-                <option value="" disabled selected hidden>User</option>
+            <TextInput
+                id="participant_id"
+                v-model="form.participant_id"
+                label="Participante"
+                type="select"
+                required
+                :error-message="form.errors.participant_id"
+            >
                 <option
                     v-for="participant in $props.with.participants"
                     :key="participant.id"
@@ -39,10 +44,16 @@ const submit = () => {
                 >
                     {{ participant.user?.name }} - {{ participant.user?.id }}
                 </option>
-            </select>
+            </TextInput>
 
-            <select v-model="form.edition_id" required class="self-stretch">
-                <option value="" disabled selected hidden>Edição</option>
+            <TextInput
+                id="edition_id"
+                v-model="form.edition_id"
+                label="Edição"
+                type="select"
+                required
+                :error-message="form.errors.edition_id"
+            >
                 <option
                     v-for="edition in $props.with.editions"
                     :key="edition.id"
@@ -50,7 +61,7 @@ const submit = () => {
                 >
                     {{ edition.name }}
                 </option>
-            </select>
+            </TextInput>
 
             <PrimaryButton type="submit">Adicionar</PrimaryButton>
         </form>
