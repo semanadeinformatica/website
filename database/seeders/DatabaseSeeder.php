@@ -57,14 +57,11 @@ class DatabaseSeeder extends Seeder
     {
         self::cleanDatabase();
 
-        $participants = User::factory(100)->create();
-        $companies = User::factory(10)->company()->create();
-
-        if (! User::where('email', '=', DatabaseSeeder::DEFAULT_ADMIN_EMAIL)->exists()) {
-            User::factory()->admin()->create([
-                'email' => DatabaseSeeder::DEFAULT_ADMIN_EMAIL,
-            ]);
-        }
+        User::factory()->admin()->create([
+            'email' => DatabaseSeeder::DEFAULT_ADMIN_EMAIL,
+        ]);
+        $participants = Participant::factory(100)->create();
+        $companies = Company::factory(10)->create();
 
         $edition = Edition::factory()->create();
 
@@ -75,7 +72,7 @@ class DatabaseSeeder extends Seeder
         ]), range(0, 7));
 
         $departments = Department::factory(10)->recycle($edition)->create();
-        Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
+        Staff::factory(20)->recycle($departments)->recycle($participants)->create();
 
         foreach ($event_days as $day) {
             $events = Event::factory(10)->recycle($day)->create();
@@ -84,8 +81,8 @@ class DatabaseSeeder extends Seeder
 
         $sponsors = [];
         foreach ($companies as $company) {
-            Quest::factory()->recycle($edition)->for($company->usertype, 'requirement')->create();
-            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create();
+            Quest::factory()->recycle($edition)->for($company, 'requirement')->create();
+            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company)->create();
         }
 
         Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();

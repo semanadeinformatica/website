@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use App\Models\EventDay;
 
 class EventCRUDController extends CRUDController
 {
-    protected string $model = Event::class;
-
-    protected string $view = 'Event';
-
     protected array $rules = [
         'name' => 'required|string',
         'time_start' => 'required|date_format:"H:i"',

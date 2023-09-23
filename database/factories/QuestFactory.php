@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +23,8 @@ class QuestFactory extends Factory
             'name' => fake()->words(3, true),
             'category' => fake()->randomElement(['COMPANY', 'TALK', 'WORKSHOP', 'MILESTONE', 'TEAMBUILDING']),
             'edition_id' => Edition::factory(),
+            'requirement_type' => fake()->randomElement([Company::class, Event::class]),
+            'requirement_id' => fn (array $attributes) => $attributes['requirement_type']::factory(),
         ];
     }
 }

@@ -9,10 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class SpeakerCRUDController extends CRUDController
 {
-    protected string $model = Speaker::class;
-
-    protected string $view = 'Speaker';
-
     protected array $rules = [
         'name' => 'required|string',
         'title' => 'nullable|string',

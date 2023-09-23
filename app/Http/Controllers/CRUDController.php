@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 /**
@@ -35,6 +36,14 @@ abstract class CRUDController extends Controller
      * @var array<int, string>
      */
     protected array $search = [];
+
+    public function __construct()
+    {
+        $basename = Str::replaceEnd('CRUDController', '', class_basename($this));
+
+        $this->model ??= "App\\Models\\{$basename}";
+        $this->view ??= $basename;
+    }
 
     /**
      * The validation rules for the store method.

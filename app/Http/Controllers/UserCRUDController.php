@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class UserCRUDController extends CRUDController
 {
-    protected string $model = User::class;
-
-    protected string $view = 'User';
-
     protected array $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
