@@ -44,8 +44,14 @@ const socialMedia = computed(() => {
                 ["github", "linkedin", "website"].includes(key) &&
                 value != null,
         ),
-    );
+    ) as Record<"github" | "linkedin" | "website", string>;
 });
+
+const urlPrefixes = {
+    github: "https://github.com/",
+    linkedin: "https://linkedin.com/in/",
+    website: "",
+};
 </script>
 
 <template>
@@ -66,7 +72,7 @@ const socialMedia = computed(() => {
             <a
                 v-for="(social, key, idx) in socialMedia"
                 :key="idx"
-                :href="social"
+                :href="urlPrefixes[key] + social"
                 target="_blank"
             >
                 <v-icon
