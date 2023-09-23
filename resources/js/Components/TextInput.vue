@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import { onMounted, ref, type InputHTMLAttributes } from "vue";
+<script setup lang="ts" generic="">
+import { onMounted, ref, type InputHTMLAttributes, computed } from "vue";
 
 interface BaseProps {
     label?: string;
@@ -40,12 +40,17 @@ const isSelect = (p: Props): p is SelectProps => {
 };
 
 interface Emits {
-    (event: "update:modelValue", value: string): void;
+    (event: "update:modelValue", value: string | string[]): void;
 }
 
 // Need to instantiate 'props' here otherwise TS would not correctly infer the types I wanted from the '$props' variable. - Nuno Pereira
 const props = defineProps<Props>();
-defineEmits<Emits>();
+const emit = defineEmits<Emits>();
+
+const value = computed({
+    get: () => props.modelValue,
+    set: (v) => emit("update:modelValue", v),
+});
 
 const input = ref<
     HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null
@@ -71,21 +76,10 @@ const visible = ref(false);
             v-if="isSelect(props)"
             :id="id"
             ref="input"
+            v-model="value"
             :class="baseClass"
-            :value="modelValue"
             v-bind="$attrs"
             :multiple="props.multiple"
-            @input="
-                $emit(
-                    'update:modelValue',
-                    props.multiple
-                        ? [
-                              ...($event.currentTarget as HTMLSelectElement)
-                                  .selectedOptions,
-                          ].map((o) => o.value)
-                        : ($event.currentTarget as HTMLSelectElement).value,
-                )
-            "
         >
             <option value="" disabled selected hidden>
                 {{ placeholder ?? "-" }}
@@ -97,33 +91,21 @@ const visible = ref(false);
             v-else-if="type === 'textarea'"
             :id="id"
             ref="input"
+            v-model="value"
             :class="[baseClass, 'min-h-[calc(theme(spacing.1)*7)]']"
-            :value="modelValue"
             :placeholder="placeholder ?? ''"
             v-bind="$attrs"
-            @input="
-                $emit(
-                    'update:modelValue',
-                    ($event.currentTarget as HTMLTextAreaElement).value,
-                )
-            "
         />
 
         <input
             v-else
             :id="id"
             ref="input"
+            v-model="value"
             :placeholder="placeholder ?? ''"
             :class="[baseClass, type === 'password' ? 'pr-12' : '']"
-            :value="modelValue"
             :type="type === 'password' && visible ? 'text' : type"
             v-bind="$attrs"
-            @input="
-                $emit(
-                    'update:modelValue',
-                    ($event.currentTarget as HTMLInputElement).value,
-                )
-            "
         />
 
         <label
