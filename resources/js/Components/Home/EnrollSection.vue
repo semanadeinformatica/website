@@ -1,15 +1,5 @@
 <script setup lang="ts">
-import FancyButton from "@/Components/FancyButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-
-interface Props {
-    days: number;
-    activities: number;
-    talks: number;
-    stands: number;
-}
-
-const { days, activities, talks, stands } = defineProps<Props>();
 </script>
 
 <template>
