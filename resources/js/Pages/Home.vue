@@ -152,9 +152,7 @@ const formattedDate = (
             >
                 Speakers
             </p>
-            <SpeakersCarousel
-                :speakers="speakers ?? []"
-            ></SpeakersCarousel>
+            <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
         </section>
         <!-- SPONSORS -->
         <section class="flex flex-col gap-10 px-20 py-24">

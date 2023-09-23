@@ -84,7 +84,9 @@ const iconColor: Record<string, string> = {
                     <h2 class="text-3xl font-bold uppercase">
                         {{ user.name }}
                     </h2>
-                    <h3 class="text-xl font-bold">{{ user.usertype?.title }}</h3>
+                    <h3 class="text-xl font-bold">
+                        {{ user.usertype?.title }}
+                    </h3>
                     <h3 class="text-xl font-bold">
                         {{ user.usertype?.organization }}
                     </h3>
