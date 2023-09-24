@@ -35,7 +35,6 @@ const submit = () => {
 <template>
     <CardLayout title="Editar Competição">
         <form class="contents" @submit.prevent="submit">
-            {{ new Date(item.date_start).toLocaleDateString() }}
             <TextInput
                 id="name"
                 v-model="form.name"
