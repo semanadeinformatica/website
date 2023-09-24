@@ -10,8 +10,7 @@ defineProps<Props>();
 const speakerName = (name: string) => {
     const nameArray = name.split(" ");
     return `${nameArray[0]} ${nameArray[nameArray.length - 1]}`;
-}; 
-
+};
 </script>
 
 <template>
