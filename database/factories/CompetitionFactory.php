@@ -20,11 +20,14 @@ class CompetitionFactory extends Factory
         return [
             'theme' => fake()->realText(),
             'date_start' => fake()->date(),
-            'date_end' => fake()->date(),
+            'date_end' => function ($attributes) {
+                return fake()->dateTimeBetween($attributes['date_start']);
+            },
             'edition_id' => Edition::factory(),
             'name' => fake()->name(),
             'slug' => fake()->slug(),
             'registration_link' => fake()->url(),
+            'regulation' => fake()->realText(2000),
         ];
     }
 }

@@ -18,7 +18,8 @@ class Competition extends Model
         'edition_id',
         'name',
         'slug',
-        'registration_link'
+        'registration_link',
+        'regulation',
     ];
 
     protected $casts = [

@@ -15,7 +15,7 @@ defineProps<{
     name: string;
 }>();
 
-const query = useSearch('query', ['items'])
+const query = useSearch("query", ["items"]);
 </script>
 
 <template>

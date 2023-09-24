@@ -6,7 +6,8 @@ import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import type Competition from "@/Types/Competition";
-import slugify from 'slugify';
+import slugify from "slugify";
+import { watchEffect } from "vue";
 
 interface Props {
     item: Competition;
@@ -25,11 +26,16 @@ const form = useForm({
     name: competition.name,
     slug: competition.slug,
     registration_link: competition.registration_link,
+    regulation: competition.regulation,
 });
 
 const submit = () => {
     form.put(route("admin.competitions.update", competition));
 };
+
+watchEffect(() => {
+    form.slug = slugify(form.name, { lower: true });
+});
 </script>
 
 <template>
@@ -48,12 +54,22 @@ const submit = () => {
 
             <TextInput
                 id="slug"
-                :model-value="form.slug = slugify(form.name, { lower: true })"
+                :model-value="form.slug"
                 label="Nome que aparece no URL"
                 type="text"
                 required
                 autofocus
                 :error-message="form.errors.slug"
+            />
+
+            <TextInput
+                id="regulation"
+                v-model="form.regulation"
+                label="Regulamento"
+                type="textarea"
+                required
+                autofocus
+                :error-message="form.errors.regulation"
             />
 
             <TextInput

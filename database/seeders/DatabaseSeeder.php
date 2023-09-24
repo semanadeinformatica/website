@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder
 
         Product::factory(10)->recycle($edition)->create();
 
-        $competition = Competition::factory()->recycle($edition)->create();
-        CompetitionTeam::factory(30)->recycle($competition)->create();
+        $competitions = Competition::factory(3)->recycle($edition)->create();
+        CompetitionTeam::factory(90)->recycle($competitions)->create();
     }
 }

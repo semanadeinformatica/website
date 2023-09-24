@@ -1,21 +1,7 @@
 <template>
-    <button
-        class="flex w-fit bg-2023-teal px-4 py-1 font-semibold text-2023-bg drop-shadow-lg"
+    <span
+        class="inline-flex h-full cursor-pointer items-center border-b border-transparent px-1 py-1 text-sm font-medium leading-5 text-2023-teal transition duration-150 ease-in-out hover:border-2023-teal focus:outline-none lg:text-lg"
     >
         <slot />
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 pl-1 text-2023-bg"
-            viewBox="0 0 512 512"
-        >
-            <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="48"
-                d="M112 184l144 144 144-144"
-            />
-        </svg>
-    </button>
+    </span>
 </template>

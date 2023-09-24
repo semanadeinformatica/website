@@ -67,4 +67,9 @@ class Edition extends Model
     {
         return $this->hasMany(Department::class);
     }
+
+    public function competitions(): HasMany
+    {
+        return $this->hasMany(Competition::class);
+    }
 }

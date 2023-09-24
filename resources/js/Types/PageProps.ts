@@ -1,3 +1,4 @@
+import type Competition from "./Competition";
 import type { User } from "./User";
 
 export default interface MyPageProps {
@@ -21,4 +22,5 @@ export default interface MyPageProps {
         user: User;
     };
     canResetPassword: boolean;
+    competitions: Competition[];
 }

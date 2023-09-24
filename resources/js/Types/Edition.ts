@@ -1,3 +1,4 @@
+import type Competition from "./Competition";
 import type Enrollment from "./Enrollment";
 import type Model from "./Model";
 import type Product from "./Product";
@@ -16,4 +17,5 @@ export default interface Edition extends Model {
     quests?: Quest[];
     speakers?: Speaker[];
     sponsors?: Sponsor[];
+    competitions?: Competition[];
 }

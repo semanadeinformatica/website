@@ -19,11 +19,4 @@ class CompetitionController extends Controller
             'competition' => $competition,
         ]);
     }
-
-    public function index()
-    {
-        return Inertia::render('Competitions', [
-            'competitions' => Competition::all(),
-        ]);
-    }
 }

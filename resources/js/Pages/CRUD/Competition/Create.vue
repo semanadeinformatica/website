@@ -24,11 +24,12 @@ const form = useForm({
     name: "",
     slug: "",
     registration_link: "",
+    regulation: "",
 });
 
 watchEffect(() => {
-    form.slug = slugify(form.name, { lower: true })
-})
+    form.slug = slugify(form.name, { lower: true });
+});
 
 const submit = () => {
     form.post(route("admin.competitions.store"));
@@ -68,6 +69,16 @@ const submit = () => {
                 autofocus
                 autocomplete="theme"
                 :error-message="form.errors.theme"
+            />
+
+            <TextInput
+                id="regulation"
+                v-model="form.regulation"
+                label="Regulamento"
+                type="textarea"
+                required
+                autofocus
+                :error-message="form.errors.regulation"
             />
 
             <TextInput

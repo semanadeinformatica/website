@@ -9,6 +9,7 @@ export default interface Competition extends Model {
     date_start: string;
     date_end: string;
     registration_link: string;
+    regulation: string;
 
     edition_id: number;
     edition?: Edition;
