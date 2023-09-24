@@ -53,7 +53,7 @@ import { Head } from "@inertiajs/vue3";
                 Estamos a preparar mais uma edição da SINF!
             </p>
             <a
-                href="https://sinf.pt"
+                href="https://2022.sinf.pt"
                 class="relative m-0 text-lg font-bold text-2023-teal no-underline max-[900px]:text-base"
             >
                 Revê a edição do último ano aqui!
