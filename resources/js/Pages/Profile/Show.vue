@@ -11,6 +11,7 @@ import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue"
 import type Session from "@/Types/Session";
 import type Participant from "@/Types/Participant";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
+import { h } from "vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -19,6 +20,15 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const buttons = {
+    ticket: { id: "ticket", title: "Bilhetes", component: "TicketWrapper" },
+    sticker: {
+        id: "sticker",
+        title: "Conquistas",
+        component: "StickerWrapper",
+    },
+};
 </script>
 
 <template>
@@ -57,7 +67,7 @@ defineProps<Props>();
                                 : $page.props.auth.user
                         "
                     />
-                    <InteractionArea> </InteractionArea>
+                    <InteractionArea :buttons="buttons"> </InteractionArea>
                 </div>
             </template>
         </div>

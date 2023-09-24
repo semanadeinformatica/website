@@ -4,10 +4,11 @@ use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\Edition;
 use App\Models\Participant;
-use function DatabaseHelpers\createManyToManyRelation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+
+use function DatabaseHelpers\createManyToManyRelation;
 
 return new class extends Migration
 {
