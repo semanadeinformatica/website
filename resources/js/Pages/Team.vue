@@ -31,7 +31,7 @@ const colors: Array<string> = [
     </AppLayout>
 </template>
 
-<style>
+<style scoped>
 main {
     padding: 2rem;
     padding-inline: 4rem;
