@@ -5,15 +5,23 @@ defineProps<{
     src: string;
     text: string;
 }>();
+
+const bgColor: Record<string, string> = {
+    orange: "bg-2023-orange",
+    "teal-dark": "bg-2023-teal-dark",
+    "red-dark": "bg-2023-red-dark",
+    red: "bg-2023-red",
+    teal: "bg-2023-teal",
+};
 </script>
 
 <template>
     <div
         class="sticker-clip-path group relative flex h-[220px] w-[220px] basis-0 justify-center overflow-hidden"
-        :class="`bg-${color}` || { [`grayscale`]: !active }"
+        :class="[active ? '' : 'grayscale', bgColor[color]]"
     >
         <img
-            class="sticker-clip-path m-auto"
+            class="sticker-clip-path m-auto transition-all duration-500 group-hover:blur"
             src="https://picsum.photos/200/200"
             alt="Sticker"
         />
