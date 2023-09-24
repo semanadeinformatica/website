@@ -16,6 +16,7 @@ import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
+import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -84,6 +85,7 @@ const buttons = {
                     "
                     :item="user ?? $page.props.auth.user"
                 />
+                <EnrolledParticipants v-else></EnrolledParticipants>
             </div>
         </div>
     </AppLayout>
