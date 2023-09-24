@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'competitions' => fn () => $request->input('edition')->competitions,
+            'competitions' => fn () => $request->input('edition')->competitions ?? [],
         ]);
     }
 }
