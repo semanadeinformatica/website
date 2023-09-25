@@ -19,7 +19,7 @@ const stickers = computed(() => {
             </clipPath>
         </svg>
         <div v-for="item in stickers" :key="item">
-            <Sticker :active="false" color="red" :text="item.name"></Sticker>
+            <Sticker color="red" :sticker="item"></Sticker>
         </div>
     </div>
 </template>

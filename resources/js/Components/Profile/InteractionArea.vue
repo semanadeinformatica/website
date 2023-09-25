@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { ref, watch, type UnwrapRef, onMounted, computed, h } from "vue";
-import StickerWrapper from "./StickerWrapper.vue";
-import TicketWrapper from "./TicketWrapper.vue";
-import { usePage } from "@inertiajs/vue3";
+import {
+    ref,
+    watch,
+    type UnwrapRef,
+    onMounted,
+    computed,
+    type VNode,
+} from "vue";
 
 const selected = ref<HTMLElement | null>(null);
+
+// Change these values with the values of the buttons
 const selectedType = ref<"ticket" | "sticker">("ticket");
+type Props = {
+    buttons: {
+        ticket: { id: string; title: string; component: VNode };
+        sticker: { id: string; title: string; component: VNode };
+    };
+};
+
+const { buttons } = defineProps<Props>();
 
 watch(selected, (newValue, oldValue) => {
     oldValue?.classList.toggle("selected");
     newValue?.classList.toggle("selected");
     selectedType.value =
         (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "ticket";
-    console.log(view);
 });
 
 const view = computed(() => {
-    switch (selectedType.value) {
-        case "ticket":
-            return {
-                elem: h(TicketWrapper),
-                items: usePage().props.tickets,
-            };
-        case "sticker":
-            return {
-                elem: h(StickerWrapper),
-                items: usePage().props.slots,
-            };
-        default:
-            return [];
-    }
+    return buttons[selectedType.value].component;
 });
 
 const toggle = ({ target }: MouseEvent) => {
@@ -44,15 +44,6 @@ onMounted(() => {
         (selected.value.dataset.type as UnwrapRef<typeof selectedType>) ??
         "ticket";
 });
-
-type Props = {
-    buttons: {
-        id: string;
-        title: string;
-    }[];
-};
-
-defineProps<Props>();
 </script>
 
 <template>
@@ -71,7 +62,7 @@ defineProps<Props>();
         </button>
     </div>
     <KeepAlive>
-        <component :is="view.elem"></component>
+        <component :is="view"></component>
     </KeepAlive>
 </template>
 
