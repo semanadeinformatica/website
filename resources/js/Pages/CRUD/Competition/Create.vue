@@ -56,7 +56,6 @@ const submit = () => {
                 label="Nome que aparece no URL"
                 type="text"
                 required
-                autofocus
                 :error-message="form.errors.slug"
             />
 
@@ -66,7 +65,6 @@ const submit = () => {
                 label="Tema"
                 type="text"
                 required
-                autofocus
                 autocomplete="theme"
                 :error-message="form.errors.theme"
             />
@@ -77,7 +75,6 @@ const submit = () => {
                 label="Regulamento"
                 type="textarea"
                 required
-                autofocus
                 :error-message="form.errors.regulation"
             />
 
@@ -87,7 +84,6 @@ const submit = () => {
                 label="Data de início"
                 type="date"
                 required
-                autofocus
                 :error-message="form.errors.date_start"
             />
 
@@ -97,7 +93,6 @@ const submit = () => {
                 label="Data de fim"
                 type="date"
                 required
-                autofocus
                 :error-message="form.errors.date_end"
             />
 
@@ -107,8 +102,6 @@ const submit = () => {
                 label="Link para registo"
                 type="text"
                 required
-                autofocus
-                autocomplete="registration_link"
                 :error-message="form.errors.registration_link"
             />
 

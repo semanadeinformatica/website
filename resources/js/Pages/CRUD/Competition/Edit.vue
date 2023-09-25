@@ -58,7 +58,6 @@ watchEffect(() => {
                 label="Nome que aparece no URL"
                 type="text"
                 required
-                autofocus
                 :error-message="form.errors.slug"
             />
 
@@ -68,7 +67,6 @@ watchEffect(() => {
                 label="Regulamento"
                 type="textarea"
                 required
-                autofocus
                 :error-message="form.errors.regulation"
             />
 
@@ -78,8 +76,6 @@ watchEffect(() => {
                 label="Tema"
                 type="text"
                 required
-                autofocus
-                autocomplete="name"
                 :error-message="form.errors.theme"
             />
 
@@ -89,7 +85,6 @@ watchEffect(() => {
                 label="Data de início"
                 type="date"
                 required
-                autofocus
                 :error-message="form.errors.date_start"
             />
 
@@ -99,7 +94,6 @@ watchEffect(() => {
                 label="Data de fim"
                 type="date"
                 required
-                autofocus
                 :error-message="form.errors.date_end"
             />
 
@@ -109,8 +103,6 @@ watchEffect(() => {
                 label="Link para registo"
                 type="text"
                 required
-                autofocus
-                autocomplete="registration_link"
                 :error-message="form.errors.registration_link"
             />
 

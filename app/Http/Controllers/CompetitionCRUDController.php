@@ -22,7 +22,7 @@ class CompetitionCRUDController extends CRUDController
         'regulation' => 'required|string',
     ];
 
-    protected array $search = ['theme', 'date_start', 'date_end', 'name', 'regulation'];
+    protected array $search = ['theme', 'name'];
 
     protected function with(): array
     {
