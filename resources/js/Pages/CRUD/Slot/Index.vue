@@ -31,6 +31,7 @@ const quests = computed<number[]>(() =>
 
         <template #header>
             <HeaderRow>
+                <Header sort-by="name">Nome</Header>
                 <Header sort-by="total_quests">Número mínimo de tarefas</Header>
                 <Header sort-by="points">Pontos</Header>
                 <Header
@@ -42,6 +43,7 @@ const quests = computed<number[]>(() =>
 
         <template #row="{ item }">
             <Row :item="item" name="slots">
+                <Cell>{{ item.name }}</Cell>
                 <Cell>{{ item.total_quests }}</Cell>
                 <Cell>{{ item.points }}</Cell>
                 <Cell>{{
