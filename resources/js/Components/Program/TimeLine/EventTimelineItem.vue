@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
+import type { SpeakerUser } from "@/Types/User";
 import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 interface Props {
     event: Event;
 }
 
 const { event } = defineProps<Props>();
+
+const speakers = computed(
+    () =>
+        event.users
+            ?.filter((user) => user.usertype_type === "App\\Models\\Speaker")
+            .map((user) => user as SpeakerUser),
+);
 
 const formatTimeString = (time: string): string => {
     const [hours, minutes] = time.split(":");
@@ -27,19 +36,14 @@ const formatTimeString = (time: string): string => {
             >
         </h2>
         <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>
-        <ul v-if="event.users" class="flex flex-col">
+        <ul v-if="speakers" class="flex flex-col">
             <li
-                v-for="speaker in event.users"
+                v-for="speaker in speakers"
                 :key="speaker.id"
                 class="font-bold text-2023-teal"
             >
                 {{ speaker.name
-                }}<span
-                    v-if="
-                        speaker.usertype_type === 'App\\Models\\Speaker' &&
-                        speaker.usertype?.organization
-                    "
-                >
+                }}<span v-if="speaker.usertype?.organization">
                     | {{ speaker.usertype?.organization }}</span
                 >
             </li>
