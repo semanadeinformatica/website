@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type Slot from "@/Types/Slot";
+
 defineProps<{
-    active: boolean;
+    active?: boolean;
     color: string;
-    text: string;
+    sticker: Slot;
 }>();
 
 const bgColor: Record<string, string> = {
@@ -27,7 +29,7 @@ const bgColor: Record<string, string> = {
         <div
             class="sticker-clip-path absolute flex h-full w-full items-center justify-center bg-black bg-opacity-50 p-10 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
         >
-            {{ text }}
+            {{ sticker.name }}
         </div>
     </div>
 </template>
