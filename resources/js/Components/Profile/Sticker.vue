@@ -2,7 +2,6 @@
 defineProps<{
     active: boolean;
     color: string;
-    src: string;
     text: string;
 }>();
 

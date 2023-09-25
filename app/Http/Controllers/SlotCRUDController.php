@@ -16,6 +16,7 @@ class SlotCRUDController extends CRUDController
         'total_quests' => 'required|integer',
         'quests' => 'sometimes|array|exists:quests,id',
         'points' => 'required|integer',
+        'name' => 'required|string',
     ];
 
     protected function created(array $new): ?array

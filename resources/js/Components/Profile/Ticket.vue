@@ -1,11 +1,34 @@
 <script setup lang="ts">
+import type Event from "@/Types/Event";
 import route from "ziggy-js";
 
 interface Props {
     state: "used" | "acquired" | "available";
+    event: Event;
 }
 
 defineProps<Props>();
+
+// FIXME: duplicated :P
+const formatTimeString = (time: string): string => {
+    const [hours, minutes] = time.split(":");
+
+    return `${hours}h${minutes}`;
+};
+
+// https://stackoverflow.com/a/52171480/11571888
+const hashCode = (str: string): number => {
+    let hash = 0;
+    if (str.length == 0) {
+        return hash;
+    }
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash & hash;
+    }
+    return Math.abs(hash);
+};
 </script>
 
 <template>
@@ -88,15 +111,30 @@ defineProps<Props>();
                     ]"
                 >
                     <span class="flex bg-2023-teal-dark px-[1em] py-[.5em]">
-                        NR: 000000001
+                        NR: {{ hashCode((event.id + "SINF2023").toString()) }}
                     </span>
 
                     <div
                         class="my-auto flex flex-col gap-[.25em] px-[1em] py-[.5em]"
                     >
-                        <span>SALA: B208</span>
-                        <span>HORA: 16:10</span>
-                        <span>DATA: 1/10/2023</span>
+                        <span>SALA: {{ event.room }}</span>
+                        <span
+                            >HORA:
+                            {{
+                                event.time_start
+                                    ? formatTimeString(event.time_start)
+                                    : ""
+                            }}</span
+                        >
+                        <!-- #FIXME: we aren't getting the date :/ -->
+                        <span
+                            >DATA:
+                            {{
+                                event.event_day?.date
+                                    ? $d(event.event_day?.date, "short")
+                                    : "TBA"
+                            }}</span
+                        >
                     </div>
                 </div>
                 <div
@@ -110,10 +148,10 @@ defineProps<Props>();
                     <span
                         class="flex justify-end bg-2023-teal-dark px-[1em] py-[.5em] text-right"
                     >
-                        WORKSHOP
+                        {{ event.topic.split(" ")[0] }}
                     </span>
 
-                    <span class="px-[1em]">Capture the Flag 101</span>
+                    <span class="px-[1em]">{{ event.name }}</span>
                 </div>
             </div>
         </div>

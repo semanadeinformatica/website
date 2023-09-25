@@ -8,27 +8,32 @@ import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOther
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
-import type Session from "@/Types/Session";
 import type Participant from "@/Types/Participant";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
-import { h } from "vue";
+import type Slot from "@/Types/Slot";
+import { computed } from "vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
-    sessions: Session[];
+    tickets: Event[];
+    slots: Slot[];
     participant: Participant;
 }
 
 defineProps<Props>();
 
-const buttons = {
-    ticket: { id: "ticket", title: "Bilhetes", component: "TicketWrapper" },
-    sticker: {
-        id: "sticker",
-        title: "Conquistas",
-        component: "StickerWrapper",
-    },
-};
+const buttons = computed(() => {
+    return {
+        tickets: {
+            id: "ticket",
+            title: "Bilhetes",
+        },
+        stickers: {
+            id: "sticker",
+            title: "Conquistas",
+        },
+    };
+});
 </script>
 
 <template>

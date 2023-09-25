@@ -78,7 +78,7 @@ const colorPicker = () => {
                         : ""
                 }}
                 @
-                {{ event.event_day ? formatTimeString(event.time_start) : "" }}
+                {{ event.time_start ? formatTimeString(event.time_start) : "" }}
                 - {{ event.room }}
             </h1>
         </section>

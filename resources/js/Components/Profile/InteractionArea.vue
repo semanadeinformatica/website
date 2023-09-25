@@ -2,6 +2,7 @@
 import { ref, watch, type UnwrapRef, onMounted, computed, h } from "vue";
 import StickerWrapper from "./StickerWrapper.vue";
 import TicketWrapper from "./TicketWrapper.vue";
+import { usePage } from "@inertiajs/vue3";
 
 const selected = ref<HTMLElement | null>(null);
 const selectedType = ref<"ticket" | "sticker">("ticket");
@@ -11,86 +12,20 @@ watch(selected, (newValue, oldValue) => {
     newValue?.classList.toggle("selected");
     selectedType.value =
         (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "ticket";
+    console.log(view);
 });
 
 const view = computed(() => {
     switch (selectedType.value) {
         case "ticket":
             return {
-                id: h(TicketWrapper),
-                items: [
-                    "acquired",
-                    "acquired",
-                    "available",
-                    "available",
-                    "used",
-                ],
+                elem: h(TicketWrapper),
+                items: usePage().props.tickets,
             };
         case "sticker":
             return {
-                id: h(StickerWrapper),
-                items: [
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: true,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                    {
-                        active: false,
-                        color: "red",
-                        src: "",
-                        text: "hellowold",
-                    },
-                ],
+                elem: h(StickerWrapper),
+                items: usePage().props.slots,
             };
         default:
             return [];
@@ -110,13 +45,14 @@ onMounted(() => {
         "ticket";
 });
 
-defineProps<{
+type Props = {
     buttons: {
         id: string;
         title: string;
-        component: string;
     }[];
-}>();
+};
+
+defineProps<Props>();
 </script>
 
 <template>
@@ -135,7 +71,7 @@ defineProps<{
         </button>
     </div>
     <KeepAlive>
-        <component :is="view.id" :items="view"></component>
+        <component :is="view.elem"></component>
     </KeepAlive>
 </template>
 
