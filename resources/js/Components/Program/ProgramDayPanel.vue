@@ -74,7 +74,7 @@ onMounted(() => {
     </section>
     <p
         v-if="!stands(items)"
-        class="mr-2 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal mt-5"
+        class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
     >
         {{ day.theme }}
     </p>
