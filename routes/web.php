@@ -19,6 +19,7 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestCRUDController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
@@ -45,9 +46,7 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
-Route::get('/shop', function() {
-    return Inertia::render('Shop');
-})->name('shop');
+Route::get('/shop', [ShopController::class, 'show'])->name('shop');
 
 Route::prefix('/competition')->name('competition')->group(function () {
     Route::get('/{competition:slug}', [CompetitionController::class, 'show'])->name('.show');
