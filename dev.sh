@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./sail up -d
+./sail up -d laravel.test
 ./sail npm run dev
