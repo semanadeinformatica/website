@@ -100,7 +100,7 @@ const closeModal = () => {
             </template>
 
             <template #footer>
-                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                <PrimaryButton click="closeModal"> Cancel </PrimaryButton>
 
                 <PrimaryButton
                     class="ml-3"

@@ -55,7 +55,7 @@ const closeModal = () => {
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
+            <div class="max-w-xl text-sm text-2023-teal-dark">
                 If necessary, you may log out of all of your other browser
                 sessions across all of your devices. Some of your recent
                 sessions are listed below; however, this list may not be
@@ -73,7 +73,7 @@ const closeModal = () => {
                     <div>
                         <svg
                             v-if="session.agent.is_desktop"
-                            class="h-8 w-8 text-gray-500"
+                            class="h-8 w-8 text-2023-teal-dark"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ const closeModal = () => {
 
                         <svg
                             v-else
-                            class="h-8 w-8 text-gray-500"
+                            class="h-8 w-8 text-2023-teal-dark"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -105,7 +105,7 @@ const closeModal = () => {
                     </div>
 
                     <div class="ml-3">
-                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                        <div class="text-sm text-2023-teal-dark">
                             {{
                                 session.agent.platform
                                     ? session.agent.platform
@@ -120,12 +120,12 @@ const closeModal = () => {
                         </div>
 
                         <div>
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs text-2023-orange">
                                 {{ session.ip_address }},
 
                                 <span
                                     v-if="session.is_current_device"
-                                    class="font-semibold text-green-500"
+                                    class="font-semibold text-2023-orange"
                                     >This device</span
                                 >
                                 <span v-else

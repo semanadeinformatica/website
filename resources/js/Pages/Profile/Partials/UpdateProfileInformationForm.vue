@@ -13,26 +13,68 @@ interface Props {
     user: User;
 }
 
-const props = defineProps<Props>();
+const {user: user} = defineProps<Props>();
 
 const form = useForm({
     _method: "PUT",
-    name: props.user.name,
-    email: props.user.email,
-    photo: null as File | null,
+    name: user.name,
+    email: user.email,
+    type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
+        | "participant"
+        | "company"
+        | "speaker"
+        | "admin",
+    title:
+        user.usertype_type === "App\\Models\\Speaker"
+            ? user.usertype?.title ?? ""
+            : "",
+    description:
+        user.usertype_type === "App\\Models\\Company" ||
+        user.usertype_type === "App\\Models\\Speaker"
+            ? user.usertype?.description ?? ""
+            : "",
+    organization:
+        user.usertype_type === "App\\Models\\Speaker"
+            ? user.usertype?.organization ?? ""
+            : "",
+    social_media: {
+        email:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.email ?? ""
+                : "",
+        facebook:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.facebook ?? ""
+                : "",
+        github:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.github ?? ""
+                : "",
+        instagram:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.instagram ?? ""
+                : "",
+        linkedin:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.linkedin ?? ""
+                : "",
+        twitter:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.twitter ?? ""
+                : "",
+        website:
+            user.usertype_type !== "App\\Models\\Admin"
+                ? user.usertype?.social_media?.website ?? ""
+                : "",
+    },
 });
 
 const verificationLinkSent = ref(false);
-const photoPreview = ref<string | null>(null);
-const photoInput = ref<HTMLInputElement | null>(null);
 
 const updateProfileInformation = () => {
-    if (photoInput.value) form.photo = photoInput.value.files?.[0] ?? null;
-
     form.post(route("user-profile-information.update"), {
         errorBag: "updateProfileInformation",
         preserveScroll: true,
-        onSuccess: () => clearPhotoFileInput(),
     });
 };
 
@@ -40,39 +82,6 @@ const sendEmailVerification = () => {
     verificationLinkSent.value = true;
 };
 
-const selectNewPhoto = () => {
-    photoInput.value?.click();
-};
-
-const updatePhotoPreview = () => {
-    const photo = photoInput.value?.files?.[0];
-
-    if (!photo) return;
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-        photoPreview.value = (e.target?.result as string) ?? null;
-    };
-
-    reader.readAsDataURL(photo);
-};
-
-const deletePhoto = () => {
-    router.delete(route("current-user-photo.destroy"), {
-        preserveScroll: true,
-        onSuccess: () => {
-            photoPreview.value = null;
-            clearPhotoFileInput();
-        },
-    });
-};
-
-const clearPhotoFileInput = () => {
-    if (photoInput.value?.value) {
-        photoInput.value.value = "";
-    }
-};
 </script>
 
 <template>
@@ -84,73 +93,18 @@ const clearPhotoFileInput = () => {
         </template>
 
         <template #form>
-            <!-- Profile Photo -->
-            <div
-                v-if="$page.props.jetstream.managesProfilePhotos"
-                class="col-span-6 sm:col-span-4"
-            >
-                <!-- Profile Photo File Input -->
-                <input
-                    ref="photoInput"
-                    type="file"
-                    class="hidden"
-                    @change="updatePhotoPreview"
-                />
-
-                <label for="photo">Photo</label>
-
-                <!-- Current Profile Photo -->
-                <div v-show="!photoPreview" class="mt-2">
-                    <img
-                        :src="user.profile_photo_url"
-                        :alt="user.name"
-                        class="h-20 w-20 rounded-full object-cover"
-                    />
-                </div>
-
-                <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview" class="mt-2">
-                    <span
-                        class="block h-20 w-20 rounded-full bg-cover bg-center bg-no-repeat"
-                        :style="
-                            'background-image: url(\'' + photoPreview + '\');'
-                        "
-                    />
-                </div>
-
-                <SecondaryButton
-                    class="mr-2 mt-2"
-                    type="button"
-                    @click.prevent="selectNewPhoto"
-                >
-                    Select A New Photo
-                </SecondaryButton>
-
-                <SecondaryButton
-                    v-if="user.profile_photo_path"
-                    type="button"
-                    class="mt-2"
-                    @click.prevent="deletePhoto"
-                >
-                    Remove Photo
-                </SecondaryButton>
-
-                <span class="mt-2">{{ form.errors.photo }}</span>
-            </div>
-
-            <!-- Name -->
-            <TextInput
-                id="name"
-                v-model="form.name"
-                label="Name"
-                type="text"
-                class="mt-1 block w-full"
-                autocomplete="name"
-                :error-message="form.errors.name"
-            />
-
             <!-- Email -->
-            <div class="col-span-6 sm:col-span-4">
+            <div class="flex flex-col gap-5">
+                <!-- Name -->
+                <TextInput
+                    id="name"
+                    v-model="form.name"
+                    label="Name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    autocomplete="name"
+                    :error-message="form.errors.name"
+                />
                 <TextInput
                     id="email"
                     v-model="form.email"
@@ -187,8 +141,93 @@ const clearPhotoFileInput = () => {
                     >
                         A new verification link has been sent to your email
                         address.
+
                     </div>
                 </div>
+
+                <TextInput
+                v-if="form.type === 'speaker'"
+                id="title"
+                v-model="form.title"
+                label="Título"
+                type="text"
+                :error-message="form.errors.title"
+            />
+
+            <TextInput
+                v-if="form.type === 'company' || form.type === 'speaker'"
+                id="description"
+                v-model="form.description"
+                label="Descrição"
+                type="textarea"
+                :error-message="form.errors.description"
+            />
+
+            <TextInput
+                v-if="form.type === 'speaker'"
+                id="organization"
+                v-model="form.organization"
+                label="Organização"
+                type="text"
+                :error-message="form.errors.organization"
+            />
+
+            <details v-if="form.type !== 'admin'" class="self-stretch list-none">
+                <summary class="text-2023-teal-dark">Redes sociais</summary>
+
+                <div class="mt-4 flex flex-col gap-4">
+                    <TextInput
+                        id="social_media.email"
+                        v-model="form.social_media.email"
+                        label="Email"
+                        type="email"
+                        autocomplete="email"
+                        :error-message="form.errors.social_media"
+                    />
+
+                    <TextInput
+                        id="social_media.facebook"
+                        v-model="form.social_media.facebook"
+                        label="Facebook"
+                        type="text"
+                    />
+
+                    <TextInput
+                        id="social_media.github"
+                        v-model="form.social_media.github"
+                        label="GitHub"
+                        type="text"
+                    />
+
+                    <TextInput
+                        id="social_media.instagram"
+                        v-model="form.social_media.instagram"
+                        label="Instagram"
+                        type="text"
+                    />
+
+                    <TextInput
+                        id="social_media.linkedin"
+                        v-model="form.social_media.linkedin"
+                        label="Linkedin"
+                        type="text"
+                    />
+
+                    <TextInput
+                        id="social_media.twitter"
+                        v-model="form.social_media.twitter"
+                        label="Twitter"
+                        type="text"
+                    />
+
+                    <TextInput
+                        id="social_media.website"
+                        v-model="form.social_media.website"
+                        label="Website"
+                        type="url"
+                    />
+                </div>
+            </details>
             </div>
         </template>
 

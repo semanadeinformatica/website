@@ -3,9 +3,7 @@ import { ref, computed, watch } from "vue";
 import { router, useForm, usePage } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
-import DangerButton from "@/Components/DangerButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
 import axios from "axios";
@@ -119,26 +117,26 @@ const disableTwoFactorAuthentication = () => {
         <template #content>
             <h3
                 v-if="twoFactorEnabled && !confirming"
-                class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                class="text-lg font-medium text-2023-teal"
             >
                 You have enabled two factor authentication.
             </h3>
 
             <h3
                 v-else-if="twoFactorEnabled && confirming"
-                class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                class="text-lg font-medium text-2023-red-dark"
             >
                 Finish enabling two factor authentication.
             </h3>
 
             <h3
                 v-else
-                class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                class="text-lg font-medium text-2023-red"
             >
                 You have not enabled two factor authentication.
             </h3>
 
-            <div class="mt-3 max-w-xl text-sm text-gray-600 dark:text-gray-400">
+            <div class="mt-3 max-w-xl text-sm text-2023-teal-dark">
                 <p>
                     When two factor authentication is enabled, you will be
                     prompted for a secure, random token during authentication.
@@ -150,7 +148,7 @@ const disableTwoFactorAuthentication = () => {
             <div v-if="twoFactorEnabled">
                 <div v-if="qrCode">
                     <div
-                        class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400"
+                        class="mt-4 max-w-xl text-sm text-2023-teal-dark"
                     >
                         <p v-if="confirming" class="font-semibold">
                             To finish enabling two factor authentication, scan
@@ -167,13 +165,13 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div
-                        class="mt-4 inline-block bg-white p-2"
+                        class="mt-4 inline-block bg-2023-bg p-2"
                         v-html="qrCode"
                     />
 
                     <div
                         v-if="setupKey"
-                        class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400"
+                        class="mt-4 max-w-xl text-sm text-2023-teal-dark"
                     >
                         <p class="font-semibold">
                             Setup Key: <span v-html="setupKey"></span>
@@ -198,7 +196,7 @@ const disableTwoFactorAuthentication = () => {
 
                 <div v-if="recoveryCodes.length > 0 && !confirming">
                     <div
-                        class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400"
+                        class="mt-4 max-w-xl text-sm text-gray-600 "
                     >
                         <p class="font-semibold">
                             Store these recovery codes in a secure password
@@ -209,7 +207,7 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div
-                        class="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm dark:bg-gray-900"
+                        class="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm "
                     >
                         <div v-for="code in recoveryCodes" :key="code">
                             {{ code }}
@@ -249,45 +247,47 @@ const disableTwoFactorAuthentication = () => {
                     </ConfirmsPassword>
 
                     <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
-                        <SecondaryButton
+                        <PrimaryButton
                             v-if="recoveryCodes.length > 0 && !confirming"
                             class="mr-3"
                         >
                             Regenerate Recovery Codes
-                        </SecondaryButton>
+                        </PrimaryButton>
                     </ConfirmsPassword>
 
                     <ConfirmsPassword @confirmed="showRecoveryCodes">
-                        <SecondaryButton
+                        <PrimaryButton
                             v-if="recoveryCodes.length === 0 && !confirming"
                             class="mr-3"
                         >
                             Show Recovery Codes
-                        </SecondaryButton>
+                        </PrimaryButton>
                     </ConfirmsPassword>
 
                     <ConfirmsPassword
                         @confirmed="disableTwoFactorAuthentication"
                     >
-                        <SecondaryButton
+                        <PrimaryButton
                             v-if="confirming"
                             :class="{ 'opacity-25': disabling }"
+                            color="red"
                             :disabled="disabling"
                         >
                             Cancel
-                        </SecondaryButton>
+                        </PrimaryButton>
                     </ConfirmsPassword>
 
                     <ConfirmsPassword
                         @confirmed="disableTwoFactorAuthentication"
                     >
-                        <DangerButton
+                        <PrimaryButton
                             v-if="!confirming"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
+                            color="red"
                         >
                             Disable
-                        </DangerButton>
+                        </PrimaryButton>
                     </ConfirmsPassword>
                 </div>
             </div>
