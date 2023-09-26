@@ -61,7 +61,7 @@
                 height="271"
                 x="471.5"
                 y="3.5"
-                href="images/default_icon.png"
+                href="/images/default_icon.png"
                 clip-path="url(#first)"
                 class="bg-opacity-0 duration-75 ease-out hover:blur-sm"
             />
@@ -81,7 +81,7 @@
                 height="271"
                 x="69.5"
                 y="76.5"
-                href="images/default_icon.png"
+                href="/images/default_icon.png"
                 clip-path="url(#second)"
                 class="bg-opacity-0 duration-75 ease-out hover:blur-sm"
             />
@@ -102,7 +102,7 @@
                 height="271"
                 x="873.5"
                 y="98.5"
-                href="images/default_icon.png"
+                href="/images/default_icon.png"
                 clip-path="url(#third)"
                 class="bg-opacity-0 duration-75 ease-out hover:blur-sm"
             />

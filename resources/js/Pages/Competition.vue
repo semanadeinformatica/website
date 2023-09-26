@@ -1,11 +1,43 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Podium from "@/Components/Podium.vue";
-import { Link } from "@inertiajs/vue3";
+import type Competition from "@/Types/Competition";
+import { computed } from "vue";
+
+interface Props {
+    competition: Competition;
+}
+
+const { competition } = defineProps<Props>();
+
+const regulationTextParts = computed(() => {
+    // See if this gets fucky - Nuno Pereira
+    const parts = competition.regulation.split(" ");
+
+    return [
+        parts.slice(0, Math.ceil(parts.length / 2)).join(" "),
+        parts.slice(Math.ceil(parts.length / 2)).join(" "),
+    ];
+});
 </script>
 
 <template>
     <AppLayout title="Competition">
+        <header
+            class="relative left-1/2 top-9 flex w-fit -translate-x-1/2 transform flex-col gap-4"
+        >
+            <h2
+                class="border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
+            >
+                {{ competition.name }}
+            </h2>
+            <span
+                class="inline-flex w-full justify-center text-xl font-bold text-2023-teal"
+                >{{ $d(new Date(competition.date_start), "short") }} -
+                {{ $d(new Date(competition.date_end), "short") }}</span
+            >
+        </header>
+
         <Podium></Podium>
         <!-- RULES -->
 
@@ -19,23 +51,10 @@ import { Link } from "@inertiajs/vue3";
             </h2>
 
             <p class="p-20 text-lg text-white max-lg:pb-10">
-                A Semana de Informática (SINF), organizada pelo Núcleo de
-                Informática da Associação de Estudantes da Faculdade de
-                Engenharia da Universidade do Porto (NIAEFEUP), foi criada com o
-                intuito de permitir aos estudantes, independentemente do curso,
-                desenvolver as suas capacidades nas diversas áreas da
-                Informática, promovendo a sua interação com o mundo empresarial
-                através de eventos sociais.
+                {{ regulationTextParts[0] }}
             </p>
-            <p class="p-20 text-lg text-white max-lg:py-10">
-                A edição de 2023 decorre entre os dias 25 e 31 de outubro. Os
-                participantes têm a seu dispor palestras e workshops onde
-                entrarão em contacto com diversas tecnologias e conceitos que
-                não intervêm no percurso académico, focando-se portanto nas
-                skills técnicas, assim como um pitch, sessões de entrevistas e
-                visitas a empresas, fomentando o seu contacto com empresas de
-                topo a nível nacional e internacional, podendo desenvolver as
-                suas soft skills.
+            <p class="p-20 text-lg text-white max-lg:pb-10">
+                {{ regulationTextParts[1] }}
             </p>
         </section>
 
@@ -49,12 +68,12 @@ import { Link } from "@inertiajs/vue3";
                 Vamos a isto?
             </h1>
 
-            <Link
-                href="/"
+            <a
+                :href="competition.registration_link"
                 class="relative mt-5 content-center justify-center border border-black bg-2023-teal px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
             >
                 Participar!
-            </Link>
+            </a>
         </section>
     </AppLayout>
 </template>

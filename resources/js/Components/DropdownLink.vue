@@ -19,11 +19,11 @@ const classes =
 
 <template>
     <div>
-        <button v-if="as == 'button'" type="submit" :class="classes">
+        <button v-if="as === 'button'" type="submit" :class="classes">
             <slot />
         </button>
 
-        <a v-else-if="as == 'a'" :href="href" :class="classes">
+        <a v-else-if="as === 'a'" :href="href" :class="classes">
             <slot />
         </a>
 

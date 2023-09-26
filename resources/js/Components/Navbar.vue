@@ -79,32 +79,27 @@ const isAdmin = computed(() => {
                     {{ label }}
                 </NavLink>
             </template>
+            <Dropdown align="center" width="32">
+                <template #trigger>
+                    <DropdownTrigger>Competições</DropdownTrigger>
+                </template>
+                <template #content>
+                    <template
+                        v-for="competition in $page.props.competitions"
+                        :key="competition.id"
+                    >
+                        <DropdownLink
+                            :href="route('competition.show', { competition })"
+                        >
+                            {{ competition.name }}
+                        </DropdownLink>
+                    </template>
+                </template>
+            </Dropdown>
         </div>
 
         <div class="mr-4 flex w-full items-center justify-end">
             <div class="hidden gap-1 md:flex lg:gap-4">
-                <Dropdown align="center" width="32">
-                    <template #trigger>
-                        <DropdownTrigger> Atividades </DropdownTrigger>
-                    </template>
-                    <template #content>
-                        <template
-                            v-for="({ label, _query }, page) in activityRoutes"
-                            :key="page"
-                        >
-                            <DropdownLink
-                                :href="
-                                    route(route().has(page) ? page : 'home', {
-                                        _query,
-                                    } as RouteParamsWithQueryOverload)
-                                "
-                            >
-                                {{ label }}
-                            </DropdownLink>
-                        </template>
-                    </template>
-                </Dropdown>
-
                 <Dropdown align="center" width="20">
                     <template #trigger>
                         <DropdownTrigger> 2023 </DropdownTrigger>

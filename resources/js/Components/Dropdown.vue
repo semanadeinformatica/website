@@ -2,15 +2,13 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 
 interface Props {
-    align: "left" | "right" | "center";
     width: string | number;
     contentClasses: string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    align: "right",
     width: "48",
-    contentClasses: () => ["bg-2023-red-dark", "text-center"],
+    contentClasses: () => ["text-2023-red-dark", "text-center"],
 });
 
 let open = ref(false);
@@ -29,25 +27,11 @@ const widthClass = computed(() => {
         "48": "w-48",
     }[props.width.toString()];
 });
-
-const alignmentClasses = computed(() => {
-    if (props.align === "left") return "origin-top-left left-0";
-
-    if (props.align === "center") {
-        return "origin-top left-1/2 -translate-x-1/2";
-    }
-
-    if (props.align === "right") {
-        return "origin-top-right right-0";
-    }
-
-    return "origin-top";
-});
 </script>
 
 <template>
-    <div class="relative justify-center">
-        <div @click="open = !open">
+    <div class="relative">
+        <div class="h-full" @click="open = !open">
             <slot name="trigger" />
         </div>
 
@@ -67,8 +51,8 @@ const alignmentClasses = computed(() => {
         >
             <div
                 v-show="open"
-                class="absolute z-50"
-                :class="[widthClass, alignmentClasses]"
+                class="absolute left-1/2 z-50 -translate-x-1/2"
+                :class="[widthClass]"
                 style="display: none"
                 @click="open = false"
             >

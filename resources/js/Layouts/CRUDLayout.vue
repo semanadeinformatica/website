@@ -4,10 +4,10 @@ import PaginationLinks from "@/Components/PaginationLinks.vue";
 import type Model from "@/Types/Model";
 import type Paginated from "@/Types/Paginated";
 import AdminLayout from "./AdminLayout.vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
-import { ref, watch } from "vue";
+import useSearch from "@/composables/useSearch";
 
 defineProps<{
     items: Paginated<T>;
@@ -15,20 +15,7 @@ defineProps<{
     name: string;
 }>();
 
-const query = ref(new URLSearchParams(location.search).get("query") ?? "");
-
-watch(query, (query) => {
-    const ziggy = route();
-
-    router.replace(
-        route(ziggy.current() ?? "#", { ...ziggy.params, query, page: 1 }),
-        {
-            preserveState: true,
-            preserveScroll: true,
-            only: ["items"],
-        },
-    );
-});
+const query = useSearch("query", ["items"]);
 </script>
 
 <template>

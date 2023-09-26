@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionTeamCRUDController;
 use App\Http\Controllers\CVController;
@@ -41,9 +42,9 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
-Route::get('/competition', function () {
-    return Inertia::render('Competition');
-})->name('competition');
+Route::prefix('/competition')->name('competition')->group(function () {
+    Route::get('/{competition:slug}', [CompetitionController::class, 'show'])->name('.show');
+});
 
 Route::prefix('/event')->name('event')->group(function () {
 

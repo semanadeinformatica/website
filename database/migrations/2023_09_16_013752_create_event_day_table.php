@@ -31,8 +31,7 @@ return new class extends Migration
         });
 
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeignIdFor(Edition::class);
-            $table->dropColumn(['edition_id']);
+            $table->dropConstrainedForeignIdFor(Edition::class);
             $table->dropColumn(['date_start', 'date_end']);
             $table->foreignIdFor(EventDay::class)->constrained()->cascadeOnDelete();
             $table->time('time_start');
@@ -46,8 +45,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeignIdFor(EventDay::class);
-            $table->dropColumn(['event_day_id']);
+            $table->dropConstrainedForeignIdFor(EventDay::class);
             $table->dropColumn(['time_start', 'time_end']);
             $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->dateTime('date_start');

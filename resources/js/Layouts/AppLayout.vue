@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
 import Navbar from "@/Components/Navbar.vue";
-import Footer from "../Components/Footer.vue";
+import Footer from "@/Components/Footer.vue";
 import Banner from "@/Components/Banner.vue";
 
 interface Props {
