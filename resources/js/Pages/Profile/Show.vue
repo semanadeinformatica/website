@@ -10,7 +10,7 @@ import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfile
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
-import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
+//import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -39,7 +39,7 @@ defineProps<Props>();
                     "
                     :item="user ?? $page.props.auth.user"
                 />
-                <EnrolledParticipants v-else></EnrolledParticipants>
+                <!--<EnrolledParticipants v-else></EnrolledParticipants>-->
             </div>
         </div>
     </AppLayout>
