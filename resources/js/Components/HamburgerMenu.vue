@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import route, {
     type QueryParams,
@@ -21,6 +21,14 @@ const props = defineProps<{
         editions: number[];
     };
 }>();
+
+watch(open, () => {
+    if (open.value) {
+        document.body.classList.add("overflow-hidden");
+    } else {
+        document.body.classList.remove("overflow-hidden");
+    }
+});
 </script>
 
 <template>
@@ -53,7 +61,7 @@ const props = defineProps<{
     </div>
     <div
         v-show="open"
-        class="absolute left-0 top-[5.6rem] z-50 m-0 flex w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
+        class="absolute left-0 top-[5.6rem] z-50 m-0 flex h-screen w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
     >
         <template
             v-for="({ label, _query }, page) in props.options.pages"
@@ -92,7 +100,10 @@ const props = defineProps<{
         </section>
         <section class="py-6">
             <h2 class="pb-3 text-center font-bold text-2023-orange">Edições</h2>
-            <div class="flex flex-row justify-center gap-5">
+            <div
+                class="flex w-full flex-wrap justify-center gap-5 px-12"
+                style="grid-template-columns: repeat(auto-fill, 100px)"
+            >
                 <template
                     v-for="edition in props.options.editions"
                     :key="`navbar-edition-link-${edition}`"
@@ -100,6 +111,7 @@ const props = defineProps<{
                     <ResponsiveNavLink
                         :href="route('home')"
                         :active="edition === new Date().getFullYear()"
+                        class="!w-fit"
                     >
                         {{ edition }}
                     </ResponsiveNavLink>
