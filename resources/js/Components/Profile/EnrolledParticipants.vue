@@ -22,4 +22,3 @@
         </tbody>
     </table>
 </template>
-
