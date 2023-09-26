@@ -45,6 +45,10 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
+Route::get('/shop', function() {
+    return Inertia::render('Shop');
+})->name('shop');
+
 Route::prefix('/competition')->name('competition')->group(function () {
     Route::get('/{competition:slug}', [CompetitionController::class, 'show'])->name('.show');
 });
