@@ -17,8 +17,8 @@ class EventCRUDController extends CRUDController
 
     protected array $rules = [
         'name' => 'required|string',
-        'time_start' => 'required|date_format:"H:i"',
-        'time_end' => 'required|date_format:"H:i"|after:time_start',
+        'time_start' => 'required|date_format:"H:i:s"',
+        'time_end' => 'required|date_format:"H:i:s"|after:time_start',
         'description' => 'required|string',
         'room' => 'required|string',
         'topic' => 'required|string',

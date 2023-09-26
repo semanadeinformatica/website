@@ -6,6 +6,11 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const speakerName = (name: string) => {
+    const nameArray = name.split(" ");
+    return `${nameArray[0]} ${nameArray[nameArray.length - 1]}`;
+};
 </script>
 
 <template>
@@ -16,7 +21,7 @@ defineProps<Props>();
             alt=""
         />
         <p class="max-w-[200px] break-words py-4 text-lg text-2023-teal-dark">
-            {{ speaker.name }}
+            {{ speakerName(speaker.name) }}
         </p>
     </div>
 </template>
