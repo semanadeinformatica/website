@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
 import Sticker from "./Sticker.vue";
-const stickers = computed(() => {
-    return usePage().props.slots;
-});
 </script>
 
 <template>
@@ -18,7 +13,7 @@ const stickers = computed(() => {
                 />
             </clipPath>
         </svg>
-        <div v-for="item in stickers" :key="item">
+        <div v-for="item in $page.props.slots" :key="item">
             <Sticker color="red" :sticker="item"></Sticker>
         </div>
     </div>
