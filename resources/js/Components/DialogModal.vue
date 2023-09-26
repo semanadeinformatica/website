@@ -25,9 +25,7 @@ const close = () => emit("close");
             </div>
         </div>
 
-        <div
-            class="flex flex-row justify-end bg-2023-bg px-6 py-4 text-right"
-        >
+        <div class="flex flex-row justify-end bg-2023-bg px-6 py-4 text-right">
             <slot name="footer" />
         </div>
     </Modal>

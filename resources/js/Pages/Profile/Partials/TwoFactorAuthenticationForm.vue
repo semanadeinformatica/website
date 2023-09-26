@@ -129,10 +129,7 @@ const disableTwoFactorAuthentication = () => {
                 Finish enabling two factor authentication.
             </h3>
 
-            <h3
-                v-else
-                class="text-lg font-medium text-2023-red"
-            >
+            <h3 v-else class="text-lg font-medium text-2023-red">
                 You have not enabled two factor authentication.
             </h3>
 
@@ -147,9 +144,7 @@ const disableTwoFactorAuthentication = () => {
 
             <div v-if="twoFactorEnabled">
                 <div v-if="qrCode">
-                    <div
-                        class="mt-4 max-w-xl text-sm text-2023-teal-dark"
-                    >
+                    <div class="mt-4 max-w-xl text-sm text-2023-teal-dark">
                         <p v-if="confirming" class="font-semibold">
                             To finish enabling two factor authentication, scan
                             the following QR code using your phone's
@@ -195,9 +190,7 @@ const disableTwoFactorAuthentication = () => {
                 </div>
 
                 <div v-if="recoveryCodes.length > 0 && !confirming">
-                    <div
-                        class="mt-4 max-w-xl text-sm text-gray-600 "
-                    >
+                    <div class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
                             Store these recovery codes in a secure password
                             manager. They can be used to recover access to your
@@ -207,7 +200,7 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div
-                        class="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm "
+                        class="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm"
                     >
                         <div v-for="code in recoveryCodes" :key="code">
                             {{ code }}

@@ -80,9 +80,7 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <PrimaryButton @click="closeModal">
-                        Cancel
-                    </PrimaryButton>
+                    <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
 
                     <PrimaryButton
                         class="ml-3"

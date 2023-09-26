@@ -13,7 +13,7 @@ interface Props {
     user: User;
 }
 
-const {user: user} = defineProps<Props>();
+const { user: user } = defineProps<Props>();
 
 const form = useForm({
     _method: "PUT",
@@ -81,7 +81,6 @@ const updateProfileInformation = () => {
 const sendEmailVerification = () => {
     verificationLinkSent.value = true;
 };
-
 </script>
 
 <template>
@@ -141,93 +140,95 @@ const sendEmailVerification = () => {
                     >
                         A new verification link has been sent to your email
                         address.
-
                     </div>
                 </div>
 
                 <TextInput
-                v-if="form.type === 'speaker'"
-                id="title"
-                v-model="form.title"
-                label="Título"
-                type="text"
-                :error-message="form.errors.title"
-            />
+                    v-if="form.type === 'speaker'"
+                    id="title"
+                    v-model="form.title"
+                    label="Título"
+                    type="text"
+                    :error-message="form.errors.title"
+                />
 
-            <TextInput
-                v-if="form.type === 'company' || form.type === 'speaker'"
-                id="description"
-                v-model="form.description"
-                label="Descrição"
-                type="textarea"
-                :error-message="form.errors.description"
-            />
+                <TextInput
+                    v-if="form.type === 'company' || form.type === 'speaker'"
+                    id="description"
+                    v-model="form.description"
+                    label="Descrição"
+                    type="textarea"
+                    :error-message="form.errors.description"
+                />
 
-            <TextInput
-                v-if="form.type === 'speaker'"
-                id="organization"
-                v-model="form.organization"
-                label="Organização"
-                type="text"
-                :error-message="form.errors.organization"
-            />
+                <TextInput
+                    v-if="form.type === 'speaker'"
+                    id="organization"
+                    v-model="form.organization"
+                    label="Organização"
+                    type="text"
+                    :error-message="form.errors.organization"
+                />
 
-            <details v-if="form.type !== 'admin'" class="self-stretch list-none">
-                <summary class="text-2023-teal-dark">Redes sociais</summary>
+                <details
+                    v-if="form.type !== 'admin'"
+                    class="list-none self-stretch"
+                >
+                    <summary class="text-2023-teal-dark">Redes sociais</summary>
 
-                <div class="mt-4 flex flex-col gap-4">
-                    <TextInput
-                        id="social_media.email"
-                        v-model="form.social_media.email"
-                        label="Email"
-                        type="email"
-                        autocomplete="email"
-                        :error-message="form.errors.social_media"
-                    />
+                    <div class="mt-4 flex flex-col gap-4">
+                        <TextInput
+                            id="social_media.email"
+                            v-model="form.social_media.email"
+                            label="Email"
+                            type="email"
+                            autocomplete="email"
+                            :error-message="form.errors.social_media"
+                        />
 
-                    <TextInput
-                        id="social_media.facebook"
-                        v-model="form.social_media.facebook"
-                        label="Facebook"
-                        type="text"
-                    />
+                        <TextInput
+                            id="social_media.facebook"
+                            v-model="form.social_media.facebook"
+                            label="Facebook"
+                            type="text"
+                        />
 
-                    <TextInput
-                        id="social_media.github"
-                        v-model="form.social_media.github"
-                        label="GitHub"
-                        type="text"
-                    />
+                        <TextInput
+                            id="social_media.github"
+                            v-model="form.social_media.github"
+                            label="GitHub"
+                            type="text"
+                        />
 
-                    <TextInput
-                        id="social_media.instagram"
-                        v-model="form.social_media.instagram"
-                        label="Instagram"
-                        type="text"
-                    />
+                        <TextInput
+                            id="social_media.instagram"
+                            v-model="form.social_media.instagram"
+                            label="Instagram"
+                            type="text"
+                        />
 
-                    <TextInput
-                        id="social_media.linkedin"
-                        v-model="form.social_media.linkedin"
-                        label="Linkedin"
-                        type="text"
-                    />
+                        <TextInput
+                            id="social_media.linkedin"
+                            v-model="form.social_media.linkedin"
+                            label="Linkedin"
+                            type="text"
+                        />
 
-                    <TextInput
-                        id="social_media.twitter"
-                        v-model="form.social_media.twitter"
-                        label="Twitter"
-                        type="text"
-                    />
+                        <TextInput
+                            id="social_media.twitter"
+                            v-model="form.social_media.twitter"
+                            label="Twitter"
+                            type="text"
+                        />
 
-                    <TextInput
-                        id="social_media.website"
-                        v-model="form.social_media.website"
-                        label="Website"
-                        type="url"
-                    />
-                </div>
-            </details>
+                        <TextInput
+                            id="social_media.website"
+                            v-model="form.social_media.website"
+                            label="Website"
+                            type="url"
+                        />
+                    </div>
+                </details>
             </div>
         </template>
 

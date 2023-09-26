@@ -26,7 +26,6 @@ use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCRUDController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -111,7 +110,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
             Route::get('/profile/edit', [UserController::class, 'edit'])
-            ->name('profile.edit');
+                ->name('profile.edit');
         });
     }
 );

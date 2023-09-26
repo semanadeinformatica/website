@@ -2,9 +2,8 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\Participant;
-use App\Models\User;
 use App\Models\SocialMedia;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
