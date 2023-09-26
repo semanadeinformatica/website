@@ -26,7 +26,7 @@ defineProps<Props>();
             <template
                 v-if="
                     participant ||
-                    $page.props.auth.user.usertype_type ===
+                    $page.props.auth.user?.usertype_type ===
                         'App\\Models\\Participant'
                 "
             >

@@ -61,7 +61,7 @@ const clearPhotoFileInput = () => {
             @change="uploadNewPhoto"
         />
         <button
-            v-if="$page.props.auth.user.id == item?.id"
+            v-if="$page.props.auth.user?.id == item?.id"
             @click.prevent="selectNewPhoto"
         >
             <svg

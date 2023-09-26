@@ -56,7 +56,7 @@ const clearCVFileInput = () => {
             <div class="flex items-center">
                 <p>CV</p>
                 <button
-                    v-if="$page.props.auth.user.id == item?.id"
+                    v-if="$page.props.auth.user?.id == item?.id"
                     class="mx-3"
                     @click.prevent="selectCV"
                 >
@@ -146,7 +146,7 @@ const clearCVFileInput = () => {
             v-if="
                 item?.usertype_type === 'App\\Models\\Participant' &&
                 !item?.usertype?.cv_path &&
-                $page.props.auth.user.id == item.id
+                $page.props.auth.user?.id == item.id
             "
             class="mb-12 mt-3 border-2 border-solid border-black p-3 text-2023-red md:mx-32"
         >
