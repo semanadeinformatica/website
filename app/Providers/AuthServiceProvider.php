@@ -29,6 +29,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('participant', fn (User $user) => $user->isParticipant());
         Gate::define('company', fn (User $user) => $user->isCompany());
 
-        Gate::define('enroll', fn (User $user, Edition $edition) => $user->isParticipant() && $user->usertype->enrollments()->where('edition_id', $edition->id)->doesntExist());
+        Gate::define('enroll', fn (?User $user, Edition $edition) => (
+            $user === null || (
+                $user->isParticipant() &&
+                $user->usertype->enrollments()->where('edition_id', $edition->id)->doesntExist()
+            )
+        ));
     }
 }

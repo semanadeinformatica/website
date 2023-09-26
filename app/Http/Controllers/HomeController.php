@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Edition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -26,7 +27,7 @@ class HomeController extends Controller
         $talk_count = $event_count - $activity_count;
         $stand_count = $edition->stands()->count();
 
-        $can_enroll = $request->user()?->can('enroll', $edition);
+        $can_enroll = Gate::allows('enroll', $edition);
 
         return Inertia::render('Home', [
             'edition' => $edition,

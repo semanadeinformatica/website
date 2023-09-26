@@ -31,7 +31,11 @@ import route from "ziggy-js";
                 shadow="teal"
                 text-size="sm:text-4xl"
                 padding="sm:px-8"
-                @click="router.put(route('enroll'))"
+                @click="
+                    $page.props.auth.user
+                        ? router.put(route('enroll'))
+                        : router.get(route('register'))
+                "
                 >Inscrever-me</PrimaryButton
             >
         </div>

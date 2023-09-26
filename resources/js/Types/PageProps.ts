@@ -19,7 +19,7 @@ export default interface MyPageProps {
         managesProfilePhotos: boolean;
     };
     auth: {
-        user: User;
+        user?: User;
     };
     canResetPassword: boolean;
     competitions: Competition[];
