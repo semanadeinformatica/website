@@ -7,6 +7,7 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;
 use App\Http\Controllers\EditionCRUDController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentCRUDController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
@@ -60,6 +61,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
+
+        Route::put('/enroll', [EnrollmentController::class, 'store'])
+            ->name('enroll');
 
         Route::prefix('admin')
             ->middleware('can:admin')

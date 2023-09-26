@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { router } from "@inertiajs/vue3";
+import route from "ziggy-js";
 </script>
 
 <template>
@@ -29,6 +31,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                 shadow="teal"
                 text-size="sm:text-4xl"
                 padding="sm:px-8"
+                @click="router.put(route('enroll'))"
                 >Inscrever-me</PrimaryButton
             >
         </div>
