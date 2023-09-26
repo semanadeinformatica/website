@@ -104,11 +104,13 @@ const formattedDate = (
             </p>
             <p class="margin-0 text-2xl font-bold text-2023-teal">
                 {{
-                    formattedDate(
-                        $d(new Date(days[0].date), "long"),
-                        $t("general.to"),
-                        $d(new Date(days[days.length - 1].date), "long"),
-                    )
+                    days.length > 0
+                        ? formattedDate(
+                              $d(new Date(days[0].date), "long"),
+                              $t("general.to"),
+                              $d(new Date(days[days.length - 1].date), "long"),
+                          )
+                        : ""
                 }}
             </p>
         </section>
