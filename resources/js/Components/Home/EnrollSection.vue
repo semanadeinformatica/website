@@ -27,7 +27,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
             <PrimaryButton
                 color="orange"
                 shadow="teal"
-                textSize="sm:text-4xl"
+                text-size="sm:text-4xl"
                 padding="sm:px-8"
                 >Inscrever-me</PrimaryButton
             >

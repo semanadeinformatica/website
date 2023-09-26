@@ -26,6 +26,8 @@ class HomeController extends Controller
         $talk_count = $event_count - $activity_count;
         $stand_count = $edition->stands()->count();
 
+        $can_enroll = $request->user()?->can('enroll', $edition);
+
         return Inertia::render('Home', [
             'edition' => $edition,
             'sponsors' => $sponsors,
@@ -34,6 +36,7 @@ class HomeController extends Controller
             'talkCount' => $talk_count,
             'days' => $days,
             'standCount' => $stand_count,
+            'canEnroll' => $can_enroll,
         ]);
     }
 }

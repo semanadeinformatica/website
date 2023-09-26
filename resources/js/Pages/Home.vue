@@ -19,6 +19,7 @@ interface Props {
     activityCount: number;
     talkCount: number;
     standCount: number;
+    canEnroll: boolean;
 }
 
 const { edition, sponsors, days, activityCount, talkCount, standCount } =
@@ -179,7 +180,7 @@ const formattedDate = (
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
-        <EnrollSection />
+        <EnrollSection v-if="canEnroll" />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>
