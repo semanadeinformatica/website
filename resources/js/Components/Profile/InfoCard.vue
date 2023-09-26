@@ -87,7 +87,7 @@ const iconColor: Record<string, string> = {
                 </template>
             </div>
         </div>
-        <button v-if="$page.props.auth.user.id == item?.id" class="self-start">
+        <button v-if="$page.props.auth.user?.id == item?.id" class="self-start">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-8 text-2023-teal"

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { router } from "@inertiajs/vue3";
+import route from "ziggy-js";
 </script>
 
 <template>
@@ -27,8 +29,13 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
             <PrimaryButton
                 color="orange"
                 shadow="teal"
-                textSize="sm:text-4xl"
+                text-size="sm:text-4xl"
                 padding="sm:px-8"
+                @click="
+                    $page.props.auth.user
+                        ? router.put(route('enroll'))
+                        : router.get(route('register'))
+                "
                 >Inscrever-me</PrimaryButton
             >
         </div>

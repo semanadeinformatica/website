@@ -50,7 +50,7 @@ const options = {
 };
 
 const isAdmin = computed(() => {
-    return usePage().props.auth.user.usertype_type == "App\\Models\\Admin";
+    return usePage().props.auth.user?.usertype_type == "App\\Models\\Admin";
 });
 </script>
 

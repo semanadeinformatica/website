@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Edition;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -22,8 +25,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('admin', fn ($user) => $user->isAdmin());
-        Gate::define('participant', fn ($user) => $user->isParticipant());
-        Gate::define('company', fn ($user) => $user->isCompany());
+        Gate::define('admin', fn (User $user) => $user->isAdmin());
+        Gate::define('participant', fn (User $user) => $user->isParticipant());
+        Gate::define('company', fn (User $user) => $user->isCompany());
+
+        Gate::define('enroll', fn (?User $user, Edition $edition) => (
+            $user === null || (
+                $user->isParticipant() &&
+                $user->usertype->enrollments()->where('edition_id', $edition->id)->doesntExist()
+            )
+        ));
     }
 }
