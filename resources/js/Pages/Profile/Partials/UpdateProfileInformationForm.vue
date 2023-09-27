@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Link, router, useForm } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import ActionMessage from "@/Components/ActionMessage.vue";
 import FormSection from "@/Components/FormSection.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type { User } from "@/Types/User";
 import route from "ziggy-js";

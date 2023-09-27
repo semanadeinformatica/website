@@ -2,7 +2,6 @@
 import { ref, reactive, nextTick } from "vue";
 import DialogModal from "./DialogModal.vue";
 import PrimaryButton from "./PrimaryButton.vue";
-import SecondaryButton from "./SecondaryButton.vue";
 import TextInput from "./TextInput.vue";
 import axios from "axios";
 import route from "ziggy-js";
@@ -100,7 +99,7 @@ const closeModal = () => {
             </template>
 
             <template #footer>
-                <PrimaryButton click="closeModal"> Cancel </PrimaryButton>
+                <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
 
                 <PrimaryButton
                     class="ml-3"

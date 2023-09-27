@@ -2,9 +2,7 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
-import DangerButton from "@/Components/DangerButton.vue";
 import DialogModal from "@/Components/DialogModal.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
 import PrimaryButton from "@/Components/PrimaryButton.vue";

@@ -5,7 +5,6 @@ import ActionMessage from "@/Components/ActionMessage.vue";
 import ActionSection from "@/Components/ActionSection.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
 import type Session from "@/Types/Session";
@@ -169,9 +168,7 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <SecondaryButton @click="closeModal">
-                        Cancel
-                    </SecondaryButton>
+                    <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
 
                     <PrimaryButton
                         class="ml-3"
