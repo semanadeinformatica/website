@@ -30,6 +30,16 @@ class EventDay extends Model
                 'usertype',
             ],
         ],
+        'talks' => [
+            'users' => [
+                'usertype',
+            ],
+        ],
+        'workshops' => [
+            'users' => [
+                'usertype',
+            ],
+        ],
     ];
 
     protected $casts = [
@@ -41,10 +51,19 @@ class EventDay extends Model
         return $this->belongsTo(Edition::class);
     }
 
+    public function talks(): HasMany
+    {
+        return $this->events()->where('type', 'talk');
+    }
+
+    public function workshops(): HasMany
+    {
+        return $this->events()->where('type', 'workshop');
+    }
+
     public function events(): HasMany
     {
-        // FIXME: I do not like having to put the ordering here but it is what it is - Nuno Pereira
-        return $this->hasMany(Event::class)->orderBy('time_start', 'asc');
+        return $this->hasMany(Event::class);
     }
 
     public function stands(): HasMany

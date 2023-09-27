@@ -7,6 +7,9 @@ export default interface EventDay extends Model {
     theme: string;
     edition_id: number;
 
-    stands: Stand[];
-    events: Event[];
+    stands?: Stand[];
+
+    events?: Event[];
+    talks?: Event[];
+    workshops?: Event[];
 }
