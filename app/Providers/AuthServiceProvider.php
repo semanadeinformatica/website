@@ -68,5 +68,13 @@ class AuthServiceProvider extends ServiceProvider
                 ) // or the user is a company and the requirement is a stand from the same company
             )
         ));
+
+        Gate::define('view_profile', fn (User $user, User $profile_user) => (
+            $user->id === $profile_user->id || (
+                $user->isAdmin() || (
+                    $user->isCompany() && $profile_user->isParticipant() && $user->participants()->contains($profile_user)
+                )
+            )
+        ));
     }
 }
