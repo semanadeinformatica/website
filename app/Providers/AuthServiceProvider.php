@@ -35,5 +35,13 @@ class AuthServiceProvider extends ServiceProvider
                 $user->usertype->enrollments()->where('edition_id', $edition->id)->doesntExist()
             )
         ));
+
+        Gate::define('view_profile', fn (User $user, User $profile_user) => (
+            $user->id === $profile_user->id || (
+                $user->isAdmin() || (
+                    $user->isCompany() && $profile_user->isParticipant() && $user->participants()->contains($profile_user)
+                )
+            )
+        ));
     }
 }
