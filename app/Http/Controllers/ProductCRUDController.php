@@ -16,6 +16,7 @@ class ProductCRUDController extends CRUDController
         'price' => 'required|integer',
         'stock' => 'required|integer',
         'edition_id' => 'required|exists:editions,id',
+        'image' => 'nullable|mimes:jpg,jpeg,png|max:1024',
     ];
 
     protected array $search = ['name', 'price', 'stock'];
@@ -24,6 +25,37 @@ class ProductCRUDController extends CRUDController
     {
         return [
             'editions' => Edition::all(),
+        ];
+    }
+
+    protected function created(array $new): ?array
+    {
+        $product = Product::create([
+            'name' => $new['name'],
+            'price' => $new['price'],
+            'stock' => $new['stock'],
+            'edition_id' => $new['edition_id'],
+        ]);
+
+        if (isset($new['image'])) {
+            $product->updateImageProduct($new['image']);
+        }
+
+        return null;
+    }
+
+    protected function updated($old, array $new): ?array
+    {
+
+        if (isset($new['image'])) {
+            $old->updateImageProduct($new['image']);
+        }
+
+        return [
+            'name' => $new['name'],
+            'price' => $new['price'],
+            'stock' => $new['stock'],
+            'edition_id' => $new['edition_id'],
         ];
     }
 }

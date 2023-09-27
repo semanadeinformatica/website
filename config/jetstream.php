@@ -78,5 +78,6 @@ return [
 
     'profile_photo_disk' => 'public',
     'cv_disk' => 'public',
+    'product_image_disk' => 'public',
 
 ];

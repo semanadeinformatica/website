@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import type Product from '@/Types/Product';
-import { defineProps } from 'vue';
+import type Product from "@/Types/Product";
 
 interface Props {
     product: Product;
 }
 
-const item = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>
-    <div class="flex flex-col border-2 border-black max-w-[20em]">
-        <img class="border-b-2 border-black max-w-[20em] h-[20em] object-cover" src="https://picsum.photos/200/300">
-        <div class="flex flex-col bg-2023-orange text-white px-4 py-2">
+    <div class="flex max-w-[20em] flex-col border-2 border-black">
+        <img
+            class="h-[20em] max-w-[20em] border-b-2 border-black object-cover"
+            :src="product.image_product_url"
+        />
+        <div class="flex flex-col bg-2023-orange px-4 py-2 text-white">
             <h2 class="text-xl font-bold">{{ product.name }}</h2>
-            <div class="self-end flex flex-row gap-2 text-xl">
+            <div class="flex flex-row gap-2 self-end text-xl">
                 <p>{{ product.price }}</p>
-                <img class="w-5" src="/images/cy-sinf-small.svg">
+                <img class="w-5" src="/images/cy-sinf-small.svg" />
             </div>
-        </div> 
+        </div>
     </div>
 </template>

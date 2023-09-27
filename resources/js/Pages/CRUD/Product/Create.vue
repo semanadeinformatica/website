@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ImageInput from "@/Components/ImageInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
@@ -19,6 +20,7 @@ const form = useForm({
     price: "",
     stock: "",
     edition_id: "",
+    image: null as File | null,
 });
 
 const submit = () => {
@@ -29,6 +31,14 @@ const submit = () => {
 <template>
     <CardLayout title="Criar produto">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                id="image"
+                v-model="form.image"
+                label="Imagem do produto"
+                class="self-stretch"
+                :error-message="form.errors.image"
+            />
+
             <TextInput
                 id="name"
                 v-model="form.name"

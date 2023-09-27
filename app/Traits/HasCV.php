@@ -38,7 +38,7 @@ trait HasCV
      */
     public function deleteCV()
     {
-        //missing check to verify if user can manage CVs
+        //#TODO: missing check to verify if user can manage CVs
 
         if (is_null($this->cv_path)) {
             return;
