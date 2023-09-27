@@ -10,12 +10,14 @@ import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfile
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
-//import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
+import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
+import type Participant from "@/Types/Participant";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
     sessions: Session[];
     user: User;
+    participants: Participant[];
 }
 
 defineProps<Props>();
@@ -39,7 +41,15 @@ defineProps<Props>();
                     "
                     :item="user ?? $page.props.auth.user"
                 />
-                <!--<EnrolledParticipants v-else></EnrolledParticipants>-->
+
+                <EnrolledParticipants
+                    v-else-if="
+                        $page.props.auth.user?.usertype_type ===
+                            'App\\Models\\Company' ||
+                        user?.usertype_type === 'App\\Models\\Company'
+                    "
+                    :participants="participants"
+                />
             </div>
         </div>
     </AppLayout>
