@@ -9,61 +9,61 @@ import type { User } from "@/Types/User";
 import route from "ziggy-js";
 
 interface Props {
-    user: User;
+    user: User | undefined;
 }
 
 const { user: user } = defineProps<Props>();
 
 const form = useForm({
     _method: "PUT",
-    name: user.name,
-    email: user.email,
-    type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
+    name: user ? user.name : "",
+    email: user ? user.email : "",
+    type: (user?.usertype_type.split("\\").pop() ?? "").toLowerCase() as
         | "participant"
         | "company"
         | "speaker"
         | "admin",
     title:
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.title ?? ""
+        user?.usertype_type === "App\\Models\\Speaker"
+            ? user?.usertype?.title ?? ""
             : "",
     description:
-        user.usertype_type === "App\\Models\\Company" ||
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.description ?? ""
+        user?.usertype_type === "App\\Models\\Company" ||
+        user?.usertype_type === "App\\Models\\Speaker"
+            ? user?.usertype?.description ?? ""
             : "",
     organization:
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.organization ?? ""
+        user?.usertype_type === "App\\Models\\Speaker"
+            ? user?.usertype?.organization ?? ""
             : "",
     social_media: {
         email:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.email ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.email ?? ""
                 : "",
         facebook:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.facebook ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.facebook ?? ""
                 : "",
         github:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.github ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.github ?? ""
                 : "",
         instagram:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.instagram ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.instagram ?? ""
                 : "",
         linkedin:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.linkedin ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.linkedin ?? ""
                 : "",
         twitter:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.twitter ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.twitter ?? ""
                 : "",
         website:
-            user.usertype_type !== "App\\Models\\Admin"
-                ? user.usertype?.social_media?.website ?? ""
+            user?.usertype_type !== "App\\Models\\Admin"
+                ? user?.usertype?.social_media?.website ?? ""
                 : "",
     },
 });
@@ -116,7 +116,7 @@ const sendEmailVerification = () => {
                 <div
                     v-if="
                         $page.props.jetstream.hasEmailVerification &&
-                        user.email_verified_at === null
+                        user?.email_verified_at === null
                     "
                 >
                     <p class="mt-2 text-sm dark:text-white">

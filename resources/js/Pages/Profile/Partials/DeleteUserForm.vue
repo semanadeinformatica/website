@@ -50,7 +50,7 @@ const closeModal = () => {
             </div>
 
             <div class="mt-5">
-                <PrimaryButton @click="confirmUserDeletion" color="red">
+                <PrimaryButton color="red" @click="confirmUserDeletion">
                     Delete Account
                 </PrimaryButton>
             </div>
