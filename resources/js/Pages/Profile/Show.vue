@@ -3,12 +3,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfilePicture from "@/Components/Profile/ProfilePicture.vue";
 import InfoCard from "@/Components/Profile/InfoCard.vue";
 import CvArea from "@/Components/Profile/CvArea.vue";
-/*import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
-import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
-import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
-import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
-import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
-import type Participant from "@/Types/Participant";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
 import type Slot from "@/Types/Slot";
 import { h } from "vue";
@@ -16,7 +10,8 @@ import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
-//import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
+import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
+import type Participant from "@/Types/Participant";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -25,6 +20,7 @@ interface Props {
     participant: Participant;
     sessions: Session[];
     user: User;
+    participants: Participant[];
 }
 
 defineProps<Props>();
@@ -85,7 +81,15 @@ const buttons = {
                     "
                     :item="user ?? $page.props.auth.user"
                 />
-                <!--<EnrolledParticipants v-else></EnrolledParticipants>-->
+
+                <EnrolledParticipants
+                    v-else-if="
+                        $page.props.auth.user?.usertype_type ===
+                            'App\\Models\\Company' ||
+                        user?.usertype_type === 'App\\Models\\Company'
+                    "
+                    :participants="participants"
+                />
             </div>
         </div>
     </AppLayout>

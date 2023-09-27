@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Edition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,11 @@ use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
 
 class UserController extends UserProfileController
 {
+    public function getParticipants(Company $company)
+    {
+        return $company->participants();
+    }
+
     public function show(Request $request)
     {
         $this->validateTwoFactorAuthenticationState($request);
@@ -50,6 +56,7 @@ class UserController extends UserProfileController
             'tickets' => $tickets->get(),
             'slots' => $slots->get(),
             'user' => $user->load('usertype.socialMedia')->toArray(),
+            'participants' => $user->usertype_type === Company::class ? $this->getParticipants($user->usertype) : null,
         ]);
     }
 
