@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Edition;
 use App\Models\Event;
 use App\Models\EventDay;
+use App\Models\EventType;
 use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
@@ -48,6 +49,8 @@ class DatabaseSeeder extends Seeder
         Department::truncate();
         Staff::truncate();
         Event::truncate();
+        EventDay::truncate();
+        EventType::truncate();
         Speaker::truncate();
         Quest::truncate();
         Sponsor::truncate();
@@ -84,9 +87,11 @@ class DatabaseSeeder extends Seeder
         $departments = Department::factory(10)->recycle($edition)->create();
         Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
 
+        $event_types = EventType::factory(3)->create();
+
         foreach ($event_days as $day) {
-            Event::factory(2)->recycle($day)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
-            Event::factory(1)->recycle($day)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
+            Event::factory(2)->recycle($day)->recycle($event_types)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
+            Event::factory(1)->recycle($day)->recycle($event_types)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
         }
 
         $sponsors = [];

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Event;
+use App\Models\EventType;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,8 +16,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('events', function (Blueprint $table) {
+        Schema::create('event_types', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name');
+        });
 
+        Schema::table('events', function (Blueprint $table) {
+            $table->foreignIdFor(EventType::class)->constrained()->cascadeOnDelete();
         });
 
         Schema::table('speakers', function (Blueprint $table) {
@@ -34,8 +41,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-        });
+
+        Schema::dropIfExists('event_user');
 
         Schema::table('speakers', function (Blueprint $table) {
             $table->string('name');
@@ -44,6 +51,10 @@ return new class extends Migration
             $table->dropConstrainedForeignIdFor(User::class);
         });
 
-        Schema::dropIfExists('event_user');
+        Schema::table('events', function (Blueprint $table) {
+            $table->dropConstrainedForeignIdFor(EventType::class);
+        });
+
+        Schema::dropIfExists('event_types');
     }
 };

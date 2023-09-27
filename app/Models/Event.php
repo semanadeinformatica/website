@@ -23,12 +23,12 @@ class Event extends Model
         'topic',
         'capacity',
         'event_day_id',
-        'edition_id',
         'description',
+        'event_type_id',
         'room',
     ];
 
-    protected $with = ['users'];
+    protected $with = ['users', 'type'];
 
     public function event_day(): BelongsTo
     {
@@ -43,5 +43,10 @@ class Event extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(EventType::class);
     }
 }
