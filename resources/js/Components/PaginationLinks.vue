@@ -17,6 +17,7 @@ defineProps<Props>();
                 v-if="link.url"
                 :href="link.url"
                 class="flex h-8 w-8 items-center justify-center border border-r-0 border-black last:border-r"
+                v-bind="linkProps"
             >
                 {{ link.label }}
             </Link>

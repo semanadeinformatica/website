@@ -9,6 +9,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { computed } from "vue";
+import TextInput from "@/Components/TextInput.vue";
 
 interface Props {
     item: Staff;
@@ -22,8 +23,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const form = useForm({
-    department_id: props.item.department_id,
-    participant_id: props.item.participant_id,
+    department_id: props.item.department_id.toString(),
+    participant_id: props.item.participant_id.toString(),
     coordinator: props.item.coordinator,
 });
 

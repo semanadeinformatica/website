@@ -1,4 +1,4 @@
-import { ref, watchEffect, unref } from "vue";
+import { ref, unref, watch } from "vue";
 import route from "ziggy-js";
 import { router } from "@inertiajs/vue3";
 
@@ -7,7 +7,7 @@ const useSearch = (param: string = "query", only?: string[]) => {
         new URLSearchParams(location.search).get(param) ?? "",
     );
 
-    watchEffect(() => {
+    watch(searchQuery, () => {
         const ziggy = route();
 
         router.replace(

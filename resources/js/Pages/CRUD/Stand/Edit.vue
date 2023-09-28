@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type EventDay from "@/Types/EventDay";
 import type Sponsor from "@/Types/Sponsor";
@@ -18,8 +19,8 @@ interface Props {
 const { item: stand } = defineProps<Props>();
 
 const form = useForm({
-    event_day_id: stand.event_day_id,
-    sponsor_id: stand.sponsor_id,
+    event_day_id: stand.event_day_id.toString(),
+    sponsor_id: stand.sponsor_id.toString(),
 });
 
 const submit = () => {
