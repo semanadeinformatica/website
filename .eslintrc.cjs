@@ -20,7 +20,7 @@ module.exports = {
         "plugin:vue/vue3-recommended",
         "prettier",
     ],
-    plugins: ["@typescript-eslint"],
+    plugins: ["@typescript-eslint", "vue", "@intlify/vue-i18n"],
     rules: {
         "vue/multi-word-component-names": "off",
         "vue/component-api-style": ["warn", ["script-setup"]],
@@ -28,5 +28,23 @@ module.exports = {
         "vue/define-props-declaration": ["error", "type-based"],
         "vue/no-undef-components": "error",
         "vue/no-useless-mustaches": "error",
+        "@intlify/vue-i18n/no-raw-text": [
+            "error",
+            {
+                attributes: {
+                    "/.+/": [
+                        "alt",
+                        "aria-label",
+                        "aria-placeholder",
+                        "aria-roledescription",
+                        "aria-valuetext",
+                        "label",
+                        "placeholder",
+                        "title",
+                    ],
+                },
+                ignorePattern: "^\\W+$",
+            },
+        ],
     },
 };
