@@ -27,6 +27,7 @@ const messages = {
             staff: "Staff | Staff",
             stand: "Stand | Stands",
             user: "User | Users",
+            eventType: "Event Type | Event Types",
         },
     },
     pt: {
@@ -59,6 +60,7 @@ const messages = {
             staff: "Staff | Staff",
             stand: "Banca | Bancas",
             user: "Utilizador | Utilizadores",
+            eventType: "Tipo de Evento | Tipos de Evento",
         },
     },
 };
