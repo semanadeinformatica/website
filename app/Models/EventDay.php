@@ -30,16 +30,8 @@ class EventDay extends Model
                 'usertype',
             ],
         ],
-        'talks' => [
-            'users' => [
-                'usertype',
-            ],
-        ],
-        'workshops' => [
-            'users' => [
-                'usertype',
-            ],
-        ],
+        'talks',
+        'workshops',
     ];
 
     protected $casts = [
@@ -53,12 +45,16 @@ class EventDay extends Model
 
     public function talks(): HasMany
     {
-        return $this->events()->where('type', 'talk');
+        return $this->events()->whereHas('type', function ($query) {
+            $query->where('name', 'talk');
+        });
     }
 
     public function workshops(): HasMany
     {
-        return $this->events()->where('type', 'workshop');
+        return $this->events()->whereHas('type', function ($query) {
+            $query->where('name', 'workshop');
+        });
     }
 
     public function events(): HasMany
