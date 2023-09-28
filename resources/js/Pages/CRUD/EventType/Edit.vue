@@ -10,7 +10,7 @@ interface Props {
     item: EventType;
 }
 
-const {item: eventType} = defineProps<Props>();
+const { item: eventType } = defineProps<Props>();
 
 const form = useForm({
     name: eventType.name,

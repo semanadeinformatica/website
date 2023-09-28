@@ -22,9 +22,8 @@ class HomeController extends Controller
         $speakers = $edition->speakers()->get();
         $days = $edition->event_days()->orderBy('date', 'ASC')->get();
 
-        $event_count = $edition->events()->count();
-        $activity_count = $edition->events()->where('capacity', '>', 0)->count();
-        $talk_count = $event_count - $activity_count;
+        $activity_count = $edition->workshops()->count();
+        $talk_count = $edition->talks()->count();
         $stand_count = $edition->stands()->count();
 
         $can_enroll = Gate::allows('enroll', $edition);
