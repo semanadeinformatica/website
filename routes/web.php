@@ -53,8 +53,9 @@ Route::prefix('/event')->name('event')->group(function () {
 
     Route::redirect('/', '/program');
 
-    Route::prefix('{event}')->group(function () {
+    Route::prefix('/{event}')->group(function () {
         Route::get('/', [EventController::class, 'show'])->name('.show');
+        Route::put('/join', [EventController::class, 'join'])->name('.join');
     });
 });
 

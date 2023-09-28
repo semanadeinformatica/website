@@ -14,7 +14,7 @@ import Sticker from "./Sticker.vue";
             </clipPath>
         </svg>
         <div v-for="item in $page.props.slots" :key="item">
-            <Sticker color="red" :sticker="item"></Sticker>
+            <Sticker color="red" :sticker="item" />
         </div>
     </div>
 </template>

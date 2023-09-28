@@ -16,6 +16,7 @@ use App\Models\EventType;
 use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
+use App\Models\Slot;
 use App\Models\SocialMedia;
 use App\Models\Speaker;
 use App\Models\Sponsor;
@@ -93,6 +94,8 @@ class DatabaseSeeder extends Seeder
             Event::factory(2)->recycle($day)->recycle($event_types)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
             Event::factory(1)->recycle($day)->recycle($event_types)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
         }
+
+        Slot::factory(30)->create();
 
         $sponsors = [];
         foreach ($companies as $i => $company) {
