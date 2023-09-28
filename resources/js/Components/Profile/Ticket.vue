@@ -25,7 +25,6 @@ const hashCode = (str: string): number => {
     for (let i = 0; i < str.length; i++) {
         const char = str.charCodeAt(i);
         hash = (hash << 5) - hash + char;
-        hash = hash & hash;
     }
     return Math.abs(hash);
 };
@@ -154,10 +153,10 @@ const accentColor = () => {
 
         <template v-if="state == 'available'">
             <a
-                :href="route('event')"
-                class="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 cursor-pointer border border-black bg-2023-red p-6 text-center text-white shadow shadow-2023-teal"
+                :href="route('event.show', event)"
+                class="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 cursor-pointer border border-black bg-2023-red p-6 text-center text-white shadow-2023-teal transition-shadow hover:shadow"
             >
-                <p class="font-bold">Nome :)</p>
+                <p class="font-bold">{{ event.name }}</p>
                 <p>+ info</p>
             </a>
         </template>

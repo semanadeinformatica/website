@@ -19,7 +19,28 @@ class UserController extends UserProfileController
     public function show(Request $request)
     {
         $this->validateTwoFactorAuthenticationState($request);
-        $tickets = Event::all();
+
+        $user = $request->user();
+
+        $edition = $request->edition;
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
+
+        if ($currentEnrollment === null) {
+            return response('No enrollment found', 500);
+        }
+
+        $joinedEvents = $currentEnrollment->events()->get()->map(fn ($e) => $e->id);
+
+        $tickets = Event::all()->map(function ($event) use ($joinedEvents) {
+            $event->joined = $joinedEvents->contains($event->id);
+            return $event;
+        });
+
         $slots = Slot::all();
 
         return Inertia::render('Profile/Show', [
