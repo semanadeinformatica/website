@@ -3,6 +3,7 @@ import type Event from "@/Types/Event";
 import type { SpeakerUser } from "@/Types/User";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
+import route from "ziggy-js";
 
 interface Props {
     event: Event;
@@ -30,9 +31,12 @@ const formatTimeString = (time: string): string => {
     >
         <h2 class="text-2xl font-bold text-2023-orange">
             <em
-                ><Link href="#" preserve-state preserve-scroll>{{
-                    event.name
-                }}</Link></em
+                ><Link
+                    :href="route('event.show', event)"
+                    preserve-state
+                    preserve-scroll
+                    >{{ event.name }}</Link
+                ></em
             >
         </h2>
         <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>

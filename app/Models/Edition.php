@@ -38,6 +38,16 @@ class Edition extends Model
         return $this->through('event_days')->has('events');
     }
 
+    public function workshops(): HasManyThrough
+    {
+        return $this->through('event_days')->has('workshops');
+    }
+
+    public function talks(): HasManyThrough
+    {
+        return $this->through('event_days')->has('talks');
+    }
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

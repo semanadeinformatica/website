@@ -42,13 +42,28 @@ onMounted(() => {
             id="tab-picker"
             class="flex flex-row justify-center gap-4 font-bold text-2023-teal"
         >
-            <button v-if="(day.talks?.length ?? 0) > 0" class="transition" data-type="talk" @click="toggle">
+            <button
+                v-if="(day.talks?.length ?? 0) > 0"
+                class="transition"
+                data-type="talk"
+                @click="toggle"
+            >
                 Palestras
             </button>
-            <button v-if="(day.workshops?.length ?? 0) > 0" class="transition" data-type="activity" @click="toggle">
+            <button
+                v-if="(day.workshops?.length ?? 0) > 0"
+                class="transition"
+                data-type="activity"
+                @click="toggle"
+            >
                 Atividades
             </button>
-            <button v-if="(day.stands?.length ?? 0) > 0" class="transition" data-type="stand" @click="toggle">
+            <button
+                v-if="(day.stands?.length ?? 0) > 0"
+                class="transition"
+                data-type="stand"
+                @click="toggle"
+            >
                 Bancas
             </button>
         </div>
