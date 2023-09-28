@@ -71,8 +71,8 @@ const isAdmin = computed(() => {
             <template #trigger>
                 <DropdownTrigger>
                     <img
-                        class="w-40 max-md:w-20"
-                        src="images/sinf logo.png"
+                        class="w-24 max-md:w-16"
+                        src="/images/cy-sinf-small.svg"
                         alt="Stylized SINF logo"
                     />
                 </DropdownTrigger>
