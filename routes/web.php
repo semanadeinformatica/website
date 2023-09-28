@@ -12,6 +12,7 @@ use App\Http\Controllers\EnrollmentCRUDController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
+use App\Http\Controllers\EventTypeCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParticipantController;
@@ -85,6 +86,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/competitionTeams' => CompetitionTeamCRUDController::class,
                     '/slots' => SlotCRUDController::class,
                     '/enrollments' => EnrollmentCRUDController::class,
+                    '/eventTypes' => EventTypeCRUDController::class,
                 ]);
 
                 Route::name('index')->get('/', function () {
