@@ -111,10 +111,12 @@ const colorPicker = () => {
                         : router.get(route('register'))
                 "
             >
-                Inscreve-te
-                <span v-if="event.capacity" class="text-base"
-                    >{{ event.capacity }} lugares</span
-                >
+                <span class="flex flex-col">
+                    Inscreve-te
+                    <span v-if="event.capacity" class="text-base"
+                        >{{ event.capacity }} lugares</span
+                    >
+                </span>
             </PrimaryButton>
         </div>
     </AppLayout>

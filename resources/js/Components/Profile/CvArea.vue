@@ -50,7 +50,7 @@ const clearCVFileInput = () => {
 <template>
     <div class="flex-col">
         <div
-            class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-2023-bg md:mx-32"
+            class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 font-bold text-2023-bg md:mx-32 px-8"
             :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
             <div class="flex items-center">
@@ -84,7 +84,6 @@ const clearCVFileInput = () => {
                 />
             </div>
             <button
-                class="p-2 px-6"
                 :class="[previewOpen ? 'rotate-180' : '']"
                 @click="togglePreview"
             >

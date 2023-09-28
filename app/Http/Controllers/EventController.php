@@ -34,7 +34,7 @@ class EventController extends Controller
         $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
         if ($currentEnrollment === null) {
-            return response('No enrollment found', 500);
+            return redirect()->route('home')->dangerBanner("Não está atualmente inscrito em nenhuma edição. Deve fazê-lo antes de tentar inscrever-se num evento.");
         }
 
         $currentEnrollment->events()->attach($event);
