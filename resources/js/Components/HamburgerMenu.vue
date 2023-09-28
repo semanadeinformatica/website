@@ -59,22 +59,24 @@ watch(open, () => {
         v-show="open"
         class="absolute left-0 top-[5.6rem] z-50 m-0 flex h-screen w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
     >
-        <template
-            v-for="({ label, _query }, page) in props.options.pages"
-            :key="page"
-        >
-            <ResponsiveNavLink
-                :href="
-                    route(route().has(page) ? page : 'home', {
-                        _query,
-                    } as RouteParamsWithQueryOverload)
-                "
-                :active="page === route().current()"
+        <div class="flex flex-col items-center">
+            <template
+                v-for="({ label, _query }, page) in props.options.pages"
+                :key="page"
             >
-                {{ label }}
-            </ResponsiveNavLink>
-        </template>
-        <section class="pt-6">
+                <ResponsiveNavLink
+                    :href="
+                        route(route().has(page) ? page : 'home', {
+                            _query,
+                        } as RouteParamsWithQueryOverload)
+                    "
+                    :active="page === route().current()"
+                >
+                    {{ label }}
+                </ResponsiveNavLink>
+            </template>
+        </div>
+        <section class="flex flex-col items-center pt-6">
             <h2 class="pb-3 text-center font-bold text-2023-orange">
                 Atividades
             </h2>
@@ -107,7 +109,6 @@ watch(open, () => {
                     <ResponsiveNavLink
                         :href="route('home')"
                         :active="edition === new Date().getFullYear()"
-                        class="!w-fit"
                     >
                         {{ edition }}
                     </ResponsiveNavLink>
