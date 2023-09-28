@@ -97,10 +97,11 @@ const accentColor = () => {
                     :class="[
                         state == 'used'
                             ? 'ticket-left-clip-path -mr-[.4%] origin-left -translate-x-[3.7%] -rotate-6'
-                            : '', mainColor()
+                            : '',
+                        mainColor(),
                     ]"
                 >
-                    <span 
+                    <span
                         class="flex px-[1em] py-[.5em]"
                         :class="accentColor()"
                     >
@@ -135,7 +136,8 @@ const accentColor = () => {
                     :class="[
                         state == 'used'
                             ? 'ticket-right-clip-path -ml-[.4%] origin-right translate-x-[3.7%] rotate-6'
-                            : '', mainColor()
+                            : '',
+                        mainColor(),
                     ]"
                 >
                     <span
