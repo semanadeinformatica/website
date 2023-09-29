@@ -18,9 +18,6 @@ interface Route {
 type Routes = Record<string, Route>;
 
 const homeSections: Routes = {
-    home: {
-        label: "Home",
-    },
     aboutus: {
         label: "Sobre nós",
     },
@@ -69,12 +66,14 @@ const isAdmin = computed(() => {
     <nav class="relative z-30 flex border-b-2 border-black bg-2023-bg py-6">
         <Dropdown align="center" width="32" class="ml-10">
             <template #trigger>
-                <DropdownTrigger>
-                    <img
-                        class="w-24 max-md:w-16"
-                        src="/images/cy-sinf-small.svg"
-                        alt="Stylized SINF logo"
-                    />
+                <DropdownTrigger class="group">
+                    <a :href="route('home')">
+                        <img
+                            class="w-24 max-md:w-16"
+                            src="/images/cy-sinf-small.svg"
+                            alt="Stylized SINF logo"
+                        />
+                    </a>
                 </DropdownTrigger>
             </template>
             <template #content>
