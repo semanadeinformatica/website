@@ -42,6 +42,16 @@ const colorPicker = () => {
     const pos = Math.floor(Math.random() * 5);
     return ["orange", "teal-dark", "red-dark", "red", "teal"][pos];
 };
+
+const formatAvailability = (e: Event) => {
+    if (e.enrollments?.length === e.capacity!) {
+        return "Esgotado";
+    } else if (e.enrollments?.length === 0) {
+        return `${e.capacity!}`;
+    } else {
+        return `${e.capacity! - (e.enrollments?.length ?? 0)}/${e.capacity!}`;
+    }
+};
 </script>
 
 <template>
@@ -114,7 +124,7 @@ const colorPicker = () => {
                 <span class="flex flex-col">
                     Inscreve-te
                     <span v-if="event.capacity" class="text-base"
-                        >{{ event.capacity }} lugares</span
+                        >{{ formatAvailability(event) }} lugares</span
                     >
                 </span>
             </PrimaryButton>

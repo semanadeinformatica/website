@@ -33,15 +33,16 @@ class UserController extends UserProfileController
 
         if ($user->isParticipant()) {
             $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
-    
+
             if ($currentEnrollment !== null) {
                 $joinedEvents = $currentEnrollment->events()->get();
-        
+
                 $tickets = $tickets->map(function ($event) use ($joinedEvents) {
                     $event->joined = $joinedEvents->contains($event);
+
                     return $event;
                 });
-        
+
                 $slots = Slot::all();
             }
         }
