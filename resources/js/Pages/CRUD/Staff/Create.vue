@@ -8,6 +8,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { computed } from "vue";
+import TextInput from "@/Components/TextInput.vue";
 
 interface Props {
     with: {

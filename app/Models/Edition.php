@@ -50,7 +50,7 @@ class Edition extends Model
 
     public function speakers(): HasManyThrough
     {
-        return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])->whereHasMorph('usertype', Speaker::class);
+        return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])->whereHasMorph('usertype', Speaker::class)->distinct();
     }
 
     public function sponsors(): HasMany

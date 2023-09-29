@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Company from "@/Types/Company";
 import type Edition from "@/Types/Edition";
@@ -18,8 +19,8 @@ interface Props {
 const { item: sponsor } = defineProps<Props>();
 
 const form = useForm({
-    edition_id: sponsor.edition_id,
-    company_id: sponsor.company_id,
+    edition_id: sponsor.edition_id.toString(),
+    company_id: sponsor.company_id.toString(),
     tier: sponsor.tier.toLowerCase(),
 });
 
