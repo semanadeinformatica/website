@@ -23,4 +23,6 @@ export default interface MyPageProps {
     };
     canResetPassword: boolean;
     competitions: Competition[];
+    locale: string;
+    fallbackLocale: string;
 }
