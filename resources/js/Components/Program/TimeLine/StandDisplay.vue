@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type Stand from "@/Types/Stand";
 import StandTimelineItem from "./StandTimelineItem.vue";
+import Sponsor from "@/Components/Home/Sponsor.vue";
+import { CompanyUser } from "@/Types/User";
 
 interface Props {
     readonly stands: Stand[];
@@ -35,12 +37,11 @@ const platSponsorStands = stands.filter(
             <span class="text-3xl font-bold" :class="shadowColorMap['PLATINUM']"
                 >Platinum</span
             >
-            <div class="flex flex-row gap-4">
-                <StandTimelineItem
-                    v-for="stand in platSponsorStands"
-                    :key="stand.id"
-                    :stand="stand"
-                />
+            <div class="flex flex-row flex-wrap gap-4">
+                <div v-for="stand in platSponsorStands" :key="stand.id" class="w-48 border border-black shadow-lg shadow-2023-orange">
+                    <Sponsor :company="(stand.sponsor.company?.user as CompanyUser)">
+                    </Sponsor> 
+                </div>
             </div>
         </section>
         <section
@@ -51,12 +52,11 @@ const platSponsorStands = stands.filter(
             <span class="text-3xl font-bold" :class="shadowColorMap['GOLD']"
                 >Gold</span
             >
-            <div class="flex flex-row gap-4">
-                <StandTimelineItem
-                    v-for="stand in goldSponsorStands"
-                    :key="stand.id"
-                    :stand="stand"
-                />
+            <div class="flex flex-row flex-wrap gap-4">
+                <div v-for="stand in goldSponsorStands" :key="stand.id" class="w-48 border border-black shadow-lg shadow-2023-teal-dark">
+                    <Sponsor :company="(stand.sponsor.company?.user as CompanyUser)">
+                    </Sponsor> 
+                </div>
             </div>
         </section>
         <section
@@ -67,12 +67,11 @@ const platSponsorStands = stands.filter(
             <span class="text-3xl font-bold" :class="shadowColorMap['SILVER']"
                 >Silver</span
             >
-            <div class="flex flex-row gap-4">
-                <StandTimelineItem
-                    v-for="stand in silverSponsorStands"
-                    :key="stand.id"
-                    :stand="stand"
-                />
+            <div class="flex flex-row flex-wrap gap-4">
+                <div v-for="stand in silverSponsorStands" :key="stand.id" class="w-48 border border-black shadow-lg shadow-2023-red-dark">
+                    <Sponsor :company="(stand.sponsor.company?.user as CompanyUser)">
+                    </Sponsor> 
+                </div>
             </div>
         </section>
     </div>

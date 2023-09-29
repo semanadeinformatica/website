@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type Stand from "@/Types/Stand";
 import type { CompanyUser } from "@/Types/User";
 import { ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
