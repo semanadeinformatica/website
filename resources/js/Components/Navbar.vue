@@ -118,10 +118,7 @@ const isAdmin = computed(() => {
                         <DropdownLink
                             :href="route('competition.show', { competition })"
                         >
-                            {{
-                                competition.name ??
-                                `Competition ${competition.id}`
-                            }}
+                            {{ competition.name }}
                         </DropdownLink>
                     </template>
                 </template>
