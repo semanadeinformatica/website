@@ -11,7 +11,7 @@ import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue"
 import type Participant from "@/Types/Participant";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
 import type Slot from "@/Types/Slot";
-import { computed, h } from "vue";
+import { h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 
@@ -24,20 +24,18 @@ interface Props {
 
 defineProps<Props>();
 
-const buttons = computed(() => {
-    return {
-        ticket: {
-            id: "ticket",
-            title: "Bilhetes",
-            component: h(TicketWrapper),
-        },
-        sticker: {
-            id: "sticker",
-            title: "Conquistas",
-            component: h(StickerWrapper),
-        },
-    };
-});
+const buttons = {
+    ticket: {
+        id: "ticket",
+        title: "Bilhetes",
+        component: h(TicketWrapper),
+    },
+    sticker: {
+        id: "sticker",
+        title: "Conquistas",
+        component: h(StickerWrapper),
+    },
+};
 </script>
 
 <template>
