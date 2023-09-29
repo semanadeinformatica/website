@@ -102,17 +102,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 });
             });
 
-        Route::prefix('user')->group(function () {
+        Route::prefix('user')->middleware('can:view_profile', 'user')->group(function () {
             Route::get('/profile', [UserController::class, 'show'])
                 ->name('profile.show');
+
             Route::prefix('/{user}')->whereNumber('user')->controller(UserController::class)->group(function () {
                 Route::get('', 'show')->name('user.profile');
             });
+
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
                 Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
+
             Route::get('/profile/edit', [UserController::class, 'edit'])
                 ->name('profile.edit');
         });
