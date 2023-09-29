@@ -8,10 +8,25 @@ use Inertia\Inertia;
 
 class EventController extends Controller
 {
-    public function show(Event $event)
+    public function show(Request $request, Event $event)
     {
+        $user = $request->user();
+
+        // TODO: inject enrollment instead of edition
+        $edition = $request->input('edition');
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        $isEnrolled = $user->usertype->enrollments()->where('edition_id', $edition->id)->exists(); // we can safely get only the first one because there should only be one.
+
+        $canJoin = $isEnrolled && $user->can('join', $event);
+
         return Inertia::render('Event', [
             'event' => $event->load(['users', 'event_day', 'enrollments']),
+            'isEnrolled' => $isEnrolled,
+            'canJoin' => $canJoin,
         ]);
     }
 

@@ -6,6 +6,7 @@ import route from "ziggy-js";
 
 <template>
     <section
+        id="enroll-section"
         class="relative mx-10 mb-10 flex h-full flex-col pt-20 max-xs:items-center"
     >
         <h2

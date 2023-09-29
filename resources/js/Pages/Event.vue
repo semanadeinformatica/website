@@ -11,6 +11,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 interface Props {
     event: Event;
+    canJoin: boolean;
+    isEnrolled: boolean;
 }
 
 const { event } = defineProps<Props>();
@@ -108,7 +110,16 @@ const formatAvailability = (e: Event) => {
         <div
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
-            <p class="w-fit text-3xl font-bold text-2023-red">Vamos a isto?</p>
+            <p
+                class="flex w-fit flex-col text-center text-3xl font-bold text-2023-red"
+            >
+                Vamos a isto?
+                <span v-if="!isEnrolled" class="text-lg">
+                    Ainda temos
+                    {{ event.capacity! - (event.enrollments?.length ?? 0) }}
+                    lugares.
+                </span>
+            </p>
 
             <PrimaryButton
                 color="teal-dark"
@@ -117,12 +128,22 @@ const formatAvailability = (e: Event) => {
                 padding="sm:px-8"
                 @click="
                     $page.props.auth.user
-                        ? router.put(route('event.join', event))
+                        ? isEnrolled
+                            ? canJoin
+                                ? router.put(route('event.join', event))
+                                : router.get(route('event.show', event))
+                            : router.get(route('home') + '#enroll-section') // HACK: this is a hack
                         : router.get(route('register'))
                 "
             >
-                <span class="flex flex-col">
-                    Inscreve-te
+                <span v-if="!isEnrolled" class="flex flex-col">
+                    Inscreve-te nesta edição!
+                </span>
+                <span v-else-if="!canJoin" class="flex flex-col">
+                    Já estás inscrito!
+                </span>
+                <span v-else class="flex flex-col">
+                    Inscreve-te!
                     <span v-if="event.capacity" class="text-base"
                         >{{ formatAvailability(event) }} lugares</span
                     >
