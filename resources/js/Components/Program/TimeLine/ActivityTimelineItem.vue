@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
+import type { SpeakerUser } from "@/Types/User";
 import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
+import route from "ziggy-js";
 
 interface Props {
     event: Event;
 }
 
 const { event } = defineProps<Props>();
+
+const speakers = computed(
+    () =>
+        event.users
+            ?.filter((user) => user.usertype_type === "App\\Models\\Speaker")
+            .map((user) => user as SpeakerUser),
+);
 
 const formatTimeString = (time: string): string => {
     const [hours, minutes] = time.split(":");
@@ -21,32 +31,30 @@ const formatTimeString = (time: string): string => {
     >
         <h2 class="text-2xl font-bold text-2023-orange">
             <em
-                ><Link href="#" preserve-state preserve-scroll>{{
-                    event.name
-                }}</Link></em
+                ><Link
+                    :href="route('event.show', event)"
+                    preserve-state
+                    preserve-scroll
+                    >{{ event.name }}</Link
+                ></em
             >
         </h2>
         <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>
-        <ul v-if="event.users" class="flex flex-col">
+        <ul v-if="speakers" class="flex flex-col">
             <li
-                v-for="speaker in event.users"
-                :key="speaker.id"
+                v-for="user in speakers"
+                :key="user.id"
                 class="font-bold text-2023-teal"
             >
-                {{ speaker.name
-                }}<span
-                    v-if="
-                        speaker.usertype_type === 'App\\Models\\Speaker' &&
-                        speaker.usertype?.organization
-                    "
-                >
-                    | {{ speaker.usertype?.organization }}</span
+                {{ user.name
+                }}<template v-if="user.usertype?.organization">
+                    | {{ user.usertype.organization }}</template
                 >
             </li>
         </ul>
-        <span v-if="event.capacity" class="text-2023-teal"
+        <span class="text-2023-teal"
             >Capacidade:
-            <span class="font-bold">{{ event.capacity }}</span></span
+            <span class="font-bold">{{ event.capacity! }}</span></span
         >
         <span class="text-2023-teal">
             {{ formatTimeString(event.time_start) }} -

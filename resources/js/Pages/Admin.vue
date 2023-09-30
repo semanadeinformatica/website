@@ -16,6 +16,7 @@ const pageRoutes = {
     "admin.staff.index": "models.staff",
     "admin.stands.index": "models.stand",
     "admin.users.index": "models.user",
+    "admin.eventTypes.index": "models.eventType",
 } satisfies Record<string, string>;
 </script>
 

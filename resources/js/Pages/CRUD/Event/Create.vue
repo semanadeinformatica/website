@@ -3,6 +3,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type EventDay from "@/Types/EventDay";
+import type EventType from "@/Types/EventType";
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
@@ -10,6 +11,7 @@ import route from "ziggy-js";
 interface Props {
     with: {
         event_days: EventDay[];
+        event_types: EventType[];
         users: User[];
     };
 }
@@ -24,6 +26,7 @@ const form = useForm({
     topic: "",
     capacity: "",
     event_day_id: "",
+    event_type_id: "",
     room: "",
     users: [] as string[],
 });
@@ -116,6 +119,22 @@ const submit = () => {
                     :value="day.id"
                 >
                     {{ $d(day.date, "short") }}
+                </option>
+            </TextInput>
+
+            <TextInput
+                v-model="form.event_type_id"
+                type="select"
+                required
+                label="Tipo do evento"
+                :error-message="form.errors.event_type_id"
+            >
+                <option
+                    v-for="_type in $props.with.event_types"
+                    :key="_type.id"
+                    :value="_type.id"
+                >
+                    {{ _type.name }}
                 </option>
             </TextInput>
 

@@ -102,7 +102,11 @@ const isAdmin = computed(() => {
                     {{ label }}
                 </NavLink>
             </template>
-            <Dropdown align="center" width="32">
+            <Dropdown
+                v-if="$page.props.competitions.length > 0"
+                align="center"
+                width="32"
+            >
                 <template #trigger>
                     <DropdownTrigger>Competições</DropdownTrigger>
                 </template>

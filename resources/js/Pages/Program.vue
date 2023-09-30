@@ -17,7 +17,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 <template>
     <AppLayout title="Programa">
         <div class="flex flex-col items-center px-10 py-20 md:px-40">
-            <section class="flex flex-col items-center gap-5">
+            <section class="mb-5 flex flex-col items-center gap-5">
                 <div
                     id="daySelection"
                     class="flex w-fit flex-row flex-wrap justify-center gap-4"
@@ -31,7 +31,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                             "
                             as="span"
                             :only="['eventDay', 'queryDay']"
-                            class="inline-flex h-16 w-16 items-center justify-center rounded-sm bg-2023-teal text-xl font-bold text-white transition"
+                            class="inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-sm bg-2023-teal text-xl font-bold text-white transition"
                             :class="{
                                 selected:
                                     day ==
@@ -50,11 +50,6 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                         day: "2-digit",
                     }).format(new Date(eventDay.date))
                 }}</span>
-                <p
-                    class="mr-2 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
-                >
-                    {{ eventDay.theme }}
-                </p>
             </section>
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\EventDay;
+use App\Models\EventType;
 use App\Models\Speaker;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class EventCRUDController extends CRUDController
         'topic' => 'required|string',
         'capacity' => 'nullable|numeric|integer',
         'event_day_id' => 'required|exists:event_days,id',
+        'event_type_id' => 'required|exists:event_types,id',
         'users' => 'sometimes|nullable|array|exists:users,id',
     ];
 
@@ -57,6 +59,7 @@ class EventCRUDController extends CRUDController
     {
         return [
             'event_days' => EventDay::all(),
+            'event_types' => EventType::all(),
             'users' => User::whereIn('usertype_type', [Speaker::class, Company::class])->get(),
         ];
     }

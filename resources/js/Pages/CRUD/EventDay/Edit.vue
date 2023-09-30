@@ -62,7 +62,6 @@ const submit = () => {
                 label="Data"
                 type="date"
                 required
-                autofocus
                 :error-message="form.errors.date"
             />
 

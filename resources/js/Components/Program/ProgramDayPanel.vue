@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type EventDay from "@/Types/EventDay";
-import { ref, onMounted, watch, type UnwrapRef, computed } from "vue";
+import { ref, onMounted, watch, type UnwrapRef } from "vue";
 import WithTimeline from "@/Components/Program/TimeLine/WithTimeline.vue";
-import EventTimelineItem from "@/Components/Program/TimeLine/EventTimelineItem.vue";
-import type Stand from "@/Types/Stand";
-import type Event from "@/Types/Event";
 import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
+import ActivityTimelineAction from "./TimeLine/ActivityTimelineItem.vue";
+import TalkTimelineAction from "./TimeLine/TalkTimelineItem.vue";
 
 interface Props {
     day: EventDay;
@@ -15,24 +14,6 @@ const { day } = defineProps<Props>();
 
 const selected = ref<HTMLElement | null>(null);
 const selectedType = ref<"talk" | "activity" | "stand">("talk");
-
-const items = computed(() => {
-    switch (selectedType.value) {
-        case "talk":
-            return day.events.filter((event) => event.capacity === null);
-        case "activity":
-            return day.events.filter(
-                (event) => event.capacity && event.capacity > 0,
-            );
-        case "stand":
-            return day.stands;
-        default:
-            return [];
-    }
-});
-const stands = (items: Stand[] | Event[]): items is Stand[] => {
-    return items.length > 0 && "sponsor_id" in items[0]; // HACK: dangerous - Nuno Pereira
-};
 
 const toggle = ({ target }: MouseEvent) => {
     selected.value = target as HTMLElement;
@@ -56,32 +37,62 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="h-full w-full pt-8">
+    <section class="h-full w-full">
         <div
             id="tab-picker"
             class="flex flex-row justify-center gap-4 font-bold text-2023-teal"
         >
-            <button class="transition" data-type="talk" @click="toggle">
+            <button
+                v-if="(day.talks?.length ?? 0) > 0"
+                class="transition"
+                data-type="talk"
+                @click="toggle"
+            >
                 Palestras
             </button>
-            <button class="transition" data-type="activity" @click="toggle">
+            <button
+                v-if="(day.workshops?.length ?? 0) > 0"
+                class="transition"
+                data-type="activity"
+                @click="toggle"
+            >
                 Atividades
             </button>
-            <button class="transition" data-type="stand" @click="toggle">
+            <button
+                v-if="(day.stands?.length ?? 0) > 0"
+                class="transition"
+                data-type="stand"
+                @click="toggle"
+            >
                 Bancas
             </button>
         </div>
     </section>
+    <p
+        v-if="selectedType !== 'stand'"
+        class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+    >
+        {{ day.theme }}
+    </p>
     <WithTimeline>
         <div class="flex flex-col gap-8">
-            <template v-if="stands(items)">
-                <StandDisplay :stands="items" />
+            <template v-if="selectedType === 'stand'">
+                <StandDisplay :stands="day.stands!" />
             </template>
-            <template v-else>
-                <EventTimelineItem
-                    v-for="event in items"
-                    :key="event.id"
-                    :event="event"
+
+            <template v-else-if="selectedType === 'activity'">
+                <ActivityTimelineAction
+                    v-for="workshop in day.workshops"
+                    :key="workshop.id"
+                    :event="workshop"
+                />
+            </template>
+
+            <template v-else-if="selectedType === 'talk'">
+                <TalkTimelineAction
+                    v-for="talk in day.talks"
+                    :key="talk.id"
+                    :event="talk"
                 />
             </template>
         </div>

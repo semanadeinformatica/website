@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\EventDay;
+use App\Models\EventType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class EventFactory extends Factory
             'room' => fake()->words(1, true),
             'capacity' => fake()->optional()->numberBetween(10, 100),
             'event_day_id' => EventDay::factory(),
+            'event_type_id' => EventType::factory(),
         ];
     }
 }

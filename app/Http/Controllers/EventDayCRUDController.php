@@ -17,8 +17,6 @@ class EventDayCRUDController extends CRUDController
         'theme' => 'required|string',
     ];
 
-    protected $with = ['date', 'theme'];
-
     protected function with(): array
     {
         return [

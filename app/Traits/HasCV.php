@@ -19,6 +19,8 @@ trait HasCV
         tap($this->cv_path, function ($previous) use ($cv, $storagePath) {
             if ($previous) {
                 Storage::disk($this->CVDisk())->delete($previous);
+            } else {
+                // Give points for CV submission
             }
 
             $this->forceFill([
