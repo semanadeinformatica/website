@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-between">
-        <div class="px-4 sm:px-0">
+        <section class="px-4 sm:px-0">
             <h3 class="text-lg font-medium text-2023-teal">
                 <slot name="title" />
             </h3>
@@ -8,10 +8,6 @@
             <p class="mt-1 text-sm text-2023-teal-dark">
                 <slot name="description" />
             </p>
-        </div>
-
-        <div class="px-4 sm:px-0">
-            <slot name="aside" />
-        </div>
+        </section>
     </div>
 </template>

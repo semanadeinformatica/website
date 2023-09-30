@@ -13,10 +13,8 @@ import SectionTitle from "./SectionTitle.vue";
             </template>
         </SectionTitle>
 
-        <div class="mt-5 md:mt-0">
-            <div class="bg-2023-bg px-4 py-5 sm:p-6">
-                <slot name="content" />
-            </div>
+        <div class="mt-5 bg-2023-bg px-4 py-5 sm:p-6 md:mt-0">
+            <slot name="content" />
         </div>
     </div>
 </template>
