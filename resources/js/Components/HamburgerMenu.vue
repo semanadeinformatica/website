@@ -5,6 +5,7 @@ import route, {
     type QueryParams,
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";
+import type Competition from "@/Types/Competition";
 
 interface Route {
     label: string;
@@ -17,7 +18,7 @@ const open = ref(false);
 const props = defineProps<{
     options: {
         pages: Routes;
-        activities: Routes;
+        competitions: Competition[];
         editions: number[];
     };
 }>();
@@ -78,21 +79,16 @@ watch(open, () => {
         </div>
         <section class="flex flex-col items-center pt-6">
             <h2 class="pb-3 text-center font-bold text-2023-orange">
-                Atividades
+                Competições
             </h2>
             <template
-                v-for="({ label, _query }, page) in props.options.activities"
-                :key="page"
+                v-for="competition in props.options.competitions"
+                :key="competition.id"
             >
                 <ResponsiveNavLink
-                    :href="
-                        route(route().has(page) ? page : 'home', {
-                            _query,
-                        } as RouteParamsWithQueryOverload)
-                    "
-                    :active="page === route().current()"
+                    :href="route('competition.show', { competition })"
                 >
-                    {{ label }}
+                    {{ competition.name }}
                 </ResponsiveNavLink>
             </template>
         </section>

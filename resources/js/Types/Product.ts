@@ -5,4 +5,5 @@ export default interface Product extends Model {
     price: number;
     stock: number;
     edition_id: number;
+    image_product_url: string;
 }
