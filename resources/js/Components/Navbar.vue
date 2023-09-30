@@ -17,11 +17,19 @@ interface Route {
 }
 type Routes = Record<string, Route>;
 
-const pageRoutes: Routes = {
+const homeSections: Routes = {
     aboutus: {
         label: "Sobre nós",
     },
     speakers: { label: "Speakers" },
+    sponsors: { label: "Patrocínios" },
+};
+
+const pageRoutes: Routes = {
+    // aboutus: {
+    //     label: "Sobre nós",
+    // },
+    // speakers: { label: "Speakers" },
     program: {
         label: "Programa",
         _query: {
@@ -29,8 +37,8 @@ const pageRoutes: Routes = {
         },
     },
     team: { label: "Equipa" },
-    sponsors: { label: "Patrocínios" },
-    contacts: { label: "Contactos" },
+    // sponsors: { label: "Patrocínios" },
+    // contacts: { label: "Contactos" },
 };
 
 const activityRoutes: Routes = {
@@ -56,13 +64,28 @@ const isAdmin = computed(() => {
 
 <template>
     <nav class="relative z-30 flex border-b-2 border-black bg-2023-bg py-6">
-        <div class="flex h-full w-full pl-5 md:hidden">
-            <img
-                class="flex md:hidden"
-                src="/images/cy-sinf-small.svg"
-                alt="Stylized SINF logo"
-            />
-        </div>
+        <Dropdown align="center" width="32" class="ml-10">
+            <template #trigger>
+                <DropdownTrigger class="group">
+                    <a :href="route('home')">
+                        <img
+                            class="w-24 max-md:w-16"
+                            src="/images/cy-sinf-small.svg"
+                            alt="Stylized SINF logo"
+                        />
+                    </a>
+                </DropdownTrigger>
+            </template>
+            <template #content>
+                <template v-for="({ label }, page) in homeSections" :key="page">
+                    <DropdownLink
+                        :href="page !== 'home' ? `/#${page}` : route(page)"
+                    >
+                        {{ label }}
+                    </DropdownLink>
+                </template>
+            </template>
+        </Dropdown>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
             <template
                 v-for="({ label, _query }, page) in pageRoutes"

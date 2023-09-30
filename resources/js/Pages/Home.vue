@@ -122,6 +122,7 @@ const formattedDate = (
             class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
         >
             <h2
+                id="aboutus"
                 class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-black bg-2023-red p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
             >
                 Sobre nós
@@ -151,6 +152,7 @@ const formattedDate = (
         </section>
         <!-- SPEAKERS -->
         <section
+            id="speakers"
             class="grid-rows-[repeat(3, 1fr)] my-10 grid grid-cols-1 gap-10"
         >
             <p
@@ -161,7 +163,7 @@ const formattedDate = (
             <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
         </section>
         <!-- SPONSORS -->
-        <section class="flex flex-col gap-10 px-20 py-24">
+        <section id="sponsors" class="flex flex-col gap-10 px-20 py-24">
             <ModalsContainer />
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
