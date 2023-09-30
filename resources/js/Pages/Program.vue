@@ -15,7 +15,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 </script>
 
 <template>
-    <AppLayout title="Programa">
+    <AppLayout :title="$t('pages.program.title')">
         <div
             v-if="totalDays !== 0"
             class="flex flex-col items-center px-10 py-10 md:px-40"

@@ -4,8 +4,7 @@ import { OhVueIcon } from "oh-vue-icons";
 </script>
 
 <template>
-    <Head title="Brevemente..." />
-    <!-- TODO: localization -->
+    <Head :title="$t('pages.maintenance')" />
     <main class="min-h-screen bg-2023-bg">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-evenly gap-14 py-16"
@@ -14,50 +13,48 @@ import { OhVueIcon } from "oh-vue-icons";
                 id="svg-1"
                 class="absolute left-[7%] w-36 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/cy-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-2"
                 class="absolute right-[7%] top-16 w-32 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/rc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-3"
                 class="absolute bottom-28 right-[15%] w-20 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/oc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
 
             <div class="relative">
                 <img
                     class="w-96 max-ml:w-72"
                     src="images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    :alt="$t('general.sinfLogoAlt')"
                 />
                 <span
                     class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
-                    >2023</span
+                    >{{ 2023 }}</span
                 >
             </div>
             <p
                 class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
             >
-                semana_de_informática
+                {{ $t("semana_de_informática") }}
             </p>
             <p class="margin-0 text-center text-2xl font-bold text-2023-teal">
-                25 a 31 de outubro
+                {{ $t("pages.maintenance.date") }}
             </p>
             <p
                 class="m-0 text-center text-lg font-bold text-2023-teal max-ml:text-base"
-            >
-                Estamos a preparar mais uma edição da SINF!
-            </p>
+            ></p>
             <a
                 href="https://2022.sinf.pt"
                 class="relative m-0 text-center text-lg font-bold text-2023-teal underline max-ml:text-base"
             >
-                Revê a edição do último ano aqui!
+                {{ $t("pages.maintenance.prepareEdition") }}
             </a>
             <section
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
@@ -65,7 +62,7 @@ import { OhVueIcon } from "oh-vue-icons";
                 <p
                     class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2023-red p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-bg"
                 >
-                    Contacta-nos!
+                    {{ $t("pages.maintenance.contactUs") }}
                 </p>
                 <div
                     id="contacts-content-desktop"

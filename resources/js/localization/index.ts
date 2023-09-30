@@ -4,6 +4,7 @@ const messages = {
     en: {
         pages: {
             home: {
+                title: "Home",
                 aboutUs: {
                     label: "About us",
                     text1: "SINF (Semana de Informática), organized by NIAEFEUP (Núcleo de Informática da Associação de Estudantes da Faculdade de Engenharia da Universidade do Porto), was created with the purpose of allowing students to, regardless of their degree, develop their skills in the various fields related to Informatics, promoting their interaction with the corporate world through a series of social gatherings.",
@@ -20,10 +21,59 @@ const messages = {
                     },
                 },
             },
-            program: {},
+            program: {
+                title: "Program",
+            },
+            maintenance: {
+                title: "Coming soon...",
+                date: "25th - 31th october",
+                prepareEdition: "We are preparing another year of SINF",
+                contactUs: "Contact us",
+            },
+            event: {
+                title: "Event",
+                join: "Join",
+                callToAction: "Let's do this?",
+                seeYou: "See you there!",
+                notEnrolled: "You still haven't enrolled for SINF!",
+                spots: {
+                    pre: "We still have",
+                    pos: "spot | spots",
+                },
+                full: "Full attendance",
+                stands: "Stands",
+                workshops: "Workshops",
+            },
+            competition: {
+                title: "Competition",
+                rules: "Rules",
+                callToAction: "Let's do this?",
+                join: "Join!",
+            },
+            profile: {},
         },
         components: {
             program: {},
+            navbar: {
+                navLinks: {
+                    aboutus: "About Us",
+                    speakers: "Speakers",
+                    program: "Program",
+                    team: "Team",
+                    sponsors: "Sponsors",
+                    contacts: "Contacts",
+                    shop: "Shop",
+                },
+                competitions: "Competitions",
+                profileDropdown: {
+                    profile: "Profile",
+                    admin: "Admin Dashboard",
+                    logout: "Logout",
+                },
+            },
+            footer: {
+                copyrightNotice: "all rights reserved",
+            },
         },
         events: {
             days: "days",
@@ -33,6 +83,7 @@ const messages = {
         },
         general: {
             to: "to",
+            sinfLogoAlt: "Stylized SINF logo",
         },
         models: {
             admin: "Admin | Admins",
@@ -60,6 +111,7 @@ const messages = {
     pt: {
         pages: {
             home: {
+                title: "Página Principal",
                 aboutUs: {
                     label: "Sobre nós",
                     text1: "A Semana de Informática (SINF), organizada pelo Núcleo de Informática da Associação de Estudantes da Faculdade de Engenharia da Universidade do Porto (NIAEFEUP), foi criada com o intuito de permitir aos estudantes, independentemente do curso, desenvolver as suas capacidades nas diversas áreas da Informática, promovendo a sua interação com o mundo empresarial através de eventos sociais.",
@@ -76,10 +128,59 @@ const messages = {
                     },
                 },
             },
-            program: {},
+            program: {
+                title: "Programa",
+            },
+            maintenance: {
+                title: "Brevemente...",
+                date: "25 a 31 de outubro",
+                prepareEdition: "Estamos a preparar mais uma edição da SINF!",
+                contactUs: "Contacta-nos!",
+            },
+            event: {
+                title: "Evento",
+                join: "Inscreve-te",
+                callToAction: "Vamos a isto?",
+                seeYou: "Vemo-nos na lá!",
+                notEnrolled: "Ainda não te inscreveste na SINF!",
+                spots: {
+                    pre: "Ainda temos",
+                    pos: "lugar | lugares",
+                },
+                full: "Evento esgotado",
+                stands: "Bancas",
+                workshops: "Atividades",
+            },
+            competition: {
+                title: "Competição",
+                rules: "Regulamento",
+                callToAction: "Vamos a isto?",
+                join: "Participar!",
+            },
+            profile: {},
         },
         components: {
             program: {},
+            navbar: {
+                navLinks: {
+                    aboutus: "Sobre nós",
+                    speakers: "Palestrantes",
+                    program: "Programa",
+                    team: "Equipa",
+                    sponsors: "Patrocínios",
+                    contacts: "Contactos",
+                    shop: "Loja",
+                },
+                competitions: "Competições",
+                profileDropdown: {
+                    profile: "Perfil",
+                    admin: "Administração",
+                    logout: "Logout",
+                },
+            },
+            footer: {
+                copyrightNotice: "todos os direitos reservados",
+            },
         },
         events: {
             days: "dias",
@@ -89,6 +190,7 @@ const messages = {
         },
         general: {
             to: "a",
+            sinfLogoAlt: "Logótipo da SINF",
         },
         models: {
             admin: "Administrador | Administradores",

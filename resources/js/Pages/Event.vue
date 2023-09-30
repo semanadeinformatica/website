@@ -48,7 +48,7 @@ const colorPicker = () => {
 </script>
 
 <template>
-    <AppLayout title="Event">
+    <AppLayout :title="$t('pages.event.title')">
         <!-- speaker/event intro -->
         <section class="mx-9 flex flex-col gap-6 pt-10">
             <SpeakerInfo
@@ -77,11 +77,18 @@ const colorPicker = () => {
             <h1
                 class="absolute -bottom-5 mr-2 flex border border-black bg-2023-red-dark p-2 px-3 text-xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
             >
-                Dia
-                {{ event.event_day ? $d(event.event_day.date, "day") : "" }}
-                @
-                {{ event.time_start ? formatTimeString(event.time_start) : "" }}
-                <template v-if="event.room"> - {{ event.room }} </template>
+                <template v-if="event.event_day?.date">
+                    Dia
+                    {{ $d(event.event_day.date, "day") }}
+                    @
+                    {{
+                        event.event_day
+                            ? formatTimeString(event.time_start)
+                            : ""
+                    }}
+                    <template v-if="event.room"> - {{ event.room }} </template>
+                </template>
+                <template v-else> N/A </template>
             </h1>
         </section>
         <!-- companies -->
@@ -102,21 +109,21 @@ const colorPicker = () => {
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
             <p
-                class="flex w-fit flex-col text-center text-3xl font-bold text-2023-red"
+                class="flex w-fit flex-col gap-2 text-center text-3xl font-bold text-2023-red"
             >
-                <span v-if="hasJoined">Vemo-nos lá!</span>
-                <span v-else-if="!isEnrolled"
-                    >Ainda não te inscreveste na SINF!</span
-                >
+                <span v-if="hasJoined">{{ $t("pages.event.seeYou") }}</span>
+                <span v-else-if="!isEnrolled">{{
+                    $t("pages.event.notEnrolled")
+                }}</span>
                 <template v-else-if="canJoin">
-                    <span>Vamos a isto?</span>
+                    <span>{{ $t("pages.event.callToAction") }}</span>
                     <span v-if="event.capacity" class="text-lg">
-                        Ainda temos
+                        {{ $t("pages.event.spots.pre") }}
                         {{ event.capacity - (event.enrollments?.length ?? 0) }}
-                        lugares.
+                        {{ $t("pages.event.spots.pos", event.capacity) }}
                     </span>
                 </template>
-                <span v-else>Evento esgotado!</span>
+                <span v-else>{{ $t("pages.event.full") }}</span>
             </p>
 
             <PrimaryButton

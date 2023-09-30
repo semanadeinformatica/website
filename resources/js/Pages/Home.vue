@@ -62,7 +62,7 @@ const formattedDate = (
 </script>
 
 <template>
-    <AppLayout title="Home">
+    <AppLayout :title="$t('pages.home.title')">
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
@@ -78,26 +78,26 @@ const formattedDate = (
                 id="svg-1"
                 class="absolute left-[7%] w-36 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/cy-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-2"
                 class="absolute right-[7%] top-16 w-32 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/rc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-3"
                 class="absolute bottom-24 right-[15%] w-24 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="images/oc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
 
             <div class="relative">
                 <img
                     class="w-96 max-ml:w-[300px]"
                     src="images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    :alt="$t('general.sinfLogoAlt')"
                 />
                 <span
                     class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
@@ -107,7 +107,8 @@ const formattedDate = (
             <p
                 class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
             >
-                semana_de_informática
+                <!-- This is a bit of an hack since Vue-i18n will just print the text as is but the linter is happy so we move on -->
+                {{ $t("semana_de_informática") }}
             </p>
             <p class="margin-0 text-2xl font-bold text-2023-teal">
                 {{
@@ -115,9 +116,12 @@ const formattedDate = (
                         ? formattedDate(
                               $d(new Date(days[0].date), "longYear"),
                               $t("general.to"),
-                              $d(new Date(days[days.length - 1].date), "longYear"),
+                              $d(
+                                  new Date(days[days.length - 1].date),
+                                  "longYear",
+                              ),
                           )
-                        : ""
+                        : undefined
                 }}
             </p>
         </section>
@@ -156,18 +160,18 @@ const formattedDate = (
                 <div
                     class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
-                <span class="text-center"
-                    >{{ days.length }} {{ $t("events.days") }}</span
-                >
-                <span class="text-center"
-                    >{{ standCount }} {{ $t("events.stalls") }}</span
-                >
-                <span class="text-center"
-                    >{{ talkCount }} {{ $t("events.talks") }}</span
-                >
-                <span class="text-center"
-                    >{{ activityCount }} {{ $t("events.workshops") }}</span
-                >
+                    <span class="text-center"
+                        >{{ days.length }} {{ $t("events.days") }}</span
+                    >
+                    <span class="text-center"
+                        >{{ standCount }} {{ $t("events.stalls") }}</span
+                    >
+                    <span class="text-center"
+                        >{{ talkCount }} {{ $t("events.talks") }}</span
+                    >
+                    <span class="text-center"
+                        >{{ activityCount }} {{ $t("events.workshops") }}</span
+                    >
                 </div>
             </template>
             <template v-else>

@@ -22,7 +22,7 @@ const regulationTextParts = computed(() => {
 </script>
 
 <template>
-    <AppLayout title="Competition">
+    <AppLayout :title="$t('pages.competition.title')">
         <header
             class="relative left-1/2 top-9 flex w-fit -translate-x-1/2 transform flex-col gap-4"
         >
@@ -47,7 +47,7 @@ const regulationTextParts = computed(() => {
             <h2
                 class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
             >
-                Regulamento
+                {{ $t("pages.competition.rules") }}
             </h2>
 
             <p class="p-20 text-lg text-white max-lg:pb-10">
@@ -65,14 +65,14 @@ const regulationTextParts = computed(() => {
             <h1
                 class="absolute top-[1rem] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
             >
-                Vamos a isto?
+                {{ $t("pages.competition.callToAction") }}
             </h1>
 
             <a
                 :href="competition.registration_link"
                 class="relative mt-5 content-center justify-center border border-black bg-2023-teal px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
             >
-                Participar!
+                {{ $t("pages.competition.join") }}
             </a>
         </section>
     </AppLayout>
