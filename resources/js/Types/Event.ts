@@ -1,6 +1,8 @@
 import type Model from "@/Types/Model";
 import type EventDay from "@/Types/EventDay";
-import type { User } from "./User";
+import type { User } from "@/Types/User";
+import type Edition from "@/Types/Edition";
+import type Enrollment from "./Enrollment";
 
 export default interface Event extends Model {
     name: string;
@@ -8,10 +10,16 @@ export default interface Event extends Model {
     time_end: string;
     topic: string;
     capacity?: number;
-    event_day_id: number;
-    edition_id: number;
     description: string;
     room: string;
+
+    enrollments?: Enrollment[];
+
     users?: User[];
+
+    edition_id: number;
+    edition?: Edition;
+
+    event_day_id: number;
     event_day?: EventDay;
 }

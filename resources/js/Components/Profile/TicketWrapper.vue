@@ -1,5 +1,15 @@
 <script setup lang="ts">
+import type Event from "@/Types/Event";
 import Ticket from "./Ticket.vue";
+
+type EventTicket = Event & {
+    joined: boolean;
+};
+
+const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
+    if (t.joined) return "acquired";
+    return "available";
+};
 </script>
 
 <template>
@@ -26,8 +36,12 @@ import Ticket from "./Ticket.vue";
         class="grid items-center justify-center gap-10 self-center pt-8"
         style="grid-template-columns: repeat(auto-fill, 350px)"
     >
-        <div v-for="item in $page.props.tickets" :key="item" class="max-w-sm">
-            <Ticket state="acquired" :event="item"></Ticket>
+        <div
+            v-for="item in $page.props.tickets as EventTicket[]"
+            :key="item.id"
+            class="max-w-sm"
+        >
+            <Ticket :state="getTicketState(item)" :event="item"></Ticket>
         </div>
     </div>
 </template>
