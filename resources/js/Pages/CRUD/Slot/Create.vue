@@ -17,6 +17,7 @@ defineProps<Props>();
 const form = useForm({
     total_quests: "0",
     points: "0",
+    name: "",
     quests: [] as string[],
 });
 
@@ -42,6 +43,14 @@ const submit = () => {
                 label="Pontos"
                 type="number"
                 :error-message="form.errors.points"
+            />
+
+            <TextInput
+                id="name"
+                v-model="form.name"
+                label="Nome"
+                type="text"
+                :error-message="form.errors.name"
             />
 
             <TextInput

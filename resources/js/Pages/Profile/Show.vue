@@ -8,16 +8,34 @@ import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOther
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";*/
-import type Session from "@/Types/Session";
 import type Participant from "@/Types/Participant";
+import InteractionArea from "@/Components/Profile/InteractionArea.vue";
+import type Slot from "@/Types/Slot";
+import { h } from "vue";
+import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
+import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
-    sessions: Session[];
+    tickets: Event[];
+    slots: Slot[];
     participant: Participant;
 }
 
 defineProps<Props>();
+
+const buttons = {
+    ticket: {
+        id: "ticket",
+        title: "Bilhetes",
+        component: h(TicketWrapper),
+    },
+    sticker: {
+        id: "sticker",
+        title: "Conquistas",
+        component: h(StickerWrapper),
+    },
+};
 </script>
 
 <template>
@@ -31,7 +49,7 @@ defineProps<Props>();
                 "
             >
                 <div
-                    class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+                    class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
                 >
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
@@ -56,6 +74,7 @@ defineProps<Props>();
                                 : $page.props.auth.user
                         "
                     />
+                    <InteractionArea :buttons="buttons"> </InteractionArea>
                 </div>
             </template>
         </div>

@@ -22,6 +22,7 @@ use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
 use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -92,6 +93,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             });
 
         Route::prefix('user')->group(function () {
+            Route::get('/profile', [UserController::class, 'show'])
+                ->name('profile.show');
             Route::prefix('/{participant}')->whereNumber('participant')->controller(ParticipantController::class)->group(function () {
                 Route::get('', 'show')->name('participant.profile');
             });

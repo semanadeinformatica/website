@@ -19,6 +19,7 @@ const { item: slot } = defineProps<Props>();
 const form = useForm({
     total_quests: slot.total_quests.toString(),
     points: slot.points.toString(),
+    name: slot.name,
     quests: slot.quests?.map((q) => q.id.toString()) ?? [],
 });
 
@@ -44,6 +45,14 @@ const submit = () => {
                 label="Pontos"
                 type="number"
                 :error-message="form.errors.points"
+            />
+
+            <TextInput
+                id="name"
+                v-model="form.name"
+                label="Nome"
+                type="text"
+                :error-message="form.errors.name"
             />
 
             <TextInput
