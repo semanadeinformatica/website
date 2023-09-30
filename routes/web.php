@@ -109,6 +109,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
                 Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
+            Route::get('/profile/edit', [UserController::class, 'edit'])
+                ->name('profile.edit');
         });
     }
 );

@@ -2,11 +2,10 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
-import DangerButton from "@/Components/DangerButton.vue";
 import DialogModal from "@/Components/DialogModal.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import route from "ziggy-js";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref<HTMLInputElement | null>(null);
@@ -44,16 +43,16 @@ const closeModal = () => {
         <template #description> Permanently delete your account. </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
+            <div class="max-w-xl text-sm text-2023-red-dark">
                 Once your account is deleted, all of its resources and data will
                 be permanently deleted. Before deleting your account, please
                 download any data or information that you wish to retain.
             </div>
 
             <div class="mt-5">
-                <DangerButton @click="confirmUserDeletion">
+                <PrimaryButton color="red" @click="confirmUserDeletion">
                     Delete Account
-                </DangerButton>
+                </PrimaryButton>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
@@ -79,18 +78,17 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <SecondaryButton @click="closeModal">
-                        Cancel
-                    </SecondaryButton>
+                    <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
 
-                    <DangerButton
+                    <PrimaryButton
                         class="ml-3"
+                        color="red"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser"
                     >
                         Delete Account
-                    </DangerButton>
+                    </PrimaryButton>
                 </template>
             </DialogModal>
         </template>

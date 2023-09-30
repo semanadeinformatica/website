@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
 import "vue-final-modal/style.css";
+import { router } from "@inertiajs/vue3";
+import route from "ziggy-js";
 
 interface Props {
     item: User | undefined;
@@ -87,7 +89,11 @@ const iconColor: Record<string, string> = {
                 </template>
             </div>
         </div>
-        <button v-if="$page.props.auth.user?.id == item?.id" class="self-start">
+        <button
+            v-if="$page.props.auth.user?.id == item?.id"
+            class="self-start"
+            @click="router.get(route('profile.edit'))"
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="w-8 text-2023-teal"

@@ -53,4 +53,14 @@ class UserController extends UserProfileController
             'slots' => $slots,
         ]);
     }
+
+    public function edit(Request $request)
+    {
+        $this->validateTwoFactorAuthenticationState($request);
+
+        return Inertia::render('Profile/Edit', [
+            'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
+            'sessions' => $this->sessions($request)->all(),
+        ]);
+    }
 }
