@@ -36,6 +36,7 @@ const pageRoutes: Routes = {
             day: 1,
         },
     },
+    shop: { label: "Loja" },
     team: { label: "Equipa" },
     // sponsors: { label: "Patrocínios" },
     // contacts: { label: "Contactos" },
@@ -53,7 +54,7 @@ const editionRoutes = [2022, 2021, 2020, 2019, 2018];
 
 const options = {
     pages: pageRoutes,
-    activities: activityRoutes,
+    competitions: usePage().props.competitions,
     editions: editionRoutes,
 };
 
