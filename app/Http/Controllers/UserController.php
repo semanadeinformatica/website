@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -18,6 +19,7 @@ class UserController extends Controller
         return Inertia::render('Profile/Show', [
             'user' => $user->load('usertype.socialMedia')->toArray(),
             'participants' => $user->usertype_type === Company::class ? $this->getParticipants($user->usertype) : null,
+            'canCV' => Gate::allows('view_CV', $user),
         ]);
     }
 }

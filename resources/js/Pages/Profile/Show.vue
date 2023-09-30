@@ -18,6 +18,7 @@ interface Props {
     sessions: Session[];
     user: User;
     participants: Participant[];
+    canCV: boolean | null;
 }
 
 defineProps<Props>();
@@ -37,7 +38,8 @@ defineProps<Props>();
                     v-if="
                         $page.props.auth.user?.usertype_type ===
                             'App\\Models\\Participant' ||
-                        user?.usertype_type === 'App\\Models\\Participant'
+                        (user?.usertype_type === 'App\\Models\\Participant' &&
+                            canCV)
                     "
                     :item="user ?? $page.props.auth.user"
                 />
