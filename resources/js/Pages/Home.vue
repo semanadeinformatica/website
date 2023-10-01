@@ -158,9 +158,18 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                Speakers
+                Oradores
             </p>
-            <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
+            <template v-if="speakers.length != 0">
+                <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
+            </template>
+            <template v-else>
+                <p
+                    class="flex w-fit place-self-center text-2xl font-bold text-2023-teal-dark"
+                >
+                    Em breve...
+                </p>
+            </template>
         </section>
         <!-- SPONSORS -->
         <section id="sponsors" class="flex flex-col gap-10 px-20 py-24">
@@ -168,20 +177,20 @@ const formattedDate = (
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
-                Sponsors
+                Patrocínios
             </p>
             <SponsorBanner
-                title="Platinum"
+                title="Platina"
                 :sponsors="sponsorGroups.PLATINUM"
                 color="orange"
             ></SponsorBanner>
             <SponsorBanner
-                title="Gold"
+                title="Ouro"
                 :sponsors="sponsorGroups.GOLD"
                 color="teal-dark"
             ></SponsorBanner>
             <SponsorBanner
-                title="Silver"
+                title="Prata"
                 :sponsors="sponsorGroups.SILVER"
                 color="red-dark"
             ></SponsorBanner>
