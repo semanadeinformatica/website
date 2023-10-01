@@ -17,7 +17,12 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
         <template v-if="$page.props.products?.toString() !== ''">
             <section
                 class="align-center grid justify-center gap-10 px-32"
-                style="grid-template-columns: repeat(auto-fill, minmax(18em, 20em))"
+                style="
+                    grid-template-columns: repeat(
+                        auto-fill,
+                        minmax(18em, 20em)
+                    );
+                "
             >
                 <ShopItem
                     v-for="product in $page.props.products"
@@ -29,8 +34,9 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
         </template>
         <template v-else>
             <div class="flex items-center justify-center">
-                <p class="w-fit text-3xl text-2023-teal-dark font-bold pt-10">Em breve...</p>
-
+                <p class="w-fit pt-10 text-3xl font-bold text-2023-teal-dark">
+                    Em breve...
+                </p>
             </div>
         </template>
     </AppLayout>

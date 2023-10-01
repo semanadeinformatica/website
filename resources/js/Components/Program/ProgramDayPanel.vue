@@ -15,14 +15,18 @@ const { day } = defineProps<Props>();
 const selected = ref<HTMLElement | null>(null);
 const selectedType = ref<"talk" | "activity" | "stand">("talk");
 
-const noInfo = computed(() => day.workshops?.length == 0 && day.talks?.length == 0 && day.talks?.length == 0);
+const noInfo = computed(
+    () =>
+        day.workshops?.length == 0 &&
+        day.talks?.length == 0 &&
+        day.talks?.length == 0,
+);
 
 const toggle = ({ target }: MouseEvent) => {
     selected.value = target as HTMLElement;
 };
 
 watch(selected, (newValue, oldValue) => {
-    
     oldValue?.classList.toggle("selected");
     newValue?.classList.toggle("selected");
     selectedType.value =
@@ -80,7 +84,7 @@ onMounted(() => {
         {{ day.theme }}
     </p>
     <template v-if="noInfo">
-        <p class="text-4xl pt-40 text-2023-teal-dark font-bold">Em breve...</p>
+        <p class="pt-40 text-4xl font-bold text-2023-teal-dark">Em breve...</p>
     </template>
     <template v-else>
         <WithTimeline>
@@ -88,7 +92,7 @@ onMounted(() => {
                 <template v-if="selectedType === 'stand'">
                     <StandDisplay :stands="day.stands!" />
                 </template>
-    
+
                 <template v-else-if="selectedType === 'activity'">
                     <ActivityTimelineAction
                         v-for="workshop in day.workshops"
@@ -96,7 +100,7 @@ onMounted(() => {
                         :event="workshop"
                     />
                 </template>
-    
+
                 <template v-else-if="selectedType === 'talk'">
                     <TalkTimelineAction
                         v-for="talk in day.talks"
