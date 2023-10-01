@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use App\Traits\HasCV;
+use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Participant extends Model
+class Participant extends Model implements MustVerifyEmail
 {
     use HasCV;
     use HasFactory;
+    use AuthMustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
