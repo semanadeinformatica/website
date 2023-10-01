@@ -3,19 +3,19 @@ const contacts = [
     {
         icon: "io-logo-facebook",
         bg: "bg-2023-red",
-        url: "https://www.facebook.com/NIAEFEUP",
+        url: "https://www.facebook.com/sinfFEUP/",
     },
     {
         icon: "io-logo-linkedin",
         bg: "bg-2023-red-dark",
-        url: "https://www.linkedin.com/company/nifeup/mycompany/",
+        url: "https://pt.linkedin.com/company/sinffeup",
     },
     {
         icon: "io-logo-instagram",
         bg: "bg-2023-teal",
-        url: "https://www.instagram.com/niaefeup/",
+        url: "https://www.instagram.com/sinffeup/?hl=en",
     },
-    { icon: "io-mail", bg: "bg-2023-orange", url: "mailto:ni@aefeup.pt" },
+    { icon: "io-mail", bg: "bg-2023-orange", url: "mailto:geral@sinf.pt" },
 ];
 </script>
 

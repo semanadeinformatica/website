@@ -141,19 +141,42 @@ const formattedDate = (
             >
                 Este ano temos...
             </h2>
-            <div
-                class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+            <template
+                v-if="
+                    days.length !== 0 &&
+                    standCount !== 0 &&
+                    talkCount !== 0 &&
+                    activityCount !== 0
+                "
             >
-                <span class="text-center">{{ days.length }} dias</span>
-                <span class="text-center">{{ standCount }} bancas</span>
-                <span class="text-center">{{ talkCount }} palestras</span>
-                <span class="text-center">{{ activityCount }} atividades</span>
-            </div>
+                <h2
+                    class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
+                >
+                    Este ano temos...
+                </h2>
+                <div
+                    class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+                >
+                    <span class="text-center">{{ days.length }} dias</span>
+                    <span class="text-center">{{ standCount }} bancas</span>
+                    <span class="text-center">{{ talkCount }} palestras</span>
+                    <span class="text-center"
+                        >{{ activityCount }} atividades</span
+                    >
+                </div>
+            </template>
+            <template v-else>
+                <div
+                    class="mx-[10%] flex items-center justify-center gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+                >
+                    Muitas novidades para ti! Está quase...
+                </div>
+            </template>
         </section>
         <!-- SPEAKERS -->
         <section
             id="speakers"
-            class="grid-rows-[repeat(3, 1fr)] my-10 grid grid-cols-1 gap-10"
+            class="grid-rows-[repeat(3, 1fr)] my-10 mb-5 grid grid-cols-1 gap-10"
         >
             <p
                 class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-red-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
@@ -172,7 +195,7 @@ const formattedDate = (
             </template>
         </section>
         <!-- SPONSORS -->
-        <section id="sponsors" class="flex flex-col gap-10 px-20 py-24">
+        <section id="sponsors" class="flex flex-col gap-10 px-20 py-20">
             <ModalsContainer />
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
