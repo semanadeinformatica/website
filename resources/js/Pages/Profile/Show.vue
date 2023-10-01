@@ -21,7 +21,7 @@ interface Props {
     sessions: Session[];
     user: User;
     participants: Participant[];
-    canCV: boolean | null;
+    canCV: boolean;
 }
 
 defineProps<Props>();

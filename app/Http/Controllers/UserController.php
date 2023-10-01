@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -59,7 +58,7 @@ class UserController extends UserProfileController
             'slots' => $slots->get(),
             'user' => $user->load('usertype.socialMedia')->toArray(),
             'participants' => $user->usertype_type === Company::class ? $this->getParticipants($user->usertype) : null,
-            'canCV' => Gate::allows('view_CV', $user),
+            'canCV' => Gate::allows('view_CV', [$user, $edition]),
         ]);
     }
 

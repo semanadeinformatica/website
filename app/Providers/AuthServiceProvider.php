@@ -76,10 +76,11 @@ class AuthServiceProvider extends ServiceProvider
                 )
             )
         ));
-        Gate::define('view_CV', fn (User $user, User $cv_user) => (
+        Gate::define('view_CV', fn (User $user, User $cv_user, Edition $edition) => (
             $user->id === $cv_user->id || (
                 $user->isAdmin() || (
-                    $user->isCompany() && $cv_user->isParticipant() && $user->usertype()->participants()->contains($cv_user) // need to check tier
+                    $user->isCompany() && $cv_user->isParticipant() && $user->usertype()->participants()->contains($cv_user) &&
+                        $edition->sponsors()->where('company_id', $user->usertype_id)->first()->tier !== 'SILVER'
                 )
             )
         ));

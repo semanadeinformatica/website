@@ -102,7 +102,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 });
             });
 
-        Route::prefix('user')->middleware('can:view_profile', 'user')->group(function () {
+        Route::prefix('user')->middleware('can:view_profile,user')->group(function () {
             Route::get('/profile', [UserController::class, 'show'])
                 ->name('profile.show');
 
