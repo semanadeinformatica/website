@@ -14,6 +14,7 @@ class Department extends Model
     protected $fillable = [
         'name',
         'edition_id',
+        'priority',
     ];
 
     public function edition(): BelongsTo

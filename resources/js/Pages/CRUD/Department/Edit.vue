@@ -19,6 +19,7 @@ const { item: department } = defineProps<Props>();
 const form = useForm({
     edition_id: department.edition_id.toString(),
     name: department.name,
+    priority: department.priority.toString(),
 });
 
 const submit = () => {
@@ -56,6 +57,14 @@ const submit = () => {
                     {{ edition.name }}
                 </option>
             </TextInput>
+
+            <TextInput
+                v-model="form.priority"
+                type="number"
+                label="Prioridade"
+                class="self-stretch"
+                :error-message="form.errors.priority"
+            />
 
             <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
