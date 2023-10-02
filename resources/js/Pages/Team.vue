@@ -22,8 +22,13 @@ const colors: Array<string> = [
     <AppLayout title="Team">
         <div
             v-if="departments.length > 0"
-            class="flex flex-col gap-6 border border-black p-10"
+            class="flex flex-col items-center gap-7 pt-10"
         >
+            <h1
+                class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-teal"
+            >
+                Equipa
+            </h1>
             <SINFTeam
                 v-for="department in departments"
                 :key="department.id"
