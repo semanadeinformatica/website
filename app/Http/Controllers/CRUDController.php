@@ -95,7 +95,9 @@ abstract class CRUDController extends Controller
             }
         }
 
-        $items = $query->paginate()->withQueryString();
+        $filteredQuery = collect($request->query())
+            ->intersectByKeys(['sort_by' => '', 'sort_dir' => '', 'query' => '', 'filter_by' => '']);
+        $items = $query->paginate()->appends($filteredQuery->toArray());
 
         $with = $this->with();
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Event;
 use App\Models\Quest;
+use App\Models\Stand;
 
 class QuestCRUDController extends CRUDController
 {
@@ -15,7 +17,7 @@ class QuestCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string',
         'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
-        'requirement' => 'required|regex:/^(company;[0-9]+)$/',
+        'requirement' => 'required|regex:/^((stand|event);[0-9]+)$/',
         'edition_id' => 'required|exists:editions,id',
     ];
 
@@ -23,7 +25,8 @@ class QuestCRUDController extends CRUDController
     {
         return [
             'editions' => Edition::all(),
-            'companies' => Company::with('user')->get(),
+            'stands' => Stand::all(),
+            'events' => Event::all(),
         ];
     }
 
@@ -34,7 +37,8 @@ class QuestCRUDController extends CRUDController
         $requirement = explode(';', $new['requirement']);
 
         $requirement_type = match ($requirement[0]) {
-            'company' => Company::class,
+            'stand' => Stand::class,
+            'event' => Event::class,
             default => null,
         };
         $requirement_id = $requirement[1];
