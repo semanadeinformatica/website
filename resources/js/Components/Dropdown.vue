@@ -31,11 +31,7 @@ const widthClass = computed(() => {
 
 <template>
     <div class="relative">
-        <div
-            class="h-full"
-            v-on:mouseover="open = true"
-            v-on:mouseleave="open = false"
-        >
+        <div class="h-full" @mouseover="open = true" @mouseleave="open = false">
             <slot name="trigger" />
         </div>
 
@@ -51,8 +47,8 @@ const widthClass = computed(() => {
                 class="absolute left-1/2 z-50 -translate-x-1/2"
                 :class="[widthClass]"
                 style="display: none"
-                v-on:mouseover="open = true"
-                v-on:mouseleave="open = false"
+                @mouseover="open = true"
+                @mouseleave="open = false"
                 @click="open = false"
             >
                 <div :class="contentClasses">

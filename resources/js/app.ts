@@ -6,7 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createVfm } from "vue-final-modal";
 // @ts-expect-error: Ziggy does not have type declarations
 import { ZiggyVue } from "ziggy";
-import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { addIcons } from "oh-vue-icons";
 import { createI18n } from "vue-i18n";
 import messages from "./messages";
 
@@ -86,7 +86,6 @@ createInertiaApp({
             .use(vfm)
             .use(i18n)
             .use(ZiggyVue, Ziggy)
-            .component("v-icon", OhVueIcon)
             .mount(el);
     },
     progress: {

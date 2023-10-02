@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SpeakerUser } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 
 interface Props {
     user: SpeakerUser;
@@ -61,12 +62,12 @@ const iconColor: Record<string, string> = {
                     :key="social"
                     :href="social"
                 >
-                    <v-icon
+                    <OhVueIcon
                         v-if="social"
                         :name="socialIcon[social]"
                         :fill="iconColor[color]"
                         scale="1.4"
-                    ></v-icon>
+                    ></OhVueIcon>
                 </a>
             </div>
         </div>

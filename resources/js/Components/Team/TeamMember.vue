@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type Staff from "@/Types/Staff";
+import { OhVueIcon } from "oh-vue-icons";
 import { computed } from "vue";
 
 const borderColor: Record<string, string> = {
@@ -75,11 +76,11 @@ const urlPrefixes = {
                 :href="urlPrefixes[key] + social"
                 target="_blank"
             >
-                <v-icon
+                <OhVueIcon
                     fill="white"
                     :name="socialIcon[key]"
                     scale="1.4"
-                ></v-icon>
+                ></OhVueIcon>
             </a>
         </div>
     </div>

@@ -4,6 +4,7 @@ import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
 import type { User } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 
 interface Props {
     speakers: User[];
@@ -60,10 +61,10 @@ onMounted(async () => {
     </Carousel>
     <div class="align-center flex justify-center gap-3 text-2023-teal">
         <button @click="prev">
-            <v-icon name="io-arrow-back" scale="2"></v-icon>
+            <OhVueIcon name="io-arrow-back" scale="2"></OhVueIcon>
         </button>
         <button @click="next">
-            <v-icon name="io-arrow-forward" scale="2"></v-icon>
+            <OhVueIcon name="io-arrow-forward" scale="2"></OhVueIcon>
         </button>
     </div>
 </template>

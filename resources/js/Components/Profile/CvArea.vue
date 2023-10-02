@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
+import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
 import route from "ziggy-js";
 
@@ -129,7 +130,7 @@ const clearCVFileInput = () => {
             >
                 <div class="flex text-2023-bg">
                     <p class="mr-1">CV</p>
-                    <v-icon name="io-open" scale="1.3"></v-icon>
+                    <OhVueIcon name="io-open" scale="1.3"></OhVueIcon>
                 </div>
             </a>
             <p

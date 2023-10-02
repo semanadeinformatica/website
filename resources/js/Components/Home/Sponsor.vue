@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CompanyUser } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
@@ -42,7 +43,11 @@ defineProps<Props>();
                 target="_blank"
             >
                 {{ company.name }}
-                <v-icon class="ml-1" name="io-open" fill="#d94f04"></v-icon>
+                <OhVueIcon
+                    class="ml-1"
+                    name="io-open"
+                    fill="#d94f04"
+                ></OhVueIcon>
             </a>
             <span v-else class="text-xl font-bold underline">
                 {{ company?.name }}

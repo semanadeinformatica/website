@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
+import { OhVueIcon } from "oh-vue-icons";
 </script>
 
 <template>
@@ -75,14 +76,20 @@ import { Head } from "@inertiajs/vue3";
                         target="_blank"
                         href="https://www.facebook.com/NIAEFEUP"
                     >
-                        <v-icon name="io-logo-facebook" fill="white"></v-icon>
+                        <OhVueIcon
+                            name="io-logo-facebook"
+                            fill="white"
+                        ></OhVueIcon>
                     </a>
                     <a
                         class="flex w-fit rounded-full bg-2023-red-dark p-2"
                         target="_blank"
                         href="https://www.linkedin.com/company/nifeup/mycompany/"
                     >
-                        <v-icon name="io-logo-linkedin" fill="white"></v-icon>
+                        <OhVueIcon
+                            name="io-logo-linkedin"
+                            fill="white"
+                        ></OhVueIcon>
                     </a>
                     <p
                         class="text-lg font-bold text-2023-teal max-[900px]:text-base"
@@ -94,14 +101,20 @@ import { Head } from "@inertiajs/vue3";
                         target="_blank"
                         href="https://www.instagram.com/niaefeup/"
                     >
-                        <v-icon name="io-logo-instagram" fill="white"></v-icon>
+                        <OhVueIcon
+                            name="io-logo-instagram"
+                            fill="white"
+                        ></OhVueIcon>
                     </a>
                     <a
                         class="flex w-fit rounded-full bg-2023-orange p-2"
                         target="_blank"
                         href="https://twitter.com/niaefeup"
                     >
-                        <v-icon name="io-logo-twitter" fill="white"></v-icon>
+                        <OhVueIcon
+                            name="io-logo-twitter"
+                            fill="white"
+                        ></OhVueIcon>
                     </a>
                 </div>
                 <div
@@ -119,40 +132,40 @@ import { Head } from "@inertiajs/vue3";
                             target="_blank"
                             href="https://www.facebook.com/NIAEFEUP"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 name="io-logo-facebook"
                                 fill="white"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                         <a
                             class="flex w-fit rounded-full bg-2023-red-dark p-2"
                             target="_blank"
                             href="https://www.linkedin.com/company/nifeup/mycompany/"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 name="io-logo-linkedin"
                                 fill="white"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                         <a
                             class="flex w-fit rounded-full bg-2023-teal p-2"
                             target="_blank"
                             href="https://www.instagram.com/niaefeup/"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 name="io-logo-instagram"
                                 fill="white"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                         <a
                             class="flex w-fit rounded-full bg-2023-orange p-2"
                             target="_blank"
                             href="https://twitter.com/niaefeup"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 name="io-logo-twitter"
                                 fill="white"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                     </div>
                 </div>

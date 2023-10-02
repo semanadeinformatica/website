@@ -22,8 +22,7 @@ interface Props {
     canEnroll: boolean;
 }
 
-const { edition, sponsors, days, activityCount, talkCount, standCount } =
-    defineProps<Props>();
+const { sponsors } = defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
@@ -115,10 +114,7 @@ const formattedDate = (
                         ? formattedDate(
                               $d(new Date(days[0].date), "long"),
                               $t("general.to"),
-                              $d(
-                                  new Date(days[days.length - 1].date),
-                                  "longYear",
-                              ),
+                              $d(new Date(days[days.length - 1].date), "long"),
                           )
                         : ""
                 }}

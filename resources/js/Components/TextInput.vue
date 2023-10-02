@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="">
+import { OhVueIcon } from "oh-vue-icons";
 import { onMounted, ref, type InputHTMLAttributes, computed } from "vue";
 
 interface BaseProps {
@@ -122,7 +123,10 @@ const visible = ref(false);
             class="absolute right-2 top-2 p-2 leading-4 text-2023-teal peer-disabled:text-gray-500 peer-disabled:opacity-50"
             @click="visible = !visible"
         >
-            <v-icon :name="visible ? 'io-eye' : 'io-eye-off'" class="h-6 w-6" />
+            <OhVueIcon
+                :name="visible ? 'io-eye' : 'io-eye-off'"
+                class="h-6 w-6"
+            />
         </button>
 
         <span

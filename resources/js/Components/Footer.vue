@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { OhVueIcon } from "oh-vue-icons";
+
 const contacts = [
     {
         icon: "io-logo-facebook",
@@ -34,11 +36,11 @@ const contacts = [
                         target="_blank"
                         :href="platform.url"
                     >
-                        <v-icon
+                        <OhVueIcon
                             :name="platform.icon"
                             fill="white"
                             scale="1.3"
-                        ></v-icon>
+                        ></OhVueIcon>
                     </a>
                 </template>
             </div>
@@ -51,11 +53,11 @@ const contacts = [
                             target="_blank"
                             :href="platform.url"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 :name="platform.icon"
                                 fill="white"
                                 scale="1.3"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                     </template>
                 </div>
