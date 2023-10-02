@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type Slot from "@/Types/Slot";
+import { computed } from "vue";
 
-defineProps<{
+const { sticker } = defineProps<{
     active?: boolean;
     color: string;
     sticker: Slot;
@@ -14,12 +15,16 @@ const bgColor: Record<string, string> = {
     red: "bg-2023-red",
     teal: "bg-2023-teal",
 };
+
+const completeness = computed(() => {
+    return Math.min(1, (sticker.completed_count ?? 0) / sticker.total_quests);
+});
 </script>
 
 <template>
     <div
         class="sticker-clip-path group relative flex h-[220px] w-[220px] basis-0 justify-center overflow-hidden"
-        :class="[active ? '' : 'grayscale', bgColor[color]]"
+        :class="bgColor[color]"
     >
         <img
             class="sticker-clip-path m-auto transition-all duration-500 group-hover:blur"
@@ -27,7 +32,11 @@ const bgColor: Record<string, string> = {
             alt="Sticker"
         />
         <div
-            class="sticker-clip-path absolute flex h-full w-full items-center justify-center bg-black bg-opacity-50 p-10 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
+            class="absolute inset-0 mix-blend-saturation"
+            :style="`background: conic-gradient(transparent ${completeness}turn, black ${completeness}turn 1turn)`"
+        ></div>
+        <div
+            class="sticker-clip-path absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 p-10 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
         >
             {{ sticker.name }}
         </div>

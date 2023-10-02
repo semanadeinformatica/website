@@ -58,6 +58,11 @@ class Edition extends Model
         return $this->hasMany(Quest::class);
     }
 
+    public function slots(): HasManyThrough
+    {
+        return $this->hasManyDeep(Slot::class, [Quest::class, 'quest_slot'])->distinct();
+    }
+
     public function speakers(): HasManyThrough
     {
         return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])
