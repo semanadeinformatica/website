@@ -19,7 +19,7 @@ class UserCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
-        'type' => 'required|in:participant,company,admin',
+        'type' => 'required|in:participant,company,admin,speaker',
         'title' => 'sometimes|nullable|string',
         'description' => 'sometimes|nullable|string',
         'organization' => 'sometimes|nullable|string',
