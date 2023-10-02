@@ -23,6 +23,6 @@ class Department extends Model
 
     public function staff(): HasMany
     {
-        return $this->hasMany(Staff::class);
+        return $this->hasMany(Staff::class)->orderByDesc('coordinator');
     }
 }
