@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\SocialMedia;
+use App\Models\Speaker;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +12,27 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SpeakerFactory extends Factory
 {
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Speaker $speaker) {
+            if ($speaker->user_id !== 0) {
+                return;
+            }
+
+            $speaker->user()->associate(User::factory()->create([
+                'usertype_id' => -1,
+                'usertype_type' => Speaker::class,
+            ]));
+        })->afterCreating(function (Speaker $speaker) {
+            if ($speaker->user_id !== 0) {
+                return;
+            }
+
+            $speaker->user->usertype_id = $speaker->id;
+            $speaker->user->save();
+        });
+    }
+
     /**
      * Define the model's default state.
      *

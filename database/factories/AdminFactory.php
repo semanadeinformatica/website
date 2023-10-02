@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +11,27 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AdminFactory extends Factory
 {
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Admin $admin) {
+            if ($admin->user_id !== 0) {
+                return;
+            }
+
+            $admin->user()->associate(User::factory()->create([
+                'usertype_id' => -1,
+                'usertype_type' => Admin::class,
+            ]));
+        })->afterCreating(function (Admin $admin) {
+            if ($admin->user_id !== 0) {
+                return;
+            }
+
+            $admin->user->usertype_id = $admin->id;
+            $admin->user->save();
+        });
+    }
+
     /**
      * Define the model's default state.
      *
