@@ -39,14 +39,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('join', fn (User $user, Event $event) => (
             $user->isParticipant() && // user must be a participant
+            $event->enrollments()->where('participant_id', $user->usertype_id)->doesntExist() && // user must not have joined the event
             (
                 $event->capacity === null || // event might not have a capacity in which case it's always joinable
-                (
-                    // user must not already be enrolled in the event
-                    // This works under the assumption that each event will only have enrollments related to a single edition: right now this is not enforced anywhere.
-                    $event->enrollments()->where('participant_id', $user->usertype_id)->doesntExist() &&
-                    $event->enrollments()->count() < $event->capacity // event must not be full
-                )
+                $event->enrollments()->count() < $event->capacity // event must not be full
             )
         ));
     }
