@@ -24,9 +24,9 @@ const submit = () => {
     <Head title="Forgot Password" />
 
     <CardLayout title="Repor password" heading="Esqueceste-te da tua password?">
-        <div v-if="status">
+        <span v-if="status" class="p-4 text-2023-teal">
             {{ status }}
-        </div>
+        </span>
 
         <form class="contents" @submit.prevent="submit">
             <TextInput
