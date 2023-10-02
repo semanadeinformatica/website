@@ -15,13 +15,15 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
+        $newPassword = 'newPassword123';
+
         $response = $this->put('/user/password', [
             'current_password' => 'password',
-            'password' => 'new-password',
-            'password_confirmation' => 'new-password',
+            'password' => $newPassword,
+            'password_confirmation' => $newPassword,
         ]);
 
-        $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
+        $this->assertTrue(Hash::check($newPassword, $user->fresh()->password));
     }
 
     public function test_current_password_must_be_correct(): void

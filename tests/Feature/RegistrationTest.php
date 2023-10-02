@@ -46,11 +46,13 @@ class RegistrationTest extends TestCase
             return;
         }
 
+        $password = 'Password123';
+
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => $password,
+            'password_confirmation' => $password,
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
 
