@@ -27,7 +27,7 @@ const classes =
             <slot />
         </a>
 
-        <Link v-else :href="href" :method="method" :class="classes">
+        <Link v-else :href="href" :method="method" :class="classes" preserve-state>
             <slot />
         </Link>
     </div>

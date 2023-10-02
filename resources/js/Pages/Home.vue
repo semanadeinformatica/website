@@ -66,9 +66,9 @@ const formattedDate = (
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
-            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 font-bold text-white shadow shadow-2023-teal"
+            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 px-3 font-bold text-white shadow shadow-2023-teal"
         >
-            Inscreve-te<v-icon name="io-chevron-down" fill="white"></v-icon>
+            <v-icon name="io-arrow-down" fill="white"></v-icon>
         </a>
         <!-- LOGO & DATE -->
         <section

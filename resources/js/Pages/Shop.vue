@@ -17,7 +17,7 @@ defineProps<Props>();
                 class="flex content-center items-center justify-center self-center py-10"
             >
                 <h1
-                    class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-teal"
+                    class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
                 >
                     Loja
                 </h1>
