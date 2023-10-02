@@ -64,6 +64,7 @@ const formattedDate = (
 <template>
     <AppLayout title="Home">
         <a
+            v-if="canEnroll"
             href="#enroll-wrapper"
             class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 font-bold text-white shadow shadow-2023-teal"
         >

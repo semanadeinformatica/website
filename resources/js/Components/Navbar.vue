@@ -65,7 +65,7 @@ const isAdmin = computed(() => {
 
 <template>
     <nav class="relative z-30 flex border-b-2 border-black bg-2023-bg py-6">
-        <Dropdown align="center" width="32" class="ml-10">
+        <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
             <template #trigger>
                 <DropdownTrigger class="group">
                     <a :href="route('home')">
@@ -87,6 +87,13 @@ const isAdmin = computed(() => {
                 </template>
             </template>
         </Dropdown>
+        <NavLink :href="route('home')" class="md:hidden">
+            <img
+                class="w-24 max-md:w-16"
+                src="/images/cy-sinf-small.svg"
+                alt="Stylized SINF logo"
+            />
+        </NavLink>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
             <template
                 v-for="({ label, _query }, page) in pageRoutes"
