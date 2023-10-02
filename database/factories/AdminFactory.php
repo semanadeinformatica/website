@@ -23,10 +23,6 @@ class AdminFactory extends Factory
                 'usertype_type' => Admin::class,
             ]));
         })->afterCreating(function (Admin $admin) {
-            if ($admin->user_id !== 0) {
-                return;
-            }
-
             $admin->user->usertype_id = $admin->id;
             $admin->user->save();
         });

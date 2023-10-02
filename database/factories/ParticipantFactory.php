@@ -24,10 +24,6 @@ class ParticipantFactory extends Factory
                 'usertype_type' => Participant::class,
             ]));
         })->afterCreating(function (Participant $participant) {
-            if ($participant->user_id !== 0) {
-                return;
-            }
-
             $participant->user->usertype_id = $participant->id;
             $participant->user->save();
         });

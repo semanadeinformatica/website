@@ -24,10 +24,6 @@ class SpeakerFactory extends Factory
                 'usertype_type' => Speaker::class,
             ]));
         })->afterCreating(function (Speaker $speaker) {
-            if ($speaker->user_id !== 0) {
-                return;
-            }
-
             $speaker->user->usertype_id = $speaker->id;
             $speaker->user->save();
         });

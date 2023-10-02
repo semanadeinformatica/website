@@ -24,10 +24,6 @@ class CompanyFactory extends Factory
                 'usertype_type' => Company::class,
             ]));
         })->afterCreating(function (Company $company) {
-            if ($company->user_id !== 0) {
-                return;
-            }
-
             $company->user->usertype_id = $company->id;
             $company->user->save();
         });
