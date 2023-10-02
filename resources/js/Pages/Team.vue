@@ -20,13 +20,20 @@ const colors: Array<string> = [
 
 <template>
     <AppLayout title="Team">
-        <div class="flex flex-col gap-6 border border-black p-10">
+        <div v-if="departments.length > 0" class="flex flex-col gap-6 border border-black p-10">
             <SINFTeam
                 v-for="department in departments"
                 :key="department.id"
                 :color="colors[department.id % colors.length]"
                 :department="department"
             ></SINFTeam>
+        </div>
+        <div v-else>
+            <p
+                class="pt-80 text-center text-5xl font-bold text-2023-teal-dark"
+            >
+                Em breve...
+            </p>
         </div>
     </AppLayout>
 </template>
