@@ -2,20 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use App\Models\Edition;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DepartmentController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $departments = Department::with([
+        /** @var Edition */
+        $edition = $request->edition;
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        $departments = $edition->departments()->with([
             'staff' => [
                 'participant' => [
                     'user',
                 ],
             ],
-        ])->where('edition_id', '=', 1)->get();
+        ])->get();
 
         return Inertia::render('Team', [
             'departments' => $departments,
