@@ -46,7 +46,7 @@ class RegistrationTest extends TestCase
             return;
         }
 
-        $password = 'Password123';
+        $password = 'password';
 
         $response = $this->post('/register', [
             'name' => 'Test User',
