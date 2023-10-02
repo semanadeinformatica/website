@@ -63,6 +63,12 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Home">
+        <a
+            href="#enroll-wrapper"
+            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 font-bold text-white shadow shadow-2023-teal"
+        >
+            Inscreve-te<v-icon name="io-chevron-down" fill="white"></v-icon>
+        </a>
         <!-- LOGO & DATE -->
         <section
             class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
@@ -219,7 +225,7 @@ const formattedDate = (
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
-        <EnrollSection v-if="canEnroll" />
+        <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>
