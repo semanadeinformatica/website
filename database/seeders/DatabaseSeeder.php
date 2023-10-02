@@ -42,21 +42,26 @@ class DatabaseSeeder extends Seeder
     {
         DB::beginTransaction();
 
-        User::truncate();
-        Company::truncate();
-        Participant::truncate();
-        SocialMedia::truncate();
         Admin::truncate();
-        Edition::truncate();
+        Company::truncate();
+        Competition::truncate();
+        CompetitionTeam::truncate();
         Department::truncate();
-        Staff::truncate();
+        Edition::truncate();
+        Enrollment::truncate();
         Event::truncate();
         EventDay::truncate();
         EventType::truncate();
-        Speaker::truncate();
-        Quest::truncate();
-        Sponsor::truncate();
+        Participant::truncate();
         Product::truncate();
+        Quest::truncate();
+        Slot::truncate();
+        SocialMedia::truncate();
+        Speaker::truncate();
+        Sponsor::truncate();
+        Staff::truncate();
+        Stand::truncate();
+        User::truncate();
 
         DB::commit();
     }
@@ -95,7 +100,6 @@ class DatabaseSeeder extends Seeder
             'date' => $start_date->addDays(1)->toDateString(),
         ]));
 
-        // Create the events
         $event_types = EventType::factory(2)->create();
 
         $events = $event_days->flatMap(fn ($day) => Event::factory(2)
@@ -135,17 +139,15 @@ class DatabaseSeeder extends Seeder
         $slots = Slot::factory(30)->create();
         $quests = Quest::factory(20)
             ->recycle($edition)
-            ->recycle($slots)
             ->recycle($stands)
             ->for(Stand::factory(), 'requirement')
             ->create()->concat(
                 Quest::factory(20)
                     ->recycle($edition)
-                    ->recycle($slots)
                     ->recycle($events)
                     ->for(Event::factory(), 'requirement')
                     ->create()
-            );
+            )->each(fn ($quest) => $quest->slots()->attach($slots->random()));
 
         $this->command->info('Creating the enrollments');
         $participants->random(50)->map(fn ($participant) => Enrollment::factory()
