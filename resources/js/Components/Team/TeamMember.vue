@@ -62,7 +62,7 @@ const urlPrefixes = {
         <img
             :src="staff.participant?.user?.profile_photo_url"
             :alt="`${staff.participant?.user?.name}'s image`"
-            class="w-40"
+            class="h-40 w-40 object-cover"
         />
         <div
             v-if="Object.keys(socialMedia).length > 0"
