@@ -34,9 +34,9 @@ const props = defineProps<{
 }>();
 
 const numCols = computed(() =>
-    props.sponsors.length > 3
-        ? Math.ceil(props.sponsors.length / 2) * 2
-        : props.sponsors.length * 2,
+    props.sponsors?.length > 3
+        ? Math.ceil(props.sponsors?.length / 2) * 2
+        : props.sponsors?.length * 2,
 );
 </script>
 
@@ -48,36 +48,58 @@ const numCols = computed(() =>
             :class="shadowColor[color]"
             :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
         >
-            <Sponsor
-                v-for="(sponsor, i) in sponsors"
-                :key="sponsor.id"
-                :company="sponsor.company?.user as CompanyUser"
-                :class="
-                    sponsors.length > 3 &&
-                    sponsors.length % 2 &&
-                    i == Math.ceil(props.sponsors.length / 2)
-                        ? 'col-start-2'
-                        : ''
-                "
-            ></Sponsor>
+            <template v-if="sponsors">
+                <Sponsor
+                    v-for="(sponsor, i) in sponsors"
+                    :key="sponsor.id"
+                    :company="sponsor.company?.user as CompanyUser"
+                    :class="
+                        sponsors.length > 3 &&
+                        sponsors.length % 2 &&
+                        i == Math.ceil(props.sponsors.length / 2)
+                            ? 'col-start-2'
+                            : ''
+                    "
+                ></Sponsor>
+            </template>
+            <template v-else>
+                <p class="flex w-fit place-self-center text-2xl font-bold">
+                    Em breve...
+                </p>
+            </template>
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
             :class="shadowColor[color]"
         >
-            <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
-                <Slide v-for="sponsor in sponsors" :key="sponsor.id">
-                    <Sponsor
-                        :company="sponsor.company?.user as CompanyUser"
-                    ></Sponsor>
-                </Slide>
-            </Carousel>
-            <button class="absolute left-2 top-[calc(50%-20px)]" @click="prev">
-                <v-icon name="io-arrow-back" scale="2"></v-icon>
-            </button>
-            <button class="absolute right-2 top-[calc(50%-20px)]" @click="next">
-                <v-icon name="io-arrow-forward" scale="2"></v-icon>
-            </button>
+            <template v-if="sponsors">
+                <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
+                    <Slide v-for="sponsor in sponsors" :key="sponsor.id">
+                        <Sponsor
+                            :company="sponsor.company?.user as CompanyUser"
+                        ></Sponsor>
+                    </Slide>
+                </Carousel>
+                <button
+                    class="absolute left-2 top-[calc(50%-20px)]"
+                    @click="prev"
+                >
+                    <v-icon name="io-arrow-back" scale="2"></v-icon>
+                </button>
+                <button
+                    class="absolute right-2 top-[calc(50%-20px)]"
+                    @click="next"
+                >
+                    <v-icon name="io-arrow-forward" scale="2"></v-icon>
+                </button>
+            </template>
+            <template v-else>
+                <p
+                    class="grid place-self-center self-center text-center text-2xl font-bold"
+                >
+                    Em breve...
+                </p>
+            </template>
         </div>
     </div>
 </template>
