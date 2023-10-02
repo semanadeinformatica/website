@@ -60,7 +60,9 @@ class Edition extends Model
 
     public function speakers(): HasManyThrough
     {
-        return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])->whereHasMorph('usertype', Speaker::class)->distinct();
+        return $this->hasManyDeep(User::class, [EventDay::class, Event::class, 'event_user'])
+            ->whereHasMorph('usertype', Speaker::class)
+            ->distinct();
     }
 
     public function sponsors(): HasMany
@@ -75,7 +77,9 @@ class Edition extends Model
 
     public function departments(): HasMany
     {
-        return $this->hasMany(Department::class);
+        return $this->hasMany(Department::class)
+            ->orderByDesc('priority')
+            ->orderBy('name');
     }
 
     public function competitions(): HasMany

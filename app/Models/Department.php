@@ -14,6 +14,7 @@ class Department extends Model
     protected $fillable = [
         'name',
         'edition_id',
+        'priority',
     ];
 
     public function edition(): BelongsTo
@@ -23,6 +24,6 @@ class Department extends Model
 
     public function staff(): HasMany
     {
-        return $this->hasMany(Staff::class);
+        return $this->hasMany(Staff::class)->orderByDesc('coordinator');
     }
 }
