@@ -16,7 +16,10 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 
 <template>
     <AppLayout title="Programa">
-        <div class="flex flex-col items-center px-10 py-20 md:px-40">
+        <div
+            v-if="totalDays !== 0"
+            class="flex flex-col items-center px-10 py-20 md:px-40"
+        >
             <section class="mb-5 flex flex-col items-center gap-5">
                 <div
                     id="daySelection"
@@ -52,6 +55,11 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                 }}</span>
             </section>
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
+        </div>
+        <div v-else class="flex items-center justify-center">
+            <p class="pt-80 text-center text-5xl font-bold text-2023-teal-dark">
+                Em breve...
+            </p>
         </div>
     </AppLayout>
 </template>

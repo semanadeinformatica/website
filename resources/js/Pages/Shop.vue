@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
+import type Product from "@/Types/Product";
+
+interface Props {
+    products: Product[];
+}
+
+defineProps<Props>();
 </script>
 
 <template>
     <AppLayout title="Loja">
-        <template v-if="$page.props.products?.toString() !== ''">
+        <template v-if="products.length > 0">
             <div
                 class="flex content-center items-center justify-center self-center py-10"
             >
@@ -25,8 +32,8 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
                 "
             >
                 <ShopItem
-                    v-for="product in $page.props.products"
-                    :key="product"
+                    v-for="product in products"
+                    :key="product.id"
                     :product="product"
                 >
                 </ShopItem>

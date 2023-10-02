@@ -31,6 +31,14 @@ class ProgramController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors();
 
+            if ($totalDays === 0) {
+                return Inertia::render('Program', [
+                    'eventDay' => fn () => null,
+                    'queryDay' => fn () => 0,
+                    'totalDays' => fn () => 0,
+                ]);
+            }
+
             return redirect()->route('home')->dangerBanner($errors->first('day'));
         }
 

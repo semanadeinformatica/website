@@ -25,7 +25,10 @@ defineProps<{
 </script>
 
 <template>
-    <section class="flex flex-col items-center gap-4">
+    <section
+        v-if="(department.staff?.length ?? 0) > 0"
+        class="flex flex-col items-center gap-4"
+    >
         <p
             class="w-fit border border-black p-2 px-6 text-center text-xl font-bold shadow"
             :class="textColor[color] || shadowColor[color]"
