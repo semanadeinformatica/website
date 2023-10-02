@@ -5,16 +5,16 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
 
 <template>
     <AppLayout title="Loja">
-        <div
-            class="flex content-center items-center justify-center self-center py-10"
-        >
-            <h1
-                class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-teal"
-            >
-                Loja
-            </h1>
-        </div>
         <template v-if="$page.props.products?.toString() !== ''">
+            <div
+                class="flex content-center items-center justify-center self-center py-10"
+            >
+                <h1
+                    class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-teal"
+                >
+                    Loja
+                </h1>
+            </div>
             <section
                 class="align-center grid justify-center gap-10 px-32"
                 style="
@@ -34,7 +34,9 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
         </template>
         <template v-else>
             <div class="flex items-center justify-center">
-                <p class="w-fit pt-10 text-3xl font-bold text-2023-teal-dark">
+                <p
+                    class="pt-80 text-center text-5xl font-bold text-2023-teal-dark"
+                >
                     Em breve...
                 </p>
             </div>
