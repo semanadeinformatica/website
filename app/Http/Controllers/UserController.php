@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -16,6 +17,7 @@ class UserController extends UserProfileController
 
         $user = $request->user();
 
+        /** @var Edition */
         $edition = $request->edition;
 
         if ($edition === null) {
@@ -31,11 +33,16 @@ class UserController extends UserProfileController
                     $query->whereRelation('slots', 'id', DB::raw('slots.id'));
                 }])
                 ->get();
-            $tickets = $edition->events()->get();
+            $tickets = $edition
+                ->events()
+                ->addSelect([
+                    DB::raw('exists(select * from "enrollment_event" where "enrollment_event"."event_id" = "events"."id" and "enrollment_event"."enrollment_id" = '.$currentEnrollment->id.') as "joined"'),
+                    DB::raw('"events".*'),
+                ])
+                ->get();
         }
 
         return Inertia::render('Profile/Show', [
-            'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
             'tickets' => $tickets,
             'slots' => $slots,
         ]);

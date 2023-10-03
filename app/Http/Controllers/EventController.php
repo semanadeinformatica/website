@@ -23,9 +23,12 @@ class EventController extends Controller
 
         $canJoin = $isEnrolled && $user->can('join', $event);
 
+        $hasJoined = $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
+
         return Inertia::render('Event', [
             'event' => $event->load(['users', 'event_day', 'enrollments']),
             'isEnrolled' => $isEnrolled,
+            'hasJoined' => $hasJoined,
             'canJoin' => $canJoin,
         ]);
     }
@@ -39,7 +42,7 @@ class EventController extends Controller
 
         // FIXME: when attempting to join multiple times in a row, only the first attempt triggers the banner.
         if ($user->cannot('join', $event)) {
-            return redirect()->back()->dangerBanner('Não pode inscrever-se neste evento.');
+            return redirect()->back()->dangerBanner('Não podes inscrever-se neste evento');
         }
 
         $edition = $request->input('edition');
@@ -51,11 +54,11 @@ class EventController extends Controller
         $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
         if ($currentEnrollment === null) {
-            return redirect()->route('home')->dangerBanner('Não está atualmente inscrito em nenhuma edição. Deve fazê-lo antes de tentar inscrever-se num evento.');
+            return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
         }
 
         $currentEnrollment->events()->attach($event);
 
-        return redirect()->back()->banner("Inscrição no evento '$event->name' realizada com sucesso!");
+        return redirect()->route('profile.show')->banner('Inscrição realizada com sucesso!');
     }
 }
