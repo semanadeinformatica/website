@@ -15,12 +15,13 @@ const attribution =
     >
         <LMap
             :zoom="zoom"
-            class="cursor-auto border border-solid border-black"
+            class="z-10 cursor-auto border border-solid border-black"
             :min-zoom="4"
             :max-zoom="18"
             :zoom-animation="true"
             :center="center"
             :use-global-leaflet="false"
+            :scroll-wheel-zoom="false"
             style="height: 400px; width: 800px"
         >
             <LTileLayer

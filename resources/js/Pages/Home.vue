@@ -63,6 +63,13 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Home">
+        <a
+            v-if="canEnroll"
+            href="#enroll-wrapper"
+            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 px-3 font-bold text-white shadow shadow-2023-teal"
+        >
+            <v-icon name="io-arrow-down" fill="white"></v-icon>
+        </a>
         <!-- LOGO & DATE -->
         <section
             class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
@@ -149,11 +156,6 @@ const formattedDate = (
                     activityCount !== 0
                 "
             >
-                <h2
-                    class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2023-orange p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
-                >
-                    Este ano temos...
-                </h2>
                 <div
                     class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
@@ -219,7 +221,7 @@ const formattedDate = (
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
-        <EnrollSection v-if="canEnroll" />
+        <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
             <Map></Map>

@@ -27,7 +27,7 @@ const regulationTextParts = computed(() => {
             class="relative left-1/2 top-9 flex w-fit -translate-x-1/2 transform flex-col gap-4"
         >
             <h2
-                class="border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
+                class="border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-teal xl:text-3xl 2xl:text-4xl"
             >
                 {{ competition.name }}
             </h2>

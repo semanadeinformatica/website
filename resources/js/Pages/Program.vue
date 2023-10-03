@@ -18,8 +18,13 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
     <AppLayout title="Programa">
         <div
             v-if="totalDays !== 0"
-            class="flex flex-col items-center px-10 py-20 md:px-40"
+            class="flex flex-col items-center px-10 py-10 md:px-40"
         >
+            <h1
+                class="mb-10 w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
+            >
+                Programa
+            </h1>
             <section class="mb-5 flex flex-col items-center gap-5">
                 <div
                     id="daySelection"

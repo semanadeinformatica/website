@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import route, {
     type QueryParams,
@@ -25,6 +25,10 @@ const props = defineProps<{
 
 watch(open, () => {
     document.body.classList.toggle("overflow-hidden");
+});
+
+onUnmounted(() => {
+    document.body.classList.remove("overflow-hidden");
 });
 </script>
 
