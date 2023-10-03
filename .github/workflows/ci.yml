@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Sail
         run: |
-          ./sail up -d
+          ./sail up -d laravel.test
           ./sail npm run dev &
           sleep 5
 
@@ -73,7 +73,7 @@ jobs:
         uses: jpribyl/action-docker-layer-caching@v0.1.1
 
       - name: Run Sail
-        run: ./sail up -d
+        run: ./sail up -d laravel.test
 
       - name: Run Pint
         run: ./sail pint -v --test
