@@ -144,7 +144,10 @@ const isAdmin = computed(() => {
                             v-for="edition in editionRoutes"
                             :key="edition"
                         >
-                            <DropdownLink as="a" :href="`https://${edition}.sinf.pt`">
+                            <DropdownLink
+                                as="a"
+                                :href="`https://${edition}.sinf.pt`"
+                            >
                                 {{ edition }}
                             </DropdownLink>
                         </template>
