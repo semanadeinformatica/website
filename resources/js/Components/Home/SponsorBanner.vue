@@ -44,9 +44,9 @@ const getSize = (tier: string) => {
         case "PLATINUM":
             return "max-h-72";
         case "GOLD":
-            return "max-h-36";
+            return "max-h-56";
         case "SILVER":
-            return "max-h-20";
+            return "max-h-40";
         default:
             return "";
     }
