@@ -5,7 +5,11 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Edition;
+use App\Models\Enrollment;
 use App\Models\Event;
+use App\Models\Participant;
+use App\Models\Quest;
+use App\Models\Stand;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -43,6 +47,25 @@ class AuthServiceProvider extends ServiceProvider
             (
                 $event->capacity === null || // event might not have a capacity in which case it's always joinable
                 $event->enrollments()->count() < $event->capacity // event must not be full
+            )
+        ));
+
+        Gate::define('give', fn (User $user, Quest $quest, Enrollment $enrollment) => (
+            $enrollment->quests()->where('quest_id', $quest->id)->doesntExist() && // participant must not have the quest
+            ( // either
+                (
+                    $user->isAdmin() && // user is admin and either
+                    (
+                        $quest->requirement_type === Event::class &&
+                        $enrollment->events()->where('event_id', $quest->requirement_id)->exists()
+                    ) || // requirement is an event the user has joined
+                    $quest->requirement_type === Stand::class // or requirement is a stand
+                ) ||
+                (
+                    $user->isCompany() &&
+                    $quest->requirement_type === Stand::class &&
+                    $quest->requirement->sponsor->company->is($user->usertype)
+                ) // or the user is a company and the requirement is a stand from the same company
             )
         ));
     }
