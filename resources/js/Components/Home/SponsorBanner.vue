@@ -50,14 +50,14 @@ const getSize = (tier: string) => {
         default:
             return "";
     }
-};  
+};
 </script>
 
 <template>
     <div :class="textColor[color]">
         <p class="text-2xl font-bold">{{ title }}</p>
         <div
-            class="grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden max-h"
+            class="max-h grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
             :class="shadowColor[color]"
             :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
         >
@@ -66,13 +66,14 @@ const getSize = (tier: string) => {
                     v-for="(sponsor, i) in sponsors"
                     :key="sponsor.id"
                     :company="sponsor.company?.user as CompanyUser"
-                    :class="
-                        [sponsors.length > 3 &&
+                    :class="[
+                        sponsors.length > 3 &&
                         sponsors.length % 2 &&
                         i == Math.ceil(props.sponsors.length / 2)
                             ? 'col-start-2'
-                            : '', getSize(sponsor.tier)]
-                    "
+                            : '',
+                        getSize(sponsor.tier),
+                    ]"
                 ></Sponsor>
             </template>
             <template v-else>
