@@ -18,11 +18,11 @@ class SocialMediaFactory extends Factory
     {
         return [
             'email' => fake()->boolean() ? fake()->email() : null,
-            'facebook' => fake()->boolean() ? fake()->userName() : null,
-            'github' => fake()->boolean() ? fake()->userName() : null,
-            'instagram' => fake()->boolean() ? fake()->userName() : null,
-            'linkedin' => fake()->boolean() ? fake()->userName() : null,
-            'twitter' => fake()->boolean() ? fake()->userName() : null,
+            'facebook' => fake()->boolean() ? fake()->url() : null,
+            'github' => fake()->boolean() ? fake()->url() : null,
+            'instagram' => fake()->boolean() ? fake()->url() : null,
+            'linkedin' => fake()->boolean() ? fake()->url() : null,
+            'twitter' => fake()->boolean() ? fake()->url() : null,
             'website' => fake()->boolean() ? fake()->url() : null,
         ];
     }

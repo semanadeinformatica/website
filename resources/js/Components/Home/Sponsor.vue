@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type Stand from "@/Types/Stand";
 import type { CompanyUser } from "@/Types/User";
 import { ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
@@ -36,10 +35,18 @@ defineProps<Props>();
         <div
             class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"
         >
-            <a class="text-xl font-bold underline" href="#" target="_blank">
-                {{ company?.name }}
+            <a
+                v-if="company?.usertype?.social_media?.website"
+                class="text-xl font-bold underline"
+                :href="company.usertype.social_media.website"
+                target="_blank"
+            >
+                {{ company.name }}
                 <v-icon class="ml-1" name="io-open" fill="#d94f04"></v-icon>
             </a>
+            <span v-else class="text-xl font-bold underline">
+                {{ company?.name }}
+            </span>
             <p class="text-justify">{{ company?.usertype?.description }}</p>
         </div>
     </VueFinalModal>

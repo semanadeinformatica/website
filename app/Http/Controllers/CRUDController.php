@@ -156,6 +156,7 @@ abstract class CRUDController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate($this->storeRules());
 
         $newValues = $this->created($validated);

@@ -12,7 +12,7 @@ class EventDayCRUDController extends CRUDController
     protected string $view = 'EventDay';
 
     protected array $rules = [
-        'edition_id' => 'required|integer|in:editions,id',
+        'edition_id' => 'required|exists:editions,id',
         'date' => 'required|date',
         'theme' => 'required|string',
     ];
