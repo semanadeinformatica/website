@@ -25,7 +25,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
 
         // TODO: split this in functions
-
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -36,12 +35,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'description' => 'sometimes|nullable|string',
             'organization' => 'sometimes|nullable|string',
             'social_media.email' => 'sometimes|nullable|string|email',
-            'social_media.facebook' => 'sometimes|nullable|string',
-            'social_media.github' => 'sometimes|nullable|string',
-            'social_media.instagram' => 'sometimes|nullable|string',
-            'social_media.linkedin' => 'sometimes|nullable|string',
-            'social_media.twitter' => 'sometimes|nullable|string',
-            'social_media.website' => 'sometimes|nullable|string|url',
+            'social_media.facebook' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/facebook.com\/\w+$/',
+            'social_media.github' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/github.com\/\w+$/',
+            'social_media.instagram' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/instagram.com\/\w+$/',
+            'social_media.linkedin' => ['bail', 'sometimes', 'nullable', Rule::excludeIf(fn () => $user->isCompany()), 'string', 'url:https', 'regex:/^https:\/\/linkedin.com\/in/\w+$/'],
+            'social_media.linkedin' => ['bail', 'sometimes', 'nullable', Rule::excludeIf(fn () => ! $user->isCompany()), 'string', 'url:https', 'regex:/^https:\/\/linkedin.com\/company/\w+$/'],
+            'social_media.twitter' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/twitter.com\/\w+$/',
+            'social_media.website' => 'sometimes|nullable|string|url:https',
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
