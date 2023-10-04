@@ -12,8 +12,7 @@ interface Props {
     company?: CompanyUser;
 }
 
-const {company} = defineProps<Props>();
-
+defineProps<Props>();
 </script>
 
 <template>
@@ -36,7 +35,12 @@ const {company} = defineProps<Props>();
         <div
             class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"
         >
-            <a v-if="company?.usertype?.social_media?.website" class="text-xl font-bold underline" :href="company.usertype.social_media.website" target="_blank">
+            <a
+                v-if="company?.usertype?.social_media?.website"
+                class="text-xl font-bold underline"
+                :href="company.usertype.social_media.website"
+                target="_blank"
+            >
                 {{ company.name }}
                 <v-icon class="ml-1" name="io-open" fill="#d94f04"></v-icon>
             </a>
