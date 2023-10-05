@@ -11,7 +11,7 @@ export default interface Event extends Model {
     topic: string;
     capacity?: number;
     description: string;
-    room: string;
+    room?: string;
 
     enrollments?: Enrollment[];
 
