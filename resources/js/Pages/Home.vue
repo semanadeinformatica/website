@@ -115,10 +115,7 @@ const formattedDate = (
                         ? formattedDate(
                               $d(new Date(days[0].date), "long"),
                               $t("general.to"),
-                              $d(
-                                  new Date(days[days.length - 1].date),
-                                  "longYear",
-                              ),
+                              $d(new Date(days[days.length - 1].date), "long"),
                           )
                         : ""
                 }}
