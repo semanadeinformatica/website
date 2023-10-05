@@ -23,6 +23,10 @@ module.exports = {
     plugins: ["@typescript-eslint"],
     rules: {
         "vue/multi-word-component-names": "off",
-        // Typescript does this for us
+        "vue/component-api-style": ["warn", ["script-setup"]],
+        "vue/component-name-in-template-casing": ["error", "PascalCase"],
+        "vue/define-props-declaration": ["error", "type-based"],
+        "vue/no-undef-components": "error",
+        "vue/no-useless-mustaches": "error",
     },
 };

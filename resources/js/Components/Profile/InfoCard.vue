@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
 import { router } from "@inertiajs/vue3";
 import route from "ziggy-js";
@@ -70,11 +71,11 @@ const iconColor: Record<string, string> = {
                             target="_blank"
                             :href="item.usertype.social_media[key]"
                         >
-                            <v-icon
+                            <OhVueIcon
                                 :name="social.icon"
                                 scale="1.3"
                                 :fill="iconColor[social.color]"
-                            ></v-icon>
+                            ></OhVueIcon>
                         </a>
                     </p>
                 </template>

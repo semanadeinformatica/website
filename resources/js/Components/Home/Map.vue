@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
+import { OhVueIcon } from "oh-vue-icons";
 
 const zoom = 17;
 const center = [41.17759413688228, -8.59592179753306];
@@ -31,12 +32,12 @@ const attribution =
             />
             <LMarker :lat-lng="center">
                 <LIcon>
-                    <v-icon
+                    <OhVueIcon
                         class="absolute -bottom-[9px] -right-[14px]"
                         name="io-location-sharp"
                         fill="#d94f04"
                         scale="2"
-                    ></v-icon>
+                    ></OhVueIcon>
                 </LIcon>
             </LMarker>
         </LMap>

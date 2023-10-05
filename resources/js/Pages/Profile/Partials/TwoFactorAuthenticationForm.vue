@@ -180,7 +180,6 @@ const disableTwoFactorAuthentication = () => {
                         type="text"
                         name="code"
                         label="Code"
-                        class="mt-1 block w-1/2"
                         inputmode="numeric"
                         autofocus
                         autocomplete="one-time-code"

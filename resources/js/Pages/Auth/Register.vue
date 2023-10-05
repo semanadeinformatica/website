@@ -23,46 +23,46 @@ const submit = () => {
 
 <template>
     <CardLayout title="Registar" heading="Regista-te!">
-        <form @submit.prevent="submit" class="contents">
+        <form class="contents" @submit.prevent="submit">
             <TextInput
-                label="Nome"
                 id="name"
                 v-model="form.name"
+                label="Nome"
                 type="text"
                 required
                 autofocus
                 autocomplete="name"
-                :errorMessage="form.errors.name"
+                :error-message="form.errors.name"
             />
 
             <TextInput
-                label="Email"
                 id="email"
                 v-model="form.email"
+                label="Email"
                 type="email"
                 required
                 autocomplete="email"
-                :errorMessage="form.errors.email"
+                :error-message="form.errors.email"
             />
 
             <TextInput
-                label="Password"
                 id="password"
                 v-model="form.password"
+                label="Password"
                 type="password"
                 required
                 autocomplete="new-password"
-                :errorMessage="form.errors.password"
+                :error-message="form.errors.password"
             />
 
             <TextInput
-                label="Confirmar password"
                 id="password_confirmation"
                 v-model="form.password_confirmation"
+                label="Confirmar password"
                 type="password"
                 required
                 autocomplete="new-password"
-                :errorMessage="form.errors.password_confirmation"
+                :error-message="form.errors.password_confirmation"
             />
 
             <label

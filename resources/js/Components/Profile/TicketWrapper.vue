@@ -13,7 +13,7 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
 </script>
 
 <template>
-    <svg width="0" height="0">
+    <svg width="0" height="0" class="fixed">
         <clipPath id="ticket-clip-path" clipPathUnits="objectBoundingBox">
             <path
                 clip-rule="evenodd"

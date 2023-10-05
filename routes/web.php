@@ -71,6 +71,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::put('/enroll', [EnrollmentController::class, 'store'])
             ->name('enroll');
 
+        Route::prefix('quest')->group(function () {
+            Route::post('/{quest}/give', [QuestController::class, 'give'])
+                ->name('quest.give');
+        });
+
         Route::prefix('admin')
             ->middleware('can:admin')
             ->name('admin.')

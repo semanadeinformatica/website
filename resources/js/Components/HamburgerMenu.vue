@@ -6,6 +6,7 @@ import route, {
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";
 import type Competition from "@/Types/Competition";
+import { OhVueIcon } from "oh-vue-icons";
 
 interface Route {
     label: string;
@@ -56,7 +57,11 @@ onUnmounted(() => {
                 </svg>
             </template>
             <template v-else>
-                <v-icon name="io-close" scale="2.1" fill="#025259"></v-icon>
+                <OhVueIcon
+                    name="io-close"
+                    scale="2.1"
+                    fill="#025259"
+                ></OhVueIcon>
             </template>
         </button>
     </div>

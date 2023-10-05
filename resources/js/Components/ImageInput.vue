@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
 
 interface Props {
@@ -52,7 +53,7 @@ const updatePreview = () => {
             class="max-h-40 w-auto border border-black object-contain shadow-md shadow-2023-red"
         />
 
-        <v-icon v-else name="io-image" class="h-20 w-20" />
+        <OhVueIcon v-else name="io-image" class="h-20 w-20" />
 
         <span class="sr-only">{{ label }}</span>
 

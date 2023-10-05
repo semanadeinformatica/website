@@ -34,10 +34,7 @@ const quests = computed<number[]>(() =>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="total_quests">Número mínimo de tarefas</Header>
                 <Header sort-by="points">Pontos</Header>
-                <Header
-                    >Número de tarefas correspondentes a este
-                    <span class="italic">slot</span></Header
-                >
+                <Header>Tarefas</Header>
             </HeaderRow>
         </template>
 

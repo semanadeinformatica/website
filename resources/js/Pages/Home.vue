@@ -10,6 +10,7 @@ import { computed } from "vue";
 import type Sponsor from "@/Types/Sponsor";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 
 interface Props {
     edition: Edition;
@@ -22,8 +23,7 @@ interface Props {
     canEnroll: boolean;
 }
 
-const { edition, sponsors, days, activityCount, talkCount, standCount } =
-    defineProps<Props>();
+const { sponsors } = defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
@@ -68,7 +68,7 @@ const formattedDate = (
             href="#enroll-wrapper"
             class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2023-red-dark p-2 px-3 font-bold text-white shadow shadow-2023-teal"
         >
-            <v-icon name="io-arrow-down" fill="white"></v-icon>
+            <OhVueIcon name="io-arrow-down" fill="white" />
         </a>
         <!-- LOGO & DATE -->
         <section

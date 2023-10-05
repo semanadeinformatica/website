@@ -4,6 +4,7 @@ import { Carousel, Slide } from "vue3-carousel";
 import Sponsor from "./Sponsor.vue";
 import type SponsorType from "@/Types/Sponsor";
 import type { CompanyUser } from "@/Types/User";
+import { OhVueIcon } from "oh-vue-icons";
 
 const carousel = ref<typeof Carousel | null>(null);
 
@@ -99,13 +100,13 @@ const getSize = (tier: string) => {
                     class="absolute left-2 top-[calc(50%-20px)]"
                     @click="prev"
                 >
-                    <v-icon name="io-arrow-back" scale="2"></v-icon>
+                    <OhVueIcon name="io-arrow-back" scale="2"></OhVueIcon>
                 </button>
                 <button
                     class="absolute right-2 top-[calc(50%-20px)]"
                     @click="next"
                 >
-                    <v-icon name="io-arrow-forward" scale="2"></v-icon>
+                    <OhVueIcon name="io-arrow-forward" scale="2"></OhVueIcon>
                 </button>
             </template>
             <template v-else>

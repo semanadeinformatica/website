@@ -6,8 +6,8 @@
         "build": "vite build",
         "format": "prettier --check *.js *.ts resources/js/",
         "format:fix": "prettier --write *.js *.ts resources/js/",
-        "lint": "eslint resources/js/",
-        "lint:fix": "eslint --fix resources/js/",
+        "lint": "eslint resources/js/ --ext .js,.ts,.vue",
+        "lint:fix": "eslint --fix resources/js/ --ext .js,.ts,.vue",
         "type-check": "vue-tsc --noEmit -p tsconfig.app.json && rm tsconfig.app.tsbuildinfo"
     },
     "devDependencies": {

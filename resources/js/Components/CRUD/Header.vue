@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type MyPageProps from "@/Types/PageProps";
 import { Link, usePage } from "@inertiajs/vue3";
+import { OhVueIcon } from "oh-vue-icons";
 import { computed, ref } from "vue";
 import route, { type RouteParams } from "ziggy-js";
 
@@ -96,11 +97,11 @@ const filter = computed(() => {
             preserve-state
             :only="['items', 'sortBy', 'sortDir']"
         >
-            <v-icon :name="sort.icon" class="ml-2" />
+            <OhVueIcon :name="sort.icon" class="ml-2" />
         </Link>
         <span v-if="filterBy" class="relative ml-2 w-min">
             <button @click="open = !open">
-                <v-icon name="io-filter" />
+                <OhVueIcon name="io-filter" />
             </button>
 
             <div

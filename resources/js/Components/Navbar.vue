@@ -10,6 +10,7 @@ import route, {
 } from "ziggy-js";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import { OhVueIcon } from "oh-vue-icons";
 
 interface Route {
     label: string;
@@ -40,14 +41,6 @@ const pageRoutes: Routes = {
     team: { label: "Equipa" },
     // sponsors: { label: "Patrocínios" },
     // contacts: { label: "Contactos" },
-};
-
-const activityRoutes: Routes = {
-    talks: { label: "Palestras" },
-    workshops: { label: "Workshops" },
-    ctf: { label: "CTF" },
-    competition: { label: "Competition" },
-    groupdynamics: { label: "Dinâmicas de Grupo" },
 };
 
 const editionRoutes = [2022, 2021, 2020, 2019, 2018];
@@ -183,8 +176,8 @@ const isAdmin = computed(() => {
                 </template>
                 <template v-else>
                     <a :href="route('login')">
-                        <v-icon name="io-person" scale="1.7" fill="#025259">
-                        </v-icon>
+                        <OhVueIcon name="io-person" scale="1.7" fill="#025259">
+                        </OhVueIcon>
                     </a>
                 </template>
             </div>

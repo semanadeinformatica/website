@@ -2,6 +2,7 @@
 import type Stand from "@/Types/Stand";
 import Sponsor from "@/Components/Home/Sponsor.vue";
 import type { CompanyUser } from "@/Types/User";
+import type { Tier } from "@/Types/Sponsor";
 
 interface Props {
     readonly stands: Stand[];
@@ -13,16 +14,16 @@ const shadowColorMap = {
     PLATINUM: "text-2023-orange",
     GOLD: "text-2023-teal-dark",
     SILVER: "text-2023-red-dark",
-} as Record<Stand["sponsor"]["tier"], string>;
+} as Record<Tier, string>;
 
 const silverSponsorStands = stands.filter(
-    (stand) => stand.sponsor.tier === "SILVER",
+    (stand) => stand.sponsor?.tier === "SILVER",
 );
 const goldSponsorStands = stands.filter(
-    (stand) => stand.sponsor.tier === "GOLD",
+    (stand) => stand.sponsor?.tier === "GOLD",
 );
 const platSponsorStands = stands.filter(
-    (stand) => stand.sponsor.tier === "PLATINUM",
+    (stand) => stand.sponsor?.tier === "PLATINUM",
 );
 </script>
 
@@ -43,7 +44,7 @@ const platSponsorStands = stands.filter(
                     class="w-48 border border-black shadow-lg shadow-2023-orange"
                 >
                     <Sponsor
-                        :company="stand.sponsor.company?.user as CompanyUser"
+                        :company="stand.sponsor?.company?.user as CompanyUser"
                     >
                     </Sponsor>
                 </div>
@@ -64,7 +65,7 @@ const platSponsorStands = stands.filter(
                     class="w-48 border border-black shadow-lg shadow-2023-teal-dark"
                 >
                     <Sponsor
-                        :company="stand.sponsor.company?.user as CompanyUser"
+                        :company="stand.sponsor?.company?.user as CompanyUser"
                     >
                     </Sponsor>
                 </div>
@@ -85,7 +86,7 @@ const platSponsorStands = stands.filter(
                     class="w-48 border border-black shadow-lg shadow-2023-red-dark"
                 >
                     <Sponsor
-                        :company="stand.sponsor.company?.user as CompanyUser"
+                        :company="stand.sponsor?.company?.user as CompanyUser"
                     >
                     </Sponsor>
                 </div>

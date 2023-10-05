@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Participant;
 use App\Models\SocialMedia;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +12,23 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ParticipantFactory extends Factory
 {
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Participant $participant) {
+            if ($participant->user_id !== 0) {
+                return;
+            }
+
+            $participant->user()->associate(User::factory()->create([
+                'usertype_id' => -1,
+                'usertype_type' => Participant::class,
+            ]));
+        })->afterCreating(function (Participant $participant) {
+            $participant->user->usertype_id = $participant->id;
+            $participant->user->save();
+        });
+    }
+
     /**
      * Define the model's default state.
      *

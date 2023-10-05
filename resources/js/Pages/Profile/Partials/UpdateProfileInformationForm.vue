@@ -99,7 +99,6 @@ const sendEmailVerification = () => {
                     v-model="form.name"
                     label="Name"
                     type="text"
-                    class="mt-1 block w-full"
                     autocomplete="name"
                     :error-message="form.errors.name"
                 />
@@ -108,7 +107,6 @@ const sendEmailVerification = () => {
                     v-model="form.email"
                     label="Email"
                     type="email"
-                    class="mt-1 block w-full"
                     autocomplete="username"
                     :error-message="form.errors.email"
                 />

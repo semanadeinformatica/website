@@ -12,6 +12,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 interface Props {
     event: Event;
     canJoin: boolean;
+    hasJoined: boolean;
     isEnrolled: boolean;
 }
 
@@ -43,16 +44,6 @@ const formatTimeString = (time: string): string => {
 const colorPicker = () => {
     const pos = Math.floor(Math.random() * 5);
     return ["orange", "teal-dark", "red-dark", "red", "teal"][pos];
-};
-
-const formatAvailability = (e: Event) => {
-    if (e.enrollments?.length === e.capacity!) {
-        return "Esgotado";
-    } else if (e.enrollments?.length === 0) {
-        return `${e.capacity!}`;
-    } else {
-        return `${e.capacity! - (e.enrollments?.length ?? 0)}/${e.capacity!}`;
-    }
 };
 </script>
 
@@ -113,15 +104,23 @@ const formatAvailability = (e: Event) => {
             <p
                 class="flex w-fit flex-col text-center text-3xl font-bold text-2023-red"
             >
-                Vamos a isto?
-                <span v-if="!isEnrolled" class="text-lg">
-                    Ainda temos
-                    {{ event.capacity! - (event.enrollments?.length ?? 0) }}
-                    lugares.
-                </span>
+                <span v-if="hasJoined">Vemo-nos lá!</span>
+                <span v-else-if="!isEnrolled"
+                    >Ainda não te inscreveste na SINF!</span
+                >
+                <template v-else-if="canJoin">
+                    <span>Vamos a isto?</span>
+                    <span v-if="event.capacity" class="text-lg">
+                        Ainda temos
+                        {{ event.capacity - (event.enrollments?.length ?? 0) }}
+                        lugares.
+                    </span>
+                </template>
+                <span v-else>Evento esgotado!</span>
             </p>
 
             <PrimaryButton
+                v-if="!isEnrolled || canJoin"
                 color="teal-dark"
                 shadow="red"
                 text-size="sm:text-3xl"
@@ -129,25 +128,15 @@ const formatAvailability = (e: Event) => {
                 @click="
                     $page.props.auth.user
                         ? isEnrolled
-                            ? canJoin
-                                ? router.put(route('event.join', event))
-                                : router.get(route('event.show', event))
+                            ? router.put(route('event.join', event))
                             : router.get(route('home') + '#enroll-section') // HACK: this is a hack
                         : router.get(route('register'))
                 "
             >
-                <span v-if="!isEnrolled" class="flex flex-col">
-                    Inscreve-te nesta edição!
-                </span>
-                <span v-else-if="!canJoin" class="flex flex-col">
-                    Já estás inscrito!
-                </span>
-                <span v-else class="flex flex-col">
-                    Inscreve-te!
-                    <span v-if="event.capacity" class="text-base"
-                        >{{ formatAvailability(event) }} lugares</span
-                    >
-                </span>
+                <span v-if="!isEnrolled" class="flex flex-col"
+                    >Inscreve-te nesta edição!</span
+                >
+                <span v-else class="flex flex-col"> Inscreve-te! </span>
             </PrimaryButton>
         </div>
     </AppLayout>

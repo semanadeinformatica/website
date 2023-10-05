@@ -162,7 +162,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('update_enrollment_points');
+        DB::unprepared('DROP TRIGGER IF EXISTS update_enrollment_points ON enrollment_quest;');
+        DB::unprepared('DROP FUNCTION IF EXISTS update_enrollment_points;');
         Schema::dropIfExists('enrollment_product');
         Schema::dropIfExists('enrollment_quest');
         Schema::dropIfExists('enrollment_event');

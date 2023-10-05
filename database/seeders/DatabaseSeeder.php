@@ -10,6 +10,7 @@ use App\Models\Competition;
 use App\Models\CompetitionTeam;
 use App\Models\Department;
 use App\Models\Edition;
+use App\Models\Enrollment;
 use App\Models\Event;
 use App\Models\EventDay;
 use App\Models\EventType;
@@ -41,21 +42,26 @@ class DatabaseSeeder extends Seeder
     {
         DB::beginTransaction();
 
-        User::truncate();
-        Company::truncate();
-        Participant::truncate();
-        SocialMedia::truncate();
         Admin::truncate();
-        Edition::truncate();
+        Company::truncate();
+        Competition::truncate();
+        CompetitionTeam::truncate();
         Department::truncate();
-        Staff::truncate();
+        Edition::truncate();
+        Enrollment::truncate();
         Event::truncate();
         EventDay::truncate();
         EventType::truncate();
-        Speaker::truncate();
-        Quest::truncate();
-        Sponsor::truncate();
+        Participant::truncate();
         Product::truncate();
+        Quest::truncate();
+        Slot::truncate();
+        SocialMedia::truncate();
+        Speaker::truncate();
+        Sponsor::truncate();
+        Staff::truncate();
+        Stand::truncate();
+        User::truncate();
 
         DB::commit();
     }
@@ -65,51 +71,91 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('Clearing the database');
         self::cleanDatabase();
 
-        $participants = User::factory(100)->create();
-        $companies = User::factory(static::PLATINUM_COUNT + static::GOLD_COUNT + static::SILVER_COUNT)->company()->create();
-        $speakers = User::factory(10)->speaker()->create();
+        $this->command->info('Creating the users');
+        $participants = Participant::factory(100)->create();
+        $participant_users = $participants->pluck('user');
+        $companies = Company::factory(static::PLATINUM_COUNT + static::GOLD_COUNT + static::SILVER_COUNT)->create();
+        $company_users = $companies->pluck('user');
+        $speakers = Speaker::factory(10)->create();
+        $speaker_users = $speakers->pluck('user');
 
         if (! User::where('email', '=', static::DEFAULT_ADMIN_EMAIL)->exists()) {
             User::factory()->admin()->create([
                 'email' => static::DEFAULT_ADMIN_EMAIL,
             ]);
+        } else {
+            $this->command->warn('Admin user already exists');
         }
 
+        $this->command->info('Creating the edition');
         $edition = Edition::factory()->create();
 
+        $this->command->info('Creating the events');
         $start_date = new Carbon(fake()->date());
         $event_day_factory = EventDay::factory()->recycle($edition);
-        $event_days = array_map(fn () => $event_day_factory->create([
+        $event_days = collect()->range(1, 7)->map(fn () => $event_day_factory->create([
             'date' => $start_date->addDays(1)->toDateString(),
-        ]), range(1, 7));
-
-        $departments = Department::factory(10)->recycle($edition)->create();
-        Staff::factory(20)->recycle($departments)->recycle($participants->pluck('usertype'))->create();
+        ]));
 
         $event_types = EventType::factory(2)->create();
 
-        foreach ($event_days as $day) {
-            Event::factory(2)->recycle($day)->recycle($event_types)->hasAttached($speakers->random(fake()->numberBetween(1, 2)))->create();
-            Event::factory(1)->recycle($day)->recycle($event_types)->hasAttached($companies->random(fake()->numberBetween(1, 5)))->create();
-        }
+        $events = $event_days->flatMap(fn ($day) => Event::factory(2)
+            ->recycle($day)
+            ->recycle($event_types)
+            ->hasAttached($speaker_users->random(fake()->numberBetween(1, 2)))
+            ->create()->concat(
+                Event::factory(1)
+                    ->recycle($day)
+                    ->recycle($event_types)
+                    ->hasAttached($company_users->random(fake()->numberBetween(1, 5)))
+                    ->create()));
 
-        Slot::factory(30)->create();
+        $this->command->info('Creating the departments and staff');
+        $departments = Department::factory(10)->recycle($edition)->create();
+        Staff::factory(20)->recycle($departments)->recycle($participants)->create();
 
-        $sponsors = [];
-        foreach ($companies as $i => $company) {
-            Quest::factory()->recycle($edition)->for($company->usertype, 'requirement')->create();
-            $sponsors[] = Sponsor::factory()->recycle($edition)->recycle($company->usertype)->create([
-                'tier' => $i < static::PLATINUM_COUNT ? 'PLATINUM' : ($i < static::PLATINUM_COUNT + static::GOLD_COUNT ? 'GOLD' : 'SILVER'),
-            ]);
-        }
+        $this->command->info('Creating the sponsors and stands');
+        $sponsors = $companies->map(fn ($company, $i) => Sponsor::factory()
+            ->recycle($edition)
+            ->recycle($company)
+            ->create([
+                'tier' => $i < static::PLATINUM_COUNT ? 'PLATINUM'
+                    : ($i < static::PLATINUM_COUNT + static::GOLD_COUNT ? 'GOLD' : 'SILVER'),
+            ]));
 
-        Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();
+        $stands = Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();
 
-        Product::factory(10)->recycle($edition)->create();
+        $this->command->info('Creating the products');
+        $products = Product::factory(10)->recycle($edition)->create();
 
+        $this->command->info('Creating the competitions');
         $competitions = Competition::factory(3)->recycle($edition)->create();
-        CompetitionTeam::factory(90)->recycle($competitions)->create();
+        $competition_teams = CompetitionTeam::factory(90)->recycle($competitions)->create();
+
+        $this->command->info('Creating the quests');
+        $slots = Slot::factory(30)->create();
+        $quests = Quest::factory(20)
+            ->recycle($edition)
+            ->recycle($stands)
+            ->for(Stand::factory(), 'requirement')
+            ->create()->concat(
+                Quest::factory(20)
+                    ->recycle($edition)
+                    ->recycle($events)
+                    ->for(Event::factory(), 'requirement')
+                    ->create()
+            )->each(fn ($quest) => $quest->slots()->attach($slots->random()));
+
+        $this->command->info('Creating the enrollments');
+        $participants->random(50)->map(fn ($participant) => Enrollment::factory()
+            ->recycle($edition)
+            ->recycle($participant)
+            ->hasAttached($events->random(3))
+            ->hasAttached($products->random(3))
+            ->hasAttached($quests->random(20))
+            ->create());
     }
 }
