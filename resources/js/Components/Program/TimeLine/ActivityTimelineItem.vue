@@ -52,9 +52,9 @@ const formatTimeString = (time: string): string => {
                 >
             </li>
         </ul>
-        <span class="text-2023-teal"
+        <span v-if="event.capacity" class="text-2023-teal"
             >Capacidade:
-            <span class="font-bold">{{ event.capacity! }}</span></span
+            <span class="font-bold">{{ event.capacity }}</span></span
         >
         <span class="text-2023-teal">
             {{ formatTimeString(event.time_start) }} -
