@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,6 +11,8 @@ class EventController extends Controller
 {
     public function show(Request $request, Event $event)
     {
+
+        /** @var User */
         $user = $request->user();
 
         // TODO: inject enrollment instead of edition
@@ -19,11 +22,11 @@ class EventController extends Controller
             return response('No edition found', 500);
         }
 
-        $isEnrolled = $user->usertype->enrollments()->where('edition_id', $edition->id)->exists(); // we can safely get only the first one because there should only be one.
+        $isEnrolled = $user && ! $user->isAdmin() && $user->usertype->enrollments()->where('edition_id', $edition->id)->exists();
 
         $canJoin = $isEnrolled && $user->can('join', $event);
 
-        $hasJoined = $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
+        $hasJoined = $user && $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
 
         return Inertia::render('Event', [
             'event' => $event->load(['users', 'event_day', 'enrollments']),
