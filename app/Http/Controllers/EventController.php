@@ -42,7 +42,7 @@ class EventController extends Controller
 
         // FIXME: when attempting to join multiple times in a row, only the first attempt triggers the banner.
         if ($user->cannot('join', $event)) {
-            return redirect()->back()->dangerBanner('Não podes inscrever-se neste evento');
+            return redirect()->back()->dangerBanner('Não podes inscrever-te neste evento');
         }
 
         $edition = $request->input('edition');
