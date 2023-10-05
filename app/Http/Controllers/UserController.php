@@ -24,27 +24,27 @@ class UserController extends UserProfileController
             return response('No edition found', 500);
         }
 
+        $slots = $edition->slots();
+        $tickets = $edition->events();
+
         if ($user->isParticipant()) {
             $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
-            $slots = $edition
-                ->slots()
+            $slots = $slots
                 ->withCount(['quests as completed_count' => function ($query) {
                     $query->whereRelation('slots', 'id', DB::raw('slots.id'));
-                }])
-                ->get();
-            $tickets = $edition
-                ->events()
+                }]);
+
+            $tickets = $tickets
                 ->addSelect([
                     DB::raw('exists(select * from "enrollment_event" where "enrollment_event"."event_id" = "events"."id" and "enrollment_event"."enrollment_id" = '.$currentEnrollment->id.') as "joined"'),
                     DB::raw('"events".*'),
-                ])
-                ->get();
+                ]);
         }
 
         return Inertia::render('Profile/Show', [
-            'tickets' => $tickets,
-            'slots' => $slots,
+            'tickets' => $tickets->get(),
+            'slots' => $slots->get(),
         ]);
     }
 
