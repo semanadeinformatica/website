@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.eventDays.store", eventDay));
+    form.put(route("admin.eventDays.update", eventDay));
 };
 </script>
 
