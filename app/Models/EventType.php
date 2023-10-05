@@ -11,7 +11,7 @@ class EventType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
+        'name',
     ];
 
     public function events(): HasMany
