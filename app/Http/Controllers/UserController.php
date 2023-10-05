@@ -28,18 +28,22 @@ class UserController extends UserProfileController
         $tickets = $edition->events();
 
         if ($user->isParticipant()) {
+
+            /** @var Enrollment|null */
             $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
-            $slots = $slots
-                ->withCount(['quests as completed_count' => function ($query) {
-                    $query->whereRelation('slots', 'id', DB::raw('slots.id'));
-                }]);
+            if ($currentEnrollment) {
+                $slots = $slots
+                    ->withCount(['quests as completed_count' => function ($query) {
+                        $query->whereRelation('slots', 'id', DB::raw('slots.id'));
+                    }]);
 
-            $tickets = $tickets
-                ->addSelect([
-                    DB::raw('exists(select * from "enrollment_event" where "enrollment_event"."event_id" = "events"."id" and "enrollment_event"."enrollment_id" = '.$currentEnrollment->id.') as "joined"'),
-                    DB::raw('"events".*'),
-                ]);
+                $tickets = $tickets
+                    ->addSelect([
+                        DB::raw('exists(select * from "enrollment_event" where "enrollment_event"."event_id" = "events"."id" and "enrollment_event"."enrollment_id" = '.$currentEnrollment->id.') as "joined"'),
+                        DB::raw('"events".*'),
+                    ]);
+            }
         }
 
         return Inertia::render('Profile/Show', [
