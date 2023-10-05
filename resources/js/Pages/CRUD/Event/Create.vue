@@ -55,7 +55,7 @@ const submit = () => {
                 v-model="form.time_start"
                 label="Hora de início"
                 type="time"
-                step="60"
+                step="1"
                 required
                 :error-message="form.errors.time_start"
             />
@@ -65,7 +65,7 @@ const submit = () => {
                 v-model="form.time_end"
                 label="Hora de fim"
                 type="time"
-                step="60"
+                step="1"
                 required
                 :error-message="form.errors.time_end"
             />
