@@ -81,7 +81,7 @@ const colorPicker = () => {
                 {{ event.event_day ? $d(event.event_day.date, "day") : "" }}
                 @
                 {{ event.time_start ? formatTimeString(event.time_start) : "" }}
-                - {{ event.room }}
+                <template v-if="event.room"> - {{ event.room }} </template>
             </h1>
         </section>
         <!-- companies -->
