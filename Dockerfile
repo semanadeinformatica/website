@@ -29,7 +29,7 @@ WORKDIR /var/www/html
 
 USER root
 
-RUN apk add --no-cache php82-pdo_pgsql php82-pgsql php82-pecl-redis
+RUN apk add --no-cache php82-pdo_pgsql php82-pgsql php82-pecl-redis php82-iconv
 
 USER nobody
 
