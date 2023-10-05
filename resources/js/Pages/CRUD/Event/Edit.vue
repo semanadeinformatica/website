@@ -29,7 +29,7 @@ const form = useForm({
     capacity: event.capacity?.toString() ?? "",
     event_day_id: event.event_day_id.toString(),
     event_type_id: event.event_type_id.toString(),
-    room: event.room,
+    room: event.room ?? "",
     users: event.users?.map((u) => u.id.toString()) ?? [],
 });
 
@@ -86,7 +86,6 @@ const submit = () => {
                 v-model="form.room"
                 label="Sala"
                 type="text"
-                required
                 :error-message="form.errors.room"
             />
 

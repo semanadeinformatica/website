@@ -84,7 +84,6 @@ const submit = () => {
                 v-model="form.room"
                 label="Sala"
                 type="text"
-                required
                 :error-message="form.errors.room"
             />
 
