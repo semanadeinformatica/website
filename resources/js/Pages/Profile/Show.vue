@@ -39,7 +39,7 @@ const buttons = {
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayout :title="$t('pages.profile.title')">
         <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
             <template
                 v-if="

@@ -178,7 +178,7 @@ const formattedDate = (
                 <div
                     class="mx-[10%] flex items-center justify-center gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
-                    Muitas novidades para ti! Está quase...
+                    {{ $t("pages.home.comingSoonNews") }}
                 </div>
             </template>
         </section>
@@ -199,7 +199,7 @@ const formattedDate = (
                 <p
                     class="flex w-fit place-self-center text-2xl font-bold text-2023-teal-dark"
                 >
-                    Em breve...
+                    {{ $t("general.soon") }}
                 </p>
             </template>
         </section>

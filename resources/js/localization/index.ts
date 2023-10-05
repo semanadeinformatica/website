@@ -5,6 +5,7 @@ const messages = {
         pages: {
             home: {
                 title: "Home",
+                comingSoonNews: "A lot of news. Don't miss out...",
                 aboutUs: {
                     label: "About us",
                     text1: "SINF (Semana de Informática), organized by NIAEFEUP (Núcleo de Informática da Associação de Estudantes da Faculdade de Engenharia da Universidade do Porto), was created with the purpose of allowing students to, regardless of their degree, develop their skills in the various fields related to Informatics, promoting their interaction with the corporate world through a series of social gatherings.",
@@ -23,6 +24,7 @@ const messages = {
             },
             program: {
                 title: "Program",
+                header: "Program",
             },
             maintenance: {
                 title: "Coming soon...",
@@ -50,7 +52,21 @@ const messages = {
                 callToAction: "Let's do this?",
                 join: "Join!",
             },
-            profile: {},
+            profile: {
+                title: "Profile",
+            },
+            team: {
+                title: "Team",
+                header: "Team",
+            },
+            error: {
+                back: "Back",
+                moreInfo: "More info",
+            },
+            shop: {
+                title: "Shop",
+                header: "Shop",
+            },
         },
         components: {
             program: {},
@@ -84,6 +100,7 @@ const messages = {
         general: {
             to: "to",
             sinfLogoAlt: "Stylized SINF logo",
+            soon: "Coming soon...",
         },
         models: {
             admin: "Admin | Admins",
@@ -112,6 +129,7 @@ const messages = {
         pages: {
             home: {
                 title: "Página Principal",
+                comingSoonNews: "Muitas novidades para ti! Está quase...",
                 aboutUs: {
                     label: "Sobre nós",
                     text1: "A Semana de Informática (SINF), organizada pelo Núcleo de Informática da Associação de Estudantes da Faculdade de Engenharia da Universidade do Porto (NIAEFEUP), foi criada com o intuito de permitir aos estudantes, independentemente do curso, desenvolver as suas capacidades nas diversas áreas da Informática, promovendo a sua interação com o mundo empresarial através de eventos sociais.",
@@ -130,6 +148,7 @@ const messages = {
             },
             program: {
                 title: "Programa",
+                header: "Programa",
             },
             maintenance: {
                 title: "Brevemente...",
@@ -157,7 +176,21 @@ const messages = {
                 callToAction: "Vamos a isto?",
                 join: "Participar!",
             },
-            profile: {},
+            profile: {
+                title: "Perfil",
+            },
+            team: {
+                title: "Equipa",
+                header: "Equipa",
+            },
+            error: {
+                back: "Voltar",
+                moreInfo: "Mais informações",
+            },
+            shop: {
+                title: "Loja",
+                header: "Loja",
+            },
         },
         components: {
             program: {},
@@ -191,6 +224,7 @@ const messages = {
         general: {
             to: "a",
             sinfLogoAlt: "Logótipo da SINF",
+            soon: "Em breve...",
         },
         models: {
             admin: "Administrador | Administradores",

@@ -11,7 +11,7 @@ defineProps<Props>();
 </script>
 
 <template>
-    <AppLayout title="Loja">
+    <AppLayout :title="$t('pages.shop.title')">
         <template v-if="products.length > 0">
             <div
                 class="flex content-center items-center justify-center self-center py-10"
@@ -19,7 +19,7 @@ defineProps<Props>();
                 <h1
                     class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
                 >
-                    Loja
+                    {{ $t("pages.shop.header") }}
                 </h1>
             </div>
             <section
@@ -44,7 +44,7 @@ defineProps<Props>();
                 <p
                     class="pt-80 text-center text-5xl font-bold text-2023-teal-dark"
                 >
-                    Em breve...
+                    {{ $t("general.soon") }}
                 </p>
             </div>
         </template>

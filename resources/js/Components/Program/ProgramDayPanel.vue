@@ -84,7 +84,9 @@ onMounted(() => {
         {{ day.theme }}
     </p>
     <template v-if="noInfo">
-        <p class="pt-40 text-4xl font-bold text-2023-teal-dark">Em breve...</p>
+        <p class="pt-40 text-4xl font-bold text-2023-teal-dark">
+            {{ $t("general.soon") }}
+        </p>
     </template>
     <template v-else>
         <WithTimeline>
