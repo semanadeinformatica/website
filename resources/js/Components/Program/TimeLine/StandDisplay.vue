@@ -37,7 +37,7 @@ const platSponsorStands = stands.filter(
             <span class="text-3xl font-bold" :class="shadowColorMap['PLATINUM']"
                 >Platinum</span
             >
-            <div class="flex flex-row flex-wrap gap-4">
+            <div class="flex flex-row flex-wrap gap-4 md:flex-nowrap">
                 <div
                     v-for="stand in platSponsorStands"
                     :key="stand.id"

@@ -20,27 +20,21 @@ type Routes = Record<string, Route>;
 
 const homeSections: Routes = {
     aboutus: {
-        label: "Sobre nós",
+        label: "components.navbar.navLinks.aboutus",
     },
-    speakers: { label: "Speakers" },
-    sponsors: { label: "Patrocínios" },
+    speakers: { label: "components.navbar.navLinks.speakers" },
+    sponsors: { label: "components.navbar.navLinks.sponsors" },
 };
 
 const pageRoutes: Routes = {
-    // aboutus: {
-    //     label: "Sobre nós",
-    // },
-    // speakers: { label: "Speakers" },
     program: {
-        label: "Programa",
+        label: "components.navbar.navLinks.program",
         _query: {
             day: 1,
         },
     },
-    shop: { label: "Loja" },
-    team: { label: "Equipa" },
-    // sponsors: { label: "Patrocínios" },
-    // contacts: { label: "Contactos" },
+    shop: { label: "components.navbar.navLinks.shop" },
+    team: { label: "components.navbar.navLinks.team" },
 };
 
 const editionRoutes = [2022, 2021, 2020, 2019, 2018];
@@ -75,7 +69,7 @@ const isAdmin = computed(() => {
                     <DropdownLink
                         :href="page !== 'home' ? `/#${page}` : route(page)"
                     >
-                        {{ label }}
+                        {{ $t(label) }}
                     </DropdownLink>
                 </template>
             </template>
@@ -84,7 +78,7 @@ const isAdmin = computed(() => {
             <img
                 class="w-24 max-md:w-16"
                 src="/images/cy-sinf-small.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
         </NavLink>
         <div class="ml-4 hidden w-full min-w-fit md:flex lg:gap-4">
@@ -100,7 +94,7 @@ const isAdmin = computed(() => {
                     "
                     :active="page === route().current()"
                 >
-                    {{ label }}
+                    {{ $t(label) }}
                 </NavLink>
             </template>
             <Dropdown
@@ -109,7 +103,9 @@ const isAdmin = computed(() => {
                 width="32"
             >
                 <template #trigger>
-                    <DropdownTrigger>Competições</DropdownTrigger>
+                    <DropdownTrigger>{{
+                        $t("components.navbar.competitions")
+                    }}</DropdownTrigger>
                 </template>
                 <template #content>
                     <template
@@ -160,16 +156,28 @@ const isAdmin = computed(() => {
                         </template>
                         <template #content>
                             <DropdownLink :href="route('profile.show')">
-                                Perfil
+                                {{
+                                    $t(
+                                        "components.navbar.profileDropdown.profile",
+                                    )
+                                }}
                             </DropdownLink>
                             <DropdownLink
                                 v-if="isAdmin"
                                 :href="route('admin.index')"
                             >
-                                Administração
+                                {{
+                                    $t(
+                                        "components.navbar.profileDropdown.admin",
+                                    )
+                                }}
                             </DropdownLink>
                             <DropdownLink :href="route('logout')" method="post">
-                                Logout
+                                {{
+                                    $t(
+                                        "components.navbar.profileDropdown.logout",
+                                    )
+                                }}
                             </DropdownLink>
                         </template>
                     </Dropdown>

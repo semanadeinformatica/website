@@ -35,6 +35,8 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'competitions' => fn () => $request->input('edition')?->competitions ?? [],
+            'locale' => app()->getLocale(),
+            'fallbackLocale' => config('app.fallback_locale'),
         ]);
     }
 }

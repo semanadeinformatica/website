@@ -66,8 +66,8 @@ const contacts = [
         <div class="container mx-auto text-center font-bold text-2023-teal">
             <p>
                 Copyright &copy; 2023
-                <a href="https://ni.fe.up.pt/">NIAEFEUP</a>, todos os direitos
-                reservados
+                <a href="https://ni.fe.up.pt/">NIAEFEUP</a>,
+                {{ $t("components.footer.copyrightNotice") }}
             </p>
         </div>
     </footer>

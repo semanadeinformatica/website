@@ -19,7 +19,7 @@ const colors: Array<string> = [
 </script>
 
 <template>
-    <AppLayout title="Team">
+    <AppLayout :title="$t('pages.team.title')">
         <div
             v-if="departments.length > 0"
             class="flex flex-col items-center gap-7 pt-10"
@@ -27,7 +27,7 @@ const colors: Array<string> = [
             <h1
                 class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
             >
-                Equipa
+                {{ $t("pages.team.header") }}
             </h1>
             <SINFTeam
                 v-for="department in departments"
@@ -38,7 +38,7 @@ const colors: Array<string> = [
         </div>
         <div v-else>
             <p class="pt-80 text-center text-5xl font-bold text-2023-teal-dark">
-                Em breve...
+                {{ $t("general.soon") }}
             </p>
         </div>
     </AppLayout>

@@ -15,7 +15,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 </script>
 
 <template>
-    <AppLayout title="Programa">
+    <AppLayout :title="$t('pages.program.title')">
         <div
             v-if="totalDays !== 0"
             class="flex flex-col items-center px-10 py-10 md:px-40"
@@ -23,7 +23,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
             <h1
                 class="mb-10 w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
             >
-                Programa
+                {{ $t("pages.program.header") }}
             </h1>
             <section class="mb-5 flex flex-col items-center gap-5">
                 <div
@@ -53,17 +53,14 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                     </template>
                 </div>
                 <span class="font-bold text-2023-orange">{{
-                    new Intl.DateTimeFormat("pt-PT", {
-                        month: "long",
-                        day: "2-digit",
-                    }).format(new Date(eventDay.date))
+                    $d(new Date(eventDay.date), "long")
                 }}</span>
             </section>
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
         </div>
         <div v-else class="flex items-center justify-center">
             <p class="pt-80 text-center text-5xl font-bold text-2023-teal-dark">
-                Em breve...
+                {{ $t("general.soon") }}
             </p>
         </div>
     </AppLayout>

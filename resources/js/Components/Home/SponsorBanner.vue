@@ -79,7 +79,7 @@ const getSize = (tier: string) => {
             </template>
             <template v-else>
                 <p class="flex w-fit place-self-center text-2xl font-bold">
-                    Em breve...
+                    {{ $t("general.soon") }}
                 </p>
             </template>
         </div>
@@ -113,7 +113,7 @@ const getSize = (tier: string) => {
                 <p
                     class="grid place-self-center self-center text-center text-2xl font-bold"
                 >
-                    Em breve...
+                    {{ $t("general.soon") }}
                 </p>
             </template>
         </div>

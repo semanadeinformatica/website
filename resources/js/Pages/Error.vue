@@ -32,26 +32,26 @@ const description = computed(() => {
                 id="svg-1"
                 class="absolute left-[7%] w-36 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="/../images/cy-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-2"
                 class="absolute right-[7%] top-16 w-32 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="/../images/rc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
             <img
                 id="svg-3"
                 class="absolute bottom-28 right-[15%] w-20 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
                 src="/../images/oc-sinf.svg"
-                alt="Stylized SINF logo"
+                :alt="$t('general.sinfLogoAlt')"
             />
 
             <div class="relative">
                 <img
                     class="w-96 max-ml:w-72"
                     src="/../images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    :alt="$t('general.sinfLogoAlt')"
                 />
                 <span
                     class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
@@ -69,11 +69,11 @@ const description = computed(() => {
                     text-size="text-xl"
                     @click="goBack()"
                 >
-                    Regressar
+                    {{ $t("pages.error.back") }}
                 </PrimaryButton>
             </div>
             <div class="text-center text-lg text-2023-teal-dark">
-                <p class="font-bold">Mais informações</p>
+                <p class="font-bold">{{ $t("pages.error.moreInfo") }}</p>
                 <p>geral@sinf.pt</p>
             </div>
         </div>
