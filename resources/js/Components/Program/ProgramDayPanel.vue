@@ -19,7 +19,7 @@ const noInfo = computed(
     () =>
         day.workshops?.length == 0 &&
         day.talks?.length == 0 &&
-        day.talks?.length == 0,
+        day.stands?.length == 0,
 );
 
 const toggle = ({ target }: MouseEvent) => {
