@@ -27,7 +27,7 @@ class UserCRUDController extends CRUDController
         'social_media.facebook' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/facebook.com\/\w+$/',
         'social_media.github' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/github.com\/\w+$/',
         'social_media.instagram' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/instagram.com\/\w+$/',
-        'social_media.linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/linkedin.com\/(in|company)/\w+$/'],
+        'social_media.linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/linkedin.com\/(in|company)\/\w+$/'],
         'social_media.twitter' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/twitter.com\/\w+$/',
         'social_media.website' => 'sometimes|nullable|string|url:https',
         'photo' => 'nullable|mimes:jpg,jpeg,png|max:1024',
