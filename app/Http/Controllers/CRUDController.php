@@ -70,14 +70,9 @@ abstract class CRUDController extends Controller
     }
 
     /**
-     * The associated relations to load when loading the model.
-     *
-     * @return array<mixed, mixed>
+     * The associated relations to load on the model when rendering the edit view.
      */
-    protected function load(): array
-    {
-        return [];
-    }
+    protected $load = [];
 
     public function index(Request $request)
     {
@@ -149,7 +144,7 @@ abstract class CRUDController extends Controller
         $with = $this->with();
 
         return Inertia::render("CRUD/$this->view/Edit", [
-            'item' => $item->load($this->load()),
+            'item' => $item->load($this->load),
             'with' => $with,
         ]);
     }

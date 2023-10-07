@@ -57,10 +57,7 @@ class EventCRUDController extends CRUDController
         return $new;
     }
 
-    protected function load(): array
-    {
-        return ['users'];
-    }
+    protected $load = ['users'];
 
     protected function with(): array
     {
