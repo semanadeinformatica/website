@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -67,6 +68,11 @@ abstract class CRUDController extends Controller
     {
         return [];
     }
+
+    /**
+     * The associated relations to load on the model when rendering the edit view.
+     */
+    protected $load = [];
 
     public function index(Request $request)
     {
@@ -138,7 +144,7 @@ abstract class CRUDController extends Controller
         $with = $this->with();
 
         return Inertia::render("CRUD/$this->view/Edit", [
-            'item' => $item,
+            'item' => $item->load($this->load),
             'with' => $with,
         ]);
     }
