@@ -28,16 +28,12 @@ class EventDay extends Model
 
     public function talks(): HasMany
     {
-        return $this->events()->whereHas('type', function ($query) {
-            $query->where('name', 'talk');
-        });
+        return $this->events()->talk();
     }
 
     public function workshops(): HasMany
     {
-        return $this->events()->whereHas('type', function ($query) {
-            $query->where('name', 'workshop');
-        });
+        return $this->events()->workshop();
     }
 
     public function events(): HasMany
