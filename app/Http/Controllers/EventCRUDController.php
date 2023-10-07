@@ -37,6 +37,7 @@ class EventCRUDController extends CRUDController
         unset($new['users']);
 
         DB::beginTransaction();
+        /** @var Event $event */
         $event = Event::create($new);
 
         $event->users()->sync($users);
@@ -50,9 +51,15 @@ class EventCRUDController extends CRUDController
         $users = $new['users'];
         unset($new['users']);
 
+        /** @var Event $old */
         $old->users()->sync($users);
 
         return $new;
+    }
+
+    protected function load(): array
+    {
+        return ['users'];
     }
 
     protected function with(): array

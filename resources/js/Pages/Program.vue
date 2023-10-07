@@ -6,7 +6,7 @@ import route from "ziggy-js";
 import { Link } from "@inertiajs/vue3";
 
 interface Props {
-    eventDay: EventDay;
+    eventDay?: EventDay;
     queryDay: number;
     totalDays: number;
 }
@@ -17,7 +17,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
 <template>
     <AppLayout title="Programa">
         <div
-            v-if="totalDays !== 0"
+            v-if="totalDays !== 0 && eventDay !== undefined"
             class="flex flex-col items-center px-10 py-10 md:px-40"
         >
             <h1
@@ -53,10 +53,7 @@ const { eventDay, queryDay, totalDays } = defineProps<Props>();
                     </template>
                 </div>
                 <span class="font-bold text-2023-orange">{{
-                    new Intl.DateTimeFormat("pt-PT", {
-                        month: "long",
-                        day: "2-digit",
-                    }).format(new Date(eventDay.date))
+                    $d(new Date(eventDay.date), "long")
                 }}</span>
             </section>
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />

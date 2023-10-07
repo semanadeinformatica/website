@@ -62,7 +62,7 @@ const filter = computed(() => {
     if (!props.filterBy) return [];
 
     const router = route();
-    console.log(router.params);
+
     return Object.entries(props.filterValues).map(([value, label]) => {
         const oldValue = page.props.filterBy?.[props.filterBy] ?? [];
         const selected = oldValue.includes(value);

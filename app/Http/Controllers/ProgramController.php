@@ -45,10 +45,21 @@ class ProgramController extends Controller
         $validated = $validator->validated();
         $queryDay = isset($validated['day']) ? $validated['day'] : ProgramController::DEFAULT_PROGRAM_DAY;
 
+        /** @var \App\Models\EventDay|null $eventDay */
         $eventDay = $edition->event_days()->orderBy('date', 'ASC')->skip($queryDay - 1)->first();
 
         return Inertia::render('Program', [
-            'eventDay' => fn () => $eventDay,
+            'eventDay' => fn () => $eventDay?->load([
+                'stands' => [
+                    'sponsor' => [
+                        'company' => [
+                            'user',
+                        ],
+                    ],
+                ],
+                'talks',
+                'workshops',
+            ]),
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),
         ]);

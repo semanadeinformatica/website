@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -64,6 +65,16 @@ abstract class CRUDController extends Controller
      * @return array<mixed, mixed>
      */
     protected function with(): array
+    {
+        return [];
+    }
+
+    /**
+     * The associated relations to load when loading the model.
+     *
+     * @return array<mixed, mixed>
+     */
+    protected function load(): array
     {
         return [];
     }
@@ -138,7 +149,7 @@ abstract class CRUDController extends Controller
         $with = $this->with();
 
         return Inertia::render("CRUD/$this->view/Edit", [
-            'item' => $item,
+            'item' => $item->load($this->load()),
             'with' => $with,
         ]);
     }

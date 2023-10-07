@@ -17,23 +17,6 @@ class EventDay extends Model
         'edition_id',
     ];
 
-    protected $with = [
-        'stands' => [
-            'sponsor' => [
-                'company' => [
-                    'user',
-                ],
-            ],
-        ],
-        'events' => [
-            'users' => [
-                'usertype',
-            ],
-        ],
-        'talks',
-        'workshops',
-    ];
-
     protected $casts = [
         'date' => 'datetime',
     ];
