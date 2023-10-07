@@ -17,10 +17,10 @@ const speakerName = (name: string) => {
     <div class="transition-all duration-500">
         <img
             :src="speaker.profile_photo_url"
-            class="w-[200px] rounded-full border-2 border-solid border-black object-cover"
+            class="w-52 h-52 rounded-full border-2 border-solid border-black object-cover"
             alt=""
         />
-        <p class="max-w-[200px] break-words py-4 text-lg text-2023-teal-dark">
+        <p class="max-w-52 break-words py-4 text-lg text-2023-teal-dark">
             {{ speakerName(speaker.name) }}
         </p>
     </div>
