@@ -27,10 +27,6 @@ const homeSections: Routes = {
 };
 
 const pageRoutes: Routes = {
-    // aboutus: {
-    //     label: "Sobre nós",
-    // },
-    // speakers: { label: "Speakers" },
     program: {
         label: "Programa",
         _query: {
@@ -39,8 +35,6 @@ const pageRoutes: Routes = {
     },
     shop: { label: "Loja" },
     team: { label: "Equipa" },
-    // sponsors: { label: "Patrocínios" },
-    // contacts: { label: "Contactos" },
 };
 
 const editionRoutes = [2022, 2021, 2020, 2019, 2018];
