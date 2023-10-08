@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
@@ -37,6 +36,7 @@ class UserController extends UserProfileController
         $slots = $edition->slots();
         $tickets = $edition->events();
         $participants = null;
+        $canViewCv = $request->user()->can('viewCVOf', [$user, $edition]);
 
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
@@ -53,7 +53,7 @@ class UserController extends UserProfileController
             'slots' => fn () => $slots->get(),
             'participants' => fn () => $participants?->get() ?? [],
             'user' => fn () => $user,
-            'canCV' => Gate::allows('view_CV', [$user, $edition]),
+            'canViewCV' => fn () => $canViewCv,
         ]);
     }
 

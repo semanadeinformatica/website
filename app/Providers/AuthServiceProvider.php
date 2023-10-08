@@ -72,15 +72,27 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('viewProfileOf', fn (User $user, User $profile_user) => (
             $user->isAdmin() || // admins have access to all profiles
             $user->is($profile_user) || // users can view their own profile
-            ($user->isCompany() && $profile_user->isParticipant() && $user->usertype->participants()->exists($profile_user))
+            (
+                // companies can view profiles of participants who have paid them a visit
+                $user->isCompany() &&
+                $profile_user->isParticipant() &&
+                $user->usertype->participants()->exists($profile_user)
+            )
         ));
 
-        Gate::define('view_CV', fn (User $user, User $cv_user, Edition $edition) => (
-            $user->id === $cv_user->id || (
-                $user->isAdmin() || (
-                    $user->isCompany() && $cv_user->isParticipant() && $user->usertype()->participants()->contains($cv_user) &&
-                        $edition->sponsors()->where('company_id', $user->usertype_id)->first()->tier !== 'SILVER'
-                )
+        Gate::define('viewCVOf', fn (User $user, User $cv_user, Edition $edition) => (
+            $user->isAdmin() || // admins have access to all CVs
+            (
+                // participants can view their own CV
+                $user->isParticipant() && // Do this so that companies do not get the CV area on their profile page
+                $user->is($cv_user)
+            ) ||
+            (
+                // companies can view CVs of participants who have paid them a visit if they are not silver sponsors
+                $user->isCompany() &&
+                $cv_user->isParticipant() &&
+                $user->usertype->participants()->exists($cv_user) &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->first()->tier !== 'SILVER' // TODO: make this configurable and not just dependent on the value
             )
         ));
     }

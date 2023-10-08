@@ -20,7 +20,7 @@ interface Props {
     sessions: Session[];
     user: User; // The user to render, can be the logged in user or another user
     participants: Participant[];
-    canCV: boolean;
+    canViewCV: boolean;
 }
 
 const { user } = defineProps<Props>();
@@ -58,11 +58,7 @@ const buttons = {
                         <InfoCard :item="user" />
                     </div>
                     <CvArea
-                        v-if="
-                            user.usertype_type === 'App\\Models\\Participant' ||
-                            (user.usertype_type === 'App\\Models\\Company' &&
-                                canCV)
-                        "
+                        v-if="canViewCV"
                         :item="user"
                     />
                     <InteractionArea :buttons="buttons"> </InteractionArea>
