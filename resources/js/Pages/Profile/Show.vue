@@ -17,14 +17,13 @@ interface Props {
     confirmsTwoFactorAuthentication: boolean;
     tickets: Event[];
     slots: Slot[];
-    participant: Participant;
     sessions: Session[];
-    user: User;
+    user: User; // The user to render, can be the logged in user or another user
     participants: Participant[];
     canCV: boolean;
 }
 
-defineProps<Props>();
+const {user} = defineProps<Props>();
 
 const buttons = {
     ticket: {
@@ -37,6 +36,11 @@ const buttons = {
         title: "Conquistas",
         component: h(StickerWrapper),
     },
+    visitHistory: {
+        id: "visitHistory",
+        title: "Visitas",
+        component: h(EnrolledParticipants),
+    }
 };
 </script>
 
@@ -52,46 +56,26 @@ const buttons = {
                     <div class="flex w-full justify-around max-md:flex-col">
                         <ProfilePicture
                             :item="
-                                participant
-                                    ? participant.user
-                                    : $page.props.auth.user
+                                user
                             "
                         />
                         <InfoCard
                             :item="
-                                participant
-                                    ? participant.user
-                                    : $page.props.auth.user
+                                user
                             "
                         />
                     </div>
                     <CvArea
-                        :item="
-                            participant
-                                ? participant.user
-                                : $page.props.auth.user
+                        v-if="
+                            user.usertype_type ===
+                                'App\\Models\\Participant' ||
+                            (user.usertype_type === 'App\\Models\\Company' &&
+                                canCV)
                         "
+                        :item="user"
                     />
                     <InteractionArea :buttons="buttons"> </InteractionArea>
                 </div>
-                <CvArea
-                    v-if="
-                        $page.props.auth.user?.usertype_type ===
-                            'App\\Models\\Participant' ||
-                        (user?.usertype_type === 'App\\Models\\Participant' &&
-                            canCV)
-                    "
-                    :item="user ?? $page.props.auth.user"
-                />
-
-                <EnrolledParticipants
-                    v-else-if="
-                        $page.props.auth.user?.usertype_type ===
-                            'App\\Models\\Company' ||
-                        user?.usertype_type === 'App\\Models\\Company'
-                    "
-                    :participants="participants"
-                />
             </div>
         </div>
     </AppLayout>

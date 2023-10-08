@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Edition;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -13,22 +14,32 @@ use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
 
 class UserController extends UserProfileController
 {
-    public function getParticipants(Company $company)
+    public function getParticipants(Company $company, Edition $edition)
     {
-        return $company->participants();
+        return $company->participants()->where('sponsors.edition_id', $edition->id)->where('enrollments.edition_id', $edition->id)->get();
     }
 
     public function show(Request $request)
     {
         $this->validateTwoFactorAuthenticationState($request);
 
-        $user = $request->user();
-
         /** @var Edition */
         $edition = $request->edition;
 
         if ($edition === null) {
             return response('No edition found', 500);
+        }
+
+        /** @var User|null */
+        $user = $request->user();
+
+        /** @var User|null */
+        $requestUserId = $request->route('user');
+        if ($requestUserId !== null) {
+
+            // If we are trying to view another user's profile, we need to validate that we can do so.
+
+            $user = User::find($requestUserId);
         }
 
         $slots = $edition->slots();
@@ -53,11 +64,15 @@ class UserController extends UserProfileController
             }
         }
 
+        if (! $user->isAdmin()) {
+            $user = $user->load('usertype.socialMedia');
+        }
+
         return Inertia::render('Profile/Show', [
             'tickets' => $tickets->get(),
             'slots' => $slots->get(),
-            'user' => $user->load('usertype.socialMedia')->toArray(),
-            'participants' => $user->usertype_type === Company::class ? $this->getParticipants($user->usertype) : null,
+            'user' => $user,
+            'participants' => $user->isCompany() ? $this->getParticipants($user->usertype, $edition) : [],
             'canCV' => Gate::allows('view_CV', [$user, $edition]),
         ]);
     }

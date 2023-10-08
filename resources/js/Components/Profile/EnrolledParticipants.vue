@@ -1,11 +1,5 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
-
-interface Props {
-    participants: Participant[] | undefined;
-}
-
-defineProps<Props>();
 </script>
 
 <template>
@@ -22,7 +16,7 @@ defineProps<Props>();
                     </thead>
                     <tbody>
                         <tr
-                            v-for="participant in participants"
+                            v-for="participant in ($page.props.participants as Participant[])"
                             :key="participant.id"
                         >
                             <td class="border px-4 py-2">

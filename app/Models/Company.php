@@ -44,6 +44,29 @@ class Company extends Model
 
     public function participants(): HasManyThrough
     {
-        return $this->hasManyDeep(Participant::class, [Sponsor::class, Stand::class, Quest::class, Enrollment::class]);
+        return $this->hasManyDeep(
+            Participant::class,
+            [
+                Sponsor::class,
+                Stand::class,
+                Quest::class,
+                'enrollment_quest',
+                Enrollment::class,
+            ], [
+                null, // FK on "sponsor" table
+                null, // FK on "stand" table
+                ['requirement_type', 'requirement_id'], // FK on "quest" table
+                null, // FK on "enrollment_quest" table
+                null, // FK on "Enrollment" table
+                'id', // Local Key on "Participant" table
+            ], [
+                null, // Local key on "company" table
+                null, // Local key on "sponsor" table
+                null, // Local key on "stand" table
+                null, // Local key on "quest" table
+                null, // Local key on "enrollment_quest" table
+                'participant_id', // Foreign key on "Enrollment" table
+            ]
+        );
     }
 }

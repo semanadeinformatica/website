@@ -11,11 +11,12 @@ import {
 const selected = ref<HTMLElement | null>(null);
 
 // Change these values with the values of the buttons
-const selectedType = ref<"ticket" | "sticker">("ticket");
+const selectedType = ref<"ticket" | "sticker" | "visitHistory">("ticket");
 type Props = {
     buttons: {
         ticket: { id: string; title: string; component: VNode };
         sticker: { id: string; title: string; component: VNode };
+        visitHistory: { id: string; title: string; component: VNode };
     };
 };
 

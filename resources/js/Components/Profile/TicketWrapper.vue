@@ -37,7 +37,7 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
         style="grid-template-columns: repeat(auto-fill, 350px)"
     >
         <div
-            v-for="item in $page.props.tickets as EventTicket[]"
+            v-for="item in ($page.props.tickets as EventTicket[])"
             :key="item.id"
             class="max-w-sm"
         >
