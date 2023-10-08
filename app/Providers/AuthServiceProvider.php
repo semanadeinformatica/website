@@ -81,7 +81,10 @@ class AuthServiceProvider extends ServiceProvider
         ));
 
         Gate::define('viewCVOf', fn (User $user, User $cv_user, Edition $edition) => (
-            $user->isAdmin() || // admins have access to all CVs
+            ( // admins have access to all CVs that do not belong to admins (since they do not have those)
+                $user->isAdmin() &&
+                ! $cv_user->isAdmin()
+            ) ||
             (
                 // participants can view their own CV
                 $user->isParticipant() && // Do this so that companies do not get the CV area on their profile page

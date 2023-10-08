@@ -5,13 +5,14 @@ import InfoCard from "@/Components/Profile/InfoCard.vue";
 import CvArea from "@/Components/Profile/CvArea.vue";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
 import type Slot from "@/Types/Slot";
-import { h } from "vue";
+import { computed, h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 import type Participant from "@/Types/Participant";
+import type { Tabs } from "@/Types/ProfilePage";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -25,23 +26,30 @@ interface Props {
 
 const { user } = defineProps<Props>();
 
-const buttons = {
-    ticket: {
-        id: "ticket",
-        title: "Bilhetes",
-        component: h(TicketWrapper),
-    },
-    sticker: {
-        id: "sticker",
-        title: "Conquistas",
-        component: h(StickerWrapper),
-    },
-    visitHistory: {
-        id: "visitHistory",
-        title: "Visitas",
-        component: h(EnrolledParticipants),
-    },
-};
+const isParticipant = computed(
+    () => user.usertype_type === "App\\Models\\Participant",
+);
+const isCompany = computed(() => user.usertype_type === "App\\Models\\Company");
+
+const buttons: Tabs = isParticipant.value
+    ? {
+          ticket: {
+              label: "Bilhetes",
+              component: h(TicketWrapper),
+          },
+          sticker: {
+              label: "Conquistas",
+              component: h(StickerWrapper),
+          },
+      }
+    : isCompany.value
+    ? {
+          visitHistory: {
+              label: "Visitas",
+              component: h(EnrolledParticipants),
+          },
+      }
+    : {};
 </script>
 
 <template>
@@ -57,10 +65,7 @@ const buttons = {
                         <ProfilePicture :item="user" />
                         <InfoCard :item="user" />
                     </div>
-                    <CvArea
-                        v-if="canViewCV"
-                        :item="user"
-                    />
+                    <CvArea v-if="canViewCV" :item="user" />
                     <InteractionArea :buttons="buttons"> </InteractionArea>
                 </div>
             </div>

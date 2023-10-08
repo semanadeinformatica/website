@@ -1,36 +1,29 @@
 <script setup lang="ts">
-import {
-    ref,
-    watch,
-    type UnwrapRef,
-    onMounted,
-    computed,
-    type VNode,
-} from "vue";
+import { ref, watch, type UnwrapRef, onMounted, computed } from "vue";
+import { type Tabs } from "@/Types/ProfilePage";
 
-const selected = ref<HTMLElement | null>(null);
-
-// Change these values with the values of the buttons
-const selectedType = ref<"ticket" | "sticker" | "visitHistory">("ticket");
 type Props = {
-    buttons: {
-        ticket: { id: string; title: string; component: VNode };
-        sticker: { id: string; title: string; component: VNode };
-        visitHistory: { id: string; title: string; component: VNode };
-    };
+    buttons: Tabs;
 };
 
 const { buttons } = defineProps<Props>();
 
+const selected = ref<HTMLElement | null>(null);
+
+const firstType = Object.keys(buttons)[0];
+
+const selectedType = ref<keyof typeof buttons>(firstType);
+
 watch(selected, (newValue, oldValue) => {
     oldValue?.classList.toggle("selected");
     newValue?.classList.toggle("selected");
+
     selectedType.value =
-        (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "ticket";
+        (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? firstType;
 });
 
 const view = computed(() => {
-    return buttons[selectedType.value].component;
+    return buttons[selectedType.value]?.component;
 });
 
 const toggle = ({ target }: MouseEvent) => {
@@ -38,12 +31,14 @@ const toggle = ({ target }: MouseEvent) => {
 };
 
 onMounted(() => {
-    selected.value = document.querySelector(
+    selected.value = document.querySelector<HTMLElement>(
         "#tab-picker > button:first-of-type",
-    ) as HTMLElement;
-    selectedType.value =
-        (selected.value.dataset.type as UnwrapRef<typeof selectedType>) ??
-        "ticket";
+    );
+
+    if (selected.value)
+        selectedType.value =
+            (selected.value.dataset.type as UnwrapRef<typeof selectedType>) ??
+            firstType;
 });
 </script>
 
@@ -53,13 +48,13 @@ onMounted(() => {
         class="flex flex-row justify-center gap-4 pt-5 font-bold text-2023-teal"
     >
         <button
-            v-for="button in buttons"
-            :key="button.id"
+            v-for="(button, id) in buttons"
+            :key="id"
             class="transition"
-            :data-type="button.id"
+            :data-type="id"
             @click="toggle"
         >
-            {{ button.title }}
+            {{ button.label }}
         </button>
     </div>
     <KeepAlive>
