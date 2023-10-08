@@ -23,7 +23,7 @@ interface Props {
     canCV: boolean;
 }
 
-const {user} = defineProps<Props>();
+const { user } = defineProps<Props>();
 
 const buttons = {
     ticket: {
@@ -40,7 +40,7 @@ const buttons = {
         id: "visitHistory",
         title: "Visitas",
         component: h(EnrolledParticipants),
-    }
+    },
 };
 </script>
 
@@ -48,27 +48,18 @@ const buttons = {
     <AppLayout title="Profile">
         <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
             <div
-                class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+                class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
             >
                 <div
                     class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
                 >
                     <div class="flex w-full justify-around max-md:flex-col">
-                        <ProfilePicture
-                            :item="
-                                user
-                            "
-                        />
-                        <InfoCard
-                            :item="
-                                user
-                            "
-                        />
+                        <ProfilePicture :item="user" />
+                        <InfoCard :item="user" />
                     </div>
                     <CvArea
                         v-if="
-                            user.usertype_type ===
-                                'App\\Models\\Participant' ||
+                            user.usertype_type === 'App\\Models\\Participant' ||
                             (user.usertype_type === 'App\\Models\\Company' &&
                                 canCV)
                         "

@@ -69,13 +69,12 @@ class AuthServiceProvider extends ServiceProvider
             )
         ));
 
-        Gate::define('view_profile', fn (User $user, User $profile_user) => (
-            $user->id === $profile_user->id || (
-                $user->isAdmin() || (
-                    $user->isCompany() && $profile_user->isParticipant() && $user->usertype()->participants()->contains($profile_user)
-                )
-            )
+        Gate::define('viewProfileOf', fn (User $user, User $profile_user) => (
+            $user->isAdmin() || // admins have access to all profiles
+            $user->is($profile_user) || // users can view their own profile
+            ($user->isCompany() && $profile_user->isParticipant() && $user->usertype->participants()->exists($profile_user))
         ));
+
         Gate::define('view_CV', fn (User $user, User $cv_user, Edition $edition) => (
             $user->id === $cv_user->id || (
                 $user->isAdmin() || (

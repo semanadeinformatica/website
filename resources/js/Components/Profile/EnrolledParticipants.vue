@@ -16,7 +16,8 @@ import type Participant from "@/Types/Participant";
                     </thead>
                     <tbody>
                         <tr
-                            v-for="participant in ($page.props.participants as Participant[])"
+                            v-for="participant in $page.props
+                                .participants as Participant[]"
                             :key="participant.id"
                         >
                             <td class="border px-4 py-2">
