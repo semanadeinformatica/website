@@ -5,7 +5,6 @@ namespace App\Actions\Fortify;
 use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Participant;
-use App\Models\SocialMedia;
 use App\Models\Speaker;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -34,13 +33,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'title' => 'sometimes|nullable|string',
             'description' => 'sometimes|nullable|string',
             'organization' => 'sometimes|nullable|string',
-            'social_media.email' => 'sometimes|nullable|string|email',
-            'social_media.facebook' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/facebook.com\/\w+$/',
-            'social_media.github' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/github.com\/\w+$/',
-            'social_media.instagram' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/instagram.com\/\w+$/',
-            'social_media.linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/linkedin.com\/(in|company)\/\w+$/'],
-            'social_media.twitter' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/twitter.com\/\w+$/',
-            'social_media.website' => 'sometimes|nullable|string|url:https',
+            'public_email' => 'sometimes|nullable|string|email',
+            'facebook' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/(www.)?facebook\.com\/[a-zA-Z0-9.]{5,}\/?$/',
+            'github' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www.)?github\.com\/[a-z\d](?:[a-z\d]|-(?=[a-z\d])){1,38}\/?$/'],
+            'instagram' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/(www.)?instagram\.com\/[a-zA-Z0-9_.]{1,30}\/?$/',
+            'linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[\p{L}0-9-]{3,100}\/?$/u'],
+            'twitter' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www.)?(twitter|x)\.com\/[a-zA-Z0-9_]{4,15}\/?$/'],
+            'website' => 'sometimes|nullable|string|url:https',
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
@@ -93,16 +92,15 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 return;
             }
 
-            if (isset($input['social_media'])) {
-                $socialMedia = $user->usertype->social_media;
-                if ($socialMedia === null) {
-                    $socialMedia = SocialMedia::create($input['social_media']);
-                    $user->usertype->socialMedia()->associate($socialMedia);
-                    $user->usertype->save();
-                } else {
-                    $socialMedia->update($input['social_media']);
-                }
-            }
+            $user->usertype->socialMedia()->updateOrCreate([], [
+                'email' => $input['public_email'],
+                'facebook' => $input['facebook'],
+                'github' => $input['github'],
+                'instagram' => $input['instagram'],
+                'linkedin' => $input['linkedin'],
+                'twitter' => $input['twitter'],
+                'website' => $input['website'],
+            ]);
         }
     }
 

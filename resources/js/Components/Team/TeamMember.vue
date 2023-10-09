@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type Staff from "@/Types/Staff";
+import { Link } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed } from "vue";
 
@@ -47,12 +48,6 @@ const socialMedia = computed(() => {
         ),
     ) as Record<"github" | "linkedin" | "website", string>;
 });
-
-const urlPrefixes = {
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/in/",
-    website: "",
-};
 </script>
 
 <template>
@@ -70,10 +65,10 @@ const urlPrefixes = {
             class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all group-hover:-bottom-7"
             :class="bgColor[color]"
         >
-            <a
+            <Link
                 v-for="(social, key, idx) in socialMedia"
                 :key="idx"
-                :href="urlPrefixes[key] + social"
+                :href="social"
                 target="_blank"
             >
                 <OhVueIcon
@@ -81,7 +76,7 @@ const urlPrefixes = {
                     :name="socialIcon[key]"
                     scale="1.4"
                 ></OhVueIcon>
-            </a>
+            </Link>
         </div>
     </div>
     <p class="max-w-[13em] text-center font-bold" :class="textColor[color]">
