@@ -10,10 +10,16 @@ interface Props {
 
 const { stands } = defineProps<Props>();
 
+const textColorMap = {
+    PLATINUM: "text-2023-red-dark",
+    GOLD: "text-2023-orange",
+    SILVER: "text-2023-teal-dark",
+} as Record<Tier, string>;
+
 const shadowColorMap = {
-    PLATINUM: "text-2023-orange",
-    GOLD: "text-2023-teal-dark",
-    SILVER: "text-2023-red-dark",
+    PLATINUM: "shadow-2023-red-dark",
+    GOLD: "shadow-2023-orange",
+    SILVER: "shadow-2023-teal-dark",
 } as Record<Tier, string>;
 
 const silverSponsorStands = stands.filter(
@@ -34,14 +40,15 @@ const platSponsorStands = stands.filter(
             id="plat"
             class="flex flex-col gap-3"
         >
-            <span class="text-3xl font-bold" :class="shadowColorMap['PLATINUM']"
+            <span class="text-3xl font-bold" :class="textColorMap['PLATINUM']"
                 >Platinum</span
             >
             <div class="flex flex-row flex-wrap gap-4">
                 <div
                     v-for="stand in platSponsorStands"
                     :key="stand.id"
-                    class="w-48 border border-black shadow-lg shadow-2023-orange"
+                    class="w-48 border border-black shadow-lg"
+                    :class="shadowColorMap['PLATINUM']"
                 >
                     <Sponsor
                         :company="stand.sponsor?.company?.user as CompanyUser"
@@ -55,14 +62,15 @@ const platSponsorStands = stands.filter(
             id="gold"
             class="flex flex-col gap-3"
         >
-            <span class="text-3xl font-bold" :class="shadowColorMap['GOLD']"
+            <span class="text-3xl font-bold" :class="textColorMap['GOLD']"
                 >Gold</span
             >
             <div class="flex flex-row flex-wrap gap-4">
                 <div
                     v-for="stand in goldSponsorStands"
                     :key="stand.id"
-                    class="w-48 border border-black shadow-lg shadow-2023-teal-dark"
+                    class="w-48 border border-black shadow-lg"
+                    :class="shadowColorMap['GOLD']"
                 >
                     <Sponsor
                         :company="stand.sponsor?.company?.user as CompanyUser"
@@ -76,14 +84,15 @@ const platSponsorStands = stands.filter(
             id="silver"
             class="flex flex-col gap-3"
         >
-            <span class="text-3xl font-bold" :class="shadowColorMap['SILVER']"
+            <span class="text-3xl font-bold" :class="textColorMap['SILVER']"
                 >Silver</span
             >
             <div class="flex flex-row flex-wrap gap-4">
                 <div
                     v-for="stand in silverSponsorStands"
                     :key="stand.id"
-                    class="w-48 border border-black shadow-lg shadow-2023-red-dark"
+                    class="w-48 border border-black shadow-lg"
+                    :class="shadowColorMap['SILVER']"
                 >
                     <Sponsor
                         :company="stand.sponsor?.company?.user as CompanyUser"

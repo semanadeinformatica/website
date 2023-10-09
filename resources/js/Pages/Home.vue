@@ -204,17 +204,17 @@ const formattedDate = (
             <SponsorBanner
                 title="Platina"
                 :sponsors="sponsorGroups.PLATINUM"
-                color="orange"
+                color="red-dark"
             ></SponsorBanner>
             <SponsorBanner
                 title="Ouro"
                 :sponsors="sponsorGroups.GOLD"
-                color="teal-dark"
+                color="orange"
             ></SponsorBanner>
             <SponsorBanner
                 title="Prata"
                 :sponsors="sponsorGroups.SILVER"
-                color="red-dark"
+                color="teal-dark"
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
