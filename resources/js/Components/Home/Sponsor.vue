@@ -19,7 +19,7 @@ defineProps<Props>();
 <template>
     <img
         v-bind="$attrs"
-        class="col-span-2 w-full cursor-pointer object-contain"
+        class="col-span-2 w-full cursor-pointer object-contain p-10"
         :src="company?.profile_photo_url"
         :alt="company?.name"
         @click="options.modelValue = true"
@@ -27,15 +27,14 @@ defineProps<Props>();
     <VueFinalModal
         v-model="options.modelValue"
         class="flex items-center justify-center"
-        content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col"
+        content-class="max-w-xl min-w-[20em] mx-4 p-4 gap-7 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col"
     >
         <img
             :src="company?.profile_photo_url"
-            class="absolute -top-20 mr-2 h-40 w-auto justify-center border border-solid border-black shadow-xl shadow-2023-teal-dark"
+            :alt="company?.name"
+            class="mr-2 h-auto max-w-[20em] justify-center border border-solid border-black bg-2023-bg p-3 shadow-xl shadow-2023-teal-dark"
         />
-        <div
-            class="flex w-full flex-col items-center gap-4 pt-20 text-2023-red"
-        >
+        <div class="flex w-full flex-col items-center gap-4 text-2023-red">
             <a
                 v-if="company?.usertype?.social_media?.website"
                 class="text-xl font-bold underline"

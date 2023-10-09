@@ -75,6 +75,7 @@ const getSize = (tier: string) => {
                             : '',
                         getSize(sponsor.tier),
                     ]"
+                    class="self-center"
                 ></Sponsor>
             </template>
             <template v-else>
