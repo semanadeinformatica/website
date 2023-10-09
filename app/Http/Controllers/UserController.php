@@ -88,7 +88,7 @@ class UserController extends UserProfileController
 
     private function getParticipants(User $company, Edition $edition)
     {
-        return $company->usertype->participants()->where('sponsors.edition_id', $edition->id)->where('enrollments.edition_id', $edition->id);
+        return $company->usertype->participants()->where('sponsors.edition_id', $edition->id)->where('enrollments.edition_id', $edition->id)->with('user');
     }
 
     private function processTicketsAndSlots(User $user, int $editionId, $tickets, $slots)

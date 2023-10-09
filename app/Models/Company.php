@@ -67,6 +67,6 @@ class Company extends Model
                 null, // Local key on "enrollment_quest" table
                 'participant_id', // Foreign key on "Enrollment" table
             ]
-        );
+        )->distinct();
     }
 }

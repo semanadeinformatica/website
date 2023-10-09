@@ -1,32 +1,23 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
+import { Link } from "@inertiajs/vue3";
+import { OhVueIcon } from "oh-vue-icons";
+import route from "ziggy-js";
 </script>
 
 <template>
-    <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
+    <div
+        class="mt-10 flex flex-col gap-4 items-center border border-black p-5 bg-2023-bg"
+    >
         <div
-            class="relative m-6 min-h-screen w-full flex-col items-center border border-black p-6 md:max-w-[85vw]"
+            v-for="participant in ($page.props.participants as Participant[])"
+            :key="participant.id"
+            class="flex items-center gap-2 justify-between w-full"
         >
-            <div class="flex w-full justify-around max-md:flex-col">
-                <table class="table-fixed">
-                    <thead>
-                        <tr>
-                            <th class="w-1/4 px-4 py-2">Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="participant in $page.props
-                                .participants as Participant[]"
-                            :key="participant.id"
-                        >
-                            <td class="border px-4 py-2">
-                                {{ participant.user?.name }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            {{ participant.user?.name ?? participant.id }}
+            <Link :href="route('user.profile', participant.user)">
+                <OhVueIcon name="io-open" scale="1.3" />
+            </Link>
         </div>
     </div>
 </template>

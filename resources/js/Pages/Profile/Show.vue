@@ -58,16 +58,12 @@ const buttons: Tabs = isParticipant.value
             <div
                 class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
             >
-                <div
-                    class="relative m-6 min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
-                >
-                    <div class="flex w-full justify-around max-md:flex-col">
-                        <ProfilePicture :item="user" />
-                        <InfoCard :item="user" />
-                    </div>
-                    <CvArea v-if="canViewCV" :item="user" />
-                    <InteractionArea :buttons="buttons"> </InteractionArea>
+                <div class="flex w-full justify-around max-md:flex-col">
+                    <ProfilePicture :item="user" />
+                    <InfoCard :item="user" />
                 </div>
+                <CvArea v-if="canViewCV" :item="user" />
+                <InteractionArea :buttons="buttons"> </InteractionArea>
             </div>
         </div>
     </AppLayout>
