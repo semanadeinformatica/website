@@ -154,7 +154,7 @@ const accentColor = () => {
         <template v-if="state == 'available'">
             <a
                 :href="route('event.show', event)"
-                class="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 cursor-pointer border border-black bg-2023-red p-6 text-center text-white shadow-2023-teal transition-shadow hover:shadow"
+                class="absolute bottom-1/2 right-1/2 w-80 translate-x-1/2 translate-y-1/2 cursor-pointer border border-black bg-2023-red p-6 text-center text-white shadow-2023-teal transition-shadow hover:shadow"
             >
                 <p class="font-bold">{{ event.name }}</p>
                 <p>+ info</p>
