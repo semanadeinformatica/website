@@ -36,36 +36,34 @@ const form = useForm({
         user?.usertype_type === "App\\Models\\Speaker"
             ? user?.usertype?.organization ?? ""
             : "",
-    social_media: {
-        email:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.email ?? ""
-                : "",
-        facebook:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.facebook ?? ""
-                : "",
-        github:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.github ?? ""
-                : "",
-        instagram:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.instagram ?? ""
-                : "",
-        linkedin:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.linkedin ?? ""
-                : "",
-        twitter:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.twitter ?? ""
-                : "",
-        website:
-            user?.usertype_type !== "App\\Models\\Admin"
-                ? user?.usertype?.social_media?.website ?? ""
-                : "",
-    },
+    public_email:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.email ?? ""
+            : "",
+    facebook:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.facebook ?? ""
+            : "",
+    github:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.github ?? ""
+            : "",
+    instagram:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.instagram ?? ""
+            : "",
+    linkedin:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.linkedin ?? ""
+            : "",
+    twitter:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.twitter ?? ""
+            : "",
+    website:
+        user?.usertype_type !== "App\\Models\\Admin"
+            ? user?.usertype?.social_media?.website ?? ""
+            : "",
 });
 
 const verificationLinkSent = ref(false);
@@ -175,54 +173,60 @@ const sendEmailVerification = () => {
 
                     <div class="mt-4 flex flex-col gap-4">
                         <TextInput
-                            id="social_media.email"
-                            v-model="form.social_media.email"
-                            label="Email"
+                            id="public_email"
+                            v-model="form.public_email"
+                            label="Public Email"
                             type="email"
                             autocomplete="email"
-                            :error-message="form.errors.social_media"
+                            :error-message="form.errors.public_email"
                         />
 
                         <TextInput
-                            id="social_media.facebook"
-                            v-model="form.social_media.facebook"
+                            id="facebook"
+                            v-model="form.facebook"
                             label="Facebook"
-                            type="text"
+                            type="url"
+                            :error-message="form.errors.facebook"
                         />
 
                         <TextInput
-                            id="social_media.github"
-                            v-model="form.social_media.github"
+                            id=".github"
+                            v-model="form.github"
                             label="GitHub"
-                            type="text"
+                            type="url"
+                            :error-message="form.errors.github"
                         />
 
                         <TextInput
-                            id="social_media.instagram"
-                            v-model="form.social_media.instagram"
+                            id="instagram"
+                            v-model="form.instagram"
                             label="Instagram"
-                            type="text"
+                            type="url"
+                            :error-message="form.errors.instagram"
                         />
 
                         <TextInput
-                            id="social_media.linkedin"
-                            v-model="form.social_media.linkedin"
+                            id="linkedin"
+                            v-model="form.linkedin"
                             label="Linkedin"
-                            type="text"
+                            type="url"
+                            :error-message="form.errors.linkedin"
                         />
 
                         <TextInput
-                            id="social_media.twitter"
-                            v-model="form.social_media.twitter"
+                            id="twitter"
+                            v-model="form.twitter"
                             label="Twitter"
-                            type="text"
+                            type="url"
+                            :error-message="form.errors.twitter"
                         />
 
                         <TextInput
-                            id="social_media.website"
-                            v-model="form.social_media.website"
+                            id="website"
+                            v-model="form.website"
                             label="Website"
                             type="url"
+                            :error-message="form.errors.website"
                         />
                     </div>
                 </details>
