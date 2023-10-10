@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
-import Map from "@/Components/Home/Map.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
 import { ModalsContainer } from "vue-final-modal";
@@ -11,10 +10,11 @@ import type Sponsor from "@/Types/Sponsor";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
+import type SponsorTier from "@/Types/SponsorTier";
 
 interface Props {
     edition: Edition;
-    sponsors: Sponsor[];
+    sponsorTiers: SponsorTier[];
     speakers: User[];
     days: EventDay[];
     activityCount: number;
@@ -23,18 +23,17 @@ interface Props {
     canEnroll: boolean;
 }
 
-const { sponsors } = defineProps<Props>();
+const { sponsorTiers } = defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
-        sponsors.reduce(
-            (acc, sponsor) => {
-                acc[sponsor.tier] ??= [];
-                acc[sponsor.tier].push(sponsor);
-                return acc;
-            },
-            {} as Record<Sponsor["tier"], Sponsor[]>,
-        ) ?? ({} as Record<Sponsor["tier"], Sponsor[]>),
+        sponsorTiers.reduce((acc, sponsorTier) => {
+            if (!acc.has(sponsorTier)) acc.set(sponsorTier, []);
+
+            acc.get(sponsorTier)?.push(...(sponsorTier.sponsors ?? []));
+            return acc;
+        }, new Map<SponsorTier, Sponsor[]>()) ??
+        ({} as Map<SponsorTier, Sponsor[]>),
 );
 
 const formattedDate = (
@@ -202,19 +201,12 @@ const formattedDate = (
                 Patrocínios
             </p>
             <SponsorBanner
-                title="Platina"
-                :sponsors="sponsorGroups.PLATINUM"
-                color="red-dark"
-            ></SponsorBanner>
-            <SponsorBanner
-                title="Ouro"
-                :sponsors="sponsorGroups.GOLD"
-                color="orange"
-            ></SponsorBanner>
-            <SponsorBanner
-                title="Prata"
-                :sponsors="sponsorGroups.SILVER"
-                color="teal-dark"
+                v-for="([tier, sponsors], idx) in sponsorGroups"
+                :key="tier.id"
+                :title="tier.name"
+                :sponsors="sponsors"
+                :color="tier.color"
+                :idx="idx"
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->

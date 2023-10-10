@@ -21,6 +21,7 @@ use App\Models\Slot;
 use App\Models\SocialMedia;
 use App\Models\Speaker;
 use App\Models\Sponsor;
+use App\Models\SponsorTier;
 use App\Models\Staff;
 use App\Models\Stand;
 use App\Models\User;
@@ -59,6 +60,7 @@ class DatabaseSeeder extends Seeder
         SocialMedia::truncate();
         Speaker::truncate();
         Sponsor::truncate();
+        SponsorTier::truncate();
         Staff::truncate();
         Stand::truncate();
         User::truncate();
@@ -117,14 +119,15 @@ class DatabaseSeeder extends Seeder
         $departments = Department::factory(10)->recycle($edition)->create();
         Staff::factory(20)->recycle($departments)->recycle($participants)->create();
 
-        $this->command->info('Creating the sponsors and stands');
-        $sponsors = $companies->map(fn ($company, $i) => Sponsor::factory()
+        $this->command->info('Creating the sponsors, tiers and stands');
+
+        $sponsorTiers = SponsorTier::factory(3)->recycle($edition)->create();
+
+        $sponsors = Sponsor::factory(20)
             ->recycle($edition)
-            ->recycle($company)
-            ->create([
-                'tier' => $i < static::PLATINUM_COUNT ? 'PLATINUM'
-                    : ($i < static::PLATINUM_COUNT + static::GOLD_COUNT ? 'GOLD' : 'SILVER'),
-            ]));
+            ->recycle($companies)
+            ->recycle($sponsorTiers)
+            ->create();
 
         $stands = Stand::factory(20)->recycle($event_days)->recycle($sponsors)->create();
 

@@ -43,7 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="h-full flex flex-col flex-1 pt-10">
+    <section class="flex h-full flex-1 flex-col pt-10">
         <div
             id="tab-picker"
             class="flex flex-row justify-center gap-4 pt-5 font-bold text-2023-teal"

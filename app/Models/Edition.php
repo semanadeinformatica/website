@@ -72,7 +72,7 @@ class Edition extends Model
 
     public function sponsors(): HasMany
     {
-        return $this->hasMany(Sponsor::class);
+        return $this->hasMany(Sponsor::class)->orderBy('rank');
     }
 
     public function stands(): HasManyThrough
@@ -85,6 +85,11 @@ class Edition extends Model
         return $this->hasMany(Department::class)
             ->orderByDesc('priority')
             ->orderBy('name');
+    }
+
+    public function sponsor_tiers(): HasMany
+    {
+        return $this->hasMany(SponsorTier::class)->orderByDesc('rank');
     }
 
     public function competitions(): HasMany

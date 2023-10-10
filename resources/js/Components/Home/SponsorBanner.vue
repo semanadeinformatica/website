@@ -8,18 +8,6 @@ import { OhVueIcon } from "oh-vue-icons";
 
 const carousel = ref<typeof Carousel | null>(null);
 
-const shadowColor: Record<string, string> = {
-    orange: "shadow-2023-orange",
-    "teal-dark": "shadow-2023-teal-dark",
-    "red-dark": "shadow-2023-red-dark",
-};
-
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-};
-
 const next = () => {
     carousel.value?.next();
 };
@@ -30,8 +18,9 @@ const prev = () => {
 
 const props = defineProps<{
     sponsors: SponsorType[];
-    color: string;
+    color: string; // TODO: find a way to force this to be in the theme defined this year
     title: string;
+    idx: number;
 }>();
 
 const numCols = computed(() =>
@@ -40,27 +29,17 @@ const numCols = computed(() =>
         : props.sponsors?.length * 2,
 );
 
-const getSize = (tier: string) => {
-    switch (tier) {
-        case "PLATINUM":
-            return "max-h-72";
-        case "GOLD":
-            return "max-h-56";
-        case "SILVER":
-            return "max-h-40";
-        default:
-            return "";
-    }
-};
+const sizes = ["max-h-72", "max-h-56", "max-h-40"];
+
+const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know for a fact that there are 3 sizes, so we can just use the idx to get the size. This can change in the following editions so be careful with that
 </script>
 
 <template>
-    <div :class="textColor[color]">
+    <div :style="`color: ${color}`">
         <p class="text-2xl font-bold">{{ title }}</p>
         <div
             class="max-h grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
-            :class="shadowColor[color]"
-            :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
+            :style="`grid-template-columns: repeat(${numCols}, 1fr); shadow-color: ${color};`"
         >
             <template v-if="sponsors">
                 <Sponsor
@@ -73,7 +52,7 @@ const getSize = (tier: string) => {
                         i == Math.ceil(props.sponsors.length / 2)
                             ? 'col-start-2'
                             : '',
-                        getSize(sponsor.tier),
+                        size,
                     ]"
                     class="self-center"
                 ></Sponsor>
@@ -86,13 +65,13 @@ const getSize = (tier: string) => {
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
-            :class="shadowColor[color]"
+            :style="`shadow-color: ${color}`"
         >
             <template v-if="sponsors">
                 <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
                     <Slide v-for="sponsor in sponsors" :key="sponsor.id">
                         <Sponsor
-                            :class="getSize(sponsor.tier)"
+                            :class="size"
                             :company="sponsor.company?.user as CompanyUser"
                         ></Sponsor>
                     </Slide>

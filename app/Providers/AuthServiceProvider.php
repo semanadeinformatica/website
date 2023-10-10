@@ -91,11 +91,11 @@ class AuthServiceProvider extends ServiceProvider
                 $user->is($cv_user)
             ) ||
             (
-                // companies can view CVs of participants who have paid them a visit if they are not silver sponsors
+                // companies can view CVs of participants who have paid them a visit if they have they right access
                 $user->isCompany() &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canViewCV', true)->exists() &&
                 $cv_user->isParticipant() &&
-                $user->usertype->participants()->exists($cv_user) &&
-                $edition->sponsors()->where('company_id', $user->usertype_id)->first()->tier !== 'SILVER' // TODO: make this configurable and not just dependent on the value
+                $user->usertype->participants()->exists($cv_user)
             )
         ));
     }

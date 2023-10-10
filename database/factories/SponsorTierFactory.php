@@ -2,15 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Company;
 use App\Models\Edition;
-use App\Models\SponsorTier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sponsor>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SponsorTier>
  */
-class SponsorFactory extends Factory
+class SponsorTierFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +18,12 @@ class SponsorFactory extends Factory
     public function definition(): array
     {
         return [
-            'sponsor_tier_id' => SponsorTier::factory(),
+            'name' => fake()->word(),
+            'color' => fake()->safeHexColor(),
+            'rank' => fake()->randomNumber(),
+            'canSeeCV' => fake()->boolean(),
+            'canSeeLinkedin' => fake()->boolean(),
             'edition_id' => Edition::factory(),
-            'company_id' => Company::factory(),
         ];
     }
 }

@@ -4,6 +4,7 @@ import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Company from "@/Types/Company";
 import type Edition from "@/Types/Edition";
+import type SponsorTier from "@/Types/SponsorTier";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
@@ -11,6 +12,7 @@ interface Props {
     with: {
         editions: Edition[];
         companies: Company[];
+        tiers: SponsorTier[];
     };
 }
 
@@ -19,7 +21,7 @@ defineProps<Props>();
 const form = useForm({
     edition_id: "",
     company_id: "",
-    tier: "",
+    sponsor_tier_id: "",
 });
 
 const submit = () => {
@@ -63,15 +65,19 @@ const submit = () => {
             </TextInput>
 
             <TextInput
-                v-model="form.tier"
+                v-model="form.sponsor_tier_id"
                 type="select"
                 required
                 label="Tipo de patrocínio"
-                :error-message="form.errors.tier"
+                :error-message="form.errors.sponsor_tier_id"
             >
-                <option value="platinum">Platina</option>
-                <option value="gold">Ouro</option>
-                <option value="silver">Prata</option>
+                <option
+                    v-for="tier in $props.with.tiers"
+                    :key="tier.id"
+                    :value="tier.id"
+                >
+                    {{ tier.name }}
+                </option>
             </TextInput>
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>

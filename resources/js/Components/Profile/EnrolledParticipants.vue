@@ -8,12 +8,12 @@ import route from "ziggy-js";
 <template>
     <div
         v-if="($page.props.participants as unknown[]).length > 0"
-        class="mt-10 flex flex-col gap-4 items-center border border-black p-5 bg-2023-bg"
+        class="mt-10 flex flex-col items-center gap-4 border border-black bg-2023-bg p-5"
     >
         <div
-            v-for="participant in ($page.props.participants as Participant[])"
+            v-for="participant in $page.props.participants as Participant[]"
             :key="participant.id"
-            class="flex items-center gap-2 justify-between w-full"
+            class="flex w-full items-center justify-between gap-2"
         >
             {{ participant.user?.name ?? participant.id }}
             <Link :href="route('user.profile', participant.user)">
@@ -21,7 +21,9 @@ import route from "ziggy-js";
             </Link>
         </div>
     </div>
-    <div v-else class="h-full flex items-center flex-1">
-        <p class="text-center text-4xl text-2023-teal">Ainda nenhum participante visitou a sua empresa.</p>
+    <div v-else class="flex h-full flex-1 items-center">
+        <p class="text-center text-4xl text-2023-teal">
+            Ainda nenhum participante visitou a sua empresa.
+        </p>
     </div>
 </template>

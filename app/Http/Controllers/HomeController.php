@@ -18,7 +18,7 @@ class HomeController extends Controller
             return response('No edition found', 500);
         }
 
-        $sponsors = $edition->sponsors()->with(['company' => ['user']])->get();
+        $sponsorTiers = $edition->sponsor_tiers()->with(['sponsors' => ['company' => ['user']]])->get();
         $speakers = $edition->speakers()->get();
         $days = $edition->event_days()->orderBy('date', 'ASC')->get();
 
@@ -34,7 +34,7 @@ class HomeController extends Controller
 
         return Inertia::render('Home', [
             'edition' => $edition,
-            'sponsors' => $sponsors,
+            'sponsorTiers' => $sponsorTiers,
             'speakers' => $speakers,
             'activityCount' => $activity_count,
             'talkCount' => $talk_count,

@@ -28,6 +28,7 @@ const messages = {
             stand: "Stand | Stands",
             user: "User | Users",
             eventType: "Event Type | Event Types",
+            sponsorTier: "Sponsor Tier | Sponsor Tiers",
         },
     },
     pt: {
@@ -61,6 +62,7 @@ const messages = {
             stand: "Banca | Bancas",
             user: "Utilizador | Utilizadores",
             eventType: "Tipo de Evento | Tipos de Evento",
+            sponsorTier: "Nível de Patrocínio | Níveis de Patrocínio",
         },
     },
 };

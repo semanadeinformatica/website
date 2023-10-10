@@ -56,7 +56,7 @@ const buttons: Tabs = isParticipant.value
     <AppLayout title="Profile">
         <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
             <div
-                class="relative m-6 min-h-screen w-full flex flex-col items-center p-6 md:max-w-[85vw]"
+                class="relative m-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
             >
                 <div class="flex w-full justify-around max-md:flex-col">
                     <ProfilePicture :item="user" />
