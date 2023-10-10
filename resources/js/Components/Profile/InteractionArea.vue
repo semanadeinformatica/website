@@ -43,23 +43,25 @@ onMounted(() => {
 </script>
 
 <template>
-    <div
-        id="tab-picker"
-        class="flex flex-row justify-center gap-4 pt-5 font-bold text-2023-teal mt-10"
-    >
-        <button
-            v-for="(button, id) in buttons"
-            :key="id"
-            class="transition"
-            :data-type="id"
-            @click="toggle"
+    <section class="h-full flex flex-col flex-1 pt-10">
+        <div
+            id="tab-picker"
+            class="flex flex-row justify-center gap-4 pt-5 font-bold text-2023-teal"
         >
-            {{ button.label }}
-        </button>
-    </div>
-    <KeepAlive>
-        <component :is="view"></component>
-    </KeepAlive>
+            <button
+                v-for="(button, id) in buttons"
+                :key="id"
+                class="transition"
+                :data-type="id"
+                @click="toggle"
+            >
+                {{ button.label }}
+            </button>
+        </div>
+        <KeepAlive>
+            <component :is="view"></component>
+        </KeepAlive>
+    </section>
 </template>
 
 <style scoped>
