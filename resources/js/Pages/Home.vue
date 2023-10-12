@@ -29,9 +29,14 @@ const { sponsorTiers } = defineProps<Props>();
 const sponsorGroups = computed(
     () =>
         sponsorTiers.reduce((acc, sponsorTier) => {
-            if (!acc.has(sponsorTier)) acc.set(sponsorTier, []);
+            let hasTier = false;
+            for (const tier of acc.keys())
+                if (tier.id === sponsorTier.id) hasTier = true;
+            
+            if (!hasTier) acc.set(sponsorTier, []);
 
             acc.get(sponsorTier)?.push(...(sponsorTier.sponsors ?? []));
+            
             return acc;
         }, new Map<SponsorTier, Sponsor[]>()) ??
         ({} as Map<SponsorTier, Sponsor[]>),

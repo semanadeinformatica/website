@@ -11,56 +11,45 @@ interface Props {
 
 const { stands } = defineProps<Props>();
 
-const tiers = computed(() =>
-    stands.reduce(
-        (acc, stand) => {
-            if (stand.sponsor && stand.sponsor.tier) {
-                if (!acc[stand.sponsor.tier.id]) {
-                    acc[stand.sponsor.tier.id] = stand.sponsor.tier;
-                }
-            }
-            return acc;
-        },
-        {} as Record<SponsorTier["id"], SponsorTier>,
-    ),
-);
+const standsPerTier = computed(
+    () =>
+        stands.reduce((acc, stand) => {
+            const sponsorTier = stand.sponsor?.tier;
+            if (!sponsorTier) return acc;
 
-const standsPerTier = computed(() =>
-    stands.reduce(
-        (acc, stand) => {
-            if (stand.sponsor && stand.sponsor.tier) {
-                if (acc[stand.sponsor.tier.id]) {
-                    acc[stand.sponsor.tier.id].push(stand);
-                } else {
-                    acc[stand.sponsor.tier.id] = [stand];
-                }
-            }
+            let hasTier = false;
+            for (const tier of acc.keys())
+                if (tier.id === sponsorTier.id) hasTier = true;
+            
+            if (!hasTier) acc.set(sponsorTier, []);
+
+            acc.get(sponsorTier)?.push(stand);
+
             return acc;
-        },
-        {} as Record<SponsorTier["id"], Stand[]>,
-    ),
+        }, new Map<SponsorTier, Stand[]>()) ??
+        ({} as Map<SponsorTier, Stand[]>),
 );
 </script>
 
 <template>
     <div class="flex flex-col gap-12">
         <template
-            v-for="(tier_stands, tier_id) in standsPerTier"
-            :key="tier_id"
+            v-for="[tier, tierStands] in standsPerTier"
+            :key="tier.id"
         >
-            <section v-if="tier_stands.length > 0" class="flex flex-col gap-3">
+            <section v-if="tierStands.length > 0" class="flex flex-col gap-3">
                 <span
                     class="text-3xl font-bold"
-                    :style="`color: ${tiers[tier_id].color}`"
+                    :style="`color: ${tier.color}`"
                 >
-                    {{ tiers[tier_id].name }}
+                    {{ tier.name }}
                 </span>
                 <div class="flex flex-row flex-wrap gap-4">
                     <div
-                        v-for="stand in tier_stands"
+                        v-for="stand in tierStands"
                         :key="stand.id"
                         class="w-48 border border-black shadow-lg"
-                        :style="`color: ${tiers[tier_id].color}`"
+                        :style="`color: ${tier.color}`"
                     >
                         <Sponsor
                             :company="
