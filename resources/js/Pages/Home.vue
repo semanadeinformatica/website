@@ -32,11 +32,11 @@ const sponsorGroups = computed(
             let hasTier = false;
             for (const tier of acc.keys())
                 if (tier.id === sponsorTier.id) hasTier = true;
-            
+
             if (!hasTier) acc.set(sponsorTier, []);
 
             acc.get(sponsorTier)?.push(...(sponsorTier.sponsors ?? []));
-            
+
             return acc;
         }, new Map<SponsorTier, Sponsor[]>()) ??
         ({} as Map<SponsorTier, Sponsor[]>),

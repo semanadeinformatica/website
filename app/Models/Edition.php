@@ -72,7 +72,7 @@ class Edition extends Model
 
     public function sponsors(): HasMany
     {
-        return $this->hasMany(Sponsor::class)->orderBy('rank');
+        return $this->hasMany(Sponsor::class);
     }
 
     public function stands(): HasManyThrough

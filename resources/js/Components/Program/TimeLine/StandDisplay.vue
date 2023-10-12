@@ -20,7 +20,7 @@ const standsPerTier = computed(
             let hasTier = false;
             for (const tier of acc.keys())
                 if (tier.id === sponsorTier.id) hasTier = true;
-            
+
             if (!hasTier) acc.set(sponsorTier, []);
 
             acc.get(sponsorTier)?.push(stand);
@@ -33,10 +33,7 @@ const standsPerTier = computed(
 
 <template>
     <div class="flex flex-col gap-12">
-        <template
-            v-for="[tier, tierStands] in standsPerTier"
-            :key="tier.id"
-        >
+        <template v-for="[tier, tierStands] in standsPerTier" :key="tier.id">
             <section v-if="tierStands.length > 0" class="flex flex-col gap-3">
                 <span
                     class="text-3xl font-bold"

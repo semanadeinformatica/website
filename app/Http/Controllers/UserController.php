@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Edition;
+use App\Models\SponsorTier;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -86,9 +88,36 @@ class UserController extends UserProfileController
         return $user;
     }
 
-    private function getParticipants(User $company, Edition $edition)
+    private function getParticipants(User $user, Edition $edition)
     {
-        return $company->usertype->participants()->where('sponsors.edition_id', $edition->id)->where('enrollments.edition_id', $edition->id)->with('user');
+        /** @var Company $company */
+        $company = $user->usertype;
+
+        // dd(Company::with('participants')->get());
+
+        $participants = $company
+            ->participants()
+            ->where('sponsors.edition_id', $edition->id)
+            ->where('enrollments.edition_id', $edition->id)
+            ->with('user');
+
+        /** @var Sponsor|null */
+        $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
+
+        if ($sponsor !== null) {
+
+            /** @var SponsorTier */
+            $sponsorTier = $sponsor->tier;
+
+            $participants = $participants
+                ->addSelect([
+                    DB::raw('participants.*'),
+                    DB::raw(($sponsorTier->canSeeCV ? '1' : '0').' as can_see_cv'),
+                    DB::raw(($sponsorTier->canSeeLinkedin ? '1' : '0').' as can_see_linkedin'),
+                ]);
+        }
+
+        return $participants;
     }
 
     private function processTicketsAndSlots(User $user, int $editionId, $tickets, $slots)

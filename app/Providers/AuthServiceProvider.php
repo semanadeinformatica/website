@@ -93,7 +93,7 @@ class AuthServiceProvider extends ServiceProvider
             (
                 // companies can view CVs of participants who have paid them a visit if they have they right access
                 $user->isCompany() &&
-                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canViewCV', true)->exists() &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() &&
                 $cv_user->isParticipant() &&
                 $user->usertype->participants()->exists($cv_user)
             )

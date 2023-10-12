@@ -11,7 +11,6 @@ import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
 import type { User } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
-import type Participant from "@/Types/Participant";
 import type { Tabs } from "@/Types/ProfilePage";
 
 interface Props {
@@ -20,7 +19,6 @@ interface Props {
     slots: Slot[];
     sessions: Session[];
     user: User; // The user to render, can be the logged in user or another user
-    participants: Participant[];
     canViewCV: boolean;
 }
 
@@ -60,7 +58,7 @@ const buttons: Tabs = isParticipant.value
             >
                 <div class="flex w-full justify-around max-md:flex-col">
                     <ProfilePicture :item="user" />
-                    <InfoCard :item="user" />
+                    <InfoCard :user="user" />
                 </div>
                 <CvArea v-if="canViewCV" :item="user" />
                 <InteractionArea :buttons="buttons"> </InteractionArea>
