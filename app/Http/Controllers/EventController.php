@@ -22,14 +22,16 @@ class EventController extends Controller
             return response('No edition found', 500);
         }
 
-        $isEnrolled = $user && ! $user->isAdmin() && $user->usertype->enrollments()->where('edition_id', $edition->id)->exists();
+        $isParticipant = $user && $user->isParticipant();
 
-        $canJoin = $isEnrolled && $user->can('join', $event);
+        $isEnrolled = $isParticipant && $user->usertype->enrollments()->where('edition_id', $edition->id)->exists();
 
-        $hasJoined = $user && $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
+        $hasJoined = $isParticipant && $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
+        $canJoin = $isEnrolled && ! $hasJoined && $user->can('join', $event);
 
         return Inertia::render('Event', [
             'event' => $event->load(['users', 'event_day', 'enrollments']),
+            'isParticipant' => $isParticipant,
             'isEnrolled' => $isEnrolled,
             'hasJoined' => $hasJoined,
             'canJoin' => $canJoin,

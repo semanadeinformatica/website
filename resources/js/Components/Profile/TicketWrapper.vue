@@ -33,7 +33,7 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
     </svg>
 
     <div
-        class="grid items-center justify-center gap-10 self-center pt-8"
+        class="grid w-full items-center justify-center gap-10 self-center pt-8"
         style="grid-template-columns: repeat(auto-fill, 350px)"
     >
         <div

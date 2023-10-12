@@ -44,7 +44,7 @@ console.log(visitors);
         </div>
     </div>
     <div v-else class="flex h-full flex-1 items-center justify-center">
-        <p class="text-center text-2xl text-2023-teal">
+        <p class="text-center text-2xl font-bold text-2023-teal">
             Ainda nenhum participante visitou a sua empresa.
         </p>
     </div>

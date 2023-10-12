@@ -12,6 +12,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 interface Props {
     event: Event;
     canJoin: boolean;
+    isParticipant: boolean;
     hasJoined: boolean;
     isEnrolled: boolean;
 }
@@ -61,7 +62,7 @@ const colorPicker = () => {
         </section>
         <!-- details -->
         <section
-            class="relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-2023-teal-dark px-16 py-24"
+            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-2023-teal-dark px-16 py-24"
             :class="[
                 { 'mt-20': companies.length > 0 && speakers.length === 0 },
             ]"
@@ -99,6 +100,7 @@ const colorPicker = () => {
         </section>
         <!-- sign up -->
         <div
+            v-if="isParticipant"
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
             <p

@@ -49,7 +49,7 @@ const clearCVFileInput = () => {
 </script>
 
 <template>
-    <div class="flex-col">
+    <div class="w-full flex-col">
         <div
             class="mt-12 flex justify-between border-solid border-black bg-2023-teal-dark p-3 px-8 font-bold text-2023-bg md:mx-32"
             :class="[previewOpen ? 'border-x border-t' : 'border']"

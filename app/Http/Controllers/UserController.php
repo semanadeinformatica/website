@@ -93,8 +93,6 @@ class UserController extends UserProfileController
         /** @var Company $company */
         $company = $user->usertype;
 
-        // dd(Company::with('participants')->get());
-
         $participants = $company
             ->participants()
             ->where('sponsors.edition_id', $edition->id)

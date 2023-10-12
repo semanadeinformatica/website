@@ -6,6 +6,7 @@ import { computed } from "vue";
 
 interface Props {
     competition: Competition;
+    isParticipant: boolean;
 }
 
 const { competition } = defineProps<Props>();
@@ -60,6 +61,7 @@ const regulationTextParts = computed(() => {
 
         <!-- PARTICIPATE -->
         <section
+            v-if="isParticipant"
             class="relative flex content-center items-center justify-center py-24"
         >
             <h1
