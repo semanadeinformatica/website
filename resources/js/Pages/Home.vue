@@ -156,9 +156,15 @@ const formattedDate = (
                 <div
                     class="mx-[10%] grid gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
                 >
-                    <span v-if="days.length !== 0" class="text-center">{{ days.length }} dias</span>
-                    <span v-if="standCount !== 0" class="text-center">{{ standCount }} bancas</span>
-                    <span v-if="talkCount !== 0" class="text-center">{{ talkCount }} palestras</span>
+                    <span v-if="days.length !== 0" class="text-center"
+                        >{{ days.length }} dias</span
+                    >
+                    <span v-if="standCount !== 0" class="text-center"
+                        >{{ standCount }} bancas</span
+                    >
+                    <span v-if="talkCount !== 0" class="text-center"
+                        >{{ talkCount }} palestras</span
+                    >
                     <span v-if="activityCount !== 0" class="text-center"
                         >{{ activityCount }} atividades</span
                     >

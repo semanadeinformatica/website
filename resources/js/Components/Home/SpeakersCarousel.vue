@@ -55,7 +55,7 @@ onMounted(async () => {
         :wrap-around="true"
         :breakpoints="breakpoints"
     >
-        <Slide v-for="speaker in (speakers as SpeakerUser[])" :key="speaker.id">
+        <Slide v-for="speaker in speakers as SpeakerUser[]" :key="speaker.id">
             <SpeakerSlide :speaker="speaker" />
         </Slide>
     </Carousel>

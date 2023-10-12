@@ -11,5 +11,5 @@ export default interface Sponsor extends Model {
     edition?: Edition;
 
     sponsor_tier_id: number;
-    tier: SponsorTier;
+    tier?: SponsorTier;
 }

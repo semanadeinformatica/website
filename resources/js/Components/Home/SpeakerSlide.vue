@@ -33,7 +33,9 @@ const speakerName = (name: string) => {
 
 <template>
     <div class="transition-all duration-500">
-        <div class="relative flex w-fit flex-col items-center overflow-y-hidden overflow-x-hidden rounded-full">
+        <div
+            class="relative flex w-fit flex-col items-center overflow-x-hidden overflow-y-hidden rounded-full"
+        >
             <img
                 :src="speaker.profile_photo_url"
                 class="h-52 w-52 rounded-full border-2 border-solid border-2023-teal-dark object-cover"
@@ -41,7 +43,7 @@ const speakerName = (name: string) => {
             />
             <div
                 v-if="Object.keys(socialMedia).length > 0"
-                class="absolute -bottom-32 flex w-full bg-2023-teal-dark flex-row items-center justify-center pb-10 pt-1 transition-all socials"
+                class="socials absolute -bottom-32 flex w-full flex-row items-center justify-center bg-2023-teal-dark pb-10 pt-1 transition-all"
             >
                 <a
                     v-for="(social, key, idx) in socialMedia"

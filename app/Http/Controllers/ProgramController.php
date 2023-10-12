@@ -55,6 +55,7 @@ class ProgramController extends Controller
                         'company' => [
                             'user',
                         ],
+                        'tier',
                     ],
                 ],
                 'talks',
