@@ -11,6 +11,7 @@ import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import type SponsorTier from "@/Types/SponsorTier";
+import { default as MapComponent } from "@/Components/Home/Map.vue";
 
 interface Props {
     edition: Edition;
@@ -146,19 +147,19 @@ const formattedDate = (
             </h2>
             <template
                 v-if="
-                    days.length !== 0 &&
-                    standCount !== 0 &&
-                    talkCount !== 0 &&
+                    days.length !== 0 ||
+                    standCount !== 0 ||
+                    talkCount !== 0 ||
                     activityCount !== 0
                 "
             >
                 <div
-                    class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+                    class="mx-[10%] grid gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
                 >
-                    <span class="text-center">{{ days.length }} dias</span>
-                    <span class="text-center">{{ standCount }} bancas</span>
-                    <span class="text-center">{{ talkCount }} palestras</span>
-                    <span class="text-center"
+                    <span v-if="days.length !== 0" class="text-center">{{ days.length }} dias</span>
+                    <span v-if="standCount !== 0" class="text-center">{{ standCount }} bancas</span>
+                    <span v-if="talkCount !== 0" class="text-center">{{ talkCount }} palestras</span>
+                    <span v-if="activityCount !== 0" class="text-center"
                         >{{ activityCount }} atividades</span
                     >
                 </div>
@@ -213,7 +214,7 @@ const formattedDate = (
         <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
-            <Map></Map>
+            <MapComponent />
         </section>
     </AppLayout>
 </template>

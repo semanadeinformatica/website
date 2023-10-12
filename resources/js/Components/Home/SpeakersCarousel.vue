@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
-import type { User } from "@/Types/User";
+import type { SpeakerUser, User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 
 interface Props {
@@ -55,7 +55,7 @@ onMounted(async () => {
         :wrap-around="true"
         :breakpoints="breakpoints"
     >
-        <Slide v-for="speaker in speakers" :key="speaker.id">
+        <Slide v-for="speaker in (speakers as SpeakerUser[])" :key="speaker.id">
             <SpeakerSlide :speaker="speaker" />
         </Slide>
     </Carousel>

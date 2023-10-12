@@ -38,7 +38,7 @@ class EventDay extends Model
 
     public function events(): HasMany
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class)->orderBy('time_start');
     }
 
     public function stands(): HasMany

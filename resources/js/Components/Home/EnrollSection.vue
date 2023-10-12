@@ -9,11 +9,11 @@ import route from "ziggy-js";
         id="enroll-section"
         class="relative mx-10 my-40 flex h-full flex-col items-center max-xs:items-center"
     >
-        <p class="w-fit py-2 text-xl font-bold text-2023-teal sm:text-4xl">
+        <p class="w-fit py-2 text-3xl font-bold text-2023-teal sm:text-4xl text-center">
             Estamos à tua espera!
         </p>
         <div
-            class="mx-10 flex h-full flex-1 flex-col items-center bg-2023-bg p-3 text-center font-bold text-white sm:p-12"
+            class="mx-10 flex h-full flex-1 text-3xl flex-col items-center bg-2023-bg p-3 text-center font-bold text-white sm:p-12"
         >
             <PrimaryButton
                 color="orange"
