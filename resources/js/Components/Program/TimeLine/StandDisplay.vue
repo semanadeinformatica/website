@@ -25,9 +25,6 @@ const tiers = computed(() =>
     ),
 );
 
-console.log(tiers);
-
-
 const standsPerTier = computed(() =>
     stands.reduce(
         (acc, stand) => {
@@ -47,9 +44,15 @@ const standsPerTier = computed(() =>
 
 <template>
     <div class="flex flex-col gap-12">
-        <template v-for="tier_stands, tier_id in standsPerTier" :key="tier_id">
+        <template
+            v-for="(tier_stands, tier_id) in standsPerTier"
+            :key="tier_id"
+        >
             <section v-if="tier_stands.length > 0" class="flex flex-col gap-3">
-                <span class="text-3xl font-bold" :style="`color: ${tiers[tier_id].color}`">
+                <span
+                    class="text-3xl font-bold"
+                    :style="`color: ${tiers[tier_id].color}`"
+                >
                     {{ tiers[tier_id].name }}
                 </span>
                 <div class="flex flex-row flex-wrap gap-4">
@@ -57,10 +60,12 @@ const standsPerTier = computed(() =>
                         v-for="stand in tier_stands"
                         :key="stand.id"
                         class="w-48 border border-black shadow-lg"
-                        :style="`shadow-color: ${tiers[tier_id].color}`"
+                        :style="`color: ${tiers[tier_id].color}`"
                     >
                         <Sponsor
-                            :company="(stand.sponsor?.company?.user as CompanyUser)"
+                            :company="
+                                stand.sponsor?.company?.user as CompanyUser
+                            "
                         >
                         </Sponsor>
                     </div>

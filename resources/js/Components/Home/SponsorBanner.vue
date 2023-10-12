@@ -39,7 +39,7 @@ const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know f
         <p class="text-2xl font-bold">{{ title }}</p>
         <div
             class="max-h grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
-            :style="`grid-template-columns: repeat(${numCols}, 1fr); shadow-color: ${color};`"
+            :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
         >
             <template v-if="sponsors">
                 <Sponsor
@@ -65,7 +65,6 @@ const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know f
         </div>
         <div
             class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
-            :style="`shadow-color: ${color}`"
         >
             <template v-if="sponsors">
                 <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
