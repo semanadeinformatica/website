@@ -5,13 +5,14 @@ import InfoCard from "@/Components/Profile/InfoCard.vue";
 import CvArea from "@/Components/Profile/CvArea.vue";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
 import type Slot from "@/Types/Slot";
-import { computed, h } from "vue";
+import { h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
-import type { User } from "@/Types/User";
+import type { CompanyUser, ParticipantUser, User } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 import type { Tabs } from "@/Types/ProfilePage";
+import { usePage } from "@inertiajs/vue3";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -23,13 +24,14 @@ interface Props {
 }
 
 const { user } = defineProps<Props>();
+const page = usePage();
 
-const isParticipant = computed(
-    () => user.usertype_type === "App\\Models\\Participant",
-);
-const isCompany = computed(() => user.usertype_type === "App\\Models\\Company");
+const isParticipant = 
+    (user: User): user is ParticipantUser => user.usertype_type === "App\\Models\\Participant";
 
-const buttons: Tabs = isParticipant.value
+const isCompany = (user: User): user is CompanyUser => user.usertype_type === "App\\Models\\Company";
+
+const buttons: Tabs = isParticipant(user) && !isCompany(page.props.auth.user!)
     ? {
           ticket: {
               label: "Bilhetes",
@@ -40,7 +42,7 @@ const buttons: Tabs = isParticipant.value
               component: h(StickerWrapper),
           },
       }
-    : isCompany.value
+    : isCompany(user)
     ? {
           visitHistory: {
               label: "Visitas",

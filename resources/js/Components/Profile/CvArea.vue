@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { User } from "@/Types/User";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
 import route from "ziggy-js";
@@ -11,7 +11,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-let previewOpen = ref(false);
+const page = usePage()
+
+let previewOpen = ref(page.props.auth.user?.usertype_type === 'App\\Models\\Company' ?? false);
 
 const form = useForm({
     _method: "PUT",

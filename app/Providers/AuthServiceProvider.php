@@ -81,7 +81,7 @@ class AuthServiceProvider extends ServiceProvider
         ));
 
         Gate::define('viewCVOf', fn (User $user, User $cv_user, Edition $edition) => (
-            ( // admins have access to all CVs that do not belong to admins (since they do not have those)
+            ( // admins have access to all CVs except if the other user is also an admin. Admins do not have CVs so this is just a safety measure of sorts
                 $user->isAdmin() &&
                 ! $cv_user->isAdmin()
             ) ||
@@ -93,7 +93,7 @@ class AuthServiceProvider extends ServiceProvider
             (
                 // companies can view CVs of participants who have paid them a visit if they have they right access
                 $user->isCompany() &&
-                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() && // If the company does not have the right access, just shortcut the check
                 $cv_user->isParticipant() &&
                 $user->usertype->participants()->exists($cv_user)
             )

@@ -42,6 +42,13 @@ class UserController extends UserProfileController
 
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
+
+            if ($request->user()->isCompany()) {
+                // We fall in this category if we are a company and we are viewing the profile of a visitor of our company
+
+                // TODO:
+            }
+
         } elseif ($user->isCompany()) {
             $participants = $this->getParticipants($user, $edition);
         }
