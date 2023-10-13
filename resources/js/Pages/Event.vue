@@ -3,7 +3,7 @@ import type Event from "@/Types/Event";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import { computed } from "vue";
-import type { CompanyUser, SpeakerUser } from "@/Types/User";
+import { isSpeaker, isCompany } from "@/Types/User";
 import Sponsor from "@/Components/Home/Sponsor.vue";
 import route from "ziggy-js";
 import { router } from "@inertiajs/vue3";
@@ -19,21 +19,11 @@ interface Props {
 
 const { event } = defineProps<Props>();
 
-const speakers = computed(
-    () =>
-        event.users?.filter(
-            (u): u is SpeakerUser => u.usertype_type === "App\\Models\\Speaker",
-        ) ?? [],
-);
+const speakers = computed(() => event.users?.filter(isSpeaker) ?? []);
 
 // It's for you bb 😘 @toni-santos
 // ty luv 😘 @ttoino
-const companies = computed(
-    () =>
-        event.users?.filter(
-            (u): u is CompanyUser => u.usertype_type === "App\\Models\\Company",
-        ) ?? [],
-);
+const companies = computed(() => event.users?.filter(isCompany) ?? []);
 
 // FIXME: duplicated :P
 const formatTimeString = (time: string): string => {

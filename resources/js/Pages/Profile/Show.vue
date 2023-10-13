@@ -9,7 +9,7 @@ import { h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
-import type { CompanyUser, ParticipantUser, User } from "@/Types/User";
+import { type User, isCompany, isParticipant } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 import type { Tabs } from "@/Types/ProfilePage";
 import { usePage } from "@inertiajs/vue3";
@@ -26,30 +26,26 @@ interface Props {
 const { user } = defineProps<Props>();
 const page = usePage();
 
-const isParticipant = 
-    (user: User): user is ParticipantUser => user.usertype_type === "App\\Models\\Participant";
-
-const isCompany = (user: User): user is CompanyUser => user.usertype_type === "App\\Models\\Company";
-
-const buttons: Tabs = isParticipant(user) && !isCompany(page.props.auth.user!)
-    ? {
-          ticket: {
-              label: "Bilhetes",
-              component: h(TicketWrapper),
-          },
-          sticker: {
-              label: "Conquistas",
-              component: h(StickerWrapper),
-          },
-      }
-    : isCompany(user)
-    ? {
-          visitHistory: {
-              label: "Visitas",
-              component: h(EnrolledParticipants),
-          },
-      }
-    : {};
+const buttons: Tabs =
+    isParticipant(user) && !isCompany(page.props.auth.user!)
+        ? {
+              ticket: {
+                  label: "Bilhetes",
+                  component: h(TicketWrapper),
+              },
+              sticker: {
+                  label: "Conquistas",
+                  component: h(StickerWrapper),
+              },
+          }
+        : isCompany(user)
+        ? {
+              visitHistory: {
+                  label: "Visitas",
+                  component: h(EnrolledParticipants),
+              },
+          }
+        : {};
 </script>
 
 <template>

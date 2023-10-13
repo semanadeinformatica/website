@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
-import type { SpeakerUser } from "@/Types/User";
+import { isSpeaker } from "@/Types/User";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 import route from "ziggy-js";
@@ -11,12 +11,7 @@ interface Props {
 
 const { event } = defineProps<Props>();
 
-const speakers = computed(
-    () =>
-        event.users
-            ?.filter((user) => user.usertype_type === "App\\Models\\Speaker")
-            .map((user) => user as SpeakerUser),
-);
+const speakers = computed(() => event.users?.filter(isSpeaker));
 
 const formatTimeString = (time: string): string => {
     const [hours, minutes] = time.split(":");

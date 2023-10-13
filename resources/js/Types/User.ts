@@ -36,4 +36,13 @@ export interface AdminUser extends BaseUser {
     usertype?: Admin;
 }
 
+export const isParticipant = (user?: User): user is ParticipantUser =>
+    user?.usertype_type === "App\\Models\\Participant";
+export const isAdmin = (user?: User): user is AdminUser =>
+    user?.usertype_type === "App\\Models\\Admin";
+export const isCompany = (user?: User): user is CompanyUser =>
+    user?.usertype_type === "App\\Models\\Company";
+export const isSpeaker = (user?: User): user is SpeakerUser =>
+    user?.usertype_type === "App\\Models\\Speaker";
+
 export type User = ParticipantUser | CompanyUser | SpeakerUser | AdminUser;

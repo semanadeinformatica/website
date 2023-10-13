@@ -3,7 +3,12 @@ import ImageInput from "@/Components/ImageInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import type { User } from "@/Types/User";
+import {
+    type User,
+    isCompany as checkIsCompany,
+    isSpeaker as checkIsSpeaker,
+    isAdmin as checkIsAdmin,
+} from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
@@ -12,6 +17,10 @@ interface Props {
 }
 
 const { item: user } = defineProps<Props>();
+
+const isCompany = checkIsCompany(user);
+const isSpeaker = checkIsSpeaker(user);
+const isAdmin = checkIsAdmin(user);
 
 const form = useForm({
     _method: "PUT",
@@ -22,47 +31,16 @@ const form = useForm({
         | "company"
         | "speaker"
         | "admin",
-    title:
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.title ?? ""
-            : "",
-    description:
-        user.usertype_type === "App\\Models\\Company" ||
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.description ?? ""
-            : "",
-    organization:
-        user.usertype_type === "App\\Models\\Speaker"
-            ? user.usertype?.organization ?? ""
-            : "",
-    public_email:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.email ?? ""
-            : "",
-    facebook:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.facebook ?? ""
-            : "",
-    github:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.github ?? ""
-            : "",
-    instagram:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.instagram ?? ""
-            : "",
-    linkedin:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.linkedin ?? ""
-            : "",
-    twitter:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.twitter ?? ""
-            : "",
-    website:
-        user?.usertype_type !== "App\\Models\\Admin"
-            ? user?.usertype?.social_media?.website ?? ""
-            : "",
+    title: isSpeaker ? user.usertype?.title ?? "" : "",
+    description: isCompany || isSpeaker ? user.usertype?.description ?? "" : "",
+    organization: isSpeaker ? user.usertype?.organization ?? "" : "",
+    public_email: !isAdmin ? user?.usertype?.social_media?.email ?? "" : "",
+    facebook: !isAdmin ? user?.usertype?.social_media?.facebook ?? "" : "",
+    github: !isAdmin ? user?.usertype?.social_media?.github ?? "" : "",
+    instagram: !isAdmin ? user?.usertype?.social_media?.instagram ?? "" : "",
+    linkedin: !isAdmin ? user?.usertype?.social_media?.linkedin ?? "" : "",
+    twitter: !isAdmin ? user?.usertype?.social_media?.twitter ?? "" : "",
+    website: !isAdmin ? user?.usertype?.social_media?.website ?? "" : "",
     photo: null as File | null,
 });
 

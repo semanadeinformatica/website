@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from "@/Types/User";
+import { type User, isCompany, isParticipant } from "@/Types/User";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
@@ -11,9 +11,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const page = usePage()
+const page = usePage();
 
-let previewOpen = ref(page.props.auth.user?.usertype_type === 'App\\Models\\Company' ?? false);
+let previewOpen = ref(isCompany(page.props.auth.user) ?? false);
 
 const form = useForm({
     _method: "PUT",
@@ -111,10 +111,7 @@ const clearCVFileInput = () => {
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
             <object
-                v-if="
-                    item?.usertype_type === 'App\\Models\\Participant' &&
-                    item.usertype?.cv_path
-                "
+                v-if="isParticipant(item) && item.usertype?.cv_path"
                 :data="item.usertype?.cv_url + '#toolbar&view=FitH'"
                 width="100%"
                 type="application/pdf"
@@ -122,10 +119,7 @@ const clearCVFileInput = () => {
                 class="max-md:hidden"
             ></object>
             <a
-                v-if="
-                    item?.usertype_type === 'App\\Models\\Participant' &&
-                    item.usertype?.cv_path
-                "
+                v-if="isParticipant(item) && item.usertype?.cv_path"
                 class="md:hidden"
                 target="_blank"
                 :href="item.usertype?.cv_url"
@@ -135,18 +129,13 @@ const clearCVFileInput = () => {
                     <OhVueIcon name="io-open" scale="1.3"></OhVueIcon>
                 </div>
             </a>
-            <p
-                v-if="
-                    item?.usertype_type === 'App\\Models\\Participant' &&
-                    !item.usertype?.cv_path
-                "
-            >
+            <p v-if="isParticipant(item) && !item.usertype?.cv_path">
                 Nenhum CV disponível
             </p>
         </div>
         <div
             v-if="
-                item?.usertype_type === 'App\\Models\\Participant' &&
+                isParticipant(item) &&
                 !item?.usertype?.cv_path &&
                 $page.props.auth.user?.id == item.id
             "

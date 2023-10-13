@@ -104,16 +104,22 @@ class DatabaseSeeder extends Seeder
 
         $event_types = EventType::factory(2)->create();
 
-        $events = $event_days->flatMap(fn ($day) => Event::factory(2)
-            ->recycle($day)
-            ->recycle($event_types)
-            ->hasAttached($speaker_users->random(fake()->numberBetween(1, 2)))
-            ->create()->concat(
-                Event::factory(1)
-                    ->recycle($day)
-                    ->recycle($event_types)
-                    ->hasAttached($company_users->random(fake()->numberBetween(1, 5)))
-                    ->create()));
+        $events = $event_days->flatMap(function ($day) use ($event_types, $speaker_users, $company_users) {
+
+            $speakers = $speaker_users->random(fake()->numberBetween(1, 2));
+            $companies = $company_users->random(fake()->numberBetween(1, 5));
+
+            return Event::factory(2)
+                ->recycle($day)
+                ->recycle($event_types)
+                ->hasAttached($speakers)
+                ->create()->concat(
+                    Event::factory(1)
+                        ->recycle($day)
+                        ->recycle($event_types)
+                        ->hasAttached($companies)
+                        ->create());
+        });
 
         $this->command->info('Creating the departments and staff');
         $departments = Department::factory(10)->recycle($edition)->create();
@@ -153,12 +159,18 @@ class DatabaseSeeder extends Seeder
             )->each(fn ($quest) => $quest->slots()->attach($slots->random()));
 
         $this->command->info('Creating the enrollments');
-        $participants->random(50)->map(fn ($participant) => Enrollment::factory()
-            ->recycle($edition)
-            ->recycle($participant)
-            ->hasAttached($events->random(3))
-            ->hasAttached($products->random(3))
-            ->hasAttached($quests->random(20))
-            ->create());
+        $participants->random(50)->map(function ($participant) use ($edition, $events, $products, $quests) {
+            $quests = $quests->random(20);
+            $events = $events->random(3);
+            $products = $products->random(3);
+
+            return Enrollment::factory()
+                ->recycle($edition)
+                ->recycle($participant)
+                ->hasAttached($events)
+                ->hasAttached($products)
+                ->hasAttached($quests)
+                ->create();
+        });
     }
 }

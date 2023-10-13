@@ -58,8 +58,12 @@ class ProgramController extends Controller
                         'tier',
                     ],
                 ],
-                'talks',
-                'workshops',
+                'talks' => [
+                    'users',
+                ],
+                'workshops' => [
+                    'users',
+                ],
             ]),
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),
