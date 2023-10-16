@@ -87,6 +87,11 @@ class Edition extends Model
             ->orderBy('name');
     }
 
+    public function sponsor_tiers(): HasMany
+    {
+        return $this->hasMany(SponsorTier::class)->orderByDesc('rank');
+    }
+
     public function competitions(): HasMany
     {
         return $this->hasMany(Competition::class);

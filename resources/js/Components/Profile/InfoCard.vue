@@ -6,7 +6,7 @@ import { router } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 interface Props {
-    item: User | undefined;
+    user?: User;
 }
 
 defineProps<Props>();
@@ -53,23 +53,23 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex-col">
             <div>
-                <p class="font-bold">{{ item?.name }}</p>
+                <p class="font-bold">{{ user?.name }}</p>
                 <p>
-                    {{ item?.email }}
+                    {{ user?.email }}
                 </p>
             </div>
             <div class="mt-10 flex">
                 <template v-for="(social, key) in socials" :key="key">
                     <p
                         v-if="
-                            item?.usertype_type !== 'App\\Models\\Admin' &&
-                            item?.usertype?.social_media?.[key]
+                            user?.usertype_type !== 'App\\Models\\Admin' &&
+                            user?.usertype?.social_media?.[key]
                         "
                     >
                         <a
                             class="flex w-fit rounded-full p-2.5"
                             target="_blank"
-                            :href="item.usertype.social_media[key]"
+                            :href="user.usertype.social_media[key]"
                         >
                             <OhVueIcon
                                 :name="social.icon"
@@ -82,7 +82,7 @@ const iconColor: Record<string, string> = {
             </div>
         </div>
         <button
-            v-if="$page.props.auth.user?.id == item?.id"
+            v-if="$page.props.auth.user?.id == user?.id"
             class="self-start"
             @click="router.get(route('profile.edit'))"
         >

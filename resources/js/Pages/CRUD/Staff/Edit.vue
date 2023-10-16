@@ -77,11 +77,7 @@ const submit = () => {
 
             <label for="coordinator" class="flex flex-row items-center gap-6">
                 Coordenador
-                <Checkbox
-                    id="coordinator"
-                    v-model="form.coordinator"
-                    :checked="false"
-                />
+                <Checkbox id="coordinator" v-model:checked="form.coordinator" />
             </label>
 
             <PrimaryButton type="submit">Editar</PrimaryButton>

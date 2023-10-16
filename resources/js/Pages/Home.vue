@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
-import Map from "@/Components/Home/Map.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
 import { ModalsContainer } from "vue-final-modal";
@@ -11,10 +10,12 @@ import type Sponsor from "@/Types/Sponsor";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
+import type SponsorTier from "@/Types/SponsorTier";
+import { default as MapComponent } from "@/Components/Home/Map.vue";
 
 interface Props {
     edition: Edition;
-    sponsors: Sponsor[];
+    sponsorTiers: SponsorTier[];
     speakers: User[];
     days: EventDay[];
     activityCount: number;
@@ -23,18 +24,22 @@ interface Props {
     canEnroll: boolean;
 }
 
-const { sponsors } = defineProps<Props>();
+const { sponsorTiers } = defineProps<Props>();
 
 const sponsorGroups = computed(
     () =>
-        sponsors.reduce(
-            (acc, sponsor) => {
-                acc[sponsor.tier] ??= [];
-                acc[sponsor.tier].push(sponsor);
-                return acc;
-            },
-            {} as Record<Sponsor["tier"], Sponsor[]>,
-        ) ?? ({} as Record<Sponsor["tier"], Sponsor[]>),
+        sponsorTiers.reduce((acc, sponsorTier) => {
+            let hasTier = false;
+            for (const tier of acc.keys())
+                if (tier.id === sponsorTier.id) hasTier = true;
+
+            if (!hasTier) acc.set(sponsorTier, []);
+
+            acc.get(sponsorTier)?.push(...(sponsorTier.sponsors ?? []));
+
+            return acc;
+        }, new Map<SponsorTier, Sponsor[]>()) ??
+        ({} as Map<SponsorTier, Sponsor[]>),
 );
 
 const formattedDate = (
@@ -147,19 +152,25 @@ const formattedDate = (
             </h2>
             <template
                 v-if="
-                    days.length !== 0 &&
-                    standCount !== 0 &&
-                    talkCount !== 0 &&
+                    days.length !== 0 ||
+                    standCount !== 0 ||
+                    talkCount !== 0 ||
                     activityCount !== 0
                 "
             >
                 <div
-                    class="mx-[10%] grid grid-cols-4 gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+                    class="mx-[10%] grid gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
                 >
-                    <span class="text-center">{{ days.length }} dias</span>
-                    <span class="text-center">{{ standCount }} bancas</span>
-                    <span class="text-center">{{ talkCount }} palestras</span>
-                    <span class="text-center"
+                    <span v-if="days.length !== 0" class="text-center"
+                        >{{ days.length }} dias</span
+                    >
+                    <span v-if="standCount !== 0" class="text-center"
+                        >{{ standCount }} bancas</span
+                    >
+                    <span v-if="talkCount !== 0" class="text-center"
+                        >{{ talkCount }} palestras</span
+                    >
+                    <span v-if="activityCount !== 0" class="text-center"
                         >{{ activityCount }} atividades</span
                     >
                 </div>
@@ -202,26 +213,19 @@ const formattedDate = (
                 Patrocínios
             </p>
             <SponsorBanner
-                title="Platina"
-                :sponsors="sponsorGroups.PLATINUM"
-                color="red-dark"
-            ></SponsorBanner>
-            <SponsorBanner
-                title="Ouro"
-                :sponsors="sponsorGroups.GOLD"
-                color="orange"
-            ></SponsorBanner>
-            <SponsorBanner
-                title="Prata"
-                :sponsors="sponsorGroups.SILVER"
-                color="teal-dark"
+                v-for="([tier, sponsors], idx) in sponsorGroups"
+                :key="tier.id"
+                :title="tier.name"
+                :sponsors="sponsors"
+                :color="tier.color"
+                :idx="idx"
             ></SponsorBanner>
         </section>
         <!-- CALL TO ACTION -->
         <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         <!-- MAP -->
         <section class="bg-2023-orange p-10">
-            <Map></Map>
+            <MapComponent />
         </section>
     </AppLayout>
 </template>

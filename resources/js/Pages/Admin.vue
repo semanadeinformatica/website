@@ -18,6 +18,7 @@ const pageRoutes = {
     "admin.users.index": "models.user",
     "admin.eventTypes.index": "models.eventType",
     "admin.enrollments.index": "models.enrollment",
+    "admin.sponsorTiers.index": "models.sponsorTier",
 } satisfies Record<string, string>;
 </script>
 

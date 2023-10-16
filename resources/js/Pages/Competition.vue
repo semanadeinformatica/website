@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
 import Podium from "@/Components/Podium.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import type Competition from "@/Types/Competition";
+import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
+import route from "ziggy-js";
+import { isAdmin } from "@/Types/User";
 
 interface Props {
     competition: Competition;
+    isParticipant: boolean;
+    isEnrolled: boolean;
 }
 
 const { competition } = defineProps<Props>();
@@ -58,22 +64,49 @@ const regulationTextParts = computed(() => {
             </p>
         </section>
 
-        <!-- PARTICIPATE -->
-        <section
-            class="relative flex content-center items-center justify-center py-24"
-        >
-            <h1
-                class="absolute top-[1rem] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
+        <template v-if="!isAdmin($page.props.auth.user)">
+            <!-- PARTICIPATE -->
+            <section
+                v-if="!isEnrolled"
+                class="relative flex flex-col content-center items-center justify-center py-24"
             >
-                Vamos a isto?
-            </h1>
+                <span class="text-2xl font-bold text-2023-teal">
+                    Ainda não estás inscrito na SINF
+                </span>
+                <div
+                    class="mx-10 flex h-full flex-1 flex-col items-center bg-2023-bg p-3 text-center text-3xl font-bold text-white sm:p-12"
+                >
+                    <PrimaryButton
+                        color="orange"
+                        shadow="teal"
+                        text-size="sm:text-4xl"
+                        padding="sm:px-8"
+                        @click="
+                            $page.props.auth.user
+                                ? router.put(route('enroll'))
+                                : router.get(route('register'))
+                        "
+                        >Inscreve-te</PrimaryButton
+                    >
+                </div>
+            </section>
+            <section
+                v-else-if="isEnrolled && isParticipant"
+                class="relative flex content-center items-center justify-center py-24"
+            >
+                <h1
+                    class="absolute top-[1rem] m-4 flex justify-center p-3 text-4xl font-black text-2023-red"
+                >
+                    Vamos a isto?
+                </h1>
 
-            <a
-                :href="competition.registration_link"
-                class="relative mt-5 content-center justify-center border border-black bg-2023-teal px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
-            >
-                Participar!
-            </a>
-        </section>
+                <a
+                    :href="competition.registration_link"
+                    class="relative mt-5 content-center justify-center border border-black bg-2023-teal px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
+                >
+                    Participar!
+                </a>
+            </section>
+        </template>
     </AppLayout>
 </template>

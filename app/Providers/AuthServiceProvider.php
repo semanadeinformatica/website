@@ -68,5 +68,35 @@ class AuthServiceProvider extends ServiceProvider
                 ) // or the user is a company and the requirement is a stand from the same company
             )
         ));
+
+        Gate::define('viewProfileOf', fn (User $user, User $profile_user) => (
+            $user->isAdmin() || // admins have access to all profiles
+            $user->is($profile_user) || // users can view their own profile
+            (
+                // companies can view profiles of participants who have paid them a visit
+                $user->isCompany() &&
+                $profile_user->isParticipant() &&
+                $user->usertype->participants()->exists($profile_user)
+            )
+        ));
+
+        Gate::define('viewCVOf', fn (User $user, User $cv_user, Edition $edition) => (
+            ( // admins have access to all CVs except if the other user is also an admin. Admins do not have CVs so this is just a safety measure of sorts
+                $user->isAdmin() &&
+                ! $cv_user->isAdmin()
+            ) ||
+            (
+                // participants can view their own CV
+                $user->isParticipant() && // Do this so that companies do not get the CV area on their profile page
+                $user->is($cv_user)
+            ) ||
+            (
+                // companies can view CVs of participants who have paid them a visit if they have they right access
+                $user->isCompany() &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() && // If the company does not have the right access, just shortcut the check
+                $cv_user->isParticipant() &&
+                $user->usertype->participants()->exists($cv_user)
+            )
+        ));
     }
 }

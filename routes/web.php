@@ -15,13 +15,13 @@ use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\EventTypeCRUDController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
+use App\Http\Controllers\SponsorTierCRUDController;
 use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserController;
@@ -64,10 +64,6 @@ Route::prefix('/event')->name('event')->group(function () {
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
-        Route::get('/dashboard', function () {
-            return Inertia::render('Dashboard');
-        })->name('dashboard');
-
         Route::put('/enroll', [EnrollmentController::class, 'store'])
             ->name('enroll');
 
@@ -96,6 +92,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/slots' => SlotCRUDController::class,
                     '/enrollments' => EnrollmentCRUDController::class,
                     '/eventTypes' => EventTypeCRUDController::class,
+                    '/sponsorTiers' => SponsorTierCRUDController::class,
                 ]);
 
                 Route::name('index')->get('/', function () {
@@ -106,14 +103,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::prefix('user')->group(function () {
             Route::get('/profile', [UserController::class, 'show'])
                 ->name('profile.show');
-            Route::prefix('/{participant}')->whereNumber('participant')->controller(ParticipantController::class)->group(function () {
-                Route::get('', 'show')->name('participant.profile');
+
+            Route::prefix('/{user}')->whereNumber('user')->controller(UserController::class)->group(function () {
+                Route::get('/profile', 'show')->name('user.profile');
             });
+
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
                 Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
+
             Route::get('/profile/edit', [UserController::class, 'edit'])
                 ->name('profile.edit');
         });

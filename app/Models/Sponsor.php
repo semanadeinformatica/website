@@ -17,7 +17,7 @@ class Sponsor extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'tier',
+        'sponsor_tier_id',
         'edition_id',
         'company_id',
     ];
@@ -30,6 +30,11 @@ class Sponsor extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function tier(): BelongsTo
+    {
+        return $this->belongsTo(SponsorTier::class, 'sponsor_tier_id');
     }
 
     public function stands(): HasMany

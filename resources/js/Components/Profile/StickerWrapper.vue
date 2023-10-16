@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type Slot from "@/Types/Slot";
 import Sticker from "./Sticker.vue";
 </script>
 
@@ -13,7 +14,7 @@ import Sticker from "./Sticker.vue";
                 />
             </clipPath>
         </svg>
-        <div v-for="item in $page.props.slots" :key="item">
+        <div v-for="item in $page.props.slots as Slot[]" :key="item.id">
             <Sticker color="red" :sticker="item" />
         </div>
     </div>

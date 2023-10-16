@@ -8,9 +8,9 @@ import route, {
     type QueryParams,
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";
-import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
+import { isAdmin as checkIsAdmin } from "@/Types/User";
 
 interface Route {
     label: string;
@@ -45,9 +45,9 @@ const options = {
     editions: editionRoutes,
 };
 
-const isAdmin = computed(() => {
-    return usePage().props.auth.user?.usertype_type == "App\\Models\\Admin";
-});
+const page = usePage();
+
+const isAdmin = checkIsAdmin(page.props.auth.user);
 </script>
 
 <template>

@@ -55,10 +55,15 @@ class ProgramController extends Controller
                         'company' => [
                             'user',
                         ],
+                        'tier',
                     ],
                 ],
-                'talks',
-                'workshops',
+                'talks' => [
+                    'users',
+                ],
+                'workshops' => [
+                    'users',
+                ],
             ]),
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),

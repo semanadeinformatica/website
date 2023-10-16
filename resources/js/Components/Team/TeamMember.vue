@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type Staff from "@/Types/Staff";
-import { Link } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed } from "vue";
 
@@ -65,7 +64,7 @@ const socialMedia = computed(() => {
             class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all group-hover:-bottom-7"
             :class="bgColor[color]"
         >
-            <Link
+            <a
                 v-for="(social, key, idx) in socialMedia"
                 :key="idx"
                 :href="social"
@@ -76,7 +75,7 @@ const socialMedia = computed(() => {
                     :name="socialIcon[key]"
                     scale="1.4"
                 ></OhVueIcon>
-            </Link>
+            </a>
         </div>
     </div>
     <p class="max-w-[13em] text-center font-bold" :class="textColor[color]">
