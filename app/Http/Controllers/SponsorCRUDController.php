@@ -14,7 +14,7 @@ class SponsorCRUDController extends CRUDController
     protected string $view = 'Sponsor';
 
     protected array $rules = [
-        'sponsor_tier_id' => 'required|exists:editions,id',
+        'sponsor_tier_id' => 'required|exists:sponsor_tiers,id',
         'edition_id' => 'required|exists:editions,id',
         'company_id' => 'required|exists:companies,id',
     ];
