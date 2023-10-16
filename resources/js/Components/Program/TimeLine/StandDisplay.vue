@@ -11,42 +11,44 @@ interface Props {
 
 const { stands } = defineProps<Props>();
 
+const standTiers = computed(() =>
+    Object.fromEntries(
+        stands.map((stand) => [stand.sponsor?.tier?.id, stand.sponsor?.tier]),
+    ),
+);
+
 const standsPerTier = computed(
     () =>
         stands.reduce((acc, stand) => {
             const sponsorTier = stand.sponsor?.tier;
             if (!sponsorTier) return acc;
 
-            let hasTier = false;
-            for (const tier of acc.keys())
-                if (tier.id === sponsorTier.id) hasTier = true;
+            if (!acc.has(sponsorTier.id)) acc.set(sponsorTier.id, []);
 
-            if (!hasTier) acc.set(sponsorTier, []);
-
-            acc.get(sponsorTier)?.push(stand);
+            acc.get(sponsorTier.id)?.push(stand);
 
             return acc;
-        }, new Map<SponsorTier, Stand[]>()) ??
-        ({} as Map<SponsorTier, Stand[]>),
+        }, new Map<SponsorTier["id"], Stand[]>()) ??
+        ({} as Map<SponsorTier["id"], Stand[]>),
 );
 </script>
 
 <template>
     <div class="flex flex-col gap-12">
-        <template v-for="[tier, tierStands] in standsPerTier" :key="tier.id">
+        <template v-for="[tierId, tierStands] in standsPerTier" :key="tierId">
             <section v-if="tierStands.length > 0" class="flex flex-col gap-3">
                 <span
                     class="text-3xl font-bold"
-                    :style="`color: ${tier.color}`"
+                    :style="`color: ${standTiers[tierId].color}`"
                 >
-                    {{ tier.name }}
+                    {{ standTiers[tierId].name }}
                 </span>
                 <div class="flex flex-row flex-wrap gap-4">
                     <div
                         v-for="stand in tierStands"
                         :key="stand.id"
                         class="w-48 border border-black shadow-lg"
-                        :style="`color: ${tier.color}`"
+                        :style="`color: ${standTiers[tierId].color}`"
                     >
                         <Sponsor
                             :company="
