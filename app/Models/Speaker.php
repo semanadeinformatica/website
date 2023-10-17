@@ -34,4 +34,14 @@ class Speaker extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'organization' => $this->organization,
+            'social_media' => $this->socialMedia->toSearchableArray(),
+        ];
+    }
 }

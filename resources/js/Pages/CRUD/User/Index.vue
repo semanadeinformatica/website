@@ -9,6 +9,7 @@ import Header from "@/Components/CRUD/Header.vue";
 
 interface Props {
     items: Paginated<User>;
+    isSearchable?: boolean;
 }
 
 defineProps<Props>();
@@ -22,7 +23,12 @@ const usertypeMap = {
 </script>
 
 <template>
-    <CRUDLayout title="User" :items="items" name="users">
+    <CRUDLayout
+        title="User"
+        :items="items"
+        name="users"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Utilizadores</template>
 
         <template #header>

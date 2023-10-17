@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
+    use Searchable;
     use TwoFactorAuthenticatable;
 
     /**
@@ -94,5 +96,16 @@ class User extends Authenticatable
     public function isSpeaker(): bool
     {
         return $this->usertype_type === Speaker::class;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'type' => call_user_func('end', explode('\\', $this->usertype_type)),
+            'user' => $this->usertype->toSearchableArray(),
+        ];
     }
 }

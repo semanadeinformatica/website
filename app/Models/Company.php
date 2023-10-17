@@ -69,4 +69,12 @@ class Company extends Model
             ]
         )->distinct();
     }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'description' => $this->description,
+            'social_media' => $this->socialMedia->toSearchableArray(),
+        ];
+    }
 }
