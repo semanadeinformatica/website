@@ -22,7 +22,7 @@ const homeSections: Routes = {
     aboutus: {
         label: "Sobre nós",
     },
-    speakers: { label: "Speakers" },
+    speakers: { label: "Oradores" },
     sponsors: { label: "Patrocínios" },
 };
 
