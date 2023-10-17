@@ -14,6 +14,4 @@ class EditionCRUDController extends CRUDController
         'name' => 'required|string',
         'year' => 'required|integer',
     ];
-
-    protected array $search = ['name', 'year'];
 }

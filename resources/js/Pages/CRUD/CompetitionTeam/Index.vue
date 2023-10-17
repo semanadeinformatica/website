@@ -14,6 +14,7 @@ interface Props {
     with: {
         competitions: Competition[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -33,6 +34,7 @@ const editions = computed<Record<number, string>>(() =>
         title="Competition Teams"
         :items="items"
         name="competitionTeams"
+        :is-searchable="isSearchable"
     >
         <template #heading>Equipas na Competição de Programação</template>
 

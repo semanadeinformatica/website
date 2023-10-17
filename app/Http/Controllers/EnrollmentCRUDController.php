@@ -17,8 +17,6 @@ class EnrollmentCRUDController extends CRUDController
         'edition_id' => 'required|exists:editions,id',
     ];
 
-    protected array $search = ['participant_id', 'edition_id'];
-
     protected function with(): array
     {
         return [

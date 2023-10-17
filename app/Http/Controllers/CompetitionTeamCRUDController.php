@@ -17,8 +17,6 @@ class CompetitionTeamCRUDController extends CRUDController
         'competition_id' => 'required|integer|exists:competitions,id',
     ];
 
-    protected array $search = ['name'];
-
     protected function with(): array
     {
         return [

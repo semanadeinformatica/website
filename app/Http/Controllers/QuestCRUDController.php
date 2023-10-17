@@ -30,8 +30,6 @@ class QuestCRUDController extends CRUDController
         ];
     }
 
-    protected array $search = ['name', 'category'];
-
     protected function created(array $new): ?array
     {
         $requirement = explode(';', $new['requirement']);

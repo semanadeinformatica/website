@@ -29,8 +29,6 @@ class EventCRUDController extends CRUDController
         'users' => 'sometimes|nullable|array|exists:users,id',
     ];
 
-    protected array $search = ['name', 'topic', 'capacity', 'room'];
-
     protected function created(array $new): ?array
     {
         $users = $new['users'];

@@ -16,6 +16,7 @@ interface Props {
         eventDays: EventDay[];
         sponsors: Sponsor[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -40,7 +41,12 @@ const sponsors = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Stands" :items="items" name="stands">
+    <CRUDLayout
+        title="Stands"
+        :items="items"
+        name="stands"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Bancas</template>
 
         <template #header>

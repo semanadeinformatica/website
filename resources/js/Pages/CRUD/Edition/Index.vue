@@ -9,13 +9,19 @@ import Header from "@/Components/CRUD/Header.vue";
 
 interface Props {
     items: Paginated<Edition>;
+    isSearchable?: boolean;
 }
 
 defineProps<Props>();
 </script>
 
 <template>
-    <CRUDLayout title="Edition" :items="items" name="editions">
+    <CRUDLayout
+        title="Edition"
+        :items="items"
+        name="editions"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Edições</template>
 
         <template #header>

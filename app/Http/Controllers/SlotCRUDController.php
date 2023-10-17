@@ -49,6 +49,4 @@ class SlotCRUDController extends CRUDController
             'quests' => Quest::all(),
         ];
     }
-
-    protected array $search = ['name'];
 }

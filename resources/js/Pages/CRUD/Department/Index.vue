@@ -14,6 +14,7 @@ interface Props {
     with: {
         editions: Edition[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -26,7 +27,12 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Departments" :items="items" name="departments">
+    <CRUDLayout
+        title="Departments"
+        :items="items"
+        name="departments"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Departamentos</template>
 
         <template #header>

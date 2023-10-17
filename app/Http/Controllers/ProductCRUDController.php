@@ -19,8 +19,6 @@ class ProductCRUDController extends CRUDController
         'image' => 'nullable|mimes:jpg,jpeg,png|max:1024',
     ];
 
-    protected array $search = ['name', 'price', 'stock'];
-
     protected function with(): array
     {
         return [

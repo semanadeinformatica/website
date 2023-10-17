@@ -22,8 +22,6 @@ class CompetitionCRUDController extends CRUDController
         'regulation' => 'required|string',
     ];
 
-    protected array $search = ['theme', 'name'];
-
     protected function with(): array
     {
         return [

@@ -32,8 +32,6 @@ class UserCRUDController extends CRUDController
         'photo' => 'nullable|mimes:jpg,jpeg,png|max:10mb',
     ];
 
-    protected array $search = ['name', 'email'];
-
     protected function updateRules($old): array
     {
         return array_merge($this->rules, [
