@@ -41,7 +41,7 @@ class Speaker extends Model
             'title' => $this->title,
             'description' => $this->description,
             'organization' => $this->organization,
-            'social_media' => $this->socialMedia->toSearchableArray(),
+            'social_media' => $this->socialMedia?->toSearchableArray(),
         ];
     }
 }

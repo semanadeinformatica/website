@@ -74,7 +74,7 @@ class Company extends Model
     {
         return [
             'description' => $this->description,
-            'social_media' => $this->socialMedia->toSearchableArray(),
+            'social_media' => $this->socialMedia?->toSearchableArray(),
         ];
     }
 }

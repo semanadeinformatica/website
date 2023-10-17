@@ -63,7 +63,7 @@ class Participant extends Model
     public function toSearchableArray(): array
     {
         return [
-            'social_media' => $this->socialMedia->toSearchableArray(),
+            'social_media' => $this->socialMedia?->toSearchableArray(),
         ];
     }
 }

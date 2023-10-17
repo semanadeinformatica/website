@@ -100,11 +100,13 @@ class User extends Authenticatable
 
     public function toSearchableArray()
     {
+        $exploded = explode('\\', $this->usertype_type);
+
         return [
             'name' => $this->name,
             'email' => $this->email,
-            'type' => call_user_func('end', explode('\\', $this->usertype_type)),
-            'user' => $this->usertype->toSearchableArray(),
+            'type' => end($exploded),
+            'user' => $this->usertype?->toSearchableArray(),
         ];
     }
 }
