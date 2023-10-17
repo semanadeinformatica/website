@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 
 class Event extends Model
 {
     use HasFactory;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -61,5 +63,14 @@ class Event extends Model
         $query->whereHas('type', function ($query) {
             $query->where('name', 'workshop');
         });
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'topic' => $this->topic,
+            'event_day' => $this->event_day->toSearchableArray(),
+        ];
     }
 }

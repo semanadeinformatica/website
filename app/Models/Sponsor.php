@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Sponsor extends Model
 {
     use HasFactory;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +42,14 @@ class Sponsor extends Model
     public function stands(): HasMany
     {
         return $this->hasMany(Stand::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'company' => $this->company->user->toSearchableArray(),
+            'edition' => $this->edition->name,
+            'tier' => $this->tier->name,
+        ];
     }
 }

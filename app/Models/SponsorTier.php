@@ -29,4 +29,12 @@ class SponsorTier extends Model
     {
         return $this->hasMany(Sponsor::class);
     }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'edition' => $this->edition->name,
+        ];
+    }
 }

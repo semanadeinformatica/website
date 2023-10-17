@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class EventDay extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'date',
@@ -44,5 +46,14 @@ class EventDay extends Model
     public function stands(): HasMany
     {
         return $this->hasMany(Stand::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'theme' => $this->theme,
+            'date' => $this->date->format('Y-m-d'),
+            'edition' => $this->edition->name,
+        ];
     }
 }

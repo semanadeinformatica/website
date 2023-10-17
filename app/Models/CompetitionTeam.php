@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 
 class CompetitionTeam extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'name',
@@ -25,5 +27,14 @@ class CompetitionTeam extends Model
     public function competition(): BelongsTo
     {
         return $this->belongsTo(Competition::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'competition' => $this->competition->name,
+            'edition' => $this->competition->edition->name,
+        ];
     }
 }

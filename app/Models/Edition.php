@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Laravel\Scout\Searchable;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Edition extends Model
 {
     use HasFactory;
     use HasRelationships;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -95,5 +97,13 @@ class Edition extends Model
     public function competitions(): HasMany
     {
         return $this->hasMany(Competition::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'year' => $this->year,
+        ];
     }
 }
