@@ -35,7 +35,7 @@ class CompetitionController extends Controller
             }
 
             if ($isParticipant) {
-                $isEnrolled = $user->enrollments()->where('edition_id', $edition->id)->exists();
+                $isEnrolled = $user->usertype->enrollments()->where('edition_id', $edition->id)->exists();
             }
         }
 
