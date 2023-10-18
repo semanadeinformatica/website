@@ -39,9 +39,17 @@ const regulationTextParts = computed(() => {
             </h2>
             <span
                 class="inline-flex w-full justify-center text-xl font-bold text-2023-teal"
-                >{{ $d(new Date(competition.date_start), "short") }} -
-                {{ $d(new Date(competition.date_end), "short") }}</span
-            >
+                >{{ $d(new Date(competition.date_start), "short") }}
+                <template
+                    v-if="
+                        new Date(competition.date_end).getTime() !==
+                        new Date(competition.date_start).getTime()
+                    "
+                >
+                    -
+                    {{ $d(new Date(competition.date_end), "short") }}
+                </template>
+            </span>
         </header>
 
         <Podium></Podium>
