@@ -74,15 +74,18 @@ class UserCRUDController extends CRUDController
         $user->save();
 
         if ($new['type'] !== 'admin') {
-            $user->usertype->socialMedia()->updateOrCreate([], [
-                'email' => $new['public_email'],
-                'facebook' => $new['facebook'],
-                'github' => $new['github'],
-                'instagram' => $new['instagram'],
-                'linkedin' => $new['linkedin'],
-                'twitter' => $new['twitter'],
-                'website' => $new['website'],
-            ]);
+            $user->usertype->socialMedia()->associate(
+                $user->usertype->socialMedia()->updateOrCreate([], [
+                    'email' => $new['public_email'],
+                    'facebook' => $new['facebook'],
+                    'github' => $new['github'],
+                    'instagram' => $new['instagram'],
+                    'linkedin' => $new['linkedin'],
+                    'twitter' => $new['twitter'],
+                    'website' => $new['website'],
+                ])
+            );
+            $user->usertype->save();
         }
         DB::commit();
 
@@ -121,15 +124,18 @@ class UserCRUDController extends CRUDController
         $old->usertype->update($usertypeProps);
 
         if ($new['type'] !== 'admin') {
-            $old->usertype->socialMedia()->updateOrCreate([], [
-                'email' => $new['public_email'],
-                'facebook' => $new['facebook'],
-                'github' => $new['github'],
-                'instagram' => $new['instagram'],
-                'linkedin' => $new['linkedin'],
-                'twitter' => $new['twitter'],
-                'website' => $new['website'],
-            ]);
+            $old->usertype->socialMedia()->associate(
+                $old->usertype->socialMedia()->updateOrCreate([], [
+                    'email' => $new['public_email'],
+                    'facebook' => $new['facebook'],
+                    'github' => $new['github'],
+                    'instagram' => $new['instagram'],
+                    'linkedin' => $new['linkedin'],
+                    'twitter' => $new['twitter'],
+                    'website' => $new['website'],
+                ])
+            );
+            $old->usertype->save();
         }
 
         if (isset($new['photo'])) {
