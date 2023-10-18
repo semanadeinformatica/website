@@ -5,8 +5,6 @@ import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
 import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
-import { computed } from "vue";
-import type Sponsor from "@/Types/Sponsor";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
@@ -25,22 +23,6 @@ interface Props {
 }
 
 const { sponsorTiers } = defineProps<Props>();
-
-const sponsorGroups = computed(
-    () =>
-        sponsorTiers.reduce((acc, sponsorTier) => {
-            let hasTier = false;
-            for (const tier of acc.keys())
-                if (tier.id === sponsorTier.id) hasTier = true;
-
-            if (!hasTier) acc.set(sponsorTier, []);
-
-            acc.get(sponsorTier)?.push(...(sponsorTier.sponsors ?? []));
-
-            return acc;
-        }, new Map<SponsorTier, Sponsor[]>()) ??
-        ({} as Map<SponsorTier, Sponsor[]>),
-);
 
 const formattedDate = (
     startDate: string,
@@ -213,10 +195,10 @@ const formattedDate = (
                 Patrocínios
             </p>
             <SponsorBanner
-                v-for="([tier, sponsors], idx) in sponsorGroups"
+                v-for="(tier, idx) in sponsorTiers"
                 :key="tier.id"
                 :title="tier.name"
-                :sponsors="sponsors"
+                :sponsors="tier.sponsors ?? []"
                 :color="tier.color"
                 :idx="idx"
             ></SponsorBanner>
