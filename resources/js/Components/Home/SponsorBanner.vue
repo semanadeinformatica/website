@@ -41,7 +41,7 @@ const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know f
             class="max-h grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
             :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
         >
-            <template v-if="sponsors">
+            <template v-if="sponsors.length">
                 <Sponsor
                     v-for="(sponsor, i) in sponsors"
                     :key="sponsor.id"
@@ -66,7 +66,7 @@ const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know f
         <div
             class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
         >
-            <template v-if="sponsors">
+            <template v-if="sponsors.length">
                 <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
                     <Slide v-for="sponsor in sponsors" :key="sponsor.id">
                         <Sponsor
