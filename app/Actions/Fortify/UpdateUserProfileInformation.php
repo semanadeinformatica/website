@@ -92,15 +92,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 return;
             }
 
-            $user->usertype->socialMedia()->updateOrCreate([], [
-                'email' => $input['public_email'],
-                'facebook' => $input['facebook'],
-                'github' => $input['github'],
-                'instagram' => $input['instagram'],
-                'linkedin' => $input['linkedin'],
-                'twitter' => $input['twitter'],
-                'website' => $input['website'],
-            ]);
+            $user->usertype->socialMedia()->associate(
+                $user->usertype->socialMedia()->updateOrCreate([], [
+                    'email' => $input['public_email'],
+                    'facebook' => $input['facebook'],
+                    'github' => $input['github'],
+                    'instagram' => $input['instagram'],
+                    'linkedin' => $input['linkedin'],
+                    'twitter' => $input['twitter'],
+                    'website' => $input['website'],
+                ])
+            );
+            $user->usertype->save();
         }
     }
 
