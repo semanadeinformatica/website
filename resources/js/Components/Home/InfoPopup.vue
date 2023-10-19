@@ -19,7 +19,6 @@ const cacheSeenInfo = () => {
     $cookies?.set("seenInfo", true);
     options.value.modelValue = false;
 };
-
 </script>
 
 <template>
@@ -31,7 +30,7 @@ const cacheSeenInfo = () => {
         @closed="cacheSeenInfo()"
     >
         <div
-            class="flex flex-col items-center gap-6 text-xl text-2023-teal-dark text-center"
+            class="flex flex-col items-center gap-6 text-center text-xl text-2023-teal-dark"
         >
             <img class="w-80" src="images/sinf logo.png" />
             <p>
