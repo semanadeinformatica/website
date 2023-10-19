@@ -48,7 +48,7 @@ const enroll = () => {
                 <li>
                     Participa em
                     <a
-                        :href="route('program', { day: 1 })"
+                        :href="route('program', { day: 6 })"
                         target="_blank"
                         class="text-2023-red underline"
                         >Workshops e Palestras</a
@@ -57,7 +57,7 @@ const enroll = () => {
                 <li>
                     Visita
                     <a
-                        :href="route('program', { day: 6 })"
+                        :href="route('program', { day: 1 })"
                         target="_blank"
                         class="text-2023-red underline"
                         >Bancas de Empresas</a
@@ -66,7 +66,7 @@ const enroll = () => {
                 <li>
                     Compete nas
                     <a
-                        :href="route('program', { day: 1 })"
+                        :href="route('program', { day: 3 })"
                         target="_blank"
                         class="text-2023-red underline"
                         >Competições de CTF e Programação</a
