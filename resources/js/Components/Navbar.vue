@@ -39,15 +39,15 @@ const pageRoutes: Routes = {
 
 const editionRoutes = [2022, 2021, 2020, 2019, 2018];
 
+const { props } = usePage();
+
 const options = {
     pages: pageRoutes,
-    competitions: usePage().props.competitions,
+    competitions: props.competitions,
     editions: editionRoutes,
 };
 
-const page = usePage();
-
-const isAdmin = checkIsAdmin(page.props.auth.user);
+const isAdmin = checkIsAdmin(props.auth.user);
 </script>
 
 <template>
@@ -98,7 +98,7 @@ const isAdmin = checkIsAdmin(page.props.auth.user);
                 </NavLink>
             </template>
             <Dropdown
-                v-if="$page.props.competitions.length > 0"
+                v-if="props.competitions.length > 0"
                 align="center"
                 width="32"
             >
@@ -107,7 +107,7 @@ const isAdmin = checkIsAdmin(page.props.auth.user);
                 </template>
                 <template #content>
                     <template
-                        v-for="competition in $page.props.competitions"
+                        v-for="competition in props.competitions"
                         :key="competition.id"
                     >
                         <DropdownLink

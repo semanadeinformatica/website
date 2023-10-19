@@ -4,7 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import type Competition from "@/Types/Competition";
 import { router } from "@inertiajs/vue3";
-import { computed } from "vue";
+// import { computed } from "vue";
 import route from "ziggy-js";
 import { isAdmin } from "@/Types/User";
 
@@ -15,16 +15,6 @@ interface Props {
 }
 
 const { competition } = defineProps<Props>();
-
-const regulationTextParts = computed(() => {
-    // See if this gets fucky - Nuno Pereira
-    const parts = competition.regulation.split(" ");
-
-    return [
-        parts.slice(0, Math.ceil(parts.length / 2)).join(" "),
-        parts.slice(Math.ceil(parts.length / 2)).join(" "),
-    ];
-});
 </script>
 
 <template>
@@ -56,20 +46,17 @@ const regulationTextParts = computed(() => {
         <!-- RULES -->
 
         <section
-            class="relative mt-5 grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
+            class="relative mt-5 border-t border-black bg-2023-teal-dark text-justify"
         >
             <h2
                 class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
             >
                 Regulamento
             </h2>
-
-            <p class="p-20 text-lg text-white max-lg:pb-10">
-                {{ regulationTextParts[0] }}
-            </p>
-            <p class="p-20 text-lg text-white max-lg:pb-10">
-                {{ regulationTextParts[1] }}
-            </p>
+            <div
+                class="prose prose-lg max-w-none p-20 text-white max-lg:pb-10 lg:columns-2"
+                v-html="competition.regulation_html"
+            ></div>
         </section>
 
         <template v-if="!isAdmin($page.props.auth.user)">

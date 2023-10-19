@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
+use Illuminate\Support\Str;
+use League\CommonMark\Util\HtmlFilter;
 
 class Competition extends Model
 {
@@ -29,6 +32,10 @@ class Competition extends Model
         'date_end' => 'datetime',
     ];
 
+    protected $appends = [
+        'regulation_html',
+    ];
+
     public function edition(): BelongsTo
     {
         return $this->belongsTo(Edition::class);
@@ -46,5 +53,13 @@ class Competition extends Model
             'theme' => $this->theme,
             'edition' => $this->edition->name,
         ];
+    }
+
+    public function regulationHtml(): Attribute
+    {
+        return Attribute::get(fn () => Str::markdown($this->regulation, [
+            'html_input' => HtmlFilter::STRIP,
+            'allow_unsafe_links' => false,
+        ]));
     }
 }
