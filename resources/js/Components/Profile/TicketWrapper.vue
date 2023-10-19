@@ -31,8 +31,14 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
             />
         </clipPath>
     </svg>
-
+    <p
+        v-if="($page.props.tickets as EventTicket[]).length === 0"
+        class="flex w-full flex-auto items-center justify-center pt-8 text-center text-2xl font-bold text-2023-teal-dark"
+    >
+        Ainda não há eventos marcados. Verifica mais tarde!
+    </p>
     <div
+        v-else
         class="grid w-full items-center justify-center gap-10 self-center pt-8"
         style="grid-template-columns: repeat(auto-fill, 350px)"
     >
