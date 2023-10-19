@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Str;
+use League\CommonMark\Util\HtmlFilter;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Company extends Model
@@ -27,6 +30,8 @@ class Company extends Model
 
     protected $with = ['socialMedia'];
 
+    protected $appends = ['description_html'];
+
     public function socialMedia(): BelongsTo
     {
         return $this->belongsTo(SocialMedia::class);
@@ -40,6 +45,14 @@ class Company extends Model
     public function sponsors(): HasMany
     {
         return $this->hasMany(Sponsor::class);
+    }
+
+    public function descriptionHtml(): Attribute
+    {
+        return Attribute::get(fn () => Str::markdown($this->description, [
+            'html_input' => HtmlFilter::STRIP,
+            'allow_unsafe_links' => false,
+        ]));
     }
 
     public function participants(): HasManyThrough

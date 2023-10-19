@@ -4,8 +4,8 @@ import type SocialMedia from "./SocialMedia";
 export default interface Speaker extends Model {
     title?: string;
     description?: string;
+    description_html?: string;
     organization?: string;
     social_media_id?: number;
     social_media?: SocialMedia;
-    event_id: number;
 }
