@@ -19,7 +19,7 @@ defineProps<Props>();
 <template>
     <img
         v-bind="$attrs"
-        class="col-span-2 w-full cursor-pointer object-contain p-10"
+        class="col-span-2 h-full w-full cursor-pointer object-contain p-10"
         :src="company?.profile_photo_url"
         :alt="company?.name"
         @click="options.modelValue = true"
