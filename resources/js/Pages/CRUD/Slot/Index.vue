@@ -14,6 +14,7 @@ interface Props {
     with: {
         quests: Quest[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -24,7 +25,12 @@ const quests = computed<number[]>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Slots" :items="items" name="slots">
+    <CRUDLayout
+        title="Slots"
+        :items="items"
+        name="slots"
+        :is-searchable="isSearchable"
+    >
         <template #heading
             ><span class="italic">Slots</span> de tarefas</template
         >

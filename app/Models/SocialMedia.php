@@ -23,4 +23,17 @@ class SocialMedia extends Model
         'twitter',
         'website',
     ];
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'email' => $this->email,
+            'facebook' => $this->facebook,
+            'github' => $this->github,
+            'instagram' => $this->instagram,
+            'linkedin' => $this->linkedin,
+            'twitter' => $this->twitter,
+            'website' => $this->website,
+        ];
+    }
 }

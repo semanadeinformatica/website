@@ -18,6 +18,7 @@ interface Props {
         companies: Company[];
         tiers: SponsorTier[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -48,7 +49,12 @@ const tiers = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Sponsor" :items="items" name="sponsors">
+    <CRUDLayout
+        title="Sponsor"
+        :items="items"
+        name="sponsors"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Patrocínios</template>
 
         <template #header>

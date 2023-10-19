@@ -59,4 +59,11 @@ class Participant extends Model
     {
         return $this->belongsToMany(CompetitionTeam::class);
     }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'social_media' => $this->socialMedia?->toSearchableArray(),
+        ];
+    }
 }

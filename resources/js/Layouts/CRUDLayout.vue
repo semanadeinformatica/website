@@ -13,6 +13,7 @@ defineProps<{
     items: Paginated<T>;
     title: string;
     name: string;
+    isSearchable?: boolean;
 }>();
 
 const query = useSearch("query", ["items"]);
@@ -28,7 +29,12 @@ const query = useSearch("query", ["items"]);
             >
                 <h2 class="mr-auto text-2xl"><slot name="heading"></slot></h2>
 
-                <TextInput v-model="query" label="Pesquisar" type="search" />
+                <TextInput
+                    v-if="isSearchable"
+                    v-model="query"
+                    label="Pesquisar"
+                    type="search"
+                />
 
                 <Link :href="route(`admin.${name}.create`)">Novo</Link>
             </header>

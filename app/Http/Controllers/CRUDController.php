@@ -31,13 +31,6 @@ abstract class CRUDController extends Controller
     protected array $rules = [];
 
     /**
-     * The columns to search in.
-     *
-     * @var array<int, string>
-     */
-    protected array $search = [];
-
-    /**
      * The validation rules for the store method.
      *
      * @param  T  $old The old model.
@@ -76,29 +69,13 @@ abstract class CRUDController extends Controller
 
     public function index(Request $request)
     {
-        $sort_by = $request->query('sort_by', 'id');
-        $sort_dir = $request->query('sort_dir', 'asc');
-        $query = $this->model::orderBy($sort_by, $sort_dir);
-
-        $filter_by = $request->query('filter_by');
-
-        if ($filter_by) {
-            foreach ($filter_by as $column => $values) {
-                $query->whereIn($column, $values);
-            }
-        }
+        $isSearchable = in_array(\Laravel\Scout\Searchable::class, class_uses($this->model));
 
         $search = $request->query('query');
-
-        if ($search) {
-            $search = explode(' ', $search);
-            foreach ($search as $searchTerm) {
-                $query->where(function ($query) use ($searchTerm) {
-                    foreach ($this->search as $column) {
-                        $query->orWhere($column, 'ILIKE', "%{$searchTerm}%");
-                    }
-                });
-            }
+        if ($isSearchable && $search !== null) {
+            $query = $this->model::search($search);
+        } else {
+            $query = $this->model::orderBy('id');
         }
 
         $filteredQuery = collect($request->query())
@@ -107,12 +84,10 @@ abstract class CRUDController extends Controller
 
         $with = $this->with();
 
-        return Inertia::render("CRUD/$this->view/Index", [
+        return Inertia::render("CRUD/{$this->view}/Index", [
             'items' => $items,
             'with' => $with,
-            'sortBy' => $sort_by,
-            'sortDir' => $sort_dir,
-            'filterBy' => $filter_by,
+            'isSearchable' => $isSearchable,
         ]);
     }
 

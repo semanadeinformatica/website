@@ -16,6 +16,7 @@ interface Props {
         participants: Participant[];
         editions: Edition[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -37,7 +38,12 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Enrollment" :items="items" name="enrollments">
+    <CRUDLayout
+        title="Enrollment"
+        :items="items"
+        name="enrollments"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Inscrições</template>
 
         <template #header>

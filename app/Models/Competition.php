@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Competition extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'theme',
@@ -35,5 +37,14 @@ class Competition extends Model
     public function teams(): HasMany
     {
         return $this->hasMany(CompetitionTeam::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'theme' => $this->theme,
+            'edition' => $this->edition->name,
+        ];
     }
 }

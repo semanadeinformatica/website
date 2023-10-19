@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Department extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $fillable = [
         'name',
@@ -25,5 +27,13 @@ class Department extends Model
     public function staff(): HasMany
     {
         return $this->hasMany(Staff::class)->orderByDesc('coordinator');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'edition' => $this->edition->name,
+        ];
     }
 }

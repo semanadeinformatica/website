@@ -9,13 +9,19 @@ import type EventType from "@/Types/EventType";
 
 interface Props {
     items: Paginated<EventType>;
+    isSearchable?: boolean;
 }
 
 defineProps<Props>();
 </script>
 
 <template>
-    <CRUDLayout title="Event Types" :items="items" name="eventTypes">
+    <CRUDLayout
+        title="Event Types"
+        :items="items"
+        name="eventTypes"
+        :is-searchable="isSearchable"
+    >
         <template #heading>Event Types</template>
 
         <template #header>

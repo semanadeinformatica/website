@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Laravel\Scout\Searchable;
 
 class Quest extends Model
 {
     use HasFactory;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -43,5 +45,14 @@ class Quest extends Model
     public function requirement(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'category' => $this->category,
+            'edition' => $this->edition->name,
+        ];
     }
 }

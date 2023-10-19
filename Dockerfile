@@ -31,10 +31,25 @@ USER root
 
 RUN apk add --no-cache php82-pdo_pgsql php82-pgsql php82-pecl-redis php82-iconv
 
-USER nobody
+# Install supercronic (cron alternative)
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.26/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=7a79496cf8ad899b99a719355d4db27422396735
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+    && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+    && chmod +x "$SUPERCRONIC" \
+    && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+    && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
 COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./etc/php/php.ini ${PHP_INI_DIR}/conf.d/php.ini
+COPY --chown=nobody ./etc/crontab ./crontab
+COPY --chown=nobody ./etc/supervisord.conf ./supervisord.conf
+
+RUN cat ./supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf
+
+USER nobody
 
 COPY --chown=nobody ./.env.prod ./.env
 

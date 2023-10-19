@@ -14,6 +14,7 @@ interface Props {
     with: {
         editions: Edition[];
     };
+    isSearchable?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -26,7 +27,12 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout title="Sponsor Tiers" :items="items" name="sponsorTiers">
+    <CRUDLayout
+        title="Sponsor Tiers"
+        :items="items"
+        name="sponsorTiers"
+        :is-searchable="isSearchable"
+    >
         <template #heading
             ><span class="italic">Tier</span> de patrocínio</template
         >
