@@ -93,11 +93,11 @@ const iconColor: Record<string, string> = {
                     </h3>
                 </div>
             </div>
-            <p
+            <div
                 class="prose col-span-2 row-start-2 max-w-4xl text-inherit"
                 :class="reverse ? 'text-right' : ''"
                 v-html="user.usertype?.description_html"
-            ></p>
+            ></div>
         </div>
     </div>
 </template>

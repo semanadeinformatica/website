@@ -51,10 +51,10 @@ defineProps<Props>();
             <span v-else class="text-xl font-bold underline">
                 {{ company?.name }}
             </span>
-            <p
+            <div
                 class="prose text-justify text-inherit max-md:h-96 max-md:overflow-y-scroll"
                 v-html="company?.usertype?.description_html"
-            ></p>
+            ></div>
         </div>
     </VueFinalModal>
 </template>
