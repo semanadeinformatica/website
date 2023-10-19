@@ -42,6 +42,7 @@ class SpeakerFactory extends Factory
             'description' => fake()->paragraph(),
             'user_id' => 0,
             'social_media_id' => SocialMedia::factory(),
+            'display_name' => fake()->optional()->name(),
         ];
     }
 }
