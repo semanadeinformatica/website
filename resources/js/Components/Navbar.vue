@@ -120,8 +120,8 @@ const isAdmin = checkIsAdmin(page.props.auth.user);
             </Dropdown>
         </div>
 
-        <div class="mr-4 flex w-full items-center justify-end">
-            <div class="hidden gap-1 md:flex lg:gap-4">
+        <div class="mr-4 flex w-full justify-end">
+            <div class="hidden h-full gap-1 md:flex lg:gap-4">
                 <Dropdown align="center" width="20">
                     <template #trigger>
                         <DropdownTrigger> 2023 </DropdownTrigger>
@@ -142,7 +142,7 @@ const isAdmin = checkIsAdmin(page.props.auth.user);
                 </Dropdown>
             </div>
 
-            <div class="ml-2 lg:mx-4">
+            <div class="ml-2 flex items-center lg:mx-4">
                 <template v-if="$page.props.auth.user">
                     <Dropdown align="right" :width="isAdmin ? '32' : '20'">
                         <template #trigger>
