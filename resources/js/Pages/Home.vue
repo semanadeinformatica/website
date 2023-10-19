@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
+import InfoPopup from "@/Components/Home/InfoPopup.vue";
 import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
@@ -50,6 +51,8 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Home">
+        <ModalsContainer />
+        <InfoPopup />
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
@@ -188,7 +191,6 @@ const formattedDate = (
         </section>
         <!-- SPONSORS -->
         <section id="sponsors" class="flex flex-col gap-10 px-20 py-20">
-            <ModalsContainer />
             <p
                 class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-teal-dark p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
             >
