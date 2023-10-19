@@ -52,7 +52,7 @@ const formattedDate = (
 <template>
     <AppLayout title="Home">
         <ModalsContainer />
-        <InfoPopup />
+        <InfoPopup v-if="$page.props.auth.user" />
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"

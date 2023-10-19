@@ -4,6 +4,8 @@ import "vue-final-modal/style.css";
 import { inject, onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
 import route from "ziggy-js";
+import { router } from "@inertiajs/vue3";
+import PrimaryButton from "../PrimaryButton.vue";
 
 const options = ref({
     modelValue: false,
@@ -18,6 +20,11 @@ onMounted(() => {
 const cacheSeenInfo = () => {
     $cookies?.set("seenInfo", true);
     options.value.modelValue = false;
+};
+
+const enroll = () => {
+    $cookies?.set("seenInfo", true);
+    router.put(route("enroll"));
 };
 </script>
 
@@ -75,6 +82,14 @@ const cacheSeenInfo = () => {
                     >Loja</a
                 >
             </p>
+            <PrimaryButton
+                color="red"
+                shadow="teal"
+                text-size="text-2xl"
+                padding="sm:px-8"
+                @click="enroll"
+                >Inscrever-me</PrimaryButton
+            >
         </div>
     </VueFinalModal>
 </template>
