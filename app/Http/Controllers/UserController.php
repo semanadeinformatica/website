@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Jobs\RemoveQuestCode;
 use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Enrollment;
 use App\Models\Participant;
+use App\Models\Sponsor;
 use App\Models\SponsorTier;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -162,22 +164,25 @@ class UserController extends UserProfileController
 
     public function generateQuestCode(Request $request)
     {
+        // This checks if the user is a participant
         Gate::authorize('participant');
 
         /** @var Participant */
-        $user = $request->user()->usertype;
+        $participant = $request->user()->usertype;
 
+        // Generate a random code (100 tries)
         for ($i = 0; $i < 100; $i++) {
             $code = Str::random(10);
 
+            // Check if the code already exists
             if (Participant::where('quest_code', $code)->exists()) {
                 continue;
             }
 
-            $user->quest_code = $code;
-            $user->save();
+            $participant->quest_code = $code;
+            $participant->save();
 
-            RemoveQuestCode::dispatch($user)->delay(now()->addMinutes(10));
+            RemoveQuestCode::dispatch($participant)->delay(now()->addMinutes(10));
 
             return redirect()->back();
         }

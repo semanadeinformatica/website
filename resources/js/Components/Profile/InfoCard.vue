@@ -4,7 +4,6 @@ import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
 import { router } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import { ModalsContainer } from "vue-final-modal";
 import QRCode from "./QRCode.vue";
 
 interface Props {
@@ -119,7 +118,6 @@ const iconColor: Record<string, string> = {
                 "
                 :participant="user.usertype"
             ></QRCode>
-            <ModalsContainer></ModalsContainer>
         </div>
     </div>
 </template>
