@@ -69,10 +69,15 @@ const colorPicker = () => {
                 class="absolute -bottom-5 mr-2 flex border border-black bg-2023-red-dark p-2 px-3 text-xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
             >
                 Dia
-                {{ event.event_day ? $d(event.event_day.date, "day") : "" }}
-                @
-                {{ event.time_start ? formatTimeString(event.time_start) : "" }}
-                <template v-if="event.room"> - {{ event.room }} </template>
+                {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},
+                {{
+                    event.time_start
+                        ? formatTimeString(event.time_start)
+                        : "N/A"
+                }}
+                -
+                {{ event.time_end ? formatTimeString(event.time_end) : "N/A" }}
+                <template v-if="event.room"> @ {{ event.room }} </template>
             </h1>
         </section>
         <!-- companies -->
