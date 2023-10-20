@@ -11,6 +11,7 @@ const form = useForm({
     email: "",
     type: "" as "participant" | "company" | "speaker" | "admin",
     title: "",
+    display_name: "",
     description: "",
     organization: "",
     public_email: "",
@@ -80,6 +81,15 @@ const submit = () => {
                 label="Título"
                 type="text"
                 :error-message="form.errors.title"
+            />
+
+            <TextInput
+                v-if="form.type === 'speaker'"
+                id="displayName"
+                v-model="form.display_name"
+                label="Nome a apresentar"
+                type="text"
+                :error-message="form.errors.display_name"
             />
 
             <TextInput

@@ -20,6 +20,7 @@ class UserCRUDController extends CRUDController
         'email' => 'required|string|email|max:255|unique:users,email',
         'type' => 'required|in:participant,company,admin,speaker',
         'title' => 'sometimes|nullable|string',
+        'display_name' => 'sometimes|nullable|string',
         'description' => 'sometimes|nullable|string',
         'organization' => 'sometimes|nullable|string',
         'public_email' => 'sometimes|nullable|string|email',
@@ -64,6 +65,7 @@ class UserCRUDController extends CRUDController
                 'title' => $new['title'],
                 'description' => $new['description'],
                 'organization' => $new['organization'],
+                'display_name' => $new['display_name'],
             ],
             default => [],
         });
@@ -116,6 +118,7 @@ class UserCRUDController extends CRUDController
                 'title' => $new['title'],
                 'description' => $new['description'],
                 'organization' => $new['organization'],
+                'display_name' => $new['display_name'],
             ],
             default => [],
         };

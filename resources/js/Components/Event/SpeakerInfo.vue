@@ -83,7 +83,7 @@ const iconColor: Record<string, string> = {
                     :class="reverse ? 'flex flex-col items-end text-right' : ''"
                 >
                     <h2 class="text-3xl font-bold uppercase">
-                        {{ user.name }}
+                        {{ user.usertype?.display_name ?? user.name }}
                     </h2>
                     <h3 class="text-xl font-bold">
                         {{ user.usertype?.title }}

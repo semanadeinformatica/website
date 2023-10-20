@@ -24,6 +24,7 @@ class Speaker extends Model
         'description',
         'organization',
         'social_media_id',
+        'display_name',
     ];
 
     protected $with = ['socialMedia'];
@@ -46,6 +47,7 @@ class Speaker extends Model
             'title' => $this->title,
             'description' => $this->description,
             'organization' => $this->organization,
+            'display_name' => $this->display_name,
             'social_media' => $this->socialMedia?->toSearchableArray(),
         ];
     }

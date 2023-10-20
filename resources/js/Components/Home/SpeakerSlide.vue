@@ -60,7 +60,7 @@ const speakerName = (name: string) => {
             </div>
         </div>
         <p class="max-w-52 break-words py-4 text-lg text-2023-teal-dark">
-            {{ speakerName(speaker.name) }}
+            {{ speaker.usertype?.display_name ?? speakerName(speaker.name) }}
         </p>
     </div>
 </template>
