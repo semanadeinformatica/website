@@ -27,7 +27,7 @@ const form = useForm({
     capacity: "",
     event_day_id: "",
     event_type_id: "",
-    room: "",
+    location: "",
     users: [] as string[],
 });
 
@@ -80,11 +80,11 @@ const submit = () => {
             />
 
             <TextInput
-                id="room"
-                v-model="form.room"
-                label="Sala"
+                id="location"
+                v-model="form.location"
+                label="Local"
                 type="text"
-                :error-message="form.errors.room"
+                :error-message="form.errors.location"
             />
 
             <TextInput
