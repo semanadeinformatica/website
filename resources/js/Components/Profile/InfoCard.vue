@@ -111,13 +111,27 @@ const iconColor: Record<string, string> = {
                     />
                 </svg>
             </button>
-            <QRCode
+            <template
                 v-if="
                     user?.usertype_type == 'App\\Models\\Participant' &&
                     user.usertype
                 "
-                :participant="user.usertype"
-            ></QRCode>
+            >
+                <QRCode :participant="user.usertype"></QRCode>
+            </template>
+            <template
+                v-else-if="
+                    user?.usertype_type == 'App\\Models\\Company' &&
+                    user.usertype
+                "
+            >
+                <a
+                    class="flex w-fit cursor-pointer rounded-full text-2023-teal"
+                    :href="route('user.qr-code')"
+                >
+                    <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
+                </a>
+            </template>
         </div>
     </div>
 </template>

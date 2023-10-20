@@ -108,6 +108,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('/profile', 'show')->name('user.profile');
             });
 
+            Route::get('/qr-code', fn () => Inertia::render('Profile/ScanCode'))
+                ->name('user.qr-code');
+
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');

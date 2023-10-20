@@ -14,6 +14,7 @@ import messages from "./messages";
 const vfm = createVfm();
 
 import * as IoIcons from "oh-vue-icons/icons/io";
+import { VueQrcodeReader } from "vue-qrcode-reader";
 
 const Io = Object.values({ ...IoIcons });
 addIcons(
@@ -88,6 +89,7 @@ createInertiaApp({
             .use(i18n)
             .use(ZiggyVue, Ziggy)
             .use(VueCookies, { expires: "7d" })
+            .use(VueQrcodeReader)
             .mount(el);
     },
     progress: {

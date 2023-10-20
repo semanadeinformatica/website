@@ -11,7 +11,7 @@ type Visitor = Participant & {
 
 const visitors = usePage().props.participants as Visitor[];
 
-console.log(visitors);
+// console.log(visitors);
 </script>
 
 <template>
