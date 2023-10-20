@@ -32,6 +32,7 @@ class Event extends Model
         'description',
         'event_type_id',
         'location',
+        'external_url',
     ];
 
     protected $appends = [

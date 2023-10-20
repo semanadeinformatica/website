@@ -15,6 +15,7 @@ export default interface Event extends Model {
     description_html: string;
 
     location?: string;
+    external_url?: string;
 
     enrollments?: Enrollment[];
 

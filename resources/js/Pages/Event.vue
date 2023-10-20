@@ -126,16 +126,26 @@ const colorPicker = () => {
                 text-size="sm:text-3xl"
                 padding="sm:px-8"
                 @click="
-                    $page.props.auth.user
-                        ? isEnrolled
-                            ? router.put(route('event.join', event))
-                            : router.get(route('home') + '#enroll-section') // HACK: this is a hack
-                        : router.get(route('register'))
+                    if (!(isEnrolled && event.external_url)) {
+                        $page.props.auth.user
+                            ? isEnrolled
+                                ? router.put(route('event.join', event))
+                                : router.get(route('home') + '#enroll-section') // HACK: this is a hack
+                            : router.get(route('register'));
+                    }
                 "
             >
                 <span v-if="!isEnrolled" class="flex flex-col"
                     >Inscreve-te nesta edição!</span
                 >
+                <a
+                    v-else-if="event.external_url"
+                    :href="event.external_url"
+                    target="_blank"
+                    class="flex flex-col"
+                >
+                    <span>Link para inscrição</span>
+                </a>
                 <span v-else class="flex flex-col"> Inscreve-te! </span>
             </PrimaryButton>
 
