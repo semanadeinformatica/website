@@ -137,6 +137,17 @@ const colorPicker = () => {
                 >
                 <span v-else class="flex flex-col"> Inscreve-te! </span>
             </PrimaryButton>
+
+            <PrimaryButton
+                v-else-if="isEnrolled"
+                color="teal-dark"
+                shadow="red"
+                text-size="sm:text-3xl"
+                padding="sm:px-8"
+                @click="router.put(route('event.leave', event))"
+            >
+                <span class="flex flex-col">Cancela a inscrição</span>
+            </PrimaryButton>
         </div>
     </AppLayout>
 </template>
