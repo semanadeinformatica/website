@@ -72,13 +72,6 @@ class Event extends Model
         });
     }
 
-    public function scopeWorkshop(Builder $query): void
-    {
-        $query->whereHas('type', function ($query) {
-            $query->where('name', 'workshop');
-        });
-    }
-
     public function descriptionHtml(): Attribute
     {
         return Attribute::get(fn () => Str::markdown($this->description ?? '', [
