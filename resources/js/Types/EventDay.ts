@@ -11,5 +11,5 @@ export default interface EventDay extends Model {
 
     events?: Event[];
     talks?: Event[];
-    workshops?: Event[];
+    activities?: Event[];
 }

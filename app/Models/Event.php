@@ -65,6 +65,13 @@ class Event extends Model
         });
     }
 
+    public function scopeActivity(Builder $query): void
+    {
+        $query->whereHas('type', function ($query) {
+            $query->whereNot('name', 'talk');
+        });
+    }
+
     public function scopeWorkshop(Builder $query): void
     {
         $query->whereHas('type', function ($query) {

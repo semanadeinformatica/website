@@ -17,7 +17,7 @@ const selectedType = ref<"talk" | "activity" | "stand">("talk");
 
 const noInfo = computed(
     () =>
-        day.workshops?.length == 0 &&
+        day.activities?.length == 0 &&
         day.talks?.length == 0 &&
         day.stands?.length == 0,
 );
@@ -60,7 +60,7 @@ onMounted(() => {
                 Palestras
             </button>
             <button
-                v-if="(day.workshops?.length ?? 0) > 0"
+                v-if="(day.activities?.length ?? 0) > 0"
                 class="transition"
                 data-type="activity"
                 @click="toggle"
@@ -95,9 +95,9 @@ onMounted(() => {
 
                 <template v-else-if="selectedType === 'activity'">
                     <ActivityTimelineAction
-                        v-for="workshop in day.workshops"
-                        :key="workshop.id"
-                        :event="workshop"
+                        v-for="activity in day.activities"
+                        :key="activity.id"
+                        :event="activity"
                     />
                 </template>
 
