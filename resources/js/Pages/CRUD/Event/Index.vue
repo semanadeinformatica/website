@@ -61,7 +61,7 @@ const event_types = computed<Record<number, string>>(() =>
                     >Tipo do evento</Header
                 >
                 <Header sort-by="capacity">Capacidade</Header>
-                <Header sort-by="capacity">Sala</Header>
+                <Header sort-by="capacity">Local</Header>
             </HeaderRow>
         </template>
 
@@ -73,7 +73,7 @@ const event_types = computed<Record<number, string>>(() =>
                 <Cell>{{ event_days[item.event_day_id] }}</Cell>
                 <Cell>{{ event_types[item.event_type_id] }}</Cell>
                 <Cell>{{ item.capacity ?? "N/A" }}</Cell>
-                <Cell>{{ item.room }}</Cell>
+                <Cell>{{ item.location }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

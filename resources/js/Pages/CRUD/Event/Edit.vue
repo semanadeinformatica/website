@@ -29,7 +29,7 @@ const form = useForm({
     capacity: event.capacity?.toString() ?? "",
     event_day_id: event.event_day_id.toString(),
     event_type_id: event.event_type_id.toString(),
-    room: event.room ?? "",
+    location: event.location ?? "",
     users: event.users?.map((u) => u.id.toString()) ?? [],
 });
 
@@ -82,11 +82,11 @@ const submit = () => {
             />
 
             <TextInput
-                id="room"
-                v-model="form.room"
-                label="Sala"
+                id="location"
+                v-model="form.location"
+                label="Local"
                 type="text"
-                :error-message="form.errors.room"
+                :error-message="form.errors.location"
             />
 
             <TextInput

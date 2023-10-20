@@ -36,7 +36,7 @@ class UserController extends UserProfileController
         }
 
         $slots = $edition->slots();
-        $tickets = $edition->events();
+        $tickets = $edition->events()->with('event_day');
         $participants = null;
         $canViewCv = $request->user()->can('viewCVOf', [$user, $edition]);
 

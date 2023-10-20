@@ -110,7 +110,10 @@ const accentColor = () => {
                     <div
                         class="my-auto flex flex-col gap-[.25em] px-[1em] py-[.5em]"
                     >
-                        <span>SALA: {{ event.room }}</span>
+                        <span v-if="event.location"
+                            >LOCAL: {{ event.location }}</span
+                        >
+                        <!-- TODO: add link based on location character length -->
                         <span
                             >HORA:
                             {{
