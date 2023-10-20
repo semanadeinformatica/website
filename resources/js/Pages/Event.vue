@@ -132,7 +132,6 @@ const colorPicker = () => {
                         : router.get(route('register'))
                 "
             >
-
                 <span v-if="!isEnrolled" class="flex flex-col"
                     >Inscreve-te nesta edição!</span
                 >
