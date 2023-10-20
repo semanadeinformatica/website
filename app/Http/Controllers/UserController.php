@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\RemoveQuestCode;
 use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Participant;
 use App\Models\SponsorTier;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -163,13 +164,13 @@ class UserController extends UserProfileController
     {
         Gate::authorize('participant');
 
-        /** @var User */
-        $user = $request->user();
+        /** @var Participant */
+        $user = $request->user()->usertype;
 
         for ($i = 0; $i < 100; $i++) {
-            $code = Str::random(32);
+            $code = Str::random(10);
 
-            if (User::where('quest_code', $code)->exists()) {
+            if (Participant::where('quest_code', $code)->exists()) {
                 continue;
             }
 

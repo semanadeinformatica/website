@@ -9,4 +9,6 @@ export default interface Participant extends Model {
     social_media?: SocialMedia;
     cv_path?: string;
     cv_url?: string;
+    quest_qr_code?: string;
+    quest_code?: string;
 }
