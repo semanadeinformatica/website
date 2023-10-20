@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RemoveQuestCode;
 use App\Models\Company;
 use App\Models\Edition;
 use App\Models\SponsorTier;
@@ -9,6 +10,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
@@ -154,5 +157,30 @@ class UserController extends UserProfileController
             'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
             'sessions' => $this->sessions($request)->all(),
         ]);
+    }
+
+    public function generateQuestCode(Request $request)
+    {
+        Gate::authorize('participant');
+
+        /** @var User */
+        $user = $request->user();
+
+        for ($i = 0; $i < 100; $i++) {
+            $code = Str::random(32);
+
+            if (User::where('quest_code', $code)->exists()) {
+                continue;
+            }
+
+            $user->quest_code = $code;
+            $user->save();
+
+            RemoveQuestCode::dispatch($user)->delay(now()->addMinutes(10));
+
+            return redirect()->back();
+        }
+
+        return abort(500);
     }
 }

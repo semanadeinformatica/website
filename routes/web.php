@@ -116,6 +116,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
             Route::get('/profile/edit', [UserController::class, 'edit'])
                 ->name('profile.edit');
+            
+            Route::post('/generate-quest-code', [UserController::class, 'generateQuestCode'])
+                ->name('generate-quest-code');
         });
     }
 );
