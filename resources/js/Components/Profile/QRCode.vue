@@ -7,18 +7,23 @@ import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import route from "ziggy-js";
 
-defineProps<{
+const { participant } = defineProps<{
     participant: Participant;
 }>();
 
-const options = ref({
-    modelValue: false,
-});
+const modalOpen = ref(false);
+const loading = ref(false);
 
 const showQRCode = () => {
-    options.value.modelValue = true;
+    modalOpen.value = true;
 
-    router.post(route("generate-quest-code"));
+    if (!participant.quest_qr_code) {
+        loading.value = true;
+        router.post(route("generate-quest-code"), undefined, {
+            preserveState: true,
+            onFinish: () => (loading.value = false),
+        });
+    }
 };
 </script>
 
@@ -30,14 +35,17 @@ const showQRCode = () => {
         <OhVueIcon name="io-qr-code" scale="1.4"></OhVueIcon>
     </p>
     <VueFinalModal
-        v-model="options.modelValue"
+        v-model="modalOpen"
         class="flex items-center justify-center"
-        content-class="max-w-xl min-w-[20em] mx-4 p-6 gap-7 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col"
+        content-class="max-w-xl min-w-[20em] mx-4 p-8 pt-12 gap-8 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col"
     >
-        <div v-html="participant.quest_qr_code"></div>
-        <p class="font-bold text-2023-teal-dark">
-            {{ participant.quest_code }}
-        </p>
+        <span v-if="loading" class="text-lg">A gerar...</span>
+        <template v-else>
+            <div v-html="participant.quest_qr_code"></div>
+            <span class="font-bold text-2023-teal-dark">
+                {{ participant.quest_code }}
+            </span>
+        </template>
     </VueFinalModal>
 </template>
 
