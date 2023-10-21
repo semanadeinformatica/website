@@ -14,14 +14,14 @@ defineProps<Props>();
 <template>
     <div>
         <Head :title="title" />
-        <Banner />
-        <div>
+        <div class="sticky top-0 z-30">
             <Navbar />
-            <main class="min-h-screen bg-2023-bg">
-                <slot />
-            </main>
-            <Footer />
+            <Banner />
         </div>
+        <main class="min-h-screen bg-2023-bg">
+            <slot />
+        </main>
+        <Footer />
     </div>
 </template>
 
