@@ -138,8 +138,8 @@ class UserController extends UserProfileController
 
         if ($currentEnrollment) {
             $slots = $slots
-                ->withCount(['quests as completed_count' => function ($query) {
-                    $query->whereRelation('slots', 'id', DB::raw('slots.id'));
+                ->withCount(['quests as completed_count' => function ($query) use ($currentEnrollment) {
+                    $query->whereRelation('enrollments', 'enrollment_id', $currentEnrollment->id);
                 }]);
 
             $tickets = $tickets
