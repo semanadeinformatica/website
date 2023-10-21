@@ -6,6 +6,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type Slot from "@/Types/Slot";
+import ImageInput from "@/Components/ImageInput.vue";
 
 interface Props {
     item: Slot;
@@ -17,20 +18,31 @@ interface Props {
 const { item: slot } = defineProps<Props>();
 
 const form = useForm({
+    _method: "PUT",
     total_quests: slot.total_quests.toString(),
     points: slot.points.toString(),
     name: slot.name,
     quests: slot.quests?.map((q) => q.id.toString()) ?? [],
+    image: null as File | null,
 });
 
 const submit = () => {
-    form.put(route("admin.slots.update", slot));
+    form.post(route("admin.slots.update", slot));
 };
 </script>
 
 <template>
     <CardLayout title="Slots">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                id="image"
+                v-model="form.image"
+                :initial-preview="item.image_slot_url"
+                label="Imagem do slot"
+                class="self-stretch"
+                :error-message="form.errors.image"
+            />
+
             <TextInput
                 id="total_quests"
                 v-model="form.total_quests"

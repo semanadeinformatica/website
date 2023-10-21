@@ -23,13 +23,13 @@ const completeness = computed(() => {
 
 <template>
     <div
-        class="sticker-clip-path group relative flex h-[220px] w-[220px] basis-0 justify-center overflow-hidden"
+        class="sticker-clip-path group relative flex h-56 w-56 basis-0 justify-center overflow-hidden"
         :class="bgColor[color]"
     >
         <img
-            class="sticker-clip-path m-auto transition-all duration-500 group-hover:blur"
-            src="https://picsum.photos/200/200"
-            alt="Sticker"
+            class="sticker-clip-path w-52 h-52 object-cover m-auto transition-all duration-500 group-hover:blur"
+            :src="sticker.image_slot_url ?? ''"
+            :alt="sticker.name"
         />
         <div
             class="absolute inset-0 mix-blend-saturation"
