@@ -34,6 +34,10 @@ class Event extends Model
         'location',
     ];
 
+    protected $appends = [
+        'description_html',
+    ];
+
     public function event_day(): BelongsTo
     {
         return $this->belongsTo(EventDay::class);
