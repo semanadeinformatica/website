@@ -51,7 +51,7 @@ const isAdmin = checkIsAdmin(props.auth.user);
 </script>
 
 <template>
-    <nav class="sticky top-0 z-30 flex border-b-2 border-black bg-2023-bg py-2">
+    <nav class="flex border-b-2 border-black bg-2023-bg py-2">
         <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
             <template #trigger>
                 <DropdownTrigger class="group">
