@@ -2,20 +2,41 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\ParticipantNotification;
+use App\Mail\UserNotification;
+use App\Models\Admin;
+use App\Models\Company;
 use App\Models\Participant;
+use App\Models\Speaker;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class SendMailToParticipants extends Command
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\text;
+
+class SendMailToParticipants extends Command implements PromptsForMissingInput
 {
+    /**
+     * The default receiver types.
+     */
+    const DEFAULT_RECEIVER_TYPES = [Participant::class];
+
+    /**
+     * Default configuration of whether emails should be sent to admins first or not.
+     */
+    const DEFAULT_TEST_FIRST = false;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:send-mail-to-participants {text : Text to send}';
+    protected $signature = 'app:send-mail-to-participants {text : Text to send} {--types=*} {--test}';
 
     /**
      * Prompt for missing input arguments using the returned questions.
@@ -25,8 +46,33 @@ class SendMailToParticipants extends Command
     protected function promptForMissingArgumentsUsing()
     {
         return [
-            'text' => 'Which text should you send in the email?',
+            'text' => fn () => text('Which text should you send in the email?'),
         ];
+    }
+
+    /**
+     * Perform actions after the user was prompted for missing arguments.
+     *
+     * @return void
+     */
+    protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)
+    {
+        $input->setOption('types', multiselect(
+            'Which user types should receive the email?',
+            options: [
+                Participant::class => 'Participants',
+                Company::class => 'Companies',
+                Speaker::class => 'Speakers',
+            ],
+            default: [
+                Participant::class,
+            ],
+            required: true,
+        ));
+        $input->setOption('test', confirm(
+            'Should the email be sent to admins before being sent to other users?',
+            default: false,
+        ));
     }
 
     /**
@@ -41,14 +87,35 @@ class SendMailToParticipants extends Command
      */
     public function handle()
     {
-
         $text = $this->argument('text');
 
-        $participants = User::where('usertype_type', Participant::class)->get()->pluck(['email']);
-        $this->info('Sending mail to all participants!');
+        $types = $this->option('types');
+        if ($types === []) {
+            $types = self::DEFAULT_RECEIVER_TYPES;
+        }
 
-        // Mail::send(new ParticipantNotification($text));
+        $test = $this->option('test') ?? self::DEFAULT_TEST_FIRST;
 
-        $this->info('Sent mail to every participant');
+        if ($test) {
+            $admins = User::where('usertype_type', Admin::class)->get();
+
+            $this->info('Sending mail to all admins before sending to participants!');
+
+            Mail::to($admins)->queue(new UserNotification($text));
+
+            if (! confirm('Send mail to all participants?', default: false, yes: 'Yes', no: 'No')) {
+                return;
+            }
+        }
+
+        /** @var Collection */
+        $users = User::whereIn('usertype_type', $types)->get();
+
+        $this->info("Sending mail to {$users->count()} users!");
+
+        // chunk the users into groups of 50 and send the email to each group so we can chunk the emails into groups of 50
+        $users->pluck('email')->chunk(50)->each(fn ($emails) => Mail::bcc($emails)->queue(new UserNotification($text)));
+
+        $this->info('Sent mail to users!');
     }
 }

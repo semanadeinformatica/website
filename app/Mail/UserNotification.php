@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ParticipantNotification extends Mailable
+class UserNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -26,8 +26,7 @@ class ParticipantNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Participant Notification',
-            bcc: ['nunoafonso2002@gmail.com', 'sirze@live.com.pt']
+            subject: 'User Notification',
         );
     }
 
@@ -37,7 +36,7 @@ class ParticipantNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails/participant-notification',
+            markdown: 'emails/user-notification',
             with: [
                 'message' => $this->message,
             ]
