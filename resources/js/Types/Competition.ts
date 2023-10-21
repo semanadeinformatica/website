@@ -10,7 +10,7 @@ export default interface Competition extends Model {
     date_end: string;
     registration_link: string;
 
-    regulation: string;
+    regulation?: string;
 
     /**
      * HTML version of the regulation (which can be written in markdown)

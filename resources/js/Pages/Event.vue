@@ -62,9 +62,10 @@ const colorPicker = () => {
             >
                 {{ event.name }}
             </h1>
-            <div class="max-w-3xl text-justify font-bold text-white">
-                {{ event.description }}
-            </div>
+            <div
+                class="prose max-w-3xl text-justify font-bold text-white"
+                v-html="event.description_html"
+            ></div>
             <h1
                 class="absolute -bottom-5 mr-2 flex border border-black bg-2023-red-dark p-2 px-3 text-xl font-bold text-white shadow-md shadow-2023-bg max-lg:left-auto"
             >
@@ -136,6 +137,17 @@ const colorPicker = () => {
                     >Inscreve-te nesta edição!</span
                 >
                 <span v-else class="flex flex-col"> Inscreve-te! </span>
+            </PrimaryButton>
+
+            <PrimaryButton
+                v-else-if="isEnrolled"
+                color="teal-dark"
+                shadow="red"
+                text-size="sm:text-3xl"
+                padding="sm:px-8"
+                @click="router.put(route('event.leave', event))"
+            >
+                <span class="flex flex-col">Cancela a inscrição</span>
             </PrimaryButton>
         </div>
     </AppLayout>

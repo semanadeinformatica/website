@@ -26,7 +26,7 @@ const form = useForm({
     name: competition.name,
     slug: competition.slug,
     registration_link: competition.registration_link,
-    regulation: competition.regulation,
+    regulation: competition.regulation ?? "",
 });
 
 const submit = () => {

@@ -66,4 +66,28 @@ class EventController extends Controller
 
         return redirect()->route('profile.show')->banner('Inscrição realizada com sucesso!');
     }
+
+    /**
+     * The current user wants to leave the given event if enrolled.
+     */
+    public function leave(Request $request, Event $event)
+    {
+        $user = $request->user();
+
+        $edition = $request->input('edition');
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
+
+        if ($currentEnrollment === null) {
+            return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
+        }
+
+        $currentEnrollment->events()->detach($event);
+
+        return redirect()->route('profile.show')->banner('Inscrição cancelada com sucesso!');
+    }
 }
