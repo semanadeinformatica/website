@@ -221,7 +221,7 @@ class UserController extends UserProfileController
         }
 
         return Inertia::render('Profile/ScanCode', [
-            'quests' => $quests
+            'quests' => $quests,
         ]);
     }
 }

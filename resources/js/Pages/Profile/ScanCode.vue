@@ -23,7 +23,9 @@ const form = useForm({
 
 const submit = () =>
     form.post(route("quest.give", { quest: form.quest }), {
-        onFinish: () => form.reset(),
+        onSuccess: () => form.reset(),
+        preserveState: true,
+        preserveScroll: true,
     });
 
 const errorMap = {
@@ -65,7 +67,7 @@ const onDetect = async ([firstDetectedCode]) => {
                     No perfil do participante, encontrar o ícone de QR Code
                     <span class="text-2023-red"
                         ><OhVueIcon name="io-qr-code" /></span
-                    >, clickar no ícone e scannar o código.
+                    >, clicar no ícone e dar scan ao código.
                 </li>
                 <li>
                     Alternativamente é possível introduzir o código de 10
@@ -73,7 +75,7 @@ const onDetect = async ([firstDetectedCode]) => {
                 </li>
                 <li>
                     <span class="font-bold text-2023-red">IMPORTANTE</span> -
-                    Antes de scannar verificar o Quest selecionado no dropdown
+                    Antes de scannar verificar a tarefa selecionada no dropdown
                     em baixo, o dia deve corresponder ao atual
                 </li>
             </ul>
@@ -97,6 +99,7 @@ const onDetect = async ([firstDetectedCode]) => {
                         label="Código"
                         type="text"
                         required
+                        :error-message="form.errors.quest_code"
                     />
                 </div>
 
@@ -107,12 +110,15 @@ const onDetect = async ([firstDetectedCode]) => {
                         label="Quest"
                         type="select"
                         required
+                        :error-message="form.errors.quest"
                     >
-                        <option 
+                        <option
                             v-for="quest in quests"
                             :key="quest.id"
                             :value="quest.id"
-                        >{{ quest.name }}</option>
+                        >
+                            {{ quest.name }}
+                        </option>
                     </TextInput>
                 </div>
 
