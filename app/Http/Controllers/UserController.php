@@ -189,4 +189,39 @@ class UserController extends UserProfileController
 
         return abort(500);
     }
+
+    public function scanQuestCode(Request $request)
+    {
+        Gate::allowIf(fn (User $user) => $user->isAdmin() || $user->isCompany());
+
+        /** @var User */
+        $user = $request->user();
+
+        /** @var Edition */
+        $edition = $request->edition;
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        if ($user->isAdmin()) {
+            $quests = $edition->quests()->get();
+        } else {
+            /** @var Company */
+            $company = $user->usertype;
+
+            /** @var Sponsor */
+            $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
+
+            if ($sponsor === null) {
+                return response('No sponsor found', 500);
+            }
+
+            $quests = $sponsor->through('stands')->has('quests')->get();
+        }
+
+        return Inertia::render('Profile/ScanCode', [
+            'quests' => $quests
+        ]);
+    }
 }

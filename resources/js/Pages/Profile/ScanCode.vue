@@ -2,52 +2,51 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import type Quest from "@/Types/Quest";
 import { useForm } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
+import route from "ziggy-js";
 
-const result = ref("");
+defineProps<{
+    quests: Quest[];
+}>();
+
 const error = ref("");
+const scanning = ref(false);
 
-// @ts-expect-error: err comes from the qrcode-reader package which has no types
-const onError = (err) => {
-    error.value = `[${err.name}]: `;
+const form = useForm({
+    quest_code: "",
+    quest: "",
+});
 
-    if (err.name === "NotAllowedError") {
-        error.value += "you need to grant camera access permission";
-    } else if (err.name === "NotFoundError") {
-        error.value += "no camera on this device";
-    } else if (err.name === "NotSupportedError") {
-        error.value += "secure context required (HTTPS, localhost)";
-    } else if (err.name === "NotReadableError") {
-        error.value += "is the camera already in use?";
-    } else if (err.name === "OverconstrainedError") {
-        error.value += "installed cameras are not suitable";
-    } else if (err.name === "StreamApiNotSupportedError") {
-        error.value += "Stream API is not supported in this browser";
-    } else if (err.name === "InsecureContextError") {
-        error.value +=
-            "Camera access is only permitted in secure context. Use HTTPS or localhost rather than HTTP.";
-    } else {
-        error.value += err.message;
-    }
+const submit = () =>
+    form.post(route("quest.give", { quest: form.quest }), {
+        onFinish: () => form.reset(),
+    });
+
+const errorMap = {
+    NotAllowedError: "Sem permissão para aceder à câmara",
+    NotFoundError: "Câmara não encontrada",
+    NotSupportedError: "Câmara não suportada",
+    NotReadableError: "Câmara já em uso",
+    OverconstrainedError: "Câmaras não é adequadas",
+    StreamApiNotSupportedError: "Stream API não suportada",
+    InsecureContextError: "Acesso à câmara não permitido em contexto inseguro",
+};
+
+const onError = (err: Error) => {
+    if (err.name in errorMap)
+        error.value = errorMap[err.name as keyof typeof errorMap];
+    else error.value = err.message;
 };
 
 // @ts-expect-error: firstDetectedCode comes from the qrcode-reader package which has no types
 const onDetect = async ([firstDetectedCode]) => {
-    console.log(firstDetectedCode);
+    form.quest_code = firstDetectedCode.rawValue;
 
-    result.value = firstDetectedCode.rawValue;
-};
-
-const form = useForm({
-    qr_code: "",
-});
-
-const submit = () => {
-    // TODO: BACKEND
-    // form.post(route());
+    if (form.quest && form.quest_code) submit();
 };
 </script>
 
@@ -79,26 +78,44 @@ const submit = () => {
                 </li>
             </ul>
             <div
+                :hidden="!scanning"
                 class="h-80 w-80 border border-black shadow-lg shadow-2023-red"
             >
                 <QrcodeStream
+                    @camera-on="scanning = true"
+                    @camera-off="scanning = false"
                     @detect="onDetect"
                     @error="onError"
                 ></QrcodeStream>
             </div>
-            <!-- WARN: FOR TESTING PURPOSES RESULT IS SHOWN HERE -->
-            <p class="text-center text-2023-teal-dark">{{ result }}</p>
             <p class="text-center text-red-600">{{ error }}</p>
             <form class="contents" @submit.prevent="submit">
                 <div class="w-80">
                     <TextInput
                         id="code"
-                        v-model="form.qr_code"
+                        v-model="form.quest_code"
                         label="Código"
                         type="text"
                         required
                     />
                 </div>
+
+                <div class="w-80">
+                    <TextInput
+                        id="quest"
+                        v-model="form.quest"
+                        label="Quest"
+                        type="select"
+                        required
+                    >
+                        <option 
+                            v-for="quest in quests"
+                            :key="quest.id"
+                            :value="quest.id"
+                        >{{ quest.name }}</option>
+                    </TextInput>
+                </div>
+
                 <PrimaryButton type="submit">Confirmar</PrimaryButton>
             </form>
         </div>

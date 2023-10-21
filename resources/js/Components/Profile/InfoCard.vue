@@ -121,13 +121,13 @@ const iconColor: Record<string, string> = {
             </template>
             <template
                 v-else-if="
-                    user?.usertype_type == 'App\\Models\\Company' &&
-                    user.usertype
+                    user?.usertype_type == 'App\\Models\\Company' ||
+                    user?.usertype_type == 'App\\Models\\Admin'
                 "
             >
                 <a
                     class="flex w-fit cursor-pointer rounded-full text-2023-teal"
-                    :href="route('user.qr-code')"
+                    :href="route('user.scan-code')"
                 >
                     <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
                 </a>
