@@ -49,7 +49,7 @@ class Company extends Model
 
     public function descriptionHtml(): Attribute
     {
-        return Attribute::get(fn () => Str::markdown($this->description, [
+        return Attribute::get(fn () => Str::markdown($this->description ?? '', [
             'html_input' => HtmlFilter::STRIP,
             'allow_unsafe_links' => false,
         ]));

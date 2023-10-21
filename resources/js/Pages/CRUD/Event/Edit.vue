@@ -25,7 +25,7 @@ const form = useForm({
     time_start: event.time_start.substring(0, 16),
     time_end: event.time_end.substring(0, 16),
     topic: event.topic,
-    description: event.description,
+    description: event.description ?? "",
     capacity: event.capacity?.toString() ?? "",
     event_day_id: event.event_day_id.toString(),
     event_type_id: event.event_type_id.toString(),
