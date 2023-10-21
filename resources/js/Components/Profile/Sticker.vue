@@ -27,7 +27,7 @@ const completeness = computed(() => {
         :class="bgColor[color]"
     >
         <img
-            class="sticker-clip-path w-52 h-52 object-cover m-auto transition-all duration-500 group-hover:blur"
+            class="sticker-clip-path m-auto h-52 w-52 object-cover transition-all duration-500 group-hover:blur"
             :src="sticker.image_slot_url ?? ''"
             :alt="sticker.name"
         />
