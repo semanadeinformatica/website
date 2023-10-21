@@ -27,12 +27,7 @@ const homeSections: Routes = {
 };
 
 const pageRoutes: Routes = {
-    program: {
-        label: "Programa",
-        _query: {
-            day: 1,
-        },
-    },
+    program: { label: "Programa" },
     shop: { label: "Loja" },
     team: { label: "Equipa" },
 };

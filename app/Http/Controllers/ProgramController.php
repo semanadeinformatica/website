@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -43,7 +45,7 @@ class ProgramController extends Controller
         }
 
         $validated = $validator->validated();
-        $queryDay = isset($validated['day']) ? $validated['day'] : ProgramController::DEFAULT_PROGRAM_DAY;
+        $queryDay = isset($validated['day']) ? $validated['day'] : $this->getCurrentProgramDay($edition);
 
         /** @var \App\Models\EventDay|null $eventDay */
         $eventDay = $edition->event_days()->orderBy('date', 'ASC')->skip($queryDay - 1)->first();
@@ -68,5 +70,15 @@ class ProgramController extends Controller
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),
         ]);
+    }
+
+    private function getCurrentProgramDay(Edition $edition)
+    {
+        $today = Carbon::today();
+        $dates = $edition->event_days()->orderBy('date', 'ASC')->pluck('date');
+
+        $currentDayId = key($dates->filter(fn ($date) => $date == $today)->all());
+
+        return $currentDayId ? $currentDayId + 1 : ProgramController::DEFAULT_PROGRAM_DAY;
     }
 }
