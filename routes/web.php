@@ -17,6 +17,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
@@ -109,6 +110,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::get('/profile', 'show')->name('user.profile');
             });
 
+            Route::get('/scan-code', [UserController::class, 'scanQuestCode'])
+                ->name('user.scan-code');
+
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
@@ -117,6 +121,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
             Route::get('/profile/edit', [UserController::class, 'edit'])
                 ->name('profile.edit');
+
+            Route::post('/generate-quest-code', [UserController::class, 'generateQuestCode'])
+                ->name('generate-quest-code');
         });
     }
 );

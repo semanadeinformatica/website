@@ -17,7 +17,7 @@ class QuestCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string',
         'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
-        'requirement' => 'required|regex:/^((stand|event);[0-9]+)$/',
+        'requirement' => ['required', 'regex:/^((stand|event);[0-9]+)$/'],
         'edition_id' => 'required|exists:editions,id',
     ];
 

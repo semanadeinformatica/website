@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RemoveQuestCode;
 use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Enrollment;
+use App\Models\Participant;
+use App\Models\Sponsor;
 use App\Models\SponsorTier;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
@@ -132,8 +138,8 @@ class UserController extends UserProfileController
 
         if ($currentEnrollment) {
             $slots = $slots
-                ->withCount(['quests as completed_count' => function ($query) {
-                    $query->whereRelation('slots', 'id', DB::raw('slots.id'));
+                ->withCount(['quests as completed_count' => function ($query) use ($currentEnrollment) {
+                    $query->whereRelation('enrollments', 'enrollment_id', $currentEnrollment->id);
                 }]);
 
             $tickets = $tickets
@@ -153,6 +159,69 @@ class UserController extends UserProfileController
         return Inertia::render('Profile/Edit', [
             'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
             'sessions' => $this->sessions($request)->all(),
+        ]);
+    }
+
+    public function generateQuestCode(Request $request)
+    {
+        // This checks if the user is a participant
+        Gate::authorize('participant');
+
+        /** @var Participant */
+        $participant = $request->user()->usertype;
+
+        // Generate a random code (100 tries)
+        for ($i = 0; $i < 100; $i++) {
+            $code = Str::random(10);
+
+            // Check if the code already exists
+            if (Participant::where('quest_code', $code)->exists()) {
+                continue;
+            }
+
+            $participant->quest_code = $code;
+            $participant->save();
+
+            RemoveQuestCode::dispatch($participant)->delay(now()->addMinutes(10));
+
+            return redirect()->back();
+        }
+
+        return abort(500);
+    }
+
+    public function scanQuestCode(Request $request)
+    {
+        Gate::allowIf(fn (User $user) => $user->isAdmin() || $user->isCompany());
+
+        /** @var User */
+        $user = $request->user();
+
+        /** @var Edition */
+        $edition = $request->edition;
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        if ($user->isAdmin()) {
+            $quests = $edition->quests()->get();
+        } else {
+            /** @var Company */
+            $company = $user->usertype;
+
+            /** @var Sponsor */
+            $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
+
+            if ($sponsor === null) {
+                return response('No sponsor found', 500);
+            }
+
+            $quests = $sponsor->through('stands')->has('quests')->get();
+        }
+
+        return Inertia::render('Profile/ScanCode', [
+            'quests' => $quests,
         ]);
     }
 }

@@ -9,5 +9,7 @@ export default interface Slot extends Model {
     quest_count?: number;
     completed_count?: number;
 
+    image_slot_url?: string;
+
     quests?: Quest[];
 }

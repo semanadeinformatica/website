@@ -4,7 +4,6 @@ import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import EnrollSection from "@/Components/Home/EnrollSection.vue";
 import InfoPopup from "@/Components/Home/InfoPopup.vue";
-import { ModalsContainer } from "vue-final-modal";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
@@ -51,7 +50,6 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Home">
-        <ModalsContainer />
         <InfoPopup v-if="$page.props.auth.user" />
         <a
             v-if="canEnroll"

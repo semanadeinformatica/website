@@ -5,6 +5,7 @@ import route from "ziggy-js";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import ImageInput from "@/Components/ImageInput.vue";
 
 interface Props {
     with: {
@@ -19,6 +20,7 @@ const form = useForm({
     points: "0",
     name: "",
     quests: [] as string[],
+    image: null as File | null,
 });
 
 const submit = () => {
@@ -29,6 +31,14 @@ const submit = () => {
 <template>
     <CardLayout title="Slots">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                id="image"
+                v-model="form.image"
+                label="Imagem do slot"
+                class="self-stretch"
+                :error-message="form.errors.image"
+            />
+
             <TextInput
                 id="total_quests"
                 v-model="form.total_quests"
