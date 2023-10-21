@@ -52,7 +52,7 @@ defineProps<Props>();
                 {{ company?.name }}
             </span>
             <div
-                class="prose text-justify text-inherit max-md:h-96 max-md:overflow-y-scroll"
+                class="prose break-words text-justify text-inherit max-md:h-96 max-md:overflow-y-scroll"
                 v-html="company?.usertype?.description_html"
             ></div>
         </div>

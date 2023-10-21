@@ -63,7 +63,7 @@ const colorPicker = () => {
                 {{ event.name }}
             </h1>
             <div
-                class="prose max-w-3xl text-justify font-bold text-white"
+                class="prose max-w-3xl break-words text-justify font-bold text-white"
                 v-html="event.description_html"
             ></div>
             <h1
