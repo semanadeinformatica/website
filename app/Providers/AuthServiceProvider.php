@@ -56,13 +56,18 @@ class AuthServiceProvider extends ServiceProvider
             $enrollment->quests()->where('quest_id', $quest->id)->doesntExist() && // participant must not have the quest
             ( // either
                 (
-                    $user->isAdmin() && // user is admin and either
                     (
-                        $quest->requirement_type === Event::class &&
-                        $enrollment->events()->where('event_id', $quest->requirement_id)->exists()
-                    ) || // requirement is an event the user has joined
-                    $quest->requirement_type === Stand::class || // or requirement is a stand
-                    $quest->requirement_type === null // or there is no requirement
+                        $user->isAdmin() || // user is admin
+                        $user->isStaff($enrollment->edition) // or user is staff
+                    ) && // and either
+                    (
+                        (
+                            $quest->requirement_type === Event::class && // requirement is an event
+                            $enrollment->events()->where('event_id', $quest->requirement_id)->exists() // and the user has joined the event
+                        ) ||
+                        $quest->requirement_type === Stand::class || // or requirement is a stand
+                        $quest->requirement_type === null // or there is no requirement
+                    )
                 ) ||
                 (
                     $user->isCompany() &&

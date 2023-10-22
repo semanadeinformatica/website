@@ -100,7 +100,7 @@ class User extends Authenticatable
 
     public function isStaff(Edition $edition): bool
     {
-        return $this->isParticipant() && $edition->through('departments')->has('staff')->where('id', $this->usertype_id)->exists();
+        return $this->isParticipant() && $edition->through('departments')->has('staff')->where('participant_id', $this->usertype_id)->exists();
     }
 
     public function toSearchableArray()
