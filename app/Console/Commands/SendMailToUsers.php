@@ -115,8 +115,18 @@ class SendMailToUsers extends Command implements PromptsForMissingInput
 
         $this->info("Sending mail to {$users->count()} users!");
 
-        $users->each(fn ($user) => Mail::to($user)->queue(new UserNotification($subject, $text)));
+        $users->each(fn ($user, $i) => Mail::to($user)->later($this->delayFactor($i), new UserNotification($subject, $text)));
 
         $this->info('Sent mail to users!');
+    }
+
+    /**
+     * Calculate the delay factor for the given index.
+     *
+     * YAY rate limits
+     */
+    private function delayFactor(int $delay)
+    {
+        return $delay * 2;
     }
 }
