@@ -103,6 +103,11 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'reply_to' => [
+        'address' => env('MAIL_REPLY_TO_ADDRESS'),
+        'name' => env('MAIL_REPLY_TO_NAME'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings
@@ -119,6 +124,7 @@ return [
 
         'paths' => [
             resource_path('views/vendor/mail'),
+            resource_path('views/emails'),
         ],
     ],
 

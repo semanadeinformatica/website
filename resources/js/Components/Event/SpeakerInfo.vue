@@ -94,7 +94,7 @@ const iconColor: Record<string, string> = {
                 </div>
             </div>
             <div
-                class="prose col-span-2 row-start-2 max-w-4xl text-inherit"
+                class="prose col-span-2 row-start-2 max-w-4xl break-words text-inherit"
                 :class="reverse ? 'text-right' : ''"
                 v-html="user.usertype?.description_html"
             ></div>

@@ -54,7 +54,7 @@ const { competition } = defineProps<Props>();
                 Regulamento
             </h2>
             <div
-                class="prose prose-lg max-w-none p-20 text-white max-lg:pb-10 lg:columns-2"
+                class="prose prose-lg max-w-none break-words p-20 text-white max-lg:pb-10 lg:columns-2"
                 v-html="competition.regulation_html"
             ></div>
         </section>
