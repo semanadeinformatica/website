@@ -17,7 +17,7 @@ class QuestCRUDController extends CRUDController
     protected array $rules = [
         'name' => 'required|string',
         'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
-        'requirement' => ['required', 'regex:/^((stand|event);[0-9]+)$/'],
+        'requirement' => ['sometimes', 'regex:/^((stand|event|general);[0-9]+)$/'],
         'edition_id' => 'required|exists:editions,id',
     ];
 
@@ -39,7 +39,12 @@ class QuestCRUDController extends CRUDController
             'event' => Event::class,
             default => null,
         };
-        $requirement_id = $requirement[1];
+
+        if ($requirement_type !== null) {
+            $requirement_id = $requirement[1];
+        } else {
+            $requirement_id = null;
+        }
 
         return [
             'name' => $new['name'],
@@ -58,7 +63,12 @@ class QuestCRUDController extends CRUDController
             'company' => Company::class,
             default => null,
         };
-        $requirement_id = $requirement[1];
+
+        if ($requirement_type !== null) {
+            $requirement_id = $requirement[1];
+        } else {
+            $requirement_id = null;
+        }
 
         return [
             'name' => $new['name'],

@@ -19,6 +19,16 @@ class QuestController extends Controller
         $participant = Participant::firstWhere('quest_code', $request->get('quest_code'));
         $enrollment = $participant->enrollments()->where('edition_id', $edition?->id)->first();
 
+        if ($enrollment === null) {
+            return redirect()->back()->dangerBanner('Participante não inscrito nesta edição!');
+        }
+
+        if (! $quest->requirement) {
+            $enrollment->quests()->attach($quest);
+
+            return redirect()->back()->banner('Tarefa atribuída com sucesso!');
+        }
+
         if (Gate::denies('give', [$quest, $enrollment])) {
             return redirect()->back()->dangerBanner('Não foi possível atribuir a tarefa ao participante!');
         }

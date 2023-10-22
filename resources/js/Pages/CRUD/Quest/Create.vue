@@ -83,6 +83,9 @@ const submit = () => {
                         {{ event.name }}
                     </option>
                 </optgroup>
+                <optgroup label="Geral">
+                    <option key="general;0" value="general;0">Geral</option>
+                </optgroup>
             </TextInput>
 
             <TextInput

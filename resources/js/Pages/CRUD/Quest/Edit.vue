@@ -24,9 +24,9 @@ const form = useForm({
     name: quest.name,
     category: quest.category.toLowerCase(),
     requirement:
-        (quest.requirement_type.split("\\").pop() ?? "").toLowerCase() +
+        (quest.requirement_type?.split("\\").pop() ?? "").toLowerCase() +
         ";" +
-        quest.requirement_id.toString(),
+        quest.requirement_id?.toString(),
     edition_id: quest.edition_id.toString(),
 });
 
@@ -87,6 +87,9 @@ const submit = () => {
                     >
                         {{ event.name }}
                     </option>
+                </optgroup>
+                <optgroup label="Geral">
+                    <option key="general;0" value="general;0">Geral</option>
                 </optgroup>
             </TextInput>
 
