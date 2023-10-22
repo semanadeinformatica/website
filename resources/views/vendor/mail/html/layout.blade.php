@@ -24,7 +24,7 @@
                     <tr>
                         <td class="w-full" width="100%" cellpadding="0" cellspacing="0"
                             style="border: hidden !important;">
-                            <table class="m-8 max-w-xl border shadow-lg shadow-2023-orange w-full" align="center"
+                            <table class="mx-auto max-w-xl border shadow-lg shadow-2023-orange w-full" align="center"
                                 cellpadding="0" cellspacing="0" role="presentation">
                                 <!-- Body content -->
                                 <tr>
