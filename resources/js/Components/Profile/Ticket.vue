@@ -88,7 +88,7 @@ const accentColor = () => {
             </svg>
 
             <div
-                class="col-start-1 row-start-1 flex max-h-full text-[3.2cqi] font-black text-white"
+                class="col-start-1 row-start-1 flex max-h-full max-w-[350px] text-[3.2cqi] font-black text-white"
                 :class="[state == 'used' ? '' : 'ticket-clip-path']"
             >
                 <div
@@ -101,35 +101,29 @@ const accentColor = () => {
                     ]"
                 >
                     <span
-                        class="flex px-[1em] py-[.5em]"
+                        class="flex px-[.75em] py-[.5em]"
                         :class="accentColor()"
                     >
                         NR: {{ hashCode((event.id + "SINF2023").toString()) }}
                     </span>
 
                     <div
-                        class="my-auto flex flex-col gap-[.25em] px-[1em] py-[.5em]"
+                        class="my-auto flex flex-col gap-[.25em] px-[.75em] py-[.5em]"
                     >
-                        <span v-if="event.location"
+                        <span
+                            v-if="event.location"
+                            :title="event.location"
+                            class="line-clamp-2 truncate whitespace-normal"
                             >LOCAL: {{ event.location }}</span
                         >
                         <!-- TODO: add link based on location character length -->
-                        <span
+                        <span v-if="event.time_start"
                             >HORA:
-                            {{
-                                event.time_start
-                                    ? formatTimeString(event.time_start)
-                                    : ""
-                            }}</span
+                            {{ formatTimeString(event.time_start) }}</span
                         >
-                        <!-- #FIXME: we aren't getting the date :/ -->
-                        <span
+                        <span v-if="event.event_day?.date"
                             >DATA:
-                            {{
-                                event.event_day?.date
-                                    ? $d(event.event_day?.date, "short")
-                                    : "TBA"
-                            }}</span
+                            {{ $d(event.event_day?.date, "short") }}</span
                         >
                     </div>
                 </div>
