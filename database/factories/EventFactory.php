@@ -25,6 +25,7 @@ class EventFactory extends Factory
             'time_end' => fake()->time(),
             'description' => fake()->text($maxNbChars = 500),
             'location' => fake()->words(1, true),
+            'external_url' => fake()->boolean(10) ? 'https://'.fake()->domainName() : null,
             'capacity' => fake()->optional()->numberBetween(10, 100),
             'event_day_id' => EventDay::factory(),
             'event_type_id' => EventType::factory(),
