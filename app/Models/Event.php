@@ -32,6 +32,7 @@ class Event extends Model
         'description',
         'event_type_id',
         'location',
+        'external_url',
     ];
 
     protected $appends = [
@@ -65,10 +66,10 @@ class Event extends Model
         });
     }
 
-    public function scopeWorkshop(Builder $query): void
+    public function scopeActivity(Builder $query): void
     {
         $query->whereHas('type', function ($query) {
-            $query->where('name', 'workshop');
+            $query->whereNot('name', 'talk');
         });
     }
 

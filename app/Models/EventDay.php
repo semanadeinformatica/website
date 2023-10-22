@@ -33,9 +33,9 @@ class EventDay extends Model
         return $this->events()->talk();
     }
 
-    public function workshops(): HasMany
+    public function activities(): HasMany
     {
-        return $this->events()->workshop();
+        return $this->events()->activity();
     }
 
     public function events(): HasMany

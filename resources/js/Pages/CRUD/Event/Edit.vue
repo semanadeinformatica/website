@@ -30,6 +30,7 @@ const form = useForm({
     event_day_id: event.event_day_id.toString(),
     event_type_id: event.event_type_id.toString(),
     location: event.location ?? "",
+    external_url: event.external_url ?? "",
     users: event.users?.map((u) => u.id.toString()) ?? [],
 });
 
@@ -87,6 +88,14 @@ const submit = () => {
                 label="Local"
                 type="text"
                 :error-message="form.errors.location"
+            />
+
+            <TextInput
+                id="external_url"
+                v-model="form.external_url"
+                label="URL Externo"
+                type="url"
+                :error-message="form.errors.external_url"
             />
 
             <TextInput

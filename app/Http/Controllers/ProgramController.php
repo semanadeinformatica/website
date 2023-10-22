@@ -63,7 +63,7 @@ class ProgramController extends Controller
                 'talks' => [
                     'users',
                 ],
-                'workshops' => [
+                'activities' => [
                     'users',
                 ],
             ]),

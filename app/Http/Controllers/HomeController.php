@@ -26,7 +26,7 @@ class HomeController extends Controller
         // $talk_count = $edition->talks()->count();
         // $activity_count = $edition->workshops()->count();
         $talk_count = $edition->events()->talk()->count();
-        $activity_count = $edition->events()->workshop()->count();
+        $activity_count = $edition->events()->activity()->count();
 
         $stand_count = $edition->stands()->count();
 
