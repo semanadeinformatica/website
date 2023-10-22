@@ -48,7 +48,10 @@ class UserController extends UserProfileController
 
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
-            $points = $user->usertype->enrollments()->where('edition_id', $edition->id)->first()->points;
+            $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id);
+            if ($enrollment->exists()) {
+                $points = $enrollment->first()->points;
+            }
             if ($request->user()->isCompany()) {
                 // We fall in this category if we are a company and we are viewing the profile of a visitor of our company
 
