@@ -1,6 +1,6 @@
 /* Base */
 
-body,
+/* body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
@@ -33,11 +33,11 @@ a {
 
 a img {
     border: none;
-}
+} */
 
 /* Typography */
 
-h1 {
+/* h1 {
     color: #3d4852;
     font-size: 18px;
     font-weight: bold;
@@ -72,11 +72,11 @@ p.sub {
 
 img {
     max-width: 100%;
-}
+} */
 
 /* Layout */
 
-.wrapper {
+/* .wrapper {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
@@ -93,11 +93,11 @@ img {
     margin: 0;
     padding: 0;
     width: 100%;
-}
+} */
 
 /* Header */
 
-.header {
+/* .header {
     padding: 25px 0;
     text-align: center;
 }
@@ -107,19 +107,19 @@ img {
     font-size: 19px;
     font-weight: bold;
     text-decoration: none;
-}
+} */
 
 /* Logo */
 
-.logo {
+/* .logo {
     height: 75px;
     max-height: 75px;
     width: 75px;
-}
+} */
 
 /* Body */
 
-.body {
+/* .body {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
@@ -143,11 +143,11 @@ img {
     margin: 0 auto;
     padding: 0;
     width: 570px;
-}
+} */
 
 /* Subcopy */
 
-.subcopy {
+/* .subcopy {
     border-top: 1px solid #e8e5ef;
     margin-top: 25px;
     padding-top: 25px;
@@ -155,11 +155,11 @@ img {
 
 .subcopy p {
     font-size: 14px;
-}
+} */
 
 /* Footer */
 
-.footer {
+/* .footer {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 570px;
@@ -178,11 +178,11 @@ img {
 .footer a {
     color: #b0adc5;
     text-decoration: underline;
-}
+} */
 
 /* Tables */
 
-.table table {
+/* .table table {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
@@ -207,11 +207,11 @@ img {
 .content-cell {
     max-width: 100vw;
     padding: 32px;
-}
+} */
 
 /* Buttons */
 
-.action {
+/* .action {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
@@ -255,11 +255,11 @@ img {
     border-left: 18px solid #e53e3e;
     border-right: 18px solid #e53e3e;
     border-top: 8px solid #e53e3e;
-}
+} */
 
 /* Panels */
 
-.panel {
+/* .panel {
     border-left: #2d3748 solid 4px;
     margin: 21px 0;
 }
@@ -281,10 +281,10 @@ img {
 .panel-item p:last-of-type {
     margin-bottom: 0;
     padding-bottom: 0;
-}
+} */
 
 /* Utilities */
 
-.break-all {
+/* .break-all {
     word-break: break-all;
-}
+} */

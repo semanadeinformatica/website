@@ -19,7 +19,7 @@ use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\text;
 
-class SendMailToParticipants extends Command implements PromptsForMissingInput
+class SendMailToUsers extends Command implements PromptsForMissingInput
 {
     /**
      * The default receiver types.
@@ -36,7 +36,7 @@ class SendMailToParticipants extends Command implements PromptsForMissingInput
      *
      * @var string
      */
-    protected $signature = 'app:send-mail-to-participants {text : Text to send} {--types=*} {--test}';
+    protected $signature = 'app:send-mail-to-users {subject : Subject of the mail to send} {text : Text of the mail to send} {--types=*} {--test}';
 
     /**
      * Prompt for missing input arguments using the returned questions.
@@ -46,6 +46,7 @@ class SendMailToParticipants extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing()
     {
         return [
+            'subject' => fn () => text('Which subject should you send in the email?'),
             'text' => fn () => text('Which text should you send in the email?'),
         ];
     }
@@ -88,6 +89,7 @@ class SendMailToParticipants extends Command implements PromptsForMissingInput
     public function handle()
     {
         $text = $this->argument('text');
+        $subject = $this->argument('subject');
 
         $types = $this->option('types');
         if ($types === []) {
@@ -101,9 +103,9 @@ class SendMailToParticipants extends Command implements PromptsForMissingInput
 
             $this->info('Sending mail to all admins before sending to participants!');
 
-            Mail::to($admins)->queue(new UserNotification($text));
+            Mail::to($admins)->queue(new UserNotification($subject, $text));
 
-            if (! confirm('Send mail to all participants?', default: false, yes: 'Yes', no: 'No')) {
+            if (! confirm('Send email to all participants?', default: false, yes: 'Yes', no: 'No')) {
                 return;
             }
         }
@@ -113,8 +115,8 @@ class SendMailToParticipants extends Command implements PromptsForMissingInput
 
         $this->info("Sending mail to {$users->count()} users!");
 
-        // chunk the users into groups of 50 and send the email to each group so we can chunk the emails into groups of 50
-        $users->pluck('email')->chunk(50)->each(fn ($emails) => Mail::bcc($emails)->queue(new UserNotification($text)));
+        // chunk the users into groups of 50 and send the email to each group
+        $users->pluck('email')->chunk(50)->each(fn ($emails) => Mail::bcc($emails)->queue(new UserNotification($subject, $text)));
 
         $this->info('Sent mail to users!');
     }

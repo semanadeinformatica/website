@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e006a435946be37bb7077a945c0e5a0c",
+    "content-hash": "1117125b2cec7c644a30ac744b16fd40",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -601,6 +601,70 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
+        },
+        {
+            "name": "fedeisas/laravel-mail-css-inliner",
+            "version": "5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fedeisas/laravel-mail-css-inliner.git",
+                "reference": "47c41eddc9000f8e1579659e4953a3f36fe5c579"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fedeisas/laravel-mail-css-inliner/zipball/47c41eddc9000f8e1579659e4953a3f36fe5c579",
+                "reference": "47c41eddc9000f8e1579659e4953a3f36fe5c579",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "illuminate/mail": "^9.0 || ^10.0",
+                "illuminate/support": "^9.0 || ^10.0",
+                "paragonie/random_compat": "~2.0 || ~9.99",
+                "php": "^8.0.2",
+                "tijsverkoyen/css-to-inline-styles": "~2.2"
+            },
+            "require-dev": {
+                "enlightn/security-checker": "^1.10",
+                "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
+                "guzzlehttp/psr7": "^1.9.1 || ^2.4.5",
+                "phpunit/phpunit": "^9.0",
+                "symfony/mailer": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fedeisas\\LaravelMailCssInliner\\LaravelMailCssInlinerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fedeisas\\LaravelMailCssInliner\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fede Isas",
+                    "email": "fedeisas@hotmail.com"
+                }
+            ],
+            "description": "Inline the CSS of your HTML emails using Laravel",
+            "keywords": [
+                "css",
+                "laravel",
+                "mailer"
+            ],
+            "support": {
+                "issues": "https://github.com/fedeisas/laravel-mail-css-inliner/issues",
+                "source": "https://github.com/fedeisas/laravel-mail-css-inliner/tree/5.2.1"
+            },
+            "time": "2023-09-18T11:18:03+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -2685,6 +2749,61 @@
             "time": "2023-06-21T08:46:11+00:00"
         },
         {
+            "name": "motomedialab/laravel-vite-helper",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/motomedialab/laravel-vite-helper.git",
+                "reference": "3f6c4b0fb34e4fecfd10bf9ea21a7a77f41747fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/motomedialab/laravel-vite-helper/zipball/3f6c4b0fb34e4fecfd10bf9ea21a7a77f41747fe",
+                "reference": "3f6c4b0fb34e4fecfd10bf9ea21a7a77f41747fe",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^10.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^8.0",
+                "phpunit/phpunit": "^9.5.21|^10.0.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Motomedialab\\LaravelViteHelper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Page",
+                    "email": "chris@motocom.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A helper method to generate absolute asset URL's to Vite assets",
+            "homepage": "https://github.com/motomedialab/laravel-vite-helper",
+            "keywords": [
+                "laravel-vite-helper",
+                "motomedialab"
+            ],
+            "support": {
+                "issues": "https://github.com/motomedialab/laravel-vite-helper/issues",
+                "source": "https://github.com/motomedialab/laravel-vite-helper/tree/v1.4.1"
+            },
+            "time": "2023-07-02T13:32:55+00:00"
+        },
+        {
             "name": "nesbot/carbon",
             "version": "2.71.0",
             "source": {
@@ -3146,6 +3265,56 @@
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
             "time": "2022-06-14T06:56:20+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -10130,5 +10299,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

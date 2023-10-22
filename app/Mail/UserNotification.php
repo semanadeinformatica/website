@@ -15,7 +15,7 @@ class UserNotification extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $message)
+    public function __construct(private string $_subject, private string $message)
     {
         //
     }
@@ -26,7 +26,7 @@ class UserNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'User Notification',
+            subject: $this->_subject,
         );
     }
 
