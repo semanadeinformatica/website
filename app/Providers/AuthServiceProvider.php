@@ -59,7 +59,8 @@ class AuthServiceProvider extends ServiceProvider
                         $quest->requirement_type === Event::class &&
                         $enrollment->events()->where('event_id', $quest->requirement_id)->exists()
                     ) || // requirement is an event the user has joined
-                    $quest->requirement_type === Stand::class // or requirement is a stand
+                    $quest->requirement_type === Stand::class || // or requirement is a stand
+                    $quest->requirement_type === null // or there is no requirement
                 ) ||
                 (
                     $user->isCompany() &&
