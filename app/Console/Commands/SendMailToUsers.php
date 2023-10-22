@@ -115,8 +115,7 @@ class SendMailToUsers extends Command implements PromptsForMissingInput
 
         $this->info("Sending mail to {$users->count()} users!");
 
-        // chunk the users into groups of 50 and send the email to each group
-        $users->pluck('email')->chunk(50)->each(fn ($emails) => Mail::bcc($emails)->queue(new UserNotification($subject, $text)));
+        $users->each(fn ($user) => Mail::to($user)->queue(new UserNotification($subject, $text)));
 
         $this->info('Sent mail to users!');
     }
