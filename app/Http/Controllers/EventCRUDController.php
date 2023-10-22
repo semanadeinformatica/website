@@ -20,7 +20,7 @@ class EventCRUDController extends CRUDController
         'name' => 'required|string',
         'time_start' => 'required|date_format:"H:i:s"',
         'time_end' => 'required|date_format:"H:i:s"|after:time_start',
-        'description' => 'required|string',
+        'description' => 'sometimes|nullable|string',
         'location' => 'sometimes|nullable|string',
         'external_url' => 'sometimes|nullable|string',
         'topic' => 'required|string',
