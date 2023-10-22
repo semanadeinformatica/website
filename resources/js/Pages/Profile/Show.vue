@@ -21,6 +21,7 @@ interface Props {
     sessions: Session[];
     user: User; // The user to render, can be the logged in user or another user
     canViewCV: boolean;
+    points?: number;
 }
 
 const { user } = defineProps<Props>();
@@ -59,6 +60,18 @@ const buttons: Tabs =
                     <InfoCard :user="user" />
                 </div>
                 <CvArea v-if="canViewCV" :item="user" />
+                <p
+                    v-if="points !== null"
+                    class="text-center text-xl font-bold text-2023-teal-dark"
+                >
+                    Tens {{ points }}
+                    <img
+                        class="inline w-5 align-text-top"
+                        alt="SINFrão"
+                        title="SINFrão"
+                        src="/images/cy-sinf-small.svg"
+                    />
+                </p>
                 <InteractionArea :buttons="buttons"> </InteractionArea>
             </div>
         </div>

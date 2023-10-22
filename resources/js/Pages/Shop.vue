@@ -5,6 +5,9 @@ import type Product from "@/Types/Product";
 
 interface Props {
     products: Product[];
+    points?: number;
+    isEnrolled: boolean;
+    isParticipant: boolean;
 }
 
 defineProps<Props>();
@@ -22,6 +25,18 @@ defineProps<Props>();
                     Loja
                 </h1>
             </div>
+            <p
+                v-if="points !== null"
+                class="py-5 text-center text-xl font-bold text-2023-teal-dark"
+            >
+                Tens {{ points }}
+                <img
+                    class="inline w-5 align-text-top"
+                    alt="SINFrão"
+                    title="SINFrão"
+                    src="/images/cy-sinf-small.svg"
+                />
+            </p>
             <section
                 class="align-center grid justify-center gap-10 px-32"
                 style="
@@ -35,8 +50,9 @@ defineProps<Props>();
                     v-for="product in products"
                     :key="product.id"
                     :product="product"
-                >
-                </ShopItem>
+                    :is-participant="isParticipant"
+                    :is-enrolled="isEnrolled"
+                />
             </section>
         </template>
         <template v-else>
