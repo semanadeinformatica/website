@@ -50,7 +50,7 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Home">
-        <InfoPopup v-if="$page.props.auth.user" />
+        <InfoPopup v-if="$page.props.auth.user && canEnroll" />
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
