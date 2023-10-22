@@ -103,8 +103,6 @@ const submit = () => {
                 v-model="form.description"
                 label="Descrição"
                 type="textarea"
-                step="60"
-                required
                 :error-message="form.errors.description"
             />
 
