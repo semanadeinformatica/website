@@ -15,7 +15,7 @@ return new class extends Migration
                 BEGIN
                     IF (NEW IS NOT NULL) THEN
                         UPDATE enrollments SET points = points - (
-                            SELECT price FROM product WHERE id = NEW.product_id
+                            SELECT price FROM products WHERE id = NEW.product_id
                         ) WHERE id = NEW.enrollment_id;
                     END IF;
 

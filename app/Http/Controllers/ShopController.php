@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enrollment;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,16 +16,23 @@ class ShopController extends Controller
 
         if ($user && $user->isParticipant()) {
             $isParticipant = $user->isParticipant();
-            $isEnrolled = $user->usertype->enrollments()->where('edition_id', $edition->id)->exists();
-            $points = $user->usertype->enrollments()->where('edition_id', $edition->id)->first()->points;
+            $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first();
+
+            // This makes one less query to the DB ☝️🤓
+            $isEnrolled = $enrollment !== null;
+            $points = $enrollment?->points;
         }
 
         if ($edition === null) {
             return response('No edition found', 500);
         }
 
+        $products = $edition->products()->orderBy('price')->get()->each(function (Product $product) use ($user) {
+            $product->canBeBought = $user->can('buy', $product);
+        });
+
         return Inertia::render('Shop', [
-            'products' => $edition->products,
+            'products' => $products,
             'points' => $points ?? null,
             'isEnrolled' => $isEnrolled ?? null,
             'isParticipant' => $isParticipant ?? null,
@@ -45,28 +51,16 @@ class ShopController extends Controller
         $user = $request->user();
 
         if ($user === null) {
-            return redirect()->back()->dangerBanner('You have to be logged in to perform this action');
+            return redirect()->back()->dangerBanner('Tens que ter sessão iniciada para poderes comprar este produto');
         }
 
-        if (! $user->isParticipant()) {
-            return redirect()->back()->dangerBanner('You are not a participant');
+        if ($user->cannot('buy', $product)) {
+            return redirect()->back()->dangerBanner('Não podes comprar este produto');
         }
 
-        /** @var Enrollment|null */
-        $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first();
+        $user->usertype->enrollments()->where('edition_id', $edition->id)->first()->products()->attach($product);
+        $product->decrement('stock', 1);
 
-        if ($currentEnrollment === null) {
-            return redirect()->back()->dangerBanner('You are not enrolled in this edition');
-        }
-
-        $points = $currentEnrollment->points;
-
-        if ($points < $product->price) {
-            return redirect()->back()->dangerBanner('You do not have enough points');
-        }
-
-        $currentEnrollment->products()->attach($product->id);
-
-        return redirect()->back()->banner('Product bought');
+        return redirect()->back()->banner('Produto comprado');
     }
 }
