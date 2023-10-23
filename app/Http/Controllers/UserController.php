@@ -48,10 +48,12 @@ class UserController extends UserProfileController
 
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
+
             $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id);
             if ($enrollment->exists()) {
                 $points = $enrollment->first()->points;
             }
+
             if ($request->user()->isCompany()) {
                 // We fall in this category if we are a company and we are viewing the profile of a visitor of our company
 
@@ -71,6 +73,7 @@ class UserController extends UserProfileController
             'slots' => fn () => $slots->get(),
             'participants' => fn () => $participants?->get() ?? [],
             'user' => fn () => $user,
+            'isStaff' => fn () => $user->isStaff($edition),
             'canViewCV' => fn () => $canViewCv,
             'points' => $points ?? null,
         ]);
@@ -196,11 +199,6 @@ class UserController extends UserProfileController
 
     public function scanQuestCode(Request $request)
     {
-        Gate::allowIf(fn (User $user) => $user->isAdmin() || $user->isCompany());
-
-        /** @var User */
-        $user = $request->user();
-
         /** @var Edition */
         $edition = $request->edition;
 
@@ -208,7 +206,12 @@ class UserController extends UserProfileController
             return response('No edition found', 500);
         }
 
-        if ($user->isAdmin()) {
+        Gate::allowIf(fn (User $user) => $user->isAdmin() || $user->isStaff($edition) || $user->isCompany());
+
+        /** @var User */
+        $user = $request->user();
+
+        if ($user->isAdmin() || $user->isStaff($edition)) {
             $quests = $edition->quests()->get();
         } else {
             /** @var Company */

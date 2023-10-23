@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from "@/Types/User";
+import { type User, isAdmin, isParticipant, isCompany } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
 import { router } from "@inertiajs/vue3";
@@ -8,6 +8,7 @@ import QRCode from "./QRCode.vue";
 
 interface Props {
     user?: User;
+    isStaff: boolean;
 }
 
 defineProps<Props>();
@@ -54,7 +55,15 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex-col">
             <div>
-                <p class="font-bold">{{ user?.name }}</p>
+                <p class="font-bold">
+                    {{ user?.name }}
+                    <span v-if="isStaff" title="Staff">
+                        <OhVueIcon
+                            name="io-ribbon-outline"
+                            scale="1.3"
+                        ></OhVueIcon>
+                    </span>
+                </p>
                 <p>
                     {{ user?.email }}
                 </p>
@@ -63,7 +72,7 @@ const iconColor: Record<string, string> = {
                 <template v-for="(social, key) in socials" :key="key">
                     <p
                         v-if="
-                            user?.usertype_type !== 'App\\Models\\Admin' &&
+                            !isAdmin(user) &&
                             user?.usertype?.social_media?.[key]
                         "
                     >
@@ -111,26 +120,17 @@ const iconColor: Record<string, string> = {
                     />
                 </svg>
             </button>
-            <template
-                v-if="
-                    user?.usertype_type == 'App\\Models\\Participant' &&
-                    user.usertype
-                "
-            >
-                <QRCode :participant="user.usertype"></QRCode>
-            </template>
-            <template
-                v-else-if="
-                    user?.usertype_type == 'App\\Models\\Company' ||
-                    user?.usertype_type == 'App\\Models\\Admin'
-                "
-            >
+            <template v-if="isAdmin(user) || isStaff || isCompany(user)">
+                <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <a
                     class="flex w-fit cursor-pointer rounded-full text-2023-teal"
                     :href="route('user.scan-code')"
                 >
                     <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
                 </a>
+            </template>
+            <template v-else-if="isParticipant(user) && user.usertype">
+                <QRCode :participant="user.usertype"></QRCode>
             </template>
         </div>
     </div>

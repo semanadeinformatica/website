@@ -20,6 +20,7 @@ interface Props {
     slots: Slot[];
     sessions: Session[];
     user: User; // The user to render, can be the logged in user or another user
+    isStaff: boolean;
     canViewCV: boolean;
     points?: number;
 }
@@ -57,7 +58,7 @@ const buttons: Tabs =
             >
                 <div class="flex w-full justify-around max-md:flex-col">
                     <ProfilePicture :item="user" />
-                    <InfoCard :user="user" />
+                    <InfoCard :user="user" :is-staff="isStaff" />
                 </div>
                 <CvArea v-if="canViewCV" :item="user" />
                 <p

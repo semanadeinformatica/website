@@ -98,6 +98,11 @@ class User extends Authenticatable
         return $this->usertype_type === Speaker::class;
     }
 
+    public function isStaff(Edition $edition): bool
+    {
+        return $this->isParticipant() && $edition->through('departments')->has('staff')->where('participant_id', $this->usertype_id)->exists();
+    }
+
     public function toSearchableArray()
     {
         $exploded = explode('\\', $this->usertype_type);
