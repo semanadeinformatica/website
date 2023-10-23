@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { OhVueIcon } from "oh-vue-icons";
+import PortoTechBanner from "@/Components/Footer/PortoTechBanner.vue";
 
 const contacts = [
     {
@@ -63,6 +64,7 @@ const contacts = [
                 </div>
             </div>
         </section>
+        <PortoTechBanner />
         <div class="container mx-auto text-center font-bold text-2023-teal">
             <p>
                 Copyright &copy; 2023
