@@ -24,10 +24,11 @@ defineProps<Props>();
 
 <template>
     <div class="flex max-w-[20em] flex-col border-2 border-black">
-        <img
-            class="object-fit max-w-[20em] border-b-2 border-black p-4"
-            :src="product.image_product_url"
-        />
+        <div
+            class="flex h-[20em] max-w-[20em] items-center border-b-2 border-black p-4"
+        >
+            <img :src="product.image_product_url" />
+        </div>
         <div
             class="flex flex-1 cursor-pointer flex-col justify-between bg-2023-orange px-4 py-2 text-white"
             @click="options.modelValue = true"
