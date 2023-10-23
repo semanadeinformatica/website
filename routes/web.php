@@ -47,7 +47,10 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
-Route::get('/shop', [ShopController::class, 'show'])->name('shop');
+Route::prefix('/shop')->name('shop')->group(function () {
+    Route::get('/', [ShopController::class, 'show'])->name('.show');
+    Route::post('/{product}/buy', [ShopController::class, 'buyProduct'])->name('.product.buy');
+});
 
 Route::prefix('/competition')->name('competition')->group(function () {
     Route::get('/{competition:slug}', [CompetitionController::class, 'show'])->name('.show');

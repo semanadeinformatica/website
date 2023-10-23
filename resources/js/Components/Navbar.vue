@@ -28,7 +28,7 @@ const homeSections: Routes = {
 
 const pageRoutes: Routes = {
     program: { label: "Programa" },
-    shop: { label: "Loja" },
+    "shop.show": { label: "Loja" },
     team: { label: "Equipa" },
 };
 

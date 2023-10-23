@@ -72,7 +72,6 @@ const submit = () => {
                 label="Pontos"
                 type="number"
                 :error-message="form.errors.points"
-                disabled
             />
 
             <PrimaryButton type="submit">Adicionar</PrimaryButton>

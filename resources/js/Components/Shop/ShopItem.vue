@@ -19,7 +19,14 @@ interface Props {
     isParticipant?: boolean;
 }
 
-defineProps<Props>();
+const { product } = defineProps<Props>();
+
+const buyProduct = () => {
+    router.post(route("shop.product.buy", { product }), undefined, {
+        preserveState: true,
+        onFinish: () => (options.value.modelValue = false),
+    });
+};
 </script>
 
 <template>
@@ -59,8 +66,7 @@ defineProps<Props>();
                 Confirmar compra de <b>{{ product.name }}</b> por
                 {{ product.price }}?
             </p>
-            <!-- TODO: BACKEND CONNECTION -->
-            <PrimaryButton>Comprar</PrimaryButton>
+            <PrimaryButton @click="buyProduct()">Comprar</PrimaryButton>
         </template>
         <template v-else>
             <p class="text-2023-teal-dark">
