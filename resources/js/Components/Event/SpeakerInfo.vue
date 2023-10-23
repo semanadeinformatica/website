@@ -10,13 +10,25 @@ interface Props {
 
 defineProps<Props>();
 
-const socialIcon: Record<string, string> = {
-    email: "io-mail",
-    github: "io-logo-github",
-    instagram: "io-logo-instagram",
-    linkedin: "io-logo-linkedin",
-    twitter: "io-logo-twitter",
-    website: "io-globe",
+const socials = {
+    facebook: {
+        icon: "io-logo-facebook",
+    },
+    linkedin: {
+        icon: "io-logo-linkedin",
+    },
+    github: {
+        icon: "io-logo-github",
+    },
+    twitter: {
+        icon: "io-logo-twitter",
+    },
+    instagram: {
+        icon: "io-logo-instagram",
+    },
+    website: {
+        icon: "io-logo-globe",
+    },
 };
 
 const textColor: Record<string, string> = {
@@ -51,24 +63,26 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex flex-col items-center gap-5">
             <img
-                class="w-52 border-2 border-black shadow-lg"
+                class="h-52 w-52 border-2 border-black object-cover shadow-lg"
                 :class="shadowColor[color]"
                 :src="user.profile_photo_url"
-                alt=""
+                :alt="
+                    user.usertype?.display_name ?? user.name + ' profile photo'
+                "
             />
             <div class="flex items-center gap-1">
-                <a
-                    v-for="social in user.usertype?.social_media ?? {}"
-                    :key="social"
-                    :href="social"
-                >
-                    <OhVueIcon
-                        v-if="social"
-                        :name="socialIcon[social]"
-                        :fill="iconColor[color]"
-                        scale="1.4"
-                    ></OhVueIcon>
-                </a>
+                <template v-for="(social, key) in socials" :key="key">
+                    <a
+                        v-if="user.usertype?.social_media?.[key]"
+                        :href="user.usertype?.social_media?.[key]"
+                    >
+                        <OhVueIcon
+                            :name="social.icon"
+                            :fill="iconColor[color]"
+                            scale="1.4"
+                        ></OhVueIcon>
+                    </a>
+                </template>
             </div>
         </div>
         <div
