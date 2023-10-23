@@ -63,16 +63,15 @@ const iconColor: Record<string, string> = {
     >
         <div class="flex flex-col items-center gap-5">
             <img
-                class="w-52 h-52 object-cover border-2 border-black shadow-lg"
+                class="h-52 w-52 border-2 border-black object-cover shadow-lg"
                 :class="shadowColor[color]"
                 :src="user.profile_photo_url"
-                :alt="user.usertype?.display_name ?? user.name + ' profile photo'"
+                :alt="
+                    user.usertype?.display_name ?? user.name + ' profile photo'
+                "
             />
             <div class="flex items-center gap-1">
-                <template
-                    v-for="(social, key) in socials"
-                    :key="key"
-                >
+                <template v-for="(social, key) in socials" :key="key">
                     <a
                         v-if="user.usertype?.social_media?.[key]"
                         :href="user.usertype?.social_media?.[key]"
