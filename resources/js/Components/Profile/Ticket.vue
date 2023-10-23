@@ -137,10 +137,10 @@ const accentColor = () => {
                     ]"
                 >
                     <span
-                        class="flex justify-end px-[1em] py-[.5em] text-right"
+                        class="truncate px-[1em] py-[.5em] text-right"
                         :class="accentColor()"
                     >
-                        {{ event.topic.split(" ")[0] }}
+                        {{ event.topic }}
                     </span>
 
                     <span class="px-[1em]">{{ event.name }}</span>
