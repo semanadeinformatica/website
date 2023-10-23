@@ -33,6 +33,31 @@ watch(selected, (newValue, oldValue) => {
         (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "talk";
 });
 
+const times = computed<{ start?: string; end?: string }>(() => {
+    const parseTimeString = (date: string) => {
+        const [hour, minutes] = date.split(":");
+
+        return `${hour}h${minutes}`;
+    };
+
+    let items = [];
+    switch (selectedType.value) {
+        case "activity":
+            items = day.activities ?? [];
+            break;
+        case "talk":
+            items = day.talks ?? [];
+            break;
+        case "stand":
+            return { start: undefined, end: undefined };
+    }
+
+    const startTime = parseTimeString(items[0].time_start);
+    const endTime = parseTimeString(items[items.length - 1].time_end);
+
+    return { start: startTime, end: endTime };
+});
+
 onMounted(() => {
     selected.value = document.querySelector(
         "#tab-picker > button:first-of-type",
@@ -87,7 +112,7 @@ onMounted(() => {
         <p class="pt-40 text-4xl font-bold text-2023-teal-dark">Em breve...</p>
     </template>
     <template v-else>
-        <WithTimeline>
+        <WithTimeline :start-time="times.start" :end-time="times.end">
             <div class="flex flex-col gap-8">
                 <template v-if="selectedType === 'stand'">
                     <StandDisplay :stands="day.stands!" />

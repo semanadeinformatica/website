@@ -1,12 +1,10 @@
 <script setup lang="ts">
-
 interface Props {
     label: string;
     timestamp: string;
-};
+}
 
 defineProps<Props>();
-
 </script>
 
 <template>

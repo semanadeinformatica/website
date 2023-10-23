@@ -2,8 +2,8 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 
 interface Props {
-    width: string | number;
-    contentClasses: string[];
+    width?: string | number;
+    contentClasses?: string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
