@@ -65,7 +65,6 @@ class ShopController extends Controller
             return redirect()->back()->dangerBanner('You do not have enough points');
         }
 
-        $currentEnrollment->decrement('points', $product->price);
         $currentEnrollment->products()->attach($product->id);
 
         return redirect()->back()->banner('Product bought');
