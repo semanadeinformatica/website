@@ -63,7 +63,7 @@
                 y="3.5"
                 href="/images/fnac_100.svg"
                 clip-path="url(#first)"
-                class="bg-opacity-0 duration-75 ease-out blur-sm hover:blur-none"
+                class="bg-opacity-0 blur-sm duration-75 ease-out hover:blur-none"
             />
             <clipPath id="second">
                 <rect
@@ -83,7 +83,7 @@
                 y="76.5"
                 href="/images/fnac_75.svg"
                 clip-path="url(#second)"
-                class="bg-opacity-0 duration-75 ease-out blur-sm hover:blur-none"
+                class="bg-opacity-0 blur-sm duration-75 ease-out hover:blur-none"
             />
 
             <clipPath id="third">
@@ -104,7 +104,7 @@
                 y="98.5"
                 href="/images/fnac_50.svg"
                 clip-path="url(#third)"
-                class="bg-opacity-0 duration-75 ease-out blur-sm hover:blur-none"
+                class="bg-opacity-0 blur-sm duration-75 ease-out hover:blur-none"
             />
 
             <path
