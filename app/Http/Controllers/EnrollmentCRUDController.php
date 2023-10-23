@@ -15,6 +15,7 @@ class EnrollmentCRUDController extends CRUDController
     protected array $rules = [
         'participant_id' => 'required|exists:participants,id',
         'edition_id' => 'required|exists:editions,id',
+        'points' => 'required|integer',
     ];
 
     protected function with(): array

@@ -76,7 +76,7 @@ const enroll = () => {
             <p>
                 Ganha pontos e troca-os por prémios na
                 <a
-                    :href="route('shop')"
+                    :href="route('shop.show')"
                     target="_blank"
                     class="text-2023-red underline"
                     >Loja</a

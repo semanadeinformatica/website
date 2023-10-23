@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
-import type Product from "@/Types/Product";
+import { type BuyableProduct } from "@/Types/ShopPage";
 
 interface Props {
-    products: Product[];
+    products: BuyableProduct[];
     points?: number;
     isEnrolled: boolean;
     isParticipant: boolean;

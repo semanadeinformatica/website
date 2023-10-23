@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type Product from "@/Types/Product";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
@@ -7,19 +6,27 @@ import "vue-final-modal/style.css";
 import type { User } from "@/Types/User";
 import { router } from "@inertiajs/vue3";
 import route from "ziggy-js";
+import { type BuyableProduct } from "@/Types/ShopPage";
 
 const options = ref({
     modelValue: false,
 });
 
 interface Props {
-    product: Product;
+    product: BuyableProduct;
     user?: User;
     isEnrolled?: boolean;
     isParticipant?: boolean;
 }
 
-defineProps<Props>();
+const { product } = defineProps<Props>();
+
+const buyProduct = () => {
+    router.post(route("shop.product.buy", { product }), undefined, {
+        preserveState: true,
+        onFinish: () => (options.value.modelValue = false),
+    });
+};
 </script>
 
 <template>
@@ -29,11 +36,12 @@ defineProps<Props>();
         >
             <img :src="product.image_product_url" />
         </div>
-        <div
-            class="flex flex-1 cursor-pointer flex-col justify-between bg-2023-orange px-4 py-2 text-white"
-            @click="options.modelValue = true"
+        <button
+            class="flex flex-1 flex-col justify-between bg-2023-orange px-4 py-2 text-white disabled:opacity-50"
+            :disabled="!product.canBeBought"
+            @click="product.canBeBought ? (options.modelValue = true) : null"
         >
-            <h2 class="text-xl font-bold">{{ product.name }}</h2>
+            <h2 class="text-start text-xl font-bold">{{ product.name }}</h2>
             <div class="flex flex-row gap-2 self-end text-xl">
                 <p>{{ product.price }}</p>
                 <img
@@ -42,7 +50,7 @@ defineProps<Props>();
                     src="/images/cy-sinf-small.svg"
                 />
             </div>
-        </div>
+        </button>
     </div>
     <VueFinalModal
         v-if="isParticipant || $page.props.auth.user === null"
@@ -59,8 +67,7 @@ defineProps<Props>();
                 Confirmar compra de <b>{{ product.name }}</b> por
                 {{ product.price }}?
             </p>
-            <!-- TODO: BACKEND CONNECTION -->
-            <PrimaryButton>Comprar</PrimaryButton>
+            <PrimaryButton @click="buyProduct()">Comprar</PrimaryButton>
         </template>
         <template v-else>
             <p class="text-2023-teal-dark">

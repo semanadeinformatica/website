@@ -21,6 +21,7 @@ class Enrollment extends Model
     protected $fillable = [
         'edition_id',
         'participant_id',
+        'points',
     ];
 
     public function edition(): BelongsTo

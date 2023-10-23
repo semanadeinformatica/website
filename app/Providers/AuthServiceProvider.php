@@ -7,7 +7,7 @@ namespace App\Providers;
 use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\Event;
-use App\Models\Participant;
+use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
@@ -105,6 +105,14 @@ class AuthServiceProvider extends ServiceProvider
                 $cv_user->isParticipant() &&
                 $user->usertype->participants()->exists($cv_user)
             )
+        ));
+
+        Gate::define('buy', fn (User $user, Product $product) => (
+            $user->isParticipant() && // user must be a participant
+            $user->usertype->enrollments()->where('edition_id', $product->edition->id)->exists() && // user must be enrolled in the current edition
+            $user->usertype->enrollments()->where('edition_id', $product->edition->id)->first()->products()->where('product_id', $product->id)->doesntExist() && // user must not have the product
+            $user->usertype->enrollments()->where('points', '>=', $product->price)->exists() && // user must have enough points
+            $product->stock > 0 // product must be in stock
         ));
     }
 }
