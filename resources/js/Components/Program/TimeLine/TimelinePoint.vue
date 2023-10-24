@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
     label: string;
-    timestamp: string;
+    timestamp?: string;
 }
 
 defineProps<Props>();
@@ -15,6 +15,7 @@ defineProps<Props>();
         <div class="flex flex-col md:block">
             <span class="text-2xl font-bold text-2023-orange">{{ label }}</span>
             <span
+                v-if="timestamp"
                 class="font-bold md:absolute md:-left-32 md:top-1/2 md:-translate-y-1/2 md:text-xl"
                 >{{ timestamp }}</span
             >

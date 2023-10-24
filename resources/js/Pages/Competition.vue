@@ -36,16 +36,18 @@ const formattedDate = (
 
 <template>
     <AppLayout title="Competition">
-        <header
-            class="relative left-1/2 top-9 flex w-fit -translate-x-1/2 transform flex-col gap-4"
-        >
+        <header class="flex flex-col items-center gap-4 p-4 text-center">
             <h2
-                class="border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-teal xl:text-3xl 2xl:text-4xl"
+                class="w-fit border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-teal xl:text-3xl 2xl:text-4xl"
             >
                 {{ competition.name }}
             </h2>
             <span
-                class="inline-flex w-full justify-center text-xl font-bold text-2023-teal"
+                class="inline-flex w-3/4 justify-center text-xl font-bold text-2023-red-dark"
+                >{{ competition.theme }}</span
+            >
+            <span
+                class="inline-flex justify-center text-xl font-bold text-2023-teal"
                 >{{
                     formattedDate(
                         $d(new Date(competition.date_start), "fullTime"),

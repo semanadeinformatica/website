@@ -6,6 +6,7 @@ import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
 import ActivityTimelineAction from "./TimeLine/ActivityTimelineItem.vue";
 import TalkTimelineAction from "./TimeLine/TalkTimelineItem.vue";
 import CompetitionTimelineItem from "./TimeLine/CompetitionTimelineItem.vue";
+import type Event from "@/Types/Event";
 
 interface Props {
     day: EventDay;
@@ -20,9 +21,10 @@ const selectedType = ref<"talk" | "activity" | "stand" | "competitions">(
 
 const noInfo = computed(
     () =>
-        day.activities?.length == 0 &&
-        day.talks?.length == 0 &&
-        day.stands?.length == 0,
+        day.activities?.length === 0 &&
+        day.talks?.length === 0 &&
+        day.stands?.length === 0 &&
+        day.competitions?.length === 0,
 );
 
 const toggle = ({ target }: MouseEvent) => {
@@ -40,41 +42,72 @@ const times = ref<{ start?: string; end?: string }>({
     start: undefined,
     end: undefined,
 });
-watch(selectedType, (selectedType) => {
-    const parseTimeString = (date: string) => {
-        const [hour, minutes] = date.split(":");
 
-        return `${hour}h${minutes}`;
-    };
+watch(
+    selectedType,
+    (_selectedType) => {
+        const parseTimeString = (time: string) => {
+            const [hour, minutes] = time.split(":");
 
-    let items = [];
-    switch (selectedType) {
-        case "activity":
-            items = day.activities ?? [];
-            break;
-        case "talk":
-            items = day.talks ?? [];
-            break;
-        case "stand":
-            return { start: undefined, end: undefined };
-        case "competitions":
-            if (day.competitions?.length === 0)
-                return {
-                    start: "N/A",
-                    end: "N/A",
-                };
+            return `${hour}h${minutes}`;
+        };
 
-            return {
-                start: day.competitions?.[0].date_start,
-                end: day.competitions?.[day.competitions.length - 1].date_end,
-            };
-    }
+        const parseDate = (dateStr?: string) => {
+            if (!dateStr) return undefined;
 
-    const startTime = parseTimeString(items[0].time_start);
-    const endTime = parseTimeString(items[items.length - 1].time_end);
+            const date = new Date(dateStr);
 
-    return { start: startTime, end: endTime };
-});
+            console.log(dateStr, date);
+
+            // FIXME: xD
+            return `${
+                date.getUTCHours() < 10
+                    ? `0${date.getUTCHours()}`
+                    : date.getUTCHours()
+            }h${
+                date.getMinutes() < 10
+                    ? `0${date.getMinutes()}`
+                    : date.getMinutes()
+            }`;
+        };
+
+        let items: Event[] = [];
+        switch (_selectedType) {
+            case "activity":
+                items = day.activities ?? [];
+                break;
+            case "talk":
+                items = day.talks ?? [];
+                break;
+            case "stand":
+                times.value = { start: "10h00", end: "17h00" };
+                return;
+            case "competitions":
+                if (day.competitions?.length === 0)
+                    times.value = {
+                        start: undefined,
+                        end: undefined,
+                    };
+                else
+                    times.value = {
+                        start: parseDate(day.competitions?.[0].date_start),
+                        end: parseDate(
+                            day.competitions?.[day.competitions.length - 1]
+                                .date_end,
+                        ),
+                    };
+                return;
+        }
+
+        const startTime = parseTimeString(items[0].time_start);
+        const endTime = parseTimeString(items[items.length - 1].time_end);
+
+        times.value = { start: startTime, end: endTime };
+    },
+    {
+        immediate: true,
+    },
+);
 
 onMounted(() => {
     selected.value = document.querySelector(

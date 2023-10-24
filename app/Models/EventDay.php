@@ -55,7 +55,7 @@ class EventDay extends Model
     {
         // 🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨
         return $this->hasManyThrough(Competition::class, Edition::class, 'id', 'edition_id', 'edition_id', 'id')
-            ->whereBetweenColumns(DB::raw("'".$this->date."'::date"), ['competitions.date_start', 'competitions.date_end']);
+            ->whereBetweenColumns(DB::raw("'".$this->date."'"), [DB::raw('"competitions"."date_start"::date'), DB::raw('"competitions"."date_end"::date')]);
     }
 
     public function toSearchableArray(): array
