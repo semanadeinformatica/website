@@ -8,9 +8,12 @@ import Sponsor from "@/Components/Home/Sponsor.vue";
 import route from "ziggy-js";
 import { router } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import type Enrollment from "@/Types/Enrollment";
 
 interface Props {
     event: Event;
+    enrollments?: Enrollment[];
+    enrollmentCount: number;
     canJoin: boolean;
     isParticipant: boolean;
     hasJoined: boolean;
@@ -112,7 +115,7 @@ const colorPicker = () => {
                     <span>Vamos a isto?</span>
                     <span v-if="event.capacity" class="text-lg">
                         Ainda temos
-                        {{ event.capacity - (event.enrollments?.length ?? 0) }}
+                        {{ event.capacity - enrollmentCount }}
                         lugares.
                     </span>
                 </template>
@@ -159,6 +162,27 @@ const colorPicker = () => {
             >
                 Cancela a inscrição
             </PrimaryButton>
+        </div>
+
+        <div
+            v-if="enrollments != null"
+            class="flex flex-col items-stretch justify-center p-12"
+        >
+            <div
+                v-if="enrollments.length > 0"
+                class="flex flex-col items-center overflow-y-auto border border-black bg-2023-bg shadow-lg shadow-2023-teal"
+            >
+                <div
+                    v-for="enrollment in enrollments"
+                    :key="enrollment.id"
+                    class="flex w-full items-center justify-between gap-3 p-3 even:bg-2023-orange even:bg-opacity-20"
+                >
+                    {{ enrollment.participant?.user?.name ?? enrollment.id }}
+                </div>
+            </div>
+            <p v-else class="text-center text-2xl font-bold text-2023-teal">
+                Ainda nenhum participante se inscreveu neste evento.
+            </p>
         </div>
     </AppLayout>
 </template>
