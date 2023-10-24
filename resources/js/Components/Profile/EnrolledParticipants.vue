@@ -2,7 +2,6 @@
 import type Participant from "@/Types/Participant";
 import { Link, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import route from "ziggy-js";
 
 type Visitor = Participant & {
     can_see_cv: boolean;
@@ -26,19 +25,22 @@ const visitors = usePage().props.participants as Visitor[];
         >
             {{ visitor.user?.name ?? visitor.id }}
             <div class="flex gap-4">
-                <template v-if="visitor.can_see_linkedin">
-                    <span v-if="visitor.social_media?.linkedin">
-                        <a :href="visitor.social_media.linkedin">
-                            <OhVueIcon name="io-logo-linkedin" scale="1.3" />
-                        </a>
-                    </span>
-                    <span v-else> Sem LinkedIn </span>
-                </template>
-                <Link
-                    v-if="visitor.can_see_cv"
-                    :href="route('user.profile', visitor.user)"
+                <span
+                    v-if="
+                        visitor.can_see_linkedin &&
+                        visitor.social_media?.linkedin
+                    "
                 >
-                    <OhVueIcon name="io-open" scale="1.3" />
+                    <a :href="visitor.social_media.linkedin" title="Linkedin">
+                        <OhVueIcon name="io-logo-linkedin" scale="1.3" />
+                    </a>
+                </span>
+                <Link
+                    v-if="visitor.can_see_cv && visitor.cv_url"
+                    :href="visitor.cv_url"
+                    title="CV"
+                >
+                    <OhVueIcon name="io-document-text" scale="1.3" />
                 </Link>
             </div>
         </div>
