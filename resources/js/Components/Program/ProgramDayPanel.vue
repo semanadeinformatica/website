@@ -5,6 +5,7 @@ import WithTimeline from "@/Components/Program/TimeLine/WithTimeline.vue";
 import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
 import ActivityTimelineAction from "./TimeLine/ActivityTimelineItem.vue";
 import TalkTimelineAction from "./TimeLine/TalkTimelineItem.vue";
+import CompetitionTimelineItem from "./TimeLine/CompetitionTimelineItem.vue";
 
 interface Props {
     day: EventDay;
@@ -13,7 +14,9 @@ interface Props {
 const { day } = defineProps<Props>();
 
 const selected = ref<HTMLElement | null>(null);
-const selectedType = ref<"talk" | "activity" | "stand">("talk");
+const selectedType = ref<"talk" | "activity" | "stand" | "competitions">(
+    "talk",
+);
 
 const noInfo = computed(
     () =>
@@ -33,7 +36,11 @@ watch(selected, (newValue, oldValue) => {
         (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "talk";
 });
 
-const times = computed<{ start?: string; end?: string }>(() => {
+const times = ref<{ start?: string; end?: string }>({
+    start: undefined,
+    end: undefined,
+});
+watch(selectedType, (selectedType) => {
     const parseTimeString = (date: string) => {
         const [hour, minutes] = date.split(":");
 
@@ -41,7 +48,7 @@ const times = computed<{ start?: string; end?: string }>(() => {
     };
 
     let items = [];
-    switch (selectedType.value) {
+    switch (selectedType) {
         case "activity":
             items = day.activities ?? [];
             break;
@@ -50,6 +57,17 @@ const times = computed<{ start?: string; end?: string }>(() => {
             break;
         case "stand":
             return { start: undefined, end: undefined };
+        case "competitions":
+            if (day.competitions?.length === 0)
+                return {
+                    start: "N/A",
+                    end: "N/A",
+                };
+
+            return {
+                start: day.competitions?.[0].date_start,
+                end: day.competitions?.[day.competitions.length - 1].date_end,
+            };
     }
 
     const startTime = parseTimeString(items[0].time_start);
@@ -100,10 +118,20 @@ onMounted(() => {
             >
                 Bancas
             </button>
+            <button
+                v-if="(day.competitions?.length ?? 0) > 0"
+                class="transition"
+                data-type="competitions"
+                @click="toggle"
+            >
+                Competições
+            </button>
         </div>
     </section>
     <p
-        v-if="selectedType !== 'stand' && !noInfo"
+        v-if="
+            (selectedType === 'talk' || selectedType === 'activity') && !noInfo
+        "
         class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
     >
         {{ day.theme }}
@@ -131,6 +159,14 @@ onMounted(() => {
                         v-for="talk in day.talks"
                         :key="talk.id"
                         :event="talk"
+                    />
+                </template>
+
+                <template v-else-if="selectedType === 'competitions'">
+                    <CompetitionTimelineItem
+                        v-for="competition in day.competitions"
+                        :key="competition.id"
+                        :competition="competition"
                     />
                 </template>
             </div>
