@@ -53,9 +53,7 @@ trait HasImageSlot
      */
     public function ImageSlotUrl(): Attribute
     {
-        return Attribute::get(function () {
-            return Storage::disk($this->ImageSlotDisk())->url($this->image_path);
-        });
+        return Attribute::get(fn () => $this->image_path ? Storage::disk($this->ImageSlotDisk())->url($this->image_path) : url('images/default_sticker.png'));
     }
 
     /**
