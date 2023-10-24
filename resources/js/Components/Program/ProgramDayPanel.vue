@@ -57,13 +57,9 @@ watch(
 
             const date = new Date(dateStr);
 
-            console.log(dateStr, date);
-
-            // FIXME: xD
+            // FIXME: for now do this, once https://github.com/semanadeinformatica/website-2023/pull/75 is merged we can do this better
             return `${
-                date.getUTCHours() < 10
-                    ? `0${date.getUTCHours()}`
-                    : date.getUTCHours()
+                date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
             }h${
                 date.getMinutes() < 10
                     ? `0${date.getMinutes()}`
