@@ -56,9 +56,7 @@ trait HasCV
      */
     public function CvUrl(): Attribute
     {
-        return Attribute::get(function () {
-            return Storage::disk($this->CVDisk())->url($this->cv_path);
-        });
+        return Attribute::get(fn () => $this->cv_path ? Storage::disk($this->CVDisk())->url($this->cv_path) : null);
     }
 
     /**

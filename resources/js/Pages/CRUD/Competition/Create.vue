@@ -74,7 +74,6 @@ const submit = () => {
                 v-model="form.regulation"
                 label="Regulamento"
                 type="textarea"
-                required
                 :error-message="form.errors.regulation"
             />
 
@@ -82,7 +81,7 @@ const submit = () => {
                 id="date_start"
                 v-model="form.date_start"
                 label="Data de início"
-                type="date"
+                type="datetime-local"
                 required
                 :error-message="form.errors.date_start"
             />
@@ -91,7 +90,7 @@ const submit = () => {
                 id="date_end"
                 v-model="form.date_end"
                 label="Data de fim"
-                type="date"
+                type="datetime-local"
                 required
                 :error-message="form.errors.date_end"
             />

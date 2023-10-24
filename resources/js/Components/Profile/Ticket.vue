@@ -143,7 +143,10 @@ const accentColor = () => {
                         {{ event.topic }}
                     </span>
 
-                    <span class="px-[1em]">{{ event.name }}</span>
+                    <span
+                        class="line-clamp-4 truncate whitespace-normal px-[1em]"
+                        >{{ event.name }}</span
+                    >
                 </div>
             </div>
         </div>

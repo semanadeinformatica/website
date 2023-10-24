@@ -135,8 +135,8 @@ const colorPicker = () => {
                     }
                 "
             >
-                <span v-if="!isEnrolled" class="flex flex-col"
-                    >Inscreve-te nesta edição!</span
+                <template v-if="!isEnrolled"
+                    >Inscreve-te nesta edição!</template
                 >
                 <a
                     v-else-if="event.external_url"
@@ -144,20 +144,20 @@ const colorPicker = () => {
                     target="_blank"
                     class="flex flex-col"
                 >
-                    <span>Link para inscrição</span>
+                    Link para inscrição
                 </a>
-                <span v-else class="flex flex-col"> Inscreve-te! </span>
+                <template v-else>Inscreve-te!</template>
             </PrimaryButton>
 
             <PrimaryButton
-                v-else-if="isEnrolled"
+                v-else-if="isEnrolled && hasJoined"
                 color="teal-dark"
                 shadow="red"
                 text-size="sm:text-3xl"
                 padding="sm:px-8"
                 @click="router.put(route('event.leave', event))"
             >
-                <span class="flex flex-col">Cancela a inscrição</span>
+                Cancela a inscrição
             </PrimaryButton>
         </div>
     </AppLayout>

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Enrollment;
+use App\Models\EnrollmentProduct;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ShopController extends Controller
@@ -30,6 +33,14 @@ class ShopController extends Controller
         $products = $edition->products()->orderBy('price')->get()->each(function (Product $product) use ($user) {
             $product->canBeBought = $user->can('buy', $product);
         });
+
+        if (Gate::allows('admin') || Gate::allows('staff', [$edition])) {
+            $products->load([
+                'enrollments' => [
+                    'participant' => ['user'],
+                ],
+            ]);
+        }
 
         return Inertia::render('Shop', [
             'products' => $products,
@@ -62,5 +73,14 @@ class ShopController extends Controller
         $product->decrement('stock', 1);
 
         return redirect()->back()->banner('Produto comprado');
+    }
+
+    public function redeemProduct(Request $request, Product $product, Enrollment $enrollment)
+    {
+        Gate::authorize('redeem', [$product, $enrollment]);
+
+        EnrollmentProduct::where('enrollment_id', $enrollment->id)->where('product_id', $product->id)->update(['redeemed' => true]);
+
+        return redirect()->back()->banner('Produto entregue');
     }
 }

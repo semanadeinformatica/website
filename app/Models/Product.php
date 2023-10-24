@@ -39,7 +39,7 @@ class Product extends Model
 
     public function enrollments(): BelongsToMany
     {
-        return $this->belongsToMany(Enrollment::class);
+        return $this->belongsToMany(Enrollment::class)->using(EnrollmentProduct::class)->withPivot('redeemed');
     }
 
     public function toSearchableArray(): array

@@ -50,6 +50,7 @@ Route::get('/program', [ProgramController::class, 'show'])->name('program');
 Route::prefix('/shop')->name('shop')->group(function () {
     Route::get('/', [ShopController::class, 'show'])->name('.show');
     Route::post('/{product}/buy', [ShopController::class, 'buyProduct'])->name('.product.buy');
+    Route::post('/{product}/{enrollment}/redeem', [ShopController::class, 'redeemProduct'])->name('.product.redeem');
 });
 
 Route::prefix('/competition')->name('competition')->group(function () {
