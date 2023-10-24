@@ -52,6 +52,12 @@ const i18n = createI18n({
                 hour: "numeric",
                 minute: "numeric",
             },
+            fullTime: {
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+            },
         },
         pt: {
             short: {
@@ -68,6 +74,12 @@ const i18n = createI18n({
                 day: "numeric",
             },
             hourMinute: {
+                hour: "numeric",
+                minute: "numeric",
+            },
+            fullTime: {
+                month: "numeric",
+                day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
             },
