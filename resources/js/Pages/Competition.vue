@@ -15,6 +15,23 @@ interface Props {
 }
 
 const { competition } = defineProps<Props>();
+
+const formattedDate = (
+    startDate: string,
+    separator: string,
+    endDate: string,
+) => {
+    const startDateArray = startDate.split(" ");
+    const endDateArray = endDate.split(" ");
+
+    let pointer = 0;
+
+    while (startDateArray[pointer] === endDateArray[pointer]) pointer++;
+
+    endDate = endDateArray.slice(pointer).join(" ");
+
+    return `${startDate} ${separator} ${endDate}`;
+};
 </script>
 
 <template>
@@ -29,16 +46,13 @@ const { competition } = defineProps<Props>();
             </h2>
             <span
                 class="inline-flex w-full justify-center text-xl font-bold text-2023-teal"
-                >{{ $d(new Date(competition.date_start), "short") }}
-                <template
-                    v-if="
-                        new Date(competition.date_end).getTime() !==
-                        new Date(competition.date_start).getTime()
-                    "
-                >
-                    -
-                    {{ $d(new Date(competition.date_end), "short") }}
-                </template>
+                >{{
+                    formattedDate(
+                        $d(new Date(competition.date_start), "fullTime"),
+                        "-",
+                        $d(new Date(competition.date_end), "fullTime"),
+                    )
+                }}
             </span>
         </header>
 

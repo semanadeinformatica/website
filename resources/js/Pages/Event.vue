@@ -79,7 +79,7 @@ const colorPicker = () => {
                 -
                 {{ event.time_end ? formatTimeString(event.time_end) : "N/A" }}
                 <template v-if="event.location">
-                    - {{ event.location }}
+                    @ {{ event.location }}
                 </template>
             </h1>
         </section>
