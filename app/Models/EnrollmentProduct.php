@@ -10,6 +10,8 @@ class EnrollmentProduct extends Pivot
 {
     use Searchable;
 
+    public $timestamps = false;
+
     public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);

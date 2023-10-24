@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Models\Edition;
 use App\Models\Enrollment;
+use App\Models\EnrollmentProduct;
 use App\Models\Event;
 use App\Models\Product;
 use App\Models\Quest;
@@ -109,10 +110,16 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('buy', fn (User $user, Product $product) => (
             $user->isParticipant() && // user must be a participant
+            ! $user->isStaff($product->edition) && // user must not be staff
             $user->usertype->enrollments()->where('edition_id', $product->edition->id)->exists() && // user must be enrolled in the current edition
             $user->usertype->enrollments()->where('edition_id', $product->edition->id)->first()->products()->where('product_id', $product->id)->doesntExist() && // user must not have the product
             $user->usertype->enrollments()->where('points', '>=', $product->price)->exists() && // user must have enough points
             $product->stock > 0 // product must be in stock
+        ));
+
+        Gate::define('redeem', fn (User $user, Product $product, Enrollment $enrollment) => (
+            ($user->isAdmin() || $user->isStaff($product->edition)) && // user must be admin or staff
+            EnrollmentProduct::where('enrollment_id', $enrollment->id)->where('product_id', $product->id)->where('redeemed', false)->exists() // product must not have been redeemed
         ));
     }
 }

@@ -1,3 +1,4 @@
+import type Enrollment from "./Enrollment";
 import type Model from "./Model";
 
 export default interface Product extends Model {
@@ -6,4 +7,6 @@ export default interface Product extends Model {
     stock: number;
     edition_id: number;
     image_product_url: string;
+
+    enrollments?: Enrollment[];
 }

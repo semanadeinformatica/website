@@ -36,7 +36,7 @@ class Enrollment extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)->using(EnrollmentProduct::class);
+        return $this->belongsToMany(Product::class)->using(EnrollmentProduct::class)->withPivot('redeemed');
     }
 
     public function slots(): BelongsToMany
