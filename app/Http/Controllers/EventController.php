@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class EventController extends Controller
 {
     public function show(Request $request, Event $event)
     {
-
         /** @var User */
         $user = $request->user();
 
@@ -29,8 +29,17 @@ class EventController extends Controller
         $hasJoined = $isParticipant && $event->enrollments()->where('participant_id', $user->usertype_id)->exists();
         $canJoin = $isEnrolled && ! $hasJoined && $user->can('join', $event);
 
+        $enrollments = $event->enrollments()->with(['participant' => ['user']])->get();
+        $enrollmentCount = $enrollments->count();
+
+        if (Gate::denies('admin') && Gate::denies('staff', [$edition])) {
+            $enrollments = null;
+        }
+
         return Inertia::render('Event', [
-            'event' => $event->load(['users', 'event_day', 'enrollments']),
+            'event' => $event->load(['users', 'event_day']),
+            'enrollments' => $enrollments,
+            'enrollmentCount' => $enrollmentCount,
             'isParticipant' => $isParticipant,
             'isEnrolled' => $isEnrolled,
             'hasJoined' => $hasJoined,
