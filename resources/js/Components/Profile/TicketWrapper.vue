@@ -4,9 +4,11 @@ import Ticket from "./Ticket.vue";
 
 type EventTicket = Event & {
     joined: boolean;
+    used: boolean;
 };
 
 const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
+    if (t.used) return "used";
     if (t.joined) return "acquired";
     return "available";
 };
