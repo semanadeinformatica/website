@@ -21,8 +21,8 @@ const { item: competition } = defineProps<Props>();
 const form = useForm({
     edition_id: competition.edition_id.toString(),
     theme: competition.theme,
-    date_start: new Date(competition.date_start).toISOString().substring(0, 10),
-    date_end: new Date(competition.date_end).toISOString().substring(0, 10),
+    date_start: competition.date_start.substring(0, 16),
+    date_end: competition.date_end.substring(0, 16),
     name: competition.name,
     slug: competition.slug,
     registration_link: competition.registration_link,
@@ -66,7 +66,6 @@ watchEffect(() => {
                 v-model="form.regulation"
                 label="Regulamento"
                 type="textarea"
-                required
                 :error-message="form.errors.regulation"
             />
 
@@ -83,7 +82,7 @@ watchEffect(() => {
                 id="date_start"
                 v-model="form.date_start"
                 label="Data de início"
-                type="date"
+                type="datetime-local"
                 required
                 :error-message="form.errors.date_start"
             />
@@ -92,7 +91,7 @@ watchEffect(() => {
                 id="date_end"
                 v-model="form.date_end"
                 label="Data de fim"
-                type="date"
+                type="datetime-local"
                 required
                 :error-message="form.errors.date_end"
             />
