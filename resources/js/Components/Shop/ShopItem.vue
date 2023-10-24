@@ -59,8 +59,8 @@ const buyProduct = () => {
     </div>
     <VueFinalModal
         v-model="modalOpen"
-        class="flex items-center justify-center"
-        content-class="max-w-xl overflow-scroll mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col gap-8"
+        class="flex items-center justify-center overflow-clip"
+        content-class="max-w-xl max-h-[80%] mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col gap-8"
     >
         <template v-if="isEnrolled">
             <img
@@ -99,12 +99,12 @@ const buyProduct = () => {
         >
             <div
                 v-if="product.enrollments.length > 0"
-                class="mt-10 flex flex-col items-center border border-black bg-2023-bg shadow-lg shadow-2023-teal"
+                class="flex flex-col items-center overflow-y-auto border border-black bg-2023-bg shadow-lg shadow-2023-teal"
             >
                 <div
                     v-for="enrollment in product.enrollments"
                     :key="enrollment.id"
-                    class="flex w-full items-center justify-between p-3 even:bg-2023-orange even:bg-opacity-20"
+                    class="flex w-full items-center justify-between gap-3 p-3 even:bg-2023-orange even:bg-opacity-20"
                 >
                     {{ enrollment.participant?.user?.name ?? enrollment.id }}
                     <Link
@@ -122,7 +122,7 @@ const buyProduct = () => {
             </div>
             <div v-else class="flex h-full flex-1 items-center justify-center">
                 <p class="text-center text-2xl font-bold text-2023-teal">
-                    Ainda nenhum participante visitou a sua empresa.
+                    Ainda nenhum participante comprou este produto.
                 </p>
             </div>
         </template>
