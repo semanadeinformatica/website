@@ -6,10 +6,7 @@ type Times = {
     endTime?: string;
 };
 
-withDefaults(defineProps<Times>(), {
-    startTime: "09h00",
-    endTime: "17h00",
-});
+defineProps<Times>();
 </script>
 
 <template>
