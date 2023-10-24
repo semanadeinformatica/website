@@ -23,7 +23,7 @@ const form = useForm({
 
 const submit = () =>
     form.post(route("quest.give", { quest: form.quest }), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => (form.quest_code = ""),
         preserveState: true,
         preserveScroll: true,
     });
