@@ -7,18 +7,11 @@ import type { User } from "@/Types/User";
 import { Link, router } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { type BuyableProduct } from "@/Types/ShopPage";
-import type Enrollment from "@/Types/Enrollment";
 
 const modalOpen = ref(false);
 
 interface Props {
-    product: BuyableProduct & {
-        enrollments?: (Enrollment & {
-            pivot: {
-                redeemed: boolean;
-            };
-        })[];
-    };
+    product: BuyableProduct;
     user?: User;
     isEnrolled?: boolean;
     isParticipant?: boolean;
