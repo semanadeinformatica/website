@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
 class EventDay extends Model
@@ -46,6 +48,14 @@ class EventDay extends Model
     public function stands(): HasMany
     {
         return $this->hasMany(Stand::class);
+    }
+
+    // 🔨
+    public function competitions(): HasManyThrough
+    {
+        // 🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨🔨
+        return $this->hasManyThrough(Competition::class, Edition::class, 'id', 'edition_id', 'edition_id', 'id')
+            ->whereBetweenColumns(DB::raw("'".$this->date."'::date"), ['competitions.date_start', 'competitions.date_end']);
     }
 
     public function toSearchableArray(): array

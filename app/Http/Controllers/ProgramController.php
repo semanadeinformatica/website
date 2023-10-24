@@ -50,6 +50,9 @@ class ProgramController extends Controller
         /** @var \App\Models\EventDay|null $eventDay */
         $eventDay = $edition->event_days()->orderBy('date', 'ASC')->skip($queryDay - 1)->first();
 
+        // FIXME: we need to do this since 'Model::load' and 'Model::with' work on the table, not on a specific model.
+        $eventDay->competitions;
+
         return Inertia::render('Program', [
             'eventDay' => fn () => $eventDay?->load([
                 'stands' => [
