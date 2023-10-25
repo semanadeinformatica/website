@@ -25,7 +25,14 @@ class QuestCRUDController extends CRUDController
     {
         return [
             'editions' => Edition::all(),
-            'stands' => Stand::all(),
+            'stands' => Stand::with([
+                'sponsor' => [
+                    'company' => [
+                        'user',
+                    ],
+                ],
+                'event_day',
+            ])->get(),
             'events' => Event::all(),
         ];
     }
