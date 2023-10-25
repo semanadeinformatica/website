@@ -6,6 +6,7 @@ import type Edition from "@/Types/Edition";
 import type Event from "@/Types/Event";
 import type Stand from "@/Types/Stand";
 import { useForm } from "@inertiajs/vue3";
+import { computed } from "vue";
 import route from "ziggy-js";
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
     };
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const form = useForm({
     name: "",
@@ -24,6 +25,17 @@ const form = useForm({
     requirement: "",
     edition_id: "",
 });
+
+const stands = computed<Record<number, string>>(() =>
+    Object.fromEntries(
+        props.with.stands.map((stand) => [
+            stand.id,
+            `${stand.sponsor?.company?.user?.name} - Dia ${new Date(
+                stand.event_day?.date ?? Date(),
+            ).getDate()}`,
+        ]),
+    ),
+);
 
 const submit = () => {
     form.post(route("admin.quests.store"));
@@ -71,7 +83,7 @@ const submit = () => {
                         :key="'stand;' + stand.id"
                         :value="'stand;' + stand.id"
                     >
-                        {{ stand.sponsor?.company?.user?.name ?? stand.id }}
+                        {{ stands[stand.id] }}
                     </option>
                 </optgroup>
                 <optgroup label="Eventos">

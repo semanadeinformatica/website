@@ -14,9 +14,7 @@ const { event } = defineProps<Props>();
 const speakers = computed(() => event.users?.filter(isSpeaker));
 
 const formatTimeString = (time: string): string => {
-    const [hours, minutes] = time.split(":");
-
-    return `${hours}h${minutes}`;
+    return `1970-01-01T${time}.000000Z`;
 };
 </script>
 
@@ -48,8 +46,9 @@ const formatTimeString = (time: string): string => {
             </li>
         </ul>
         <span class="text-2023-teal">
-            {{ formatTimeString(event.time_start) }} -
-            {{ formatTimeString(event.time_end) }}
+            {{ $d(new Date(formatTimeString(event.time_start)), "hourMinute") }}
+            -
+            {{ $d(new Date(formatTimeString(event.time_end)), "hourMinute") }}
         </span>
         <span
             class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2023-orange text-xl font-semibold text-white"

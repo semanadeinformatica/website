@@ -16,7 +16,7 @@ class QuestCRUDController extends CRUDController
 
     protected array $rules = [
         'name' => 'required|string',
-        'category' => 'required|string|in:company,talk,workshop,milestone,teambuiling',
+        'category' => 'required|string|in:company,talk,workshop,milestone,teambuilding',
         'requirement' => ['sometimes', 'regex:/^((stand|event|general);[0-9]+)$/'],
         'edition_id' => 'required|exists:editions,id',
     ];
@@ -25,7 +25,14 @@ class QuestCRUDController extends CRUDController
     {
         return [
             'editions' => Edition::all(),
-            'stands' => Stand::all(),
+            'stands' => Stand::with([
+                'sponsor' => [
+                    'company' => [
+                        'user',
+                    ],
+                ],
+                'event_day',
+            ])->get(),
             'events' => Event::all(),
         ];
     }

@@ -30,9 +30,7 @@ const companies = computed(() => event.users?.filter(isCompany) ?? []);
 
 // FIXME: duplicated :P
 const formatTimeString = (time: string): string => {
-    const [hours, minutes] = time.split(":");
-
-    return `${hours}h${minutes}`;
+    return `1970-01-01T${time}.000000Z`;
 };
 
 const colorPicker = () => {
@@ -75,12 +73,15 @@ const colorPicker = () => {
                 Dia
                 {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},
                 {{
-                    event.time_start
-                        ? formatTimeString(event.time_start)
-                        : "N/A"
+                    $d(
+                        new Date(formatTimeString(event.time_start)),
+                        "hourMinute",
+                    )
                 }}
                 -
-                {{ event.time_end ? formatTimeString(event.time_end) : "N/A" }}
+                {{
+                    $d(new Date(formatTimeString(event.time_end)), "hourMinute")
+                }}
                 <template v-if="event.location">
                     @ {{ event.location }}
                 </template>
