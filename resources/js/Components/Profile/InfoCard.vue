@@ -2,7 +2,7 @@
 import { type User, isAdmin, isParticipant, isCompany } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
-import { router } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import QRCode from "./QRCode.vue";
 
@@ -70,32 +70,29 @@ const iconColor: Record<string, string> = {
             </div>
             <div class="mt-10 flex">
                 <template v-for="(social, key) in socials" :key="key">
-                    <p
+                    <a
                         v-if="
                             !isAdmin(user) &&
                             user?.usertype?.social_media?.[key]
                         "
+                        class="flex w-fit rounded-full p-2.5"
+                        target="_blank"
+                        :href="user.usertype.social_media[key]"
                     >
-                        <a
-                            class="flex w-fit rounded-full p-2.5"
-                            target="_blank"
-                            :href="user.usertype.social_media[key]"
-                        >
-                            <OhVueIcon
-                                :name="social.icon"
-                                scale="1.3"
-                                :fill="iconColor[social.color]"
-                            ></OhVueIcon>
-                        </a>
-                    </p>
+                        <OhVueIcon
+                            :name="social.icon"
+                            scale="1.3"
+                            :fill="iconColor[social.color]"
+                        ></OhVueIcon>
+                    </a>
                 </template>
             </div>
         </div>
-        <div class="flex flex-col justify-between">
-            <button
+        <div class="flex flex-col items-center justify-between">
+            <Link
                 v-if="$page.props.auth.user?.id == user?.id"
-                class="self-start"
-                @click="router.get(route('profile.edit'))"
+                class="self-start p-2.5"
+                :href="route('profile.edit')"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +116,7 @@ const iconColor: Record<string, string> = {
                         d="M459.94 53.25a16.06 16.06 0 00-23.22-.56L424.35 65a8 8 0 000 11.31l11.34 11.32a8 8 0 0011.34 0l12.06-12c6.1-6.09 6.67-16.01.85-22.38zM399.34 90L218.82 270.2a9 9 0 00-2.31 3.93L208.16 299a3.91 3.91 0 004.86 4.86l24.85-8.35a9 9 0 003.93-2.31L422 112.66a9 9 0 000-12.66l-9.95-10a9 9 0 00-12.71 0z"
                     />
                 </svg>
-            </button>
+            </Link>
             <template v-if="isAdmin(user) || isStaff || isCompany(user)">
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <a
@@ -129,9 +126,10 @@ const iconColor: Record<string, string> = {
                     <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
                 </a>
             </template>
-            <template v-else-if="isParticipant(user) && user.usertype">
-                <QRCode :participant="user.usertype"></QRCode>
-            </template>
+            <QRCode
+                v-else-if="isParticipant(user) && user.usertype"
+                :participant="user.usertype"
+            ></QRCode>
         </div>
     </div>
 </template>
