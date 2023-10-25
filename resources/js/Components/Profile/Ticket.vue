@@ -53,7 +53,7 @@ const accentColor = () => {
             class="grid aspect-[5/2] place-content-stretch place-items-stretch @container"
             :class="[
                 state == 'available'
-                    ? 'can-hover:blur-sm cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none'
+                    ? 'cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none [@media(hover:hover)]:blur-sm'
                     : '',
             ]"
         >

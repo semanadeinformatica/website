@@ -50,7 +50,8 @@ export default {
             screens: {
                 ml: "900px",
                 xs: "500px",
-                "can-hover": { raw: "(hover: hover)" },
+                // this breaks max- and min- breakpoints
+                // "can-hover": { raw: "(hover: hover)" },
             },
         },
     },
