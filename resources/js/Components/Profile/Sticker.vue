@@ -39,9 +39,17 @@ const completeness = computed(() => {
             }"
         />
         <div
-            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 p-10 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
+            class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black bg-opacity-50 p-4 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
         >
-            {{ sticker.name }}
+            <span>{{ sticker.name }}</span>
+            <span
+                >{{ sticker.points }}
+                <img
+                    class="inline-block w-5 align-middle"
+                    title="SINFrão"
+                    src="/images/cy-sinf-small.svg"
+                />
+            </span>
         </div>
     </div>
 </template>
