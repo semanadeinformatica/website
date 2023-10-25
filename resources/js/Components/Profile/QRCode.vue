@@ -28,12 +28,12 @@ const showQRCode = () => {
 </script>
 
 <template>
-    <p
-        class="flex w-fit cursor-pointer rounded-full text-2023-teal"
+    <button
+        class="flex w-fit cursor-pointer rounded-full p-2.5 text-2023-red"
         @click="showQRCode"
     >
         <OhVueIcon name="io-qr-code" scale="1.4"></OhVueIcon>
-    </p>
+    </button>
     <VueFinalModal
         v-model="modalOpen"
         class="flex items-center justify-center"

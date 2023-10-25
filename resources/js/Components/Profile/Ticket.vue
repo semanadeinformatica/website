@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
+import { Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 interface Props {
@@ -47,12 +48,12 @@ const accentColor = () => {
 </script>
 
 <template>
-    <div class="relative">
+    <Link :href="route('event.show', event)" class="relative">
         <div
             class="grid aspect-[5/2] place-content-stretch place-items-stretch @container"
             :class="[
                 state == 'available'
-                    ? 'select-none opacity-50 blur-sm grayscale'
+                    ? 'cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none [@media(hover:hover)]:blur-sm'
                     : '',
             ]"
         >
@@ -150,17 +151,7 @@ const accentColor = () => {
                 </div>
             </div>
         </div>
-
-        <template v-if="state == 'available'">
-            <a
-                :href="route('event.show', event)"
-                class="absolute bottom-1/2 right-1/2 w-80 translate-x-1/2 translate-y-1/2 cursor-pointer border border-black bg-2023-red p-6 text-center text-white shadow-2023-teal transition-shadow hover:shadow"
-            >
-                <p class="font-bold">{{ event.name }}</p>
-                <p>+ info</p>
-            </a>
-        </template>
-    </div>
+    </Link>
 </template>
 
 <style>

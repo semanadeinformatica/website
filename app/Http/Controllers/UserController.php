@@ -43,7 +43,7 @@ class UserController extends UserProfileController
         }
 
         $slots = $edition->slots();
-        $tickets = $edition->events()->with('event_day');
+        $tickets = $edition->events()->with('event_day')->whereNull('external_url');
         $participants = null;
         $canViewCv = $request->user()->can('viewCVOf', [$user, $edition]);
 
