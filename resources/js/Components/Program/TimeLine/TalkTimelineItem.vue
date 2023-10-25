@@ -45,6 +45,9 @@ const formatTimeString = (time: string): string => {
                 >
             </li>
         </ul>
+        <span v-if="event.location" class="text-2023-teal"
+            >Local: <span class="font-bold">{{ event.location }}</span></span
+        >
         <span class="text-2023-teal">
             {{ $d(new Date(formatTimeString(event.time_start)), "hourMinute") }}
             -
