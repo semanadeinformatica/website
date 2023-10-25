@@ -47,28 +47,7 @@ watch(
     selectedType,
     (_selectedType) => {
         const parseTimeString = (time: string) => {
-            const [hour, minutes] = time.split(":");
-
-            return `${hour}h${minutes}`;
-        };
-
-        const parseDate = (dateStr?: string) => {
-            if (!dateStr) return undefined;
-
-            const date = new Date(dateStr);
-
-            console.log(dateStr, date);
-
-            // FIXME: xD
-            return `${
-                date.getUTCHours() < 10
-                    ? `0${date.getUTCHours()}`
-                    : date.getUTCHours()
-            }h${
-                date.getMinutes() < 10
-                    ? `0${date.getMinutes()}`
-                    : date.getMinutes()
-            }`;
+            return `1970-01-01T${time}.000000Z`;
         };
 
         let items: Event[] = [];
@@ -80,7 +59,10 @@ watch(
                 items = day.talks ?? [];
                 break;
             case "stand":
-                times.value = { start: "10h00", end: "17h00" };
+                times.value = {
+                    start: "1970-01-01T09:00:00.000000Z",
+                    end: "1970-01-01T16:00:00.000000Z",
+                };
                 return;
             case "competitions":
                 if (day.competitions?.length === 0)
@@ -88,15 +70,22 @@ watch(
                         start: undefined,
                         end: undefined,
                     };
-                else
+                else {
                     times.value = {
-                        start: parseDate(day.competitions?.[0].date_start),
-                        end: parseDate(
-                            day.competitions?.[day.competitions.length - 1]
-                                .date_end,
-                        ),
+                        start: day.competitions?.[0].date_start,
+                        end: day.competitions?.[day.competitions.length - 1]
+                            .date_end,
                     };
+                }
                 return;
+        }
+
+        if (items.length === 0) {
+            times.value = {
+                start: undefined,
+                end: undefined,
+            };
+            return;
         }
 
         const startTime = parseTimeString(items[0].time_start);
