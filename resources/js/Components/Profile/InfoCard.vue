@@ -119,15 +119,15 @@ const iconColor: Record<string, string> = {
             </Link>
             <template v-if="isAdmin(user) || isStaff || isCompany(user)">
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
-                <a
+                <Link
                     class="flex w-fit cursor-pointer rounded-full text-2023-teal"
                     :href="route('user.scan-code')"
                 >
                     <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
-                </a>
+                </Link>
             </template>
             <QRCode
-                v-else-if="isParticipant(user) && user.usertype"
+                v-if="isParticipant(user) && user.usertype"
                 :participant="user.usertype"
             ></QRCode>
         </div>
