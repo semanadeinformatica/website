@@ -10,11 +10,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// FIXME: duplicated :P
 const formatTimeString = (time: string): string => {
-    const [hours, minutes] = time.split(":");
-
-    return `${hours}h${minutes}`;
+    return `1970-01-01T${time}.000000Z`;
 };
 
 // https://stackoverflow.com/a/52171480/11571888
@@ -117,10 +114,16 @@ const accentColor = () => {
                             class="line-clamp-2 truncate whitespace-normal"
                             >LOCAL: {{ event.location }}</span
                         >
-                        <!-- TODO: add link based on location character length -->
                         <span v-if="event.time_start"
                             >HORA:
-                            {{ formatTimeString(event.time_start) }}</span
+                            {{
+                                $d(
+                                    new Date(
+                                        formatTimeString(event.time_start),
+                                    ),
+                                    "hourMinute",
+                                )
+                            }}</span
                         >
                         <span v-if="event.event_day?.date"
                             >DATA:
