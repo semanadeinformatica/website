@@ -38,10 +38,11 @@ const updatePassword = () => {
 
 <template>
     <FormSection @submitted="updatePassword">
-        <template #title> Update Password </template>
+        <template #title> Atualizar Password </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            Garante que a tua conta usa uma senha longa e aleatória para se
+            manter segura.
         </template>
 
         <template #form>
@@ -49,7 +50,7 @@ const updatePassword = () => {
                 id="current_password"
                 ref="currentPasswordInput"
                 v-model="form.current_password"
-                label="Current Password"
+                label="Password Atual"
                 type="password"
                 autocomplete="current-password"
                 :error-message="form.errors.current_password"
@@ -59,7 +60,7 @@ const updatePassword = () => {
                 id="password"
                 ref="passwordInput"
                 v-model="form.password"
-                label="New Password"
+                label="Nova Password"
                 type="password"
                 autocomplete="new-password"
                 :error-message="form.errors.password"
@@ -68,7 +69,7 @@ const updatePassword = () => {
             <TextInput
                 id="password_confirmation"
                 v-model="form.password_confirmation"
-                label="Confirm Password"
+                label="Confirmar Password"
                 type="password"
                 autocomplete="new-password"
                 :error-message="form.errors.password_confirmation"
@@ -77,14 +78,14 @@ const updatePassword = () => {
 
         <template #actions>
             <ActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Saved.
+                Guardado.
             </ActionMessage>
 
             <PrimaryButton
                 :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing"
             >
-                Save
+                Guardar
             </PrimaryButton>
         </template>
     </FormSection>

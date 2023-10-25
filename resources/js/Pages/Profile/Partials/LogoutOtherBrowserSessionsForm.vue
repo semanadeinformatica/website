@@ -46,20 +46,20 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> Browser Sessions </template>
+        <template #title> Sessões do Browser</template>
 
         <template #description>
-            Manage and log out your active sessions on other browsers and
-            devices.
+            Gere e regista as tuas sessões ativas em outros navegadores e
+            dispositivos.
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-2023-teal-dark">
-                If necessary, you may log out of all of your other browser
-                sessions across all of your devices. Some of your recent
-                sessions are listed below; however, this list may not be
-                exhaustive. If you feel your account has been compromised, you
-                should also update your password.
+                Se necessário, podes terminar a sessão de todos os outros
+                navegadores em todos os teus dispositivos. Algumas das tuase
+                sessões recentes estão listadas abaixo; No entanto, esta lista
+                pode não estar completa. Se achas que a tua conta foi
+                comprometida, também deves atualizar a tua senha.
             </div>
 
             <!-- Other Browser Sessions -->
@@ -138,22 +138,22 @@ const closeModal = () => {
 
             <div class="mt-5 flex items-center">
                 <PrimaryButton @click="confirmLogout">
-                    Log Out Other Browser Sessions
+                    Terminar sessão noutros navegadores
                 </PrimaryButton>
 
                 <ActionMessage :on="form.recentlySuccessful" class="ml-3">
-                    Done.
+                    Pronto.
                 </ActionMessage>
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
             <DialogModal :show="confirmingLogout" @close="closeModal">
-                <template #title> Log Out Other Browser Sessions </template>
+                <template #title>Terminar sessão noutros navegadores </template>
 
                 <template #content>
-                    Please enter your password to confirm you would like to log
-                    out of your other browser sessions across all of your
-                    devices.
+                    Por favor, digite sua senha para confirmar que você gostaria
+                    de registrar fora de suas outras sessões de navegador em
+                    todas as suas dispositivos.
 
                     <TextInput
                         ref="passwordInput"
@@ -176,7 +176,7 @@ const closeModal = () => {
                         :disabled="form.processing"
                         @click="logoutOtherBrowserSessions"
                     >
-                        Log Out Other Browser Sessions
+                        Terminar sessão noutros navegadores
                     </PrimaryButton>
                 </template>
             </DialogModal>

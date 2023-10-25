@@ -17,7 +17,7 @@ defineProps<Props>();
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayout title="Perfil">
         <div class="mx-auto max-w-3xl py-10 sm:px-6 lg:px-8">
             <template v-if="$page.props.jetstream.canUpdateProfileInformation">
                 <UpdateProfileInformationForm :user="$page.props.auth.user" />

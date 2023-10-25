@@ -19,7 +19,7 @@ const colors: Array<string> = [
 </script>
 
 <template>
-    <AppLayout title="Team">
+    <AppLayout title="Equipa">
         <div
             v-if="departments.length > 0"
             class="flex flex-col items-center gap-7 pt-10"

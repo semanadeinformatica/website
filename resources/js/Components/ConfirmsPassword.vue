@@ -19,8 +19,8 @@ interface Emits {
 const emit = defineEmits<Emits>();
 
 withDefaults(defineProps<Props>(), {
-    title: "Confirm Password",
-    content: "For your security, please confirm your password to continue.",
+    title: "Confirmar Password",
+    content: "Para a tua segurança, confirma a tua senha para continuar.",
     button: "Confirm",
 });
 

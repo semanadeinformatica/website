@@ -40,7 +40,7 @@ const colorPicker = () => {
 </script>
 
 <template>
-    <AppLayout title="Event">
+    <AppLayout title="Evento">
         <!-- speaker/event intro -->
         <section class="mx-9 flex flex-col gap-6 pt-10">
             <SpeakerInfo
