@@ -28,7 +28,7 @@ const completeness = computed(() => {
     >
         <img
             v-if="sticker.image_slot_url"
-            class="absolute inset-0 object-contain transition-all duration-500 group-hover:blur"
+            class="absolute inset-0 h-full w-full object-contain transition-all duration-500 group-hover:blur"
             :src="sticker.image_slot_url"
             alt=""
         />
