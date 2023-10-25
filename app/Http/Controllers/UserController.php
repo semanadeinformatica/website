@@ -153,7 +153,7 @@ class UserController extends UserProfileController
             $tickets = $tickets
                 ->addSelect([
                     DB::raw('exists(select * from "enrollment_event" where "enrollment_event"."event_id" = "events"."id" and "enrollment_event"."enrollment_id" = '.$currentEnrollment->id.') as "joined"'),
-                    DB::raw('exists(select * from "enrollment_quest" inner join "quests" on "quests"."id" = "enrollment_quest"."quest_id" where "quests"."requirement_type" = \''.Event::class.'\' and "quests"."requirement_id" = "events"."id") as "used"'),
+                    DB::raw('exists(select * from "enrollment_quest" inner join "quests" on "quests"."id" = "enrollment_quest"."quest_id" where "quests"."requirement_type" = \''.Event::class.'\' and "quests"."requirement_id" = "events"."id" and "enrollment_quest"."enrollment_id" = '.$currentEnrollment->id.') as "used"'),
                     DB::raw('"events".*'),
                 ]);
         }
