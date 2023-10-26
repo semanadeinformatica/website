@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
-import { Link, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 
 type Visitor = Participant & {
@@ -23,23 +23,26 @@ const visitors = usePage().props.participants as Visitor[];
         >
             {{ visitor.user?.name ?? visitor.id }}
             <div class="flex gap-4">
-                <span
+                <a
                     v-if="
                         visitor.can_see_linkedin &&
                         visitor.social_media?.linkedin
                     "
+                    :href="visitor.social_media.linkedin"
+                    target="_blank"
+                    title="Linkedin"
                 >
-                    <a :href="visitor.social_media.linkedin" title="Linkedin">
-                        <OhVueIcon name="io-logo-linkedin" scale="1.3" />
-                    </a>
-                </span>
-                <Link
+                    <OhVueIcon name="io-logo-linkedin" scale="1.3" />
+                </a>
+
+                <a
                     v-if="visitor.can_see_cv && visitor.cv_url"
                     :href="visitor.cv_url"
+                    target="_blank"
                     title="CV"
                 >
                     <OhVueIcon name="io-document-text" scale="1.3" />
-                </Link>
+                </a>
             </div>
         </div>
     </div>

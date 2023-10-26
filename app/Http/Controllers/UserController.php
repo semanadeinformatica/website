@@ -124,7 +124,6 @@ class UserController extends UserProfileController
         $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
 
         if ($sponsor !== null) {
-
             /** @var SponsorTier */
             $sponsorTier = $sponsor->tier;
 

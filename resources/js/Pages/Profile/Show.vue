@@ -60,7 +60,7 @@ const buttons: Tabs =
                     <ProfilePicture :item="user" />
                     <InfoCard :user="user" :is-staff="isStaff" />
                 </div>
-                <CvArea v-if="canViewCV" :item="user" />
+                <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
                 <p
                     v-if="points !== null"
                     class="text-center text-xl font-bold text-2023-teal-dark"

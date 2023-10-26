@@ -74,7 +74,7 @@ const sendEmailVerification = () => {
                 <TextInput
                     id="name"
                     v-model="form.name"
-                    label="Name"
+                    label="Nome"
                     type="text"
                     autocomplete="name"
                     :error-message="form.errors.name"
@@ -144,71 +144,64 @@ const sendEmailVerification = () => {
                     :error-message="form.errors.organization"
                 />
 
-                <details
-                    v-if="form.type !== 'admin'"
-                    class="list-none self-stretch"
-                >
-                    <summary class="text-2023-teal-dark">Redes sociais</summary>
+                <template v-if="form.type !== 'admin'">
+                    <TextInput
+                        id="public_email"
+                        v-model="form.public_email"
+                        label="Email público"
+                        type="email"
+                        autocomplete="email"
+                        :error-message="form.errors.public_email"
+                    />
 
-                    <div class="mt-4 flex flex-col gap-4">
-                        <TextInput
-                            id="public_email"
-                            v-model="form.public_email"
-                            label="Public Email"
-                            type="email"
-                            autocomplete="email"
-                            :error-message="form.errors.public_email"
-                        />
+                    <TextInput
+                        id="facebook"
+                        v-model="form.facebook"
+                        label="Facebook"
+                        type="url"
+                        :error-message="form.errors.facebook"
+                    />
 
-                        <TextInput
-                            id="facebook"
-                            v-model="form.facebook"
-                            label="Facebook"
-                            type="url"
-                            :error-message="form.errors.facebook"
-                        />
+                    <TextInput
+                        id=".github"
+                        v-model="form.github"
+                        label="GitHub"
+                        type="url"
+                        :error-message="form.errors.github"
+                    />
 
-                        <TextInput
-                            id=".github"
-                            v-model="form.github"
-                            label="GitHub"
-                            type="url"
-                            :error-message="form.errors.github"
-                        />
+                    <TextInput
+                        id="instagram"
+                        v-model="form.instagram"
+                        label="Instagram"
+                        type="url"
+                        :error-message="form.errors.instagram"
+                    />
 
-                        <TextInput
-                            id="instagram"
-                            v-model="form.instagram"
-                            label="Instagram"
-                            type="url"
-                            :error-message="form.errors.instagram"
-                        />
+                    <TextInput
+                        id="linkedin"
+                        v-model="form.linkedin"
+                        label="Linkedin"
+                        type="url"
+                        :error-message="form.errors.linkedin"
+                    />
 
-                        <TextInput
-                            id="linkedin"
-                            v-model="form.linkedin"
-                            label="Linkedin"
-                            type="url"
-                            :error-message="form.errors.linkedin"
-                        />
+                    <TextInput
+                        id="twitter"
+                        v-model="form.twitter"
+                        label="Twitter"
+                        type="url"
+                        :error-message="form.errors.twitter"
+                    />
 
-                        <TextInput
-                            id="twitter"
-                            v-model="form.twitter"
-                            label="Twitter"
-                            type="url"
-                            :error-message="form.errors.twitter"
-                        />
-
-                        <TextInput
-                            id="website"
-                            v-model="form.website"
-                            label="Website"
-                            type="url"
-                            :error-message="form.errors.website"
-                        />
-                    </div>
-                </details>
+                    <TextInput
+                        id="website"
+                        v-model="form.website"
+                        label="Website"
+                        type="url"
+                        :error-message="form.errors.website"
+                    />
+                </template>
             </div>
         </template>
 
