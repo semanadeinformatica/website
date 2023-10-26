@@ -35,7 +35,7 @@ const formattedDate = (
 </script>
 
 <template>
-    <AppLayout title="Competition">
+    <AppLayout title="Competição">
         <header class="flex flex-col items-center gap-4 p-4 text-center">
             <h2
                 class="w-fit border border-solid border-black bg-2023-red p-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-teal xl:text-3xl 2xl:text-4xl"

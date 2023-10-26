@@ -38,32 +38,34 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> Delete Account </template>
+        <template #title> Apagar conta</template>
 
-        <template #description> Permanently delete your account. </template>
+        <template #description> Apaga permanentemente a tua conta. </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-2023-red-dark">
-                Once your account is deleted, all of its resources and data will
-                be permanently deleted. Before deleting your account, please
-                download any data or information that you wish to retain.
+                Depois de a tua conta ser excluída, todos os teus recursos e
+                dados serão apagados permanentemente. Antes de apagares a tua
+                conta, por favor faz o download de todos os dados ou informações
+                que desejas reter.
             </div>
 
             <div class="mt-5">
                 <PrimaryButton color="red" @click="confirmUserDeletion">
-                    Delete Account
+                    Apagar conta
                 </PrimaryButton>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
             <DialogModal :show="confirmingUserDeletion" @close="closeModal">
-                <template #title> Delete Account </template>
+                <template #title> Apagar conta </template>
 
                 <template #content>
-                    Are you sure you want to delete your account? Once your
-                    account is deleted, all of its resources and data will be
-                    permanently deleted. Please enter your password to confirm
-                    you would like to permanently delete your account.
+                    Tens a certeza de que desejas apagar a tua conta? Uma vez
+                    que a tua conta é excluída, todos os teus recursos e dados
+                    serão apagados permanentemente. Por favor, insere a tua
+                    password para confirmar que queres apagar permanentemente a
+                    tua conta.
 
                     <TextInput
                         ref="passwordInput"

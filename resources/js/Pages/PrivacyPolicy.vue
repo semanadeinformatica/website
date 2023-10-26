@@ -9,7 +9,7 @@ defineProps<Props>();
 </script>
 
 <template>
-    <Head title="Privacy Policy" />
+    <Head title="Política de privacidade" />
 
     <div class="font-sans text-gray-900 antialiased dark:text-gray-100">
         <div class="bg-gray-100 pt-4 dark:bg-gray-900">

@@ -61,10 +61,11 @@ const sendEmailVerification = () => {
 
 <template>
     <FormSection @submitted="updateProfileInformation">
-        <template #title> Profile Information </template>
+        <template #title> Informação do Perfil </template>
 
         <template #description>
-            Update your account's profile information and email address.
+            Atualiza as informações do perfil da tua conta e o endereço de
+            e-mail.
         </template>
 
         <template #form>
@@ -95,7 +96,7 @@ const sendEmailVerification = () => {
                     "
                 >
                     <p class="mt-2 text-sm dark:text-white">
-                        Your email address is unverified.
+                        O teu endereço de e-mail não foi verificado.
 
                         <Link
                             :href="route('verification.send')"
@@ -104,7 +105,7 @@ const sendEmailVerification = () => {
                             class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                             @click.prevent="sendEmailVerification"
                         >
-                            Click here to re-send the verification email.
+                            Clica aqui para reenviar o e-mail de verificação.
                         </Link>
                     </p>
 
@@ -112,8 +113,8 @@ const sendEmailVerification = () => {
                         v-show="verificationLinkSent"
                         class="mt-2 text-sm font-medium text-green-600 dark:text-green-400"
                     >
-                        A new verification link has been sent to your email
-                        address.
+                        Um novo link de verificação foi enviado para o teu
+                        email.
                     </div>
                 </div>
 
@@ -207,14 +208,14 @@ const sendEmailVerification = () => {
 
         <template #actions>
             <ActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Saved.
+                Guardado.
             </ActionMessage>
 
             <PrimaryButton
                 :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing"
             >
-                Save
+                Guardar
             </PrimaryButton>
         </template>
     </FormSection>
