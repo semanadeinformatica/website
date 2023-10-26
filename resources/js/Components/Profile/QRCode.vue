@@ -42,7 +42,7 @@ const showQRCode = () => {
         <span v-if="loading" class="text-lg">A gerar...</span>
         <template v-else>
             <div v-html="participant.quest_qr_code"></div>
-            <span class="font-bold text-2023-teal-dark">
+            <span class="font-mono font-bold text-2023-teal-dark">
                 {{ participant.quest_code }}
             </span>
         </template>

@@ -99,6 +99,7 @@ const onDetect = async ([firstDetectedCode]) => {
                         label="Código"
                         type="text"
                         required
+                        class="font-mono"
                         :error-message="form.errors.quest_code"
                     />
                 </div>
