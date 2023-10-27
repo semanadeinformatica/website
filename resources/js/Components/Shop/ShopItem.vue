@@ -99,7 +99,8 @@ const buyProduct = () => {
                     :key="enrollment.id"
                     class="flex w-full items-center justify-between gap-3 p-3 even:bg-2023-orange even:bg-opacity-20"
                 >
-                    {{ enrollment.participant?.user?.name ?? enrollment.id }}
+                    {{ enrollment.participant?.user?.name ?? enrollment.id }} -
+                    {{ enrollment.participant?.user?.email ?? enrollment.id }}
                     <Link
                         v-if="!enrollment.pivot.redeemed"
                         :href="
