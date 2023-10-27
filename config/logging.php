@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'sinfWebsite'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,6 +52,32 @@ return [
     */
 
     'channels' => [
+
+        'sinfWebsite' => [
+            'driver' => 'stack',
+            'channels' => [
+                'sinfWebsiteFileChannel',
+                'sinfWebsiteSlackChannel',
+            ],
+            'ignore_exceptions' => false,
+        ],
+
+        'sinfWebsiteFileChannel' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
+        ],
+
+        'sinfWebsiteSlackChannel' => [
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_WEBHOOK_URL'),
+            'username' => 'SINF Website Logs',
+            'emoji' => ':boom:',
+            'level' => env('LOG_LEVEL', 'critical'),
+            'replace_placeholders' => true,
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

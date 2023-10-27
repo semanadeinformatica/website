@@ -5,9 +5,11 @@ namespace App\Actions\Fortify;
 use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Nette\Utils\Json;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -27,13 +29,17 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        $user = User::create([
+        $data = [
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'usertype_id' => '0',
             'usertype_type' => Participant::class,
-        ]);
+        ];
+
+        Log::info('Creating user with input: {input}', ['input' => Json::encode($data, true)]);
+
+        $user = User::create($data);
         $participant = Participant::create(['user_id' => $user->id]);
         $user->usertype()->associate($participant);
         $user->save();

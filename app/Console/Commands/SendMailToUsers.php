@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -99,6 +100,9 @@ class SendMailToUsers extends Command implements PromptsForMissingInput
         $test = $this->option('test') ?? self::DEFAULT_TEST_FIRST;
 
         if ($test) {
+
+            Log::info('Sending e-mail message to admins first to check if message is correct');
+
             $admins = User::where('usertype_type', Admin::class)->get();
 
             $this->info('Sending mail to all admins before sending to participants!');
@@ -115,6 +119,7 @@ class SendMailToUsers extends Command implements PromptsForMissingInput
 
         $this->info("Sending mail to {$users->count()} users!");
 
+        Log::info('Sending e-mail message to {count} users of types: {types}', ['count' => $users->count(), 'types' => collect($types)->map(fn ($type) => end(explode('\\', $type)))->join(', ')]);
         $users->each(fn ($user, $i) => Mail::to($user)->later($this->delayFactor($i), new UserNotification($subject, $text)));
 
         $this->info('Sent mail to users!');

@@ -8,6 +8,7 @@ use App\Models\Participant;
 use App\Models\Speaker;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -41,6 +42,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'twitter' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]{4,15}\/?$/'],
             'website' => 'sometimes|nullable|string|url:https',
         ])->validateWithBag('updateProfileInformation');
+
+        Log::info('Updating user profile information for {user}', ['user' => $user->name]);
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
