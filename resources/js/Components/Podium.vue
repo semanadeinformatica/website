@@ -1,5 +1,5 @@
 <template>
-    <section class="relative flex justify-center py-28">
+    <section class="relative flex flex-col items-center justify-center py-28">
         <svg
             width="75%"
             height="75%"
@@ -358,5 +358,10 @@
                 </filter>
             </defs>
         </svg>
+        <div class="px-1.5 grid grid-cols-3 w-3/4 text-center font-bold mt-10 align-middle items-center gap-4 text-2023-teal-dark">
+            <p class="text-xl truncate px-1">name</p>
+            <p class="text-2xl truncate px-3">name</p>
+            <p class="truncate px-1">name</p>
+        </div>
     </section>
 </template>
