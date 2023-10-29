@@ -16,7 +16,7 @@ const images = computed(() => {
         return [prizes.firstPlace, prizes.secondPlace, prizes.thirdPlace];
     return leaderboard.map(
         (team) =>
-            team.image_url ??
+            team.image_competition_team_url ??
             `https://ui-avatars.com/api/?size=512&name=${team.name
                 .split(" ")
                 .map((t) => t[0])

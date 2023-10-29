@@ -92,7 +92,7 @@ const formattedDate = (
                 class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
             >
                 <template v-if="competition.teams && competition.teams.length">
-                    <p class="text-2xl font-bold text-2023-teal text-center">
+                    <p class="text-center text-2xl font-bold text-2023-teal">
                         A competição já acabou, vê aqui quem participou
                     </p>
                     <span class="text-2xl font-bold text-2023-teal">

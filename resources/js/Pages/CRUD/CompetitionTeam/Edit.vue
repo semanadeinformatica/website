@@ -6,6 +6,7 @@ import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import type CompetitionTeam from "@/Types/CompetitionTeam";
+import ImageInput from "@/Components/ImageInput.vue";
 
 interface Props {
     item: CompetitionTeam;
@@ -17,19 +18,30 @@ interface Props {
 const { item: competitionTeam } = defineProps<Props>();
 
 const form = useForm({
+    _method: "PUT",
     competition_id: competitionTeam.competition_id + "",
     name: competitionTeam.name,
     points: competitionTeam.points + "",
+    image: null as File | null,
 });
 
 const submit = () => {
-    form.put(route("admin.competitionTeams.update", competitionTeam));
+    form.post(route("admin.competitionTeams.update", competitionTeam));
 };
 </script>
 
 <template>
     <CardLayout title="Associar membro a equipa">
         <form class="contents" @submit.prevent="submit">
+            <ImageInput
+                id="image"
+                v-model="form.image"
+                :initial-preview="item.image_competition_team_url"
+                label="Imagem da equipa"
+                class="self-stretch"
+                :error-message="form.errors.image"
+            />
+
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -47,7 +59,6 @@ const submit = () => {
                 label="Pontos"
                 type="number"
                 required
-                autofocus
                 autocomplete="points"
                 :error-message="form.errors.points"
             />
@@ -64,7 +75,7 @@ const submit = () => {
                     :key="competition.id"
                     :value="competition.id"
                 >
-                    {{ competition.edition?.name ?? competition.id }}
+                    {{ competition.name }}
                 </option>
             </TextInput>
 
