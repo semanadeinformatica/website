@@ -7,14 +7,19 @@ import { router } from "@inertiajs/vue3";
 // import { computed } from "vue";
 import route from "ziggy-js";
 import { isAdmin } from "@/Types/User";
+import type CompetitionTeam from "@/Types/CompetitionTeam";
 
 interface Props {
     competition: Competition;
+    leaderboard: CompetitionTeam[];
     isParticipant: boolean;
     isEnrolled: boolean;
+    isOver: boolean;
 }
 
-const { competition } = defineProps<Props>();
+const { competition, isOver } = defineProps<Props>();
+
+console.log(isOver);
 
 const formattedDate = (
     startDate: string,
@@ -58,7 +63,14 @@ const formattedDate = (
             </span>
         </header>
 
-        <Podium></Podium>
+        <Podium
+            :leaderboard="leaderboard"
+            :prizes="{
+                firstPlace: '/images/fnac_100.svg',
+                secondPlace: '/images/fnac_75.svg',
+                thirdPlace: '/images/fnac_50.svg',
+            }"
+        />
         <!-- RULES -->
 
         <section
@@ -75,7 +87,36 @@ const formattedDate = (
             ></div>
         </section>
 
-        <template v-if="!isAdmin($page.props.auth.user)">
+        <template v-if="isOver">
+            <section
+                class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
+            >
+                <template v-if="competition.teams && competition.teams.length">
+                    <p class="text-2xl font-bold text-2023-teal text-center">
+                        A competição já acabou, vê aqui quem participou
+                    </p>
+                    <span class="text-2xl font-bold text-2023-teal">
+                        Equipas: {{ competition.teams?.length }}
+                    </span>
+                    <div
+                        class="flex w-3/4 flex-col border border-black shadow-lg shadow-2023-teal md:w-1/2"
+                    >
+                        <div
+                            v-for="team in competition.teams ?? []"
+                            :key="team.id"
+                            class="inline-flex w-full justify-between p-4 text-lg even:bg-2023-orange even:bg-opacity-20"
+                        >
+                            {{ team.name }}
+                        </div>
+                    </div>
+                </template>
+                <p v-else class="text-lg font-bold text-2023-teal">
+                    A competição acabou mas não houve equipas inscritas desta
+                    vez.
+                </p>
+            </section>
+        </template>
+        <template v-else-if="!isAdmin($page.props.auth.user)">
             <!-- PARTICIPATE -->
             <section
                 v-if="!isEnrolled"

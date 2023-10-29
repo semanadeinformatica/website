@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import type CompetitionTeam from "@/Types/CompetitionTeam";
+import { type CompetitionPrizes } from "@/Types/Competition";
+import { computed } from "vue";
+
+interface Props {
+    prizes: CompetitionPrizes;
+    leaderboard: CompetitionTeam[];
+}
+
+const { leaderboard, prizes } = defineProps<Props>();
+
+const images = computed(() => {
+    // we need to have all 3 teams in order to display stuff
+    if (leaderboard.length < 3)
+        return [prizes.firstPlace, prizes.secondPlace, prizes.thirdPlace];
+    return leaderboard.map(
+        (team) =>
+            team.image_url ??
+            `https://ui-avatars.com/api/?size=512&name=${team.name
+                .split(" ")
+                .map((t) => t[0])
+                .join("+")}&color=f8f5e7&background=d94f04`,
+    );
+});
+
+const hasLeaderboardTeams = computed(() => leaderboard.length >= 3);
+</script>
+
 <template>
     <section class="relative flex flex-col items-center justify-center py-28">
         <svg
@@ -60,7 +89,7 @@
                 height="271"
                 x="471.5"
                 y="3.5"
-                href="/images/fnac_100.svg"
+                :href="images[0]"
                 clip-path="url(#first)"
             />
             <clipPath id="second">
@@ -79,7 +108,7 @@
                 height="271"
                 x="69.5"
                 y="76.5"
-                href="/images/fnac_75.svg"
+                :href="images[1]"
                 clip-path="url(#second)"
             />
 
@@ -99,7 +128,7 @@
                 height="271"
                 x="873.5"
                 y="98.5"
-                href="/images/fnac_50.svg"
+                :href="images[2]"
                 clip-path="url(#third)"
             />
 
@@ -358,10 +387,35 @@
                 </filter>
             </defs>
         </svg>
-        <div class="px-1.5 grid grid-cols-3 w-3/4 text-center font-bold mt-10 align-middle items-center gap-4 text-2023-teal-dark">
-            <p class="text-xl truncate px-1">name</p>
-            <p class="text-2xl truncate px-3">name</p>
-            <p class="truncate px-1">name</p>
+
+        <div
+            v-if="hasLeaderboardTeams"
+            class="mt-10 grid w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-2023-teal-dark max-xs:grid-cols-1"
+        >
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-1 text-xl max-xs:row-start-2"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[1].name
+                }}</span>
+                <span class="">{{ leaderboard[1].points }}</span>
+            </div>
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-3 text-2xl"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[0].name
+                }}</span>
+                <span class="">{{ leaderboard[0].points }}</span>
+            </div>
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-1 text-lg"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[2].name
+                }}</span>
+                <span class="">{{ leaderboard[2].points }}</span>
+            </div>
         </div>
     </section>
 </template>

@@ -5,6 +5,7 @@ import type Competition from "@/Types/Competition";
 export default interface CompetitionTeam extends Model {
     name: string;
     points: number;
+    image_url?: string;
 
     participants?: Participant[];
 
