@@ -30,7 +30,7 @@ class QuestController extends Controller
         if ($user === null) {
             Log::warning('Unauthenticated user attempted to give quest to participant');
 
-            return redirect()->back()->dangerBanner('Tens que estar autenticado para efetuar esta ação');
+            return redirect()->back()->dangerBanner('Inicia sessão para efetuar esta ação');
         }
 
         if ($user->cannot('give', [$quest, $enrollment])) {

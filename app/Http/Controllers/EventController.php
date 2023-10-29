@@ -64,7 +64,7 @@ class EventController extends Controller
         $user = $request->user();
 
         if ($user === null) {
-            return redirect()->back()->dangerBanner('Tens que ter sessão iniciada para fazer esta ação');
+            return redirect()->back()->dangerBanner('Inicia sessão para fazer esta ação');
         }
 
         if ($user->cannot('join', $event)) {

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
-use Nette\Utils\Json;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -37,12 +36,12 @@ class CreateNewUser implements CreatesNewUsers
             'usertype_type' => Participant::class,
         ];
 
-        Log::info('Creating user with input: {input}', ['input' => Json::encode($data, true)]);
-
         $user = User::create($data);
         $participant = Participant::create(['user_id' => $user->id]);
         $user->usertype()->associate($participant);
         $user->save();
+
+        Log::info('Created user with input: {input}', ['input' => $user->toArray()]);
 
         return $user;
     }
