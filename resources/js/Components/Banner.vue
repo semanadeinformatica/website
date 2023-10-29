@@ -8,10 +8,13 @@ const style = computed(
     () => usePage().props.jetstream.flash?.bannerStyle || "success",
 );
 const message = computed(() => usePage().props.jetstream.flash?.banner || "");
+const id = computed(() => usePage().props.jetstream.flash?.bannerId || "");
 
-watch(message, async () => {
+watch(id, async () => {
     show.value = true;
 });
+
+console.log("Banner.vue");
 </script>
 
 <template>

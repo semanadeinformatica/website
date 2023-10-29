@@ -11,6 +11,7 @@ export default interface MyPageProps {
         flash?: {
             banner: string;
             bannerStyle: string;
+            bannerId: string;
         };
         hasAccountDeletionFeatures: boolean;
         hasApiFeatures: boolean;
