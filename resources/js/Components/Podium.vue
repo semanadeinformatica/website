@@ -8,13 +8,20 @@ interface Props {
     leaderboard: CompetitionTeam[];
 }
 
-const { leaderboard, prizes } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const leaderboard = computed(() => props.leaderboard);
+const prizes = computed(() => props.prizes);
 
 const images = computed(() => {
     // we need to have all 3 teams in order to display stuff
-    if (leaderboard.length < 3)
-        return [prizes.firstPlace, prizes.secondPlace, prizes.thirdPlace];
-    return leaderboard.map(
+    if (leaderboard.value.length < 3)
+        return [
+            prizes.value.firstPlace,
+            prizes.value.secondPlace,
+            prizes.value.thirdPlace,
+        ];
+    return leaderboard.value.map(
         (team) =>
             team.image_competition_team_url ??
             `https://ui-avatars.com/api/?size=512&name=${team.name
@@ -24,7 +31,7 @@ const images = computed(() => {
     );
 });
 
-const hasLeaderboardTeams = computed(() => leaderboard.length >= 3);
+const hasLeaderboardTeams = computed(() => leaderboard.value.length >= 3);
 </script>
 
 <template>

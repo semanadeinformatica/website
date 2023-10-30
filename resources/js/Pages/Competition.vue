@@ -17,9 +17,7 @@ interface Props {
     isOver: boolean;
 }
 
-const { competition, isOver } = defineProps<Props>();
-
-console.log(isOver);
+const { competition } = defineProps<Props>();
 
 const formattedDate = (
     startDate: string,
