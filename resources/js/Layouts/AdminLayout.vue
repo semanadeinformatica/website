@@ -15,9 +15,9 @@ defineProps<Props>();
     <div>
         <Head :title="title" />
         <Banner />
-        <div>
+        <div class="min-h-screen flex flex-col">
             <AdminNavbar />
-            <main class="min-h-screen bg-2023-bg">
+            <main class="flex-1 bg-2023-bg">
                 <slot />
             </main>
             <Footer />
