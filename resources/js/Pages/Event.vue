@@ -3,10 +3,10 @@ import type Event from "@/Types/Event";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import { computed } from "vue";
-import { isSpeaker, isCompany } from "@/Types/User";
+import { isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import Sponsor from "@/Components/Home/Sponsor.vue";
 import route from "ziggy-js";
-import { router } from "@inertiajs/vue3";
+import { router, Link } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import type Enrollment from "@/Types/Enrollment";
 
@@ -18,6 +18,7 @@ interface Props {
     isParticipant: boolean;
     hasJoined: boolean;
     isEnrolled: boolean;
+    isStaff: boolean;
 }
 
 const { event } = defineProps<Props>();
@@ -100,6 +101,19 @@ const colorPicker = () => {
                 <Sponsor :company="company" />
             </div>
         </section>
+
+        <Link
+            v-if="isAdmin($page.props.auth.user) || isStaff"
+            :href="route('user.scan-code', {
+                _query: {
+                    event: event.id,
+                }
+            })"
+            class="inline-flex border border-black bg-2023-red p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-bg"
+        >
+            Scan QR Code
+        </Link>
+
         <!-- sign up -->
         <div
             v-if="isParticipant"
