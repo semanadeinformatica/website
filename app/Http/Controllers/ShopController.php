@@ -31,7 +31,10 @@ class ShopController extends Controller
         }
 
         $products = $edition->products()->orderBy('price')->get()->each(function (Product $product) use ($user) {
-            $product->canBeBought = $user ? $user->can('buy', $product) : true;
+            $product->canBeBought =
+                $product->stock <= 0
+                    ? false
+                    : $user?->can('buy', $product) ?? true;
         });
 
         if (Gate::allows('admin') || Gate::allows('staff', [$edition])) {
