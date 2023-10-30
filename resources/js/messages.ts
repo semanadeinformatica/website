@@ -30,6 +30,9 @@ const messages = {
             eventType: "Event Type | Event Types",
             sponsorTier: "Sponsor Tier | Sponsor Tiers",
         },
+        admin: {
+            gallery: "Photo Galery",
+        },
     },
     pt: {
         homePage: {
@@ -63,6 +66,9 @@ const messages = {
             user: "Utilizador | Utilizadores",
             eventType: "Tipo de Evento | Tipos de Evento",
             sponsorTier: "Nível de Patrocínio | Níveis de Patrocínio",
+        },
+        admin: {
+            gallery: "Galeria de fotos",
         },
     },
 };

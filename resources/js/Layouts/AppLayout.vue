@@ -12,13 +12,13 @@ defineProps<Props>();
 </script>
 
 <template>
-    <div>
+    <div class="min-h-screen flex flex-col">
         <Head :title="title" />
         <div class="sticky top-0 z-30">
             <Navbar />
             <Banner />
         </div>
-        <main class="min-h-screen bg-2023-bg">
+        <main class="flex-1 bg-2023-bg">
             <slot />
         </main>
         <Footer />

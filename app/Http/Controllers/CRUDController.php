@@ -84,7 +84,7 @@ abstract class CRUDController extends Controller
 
         $with = $this->with();
 
-        return Inertia::render("CRUD/{$this->view}/Index", [
+        return Inertia::render("Admin/CRUD/{$this->view}/Index", [
             'items' => $items,
             'with' => $with,
             'isSearchable' => $isSearchable,
@@ -97,7 +97,7 @@ abstract class CRUDController extends Controller
 
         $with = $this->with();
 
-        return Inertia::render("CRUD/$this->view/Show", [
+        return Inertia::render("Admin/CRUD/$this->view/Show", [
             'item' => $item,
             'with' => $with,
         ]);
@@ -107,7 +107,7 @@ abstract class CRUDController extends Controller
     {
         $with = $this->with();
 
-        return Inertia::render("CRUD/$this->view/Create", [
+        return Inertia::render("Admin/CRUD/$this->view/Create", [
             'with' => $with,
         ]);
     }
@@ -118,7 +118,7 @@ abstract class CRUDController extends Controller
 
         $with = $this->with();
 
-        return Inertia::render("CRUD/$this->view/Edit", [
+        return Inertia::render("Admin/CRUD/$this->view/Edit", [
             'item' => $item->load($this->load),
             'with' => $with,
         ]);
