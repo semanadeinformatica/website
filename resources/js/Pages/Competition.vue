@@ -104,7 +104,7 @@ const formattedDate = (
                             :key="team.id"
                             class="inline-flex w-full justify-between p-4 text-lg even:bg-2023-orange even:bg-opacity-20"
                         >
-                            {{ team.name }}
+                            {{ team.name }} - {{ team.points }}
                         </div>
                     </div>
                 </template>

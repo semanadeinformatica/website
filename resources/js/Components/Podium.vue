@@ -21,13 +21,13 @@ const images = computed(() => {
             prizes.value.secondPlace,
             prizes.value.thirdPlace,
         ];
-    return leaderboard.value.map(
-        (team) =>
-            team.image_competition_team_url ??
-            `https://ui-avatars.com/api/?size=512&name=${team.name
-                .split(" ")
-                .map((t) => t[0])
-                .join("+")}&color=f8f5e7&background=d94f04`,
+    return leaderboard.value.map((team) =>
+        team.image_competition_team_url !== "http://localhost:8000/storage/"
+            ? team.image_competition_team_url
+            : `https://ui-avatars.com/api/?size=512&name=${team.name
+                  .split(" ")
+                  .map((t) => t[0])
+                  .join("+")}&color=f8f5e7&background=d94f04`,
     );
 });
 
