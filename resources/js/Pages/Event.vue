@@ -102,17 +102,21 @@ const colorPicker = () => {
             </div>
         </section>
 
-        <Link
-            v-if="isAdmin($page.props.auth.user) || isStaff"
-            :href="route('user.scan-code', {
-                _query: {
-                    event: event.id,
-                }
-            })"
-            class="inline-flex border border-black bg-2023-red p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-2023-bg"
-        >
-            Scan QR Code
-        </Link>
+        <div class="mt-16 flex w-full justify-center">
+            <Link
+                v-if="isAdmin($page.props.auth.user) || isStaff"
+                :href="
+                    route('user.scan-code', {
+                        _query: {
+                            event: event.id,
+                        },
+                    })
+                "
+                class="inline-flex border border-black bg-2023-red p-2 px-3 text-center text-2xl font-bold text-white shadow-2023-teal transition hover:shadow-md"
+            >
+                Scan QR Code
+            </Link>
+        </div>
 
         <!-- sign up -->
         <div
