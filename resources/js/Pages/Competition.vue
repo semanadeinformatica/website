@@ -7,17 +7,18 @@ import { router } from "@inertiajs/vue3";
 // import { computed } from "vue";
 import route from "ziggy-js";
 import { isAdmin } from "@/Types/User";
-import type CompetitionTeam from "@/Types/CompetitionTeam";
+import { computed } from "vue";
 
 interface Props {
     competition: Competition;
-    leaderboard: CompetitionTeam[];
     isParticipant: boolean;
     isEnrolled: boolean;
     isOver: boolean;
 }
 
-const { competition } = defineProps<Props>();
+const props = defineProps<Props>();
+const competition = computed(() => props.competition);
+const leaderboard = computed(() => competition.value.teams?.slice(0, 3) ?? []);
 
 const formattedDate = (
     startDate: string,
@@ -97,14 +98,31 @@ const formattedDate = (
                         Equipas: {{ competition.teams?.length }}
                     </span>
                     <div
-                        class="flex w-3/4 flex-col border border-black shadow-lg shadow-2023-teal md:w-1/2"
+                        class="flex w-4/5 flex-col border border-black shadow-lg shadow-2023-teal md:w-1/2"
                     >
                         <div
                             v-for="team in competition.teams ?? []"
                             :key="team.id"
-                            class="inline-flex w-full justify-between p-4 text-lg even:bg-2023-orange even:bg-opacity-20"
+                            class="inline-flex w-full justify-between p-4 gap-1 text-lg even:bg-2023-orange even:bg-opacity-20"
                         >
-                            {{ team.name }} - {{ team.points }}
+                            <img
+                                :src="
+                                    team.image_competition_team_url
+                                        ? team.image_competition_team_url
+                                        : `https://ui-avatars.com/api/?size=512&name=${team.name
+                                              .split(' ')
+                                              .map((t) => t[0])
+                                              .join(
+                                                  '+',
+                                              )}&color=f8f5e7&background=d94f04`
+                                "
+                                class="w-16 h-16 rounded-sm self-center"
+                                :alt="`Image for team ${team.name}`"
+                            />
+                            <div class="flex flex-col items-end self-center">
+                                <span class="text-end">{{ team.name }}</span>
+                                <span>{{ team.points }} pontos</span>
+                            </div>
                         </div>
                     </div>
                 </template>

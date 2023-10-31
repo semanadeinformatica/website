@@ -8,7 +8,7 @@ export default interface CompetitionTeam extends Model {
 
     image_competition_team_url?: string;
 
-    participants?: Participant[];
+    members?: Participant[];
 
     competition_id: number;
     competition?: Competition;

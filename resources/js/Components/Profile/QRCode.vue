@@ -2,14 +2,16 @@
 import type Participant from "@/Types/Participant";
 import { router } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import route from "ziggy-js";
 
-const { participant } = defineProps<{
+const props = defineProps<{
     participant: Participant;
 }>();
+
+const participant = computed(() => props.participant);
 
 const modalOpen = ref(false);
 const loading = ref(false);
@@ -17,7 +19,7 @@ const loading = ref(false);
 const showQRCode = () => {
     modalOpen.value = true;
 
-    if (!participant.quest_qr_code) {
+    if (!participant.value.quest_qr_code) {
         loading.value = true;
         router.post(route("generate-quest-code"), undefined, {
             preserveState: true,

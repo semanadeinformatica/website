@@ -1,6 +1,6 @@
 import type Model from "@/Types/Model";
 import type Edition from "@/Types/Edition";
-import type CompetitionTeam from "@/Types/Competition";
+import type CompetitionTeam from "@/Types/CompetitionTeam";
 
 export default interface Competition extends Model {
     name: string;
@@ -21,8 +21,6 @@ export default interface Competition extends Model {
     edition?: Edition;
 
     teams?: CompetitionTeam[];
-
-    points: number;
 }
 
 export type CompetitionPrizes = {

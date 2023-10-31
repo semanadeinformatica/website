@@ -7,11 +7,13 @@ interface Props {
     speaker: SpeakerUser;
 }
 
-const { speaker } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const speaker = computed(() => props.speaker);
 
 const socialMedia = computed(() => {
     return Object.fromEntries(
-        Object.entries(speaker.usertype?.social_media ?? {}).filter(
+        Object.entries(speaker.value.usertype?.social_media ?? {}).filter(
             ([key, value]) =>
                 ["github", "linkedin", "website"].includes(key) &&
                 value != null,

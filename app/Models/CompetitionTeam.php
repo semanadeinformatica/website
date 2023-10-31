@@ -28,7 +28,7 @@ class CompetitionTeam extends Model
 
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(Participant::class);
+        return $this->belongsToMany(Participant::class)->using(CompetitionTeamParticipant::class);
     }
 
     public function competition(): BelongsTo

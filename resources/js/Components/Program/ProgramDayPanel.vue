@@ -12,7 +12,9 @@ interface Props {
     day: EventDay;
 }
 
-const { day } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const day = computed(() => props.day);
 
 const selected = ref<HTMLElement | null>(null);
 const selectedType = ref<"talk" | "activity" | "stand" | "competitions">(
@@ -21,10 +23,10 @@ const selectedType = ref<"talk" | "activity" | "stand" | "competitions">(
 
 const noInfo = computed(
     () =>
-        day.activities?.length === 0 &&
-        day.talks?.length === 0 &&
-        day.stands?.length === 0 &&
-        day.competitions?.length === 0,
+        day.value.activities?.length === 0 &&
+        day.value.talks?.length === 0 &&
+        day.value.stands?.length === 0 &&
+        day.value.competitions?.length === 0,
 );
 
 const toggle = ({ target }: MouseEvent) => {
@@ -53,10 +55,10 @@ watch(
         let items: Event[] = [];
         switch (_selectedType) {
             case "activity":
-                items = day.activities ?? [];
+                items = day.value.activities ?? [];
                 break;
             case "talk":
-                items = day.talks ?? [];
+                items = day.value.talks ?? [];
                 break;
             case "stand":
                 times.value = {
@@ -65,16 +67,17 @@ watch(
                 };
                 return;
             case "competitions":
-                if (day.competitions?.length === 0)
+                if (day.value.competitions?.length === 0)
                     times.value = {
                         start: undefined,
                         end: undefined,
                     };
                 else {
                     times.value = {
-                        start: day.competitions?.[0].date_start,
-                        end: day.competitions?.[day.competitions.length - 1]
-                            .date_end,
+                        start: day.value.competitions?.[0].date_start,
+                        end: day.value.competitions?.[
+                            day.value.competitions.length - 1
+                        ].date_end,
                     };
                 }
                 return;

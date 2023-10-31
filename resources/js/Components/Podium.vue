@@ -10,18 +10,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const leaderboard = computed(() => props.leaderboard);
-const prizes = computed(() => props.prizes);
+// const leaderboard = computed(() => props.leaderboard);
+// const prizes = computed(() => props.prizes);
 
 const images = computed(() => {
     // we need to have all 3 teams in order to display stuff
-    if (leaderboard.value.length < 3)
+    if (props.leaderboard.length < 3)
         return [
-            prizes.value.firstPlace,
-            prizes.value.secondPlace,
-            prizes.value.thirdPlace,
+            props.prizes.firstPlace,
+            props.prizes.secondPlace,
+            props.prizes.thirdPlace,
         ];
-    return leaderboard.value.map((team) =>
+    return props.leaderboard.map((team) =>
         team.image_competition_team_url
             ? team.image_competition_team_url
             : `https://ui-avatars.com/api/?size=512&name=${team.name
@@ -31,7 +31,7 @@ const images = computed(() => {
     );
 });
 
-const hasLeaderboardTeams = computed(() => leaderboard.value.length >= 3);
+const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
 </script>
 
 <template>
@@ -397,7 +397,7 @@ const hasLeaderboardTeams = computed(() => leaderboard.value.length >= 3);
 
         <div
             v-if="hasLeaderboardTeams"
-            class="mt-10 grid w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-2023-teal-dark max-xs:grid-cols-1"
+            class="mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-2023-teal-dark max-xs:grid-cols-1 md:grid"
         >
             <div
                 class="align-center text-wrap flex flex-col items-center truncate px-1 text-xl max-xs:row-start-2"

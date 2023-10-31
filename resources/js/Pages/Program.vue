@@ -11,7 +11,7 @@ interface Props {
     totalDays: number;
 }
 
-const { eventDay, queryDay, totalDays } = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>

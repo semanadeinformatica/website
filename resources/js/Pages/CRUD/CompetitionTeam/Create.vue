@@ -6,10 +6,12 @@ import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import ImageInput from "@/Components/ImageInput.vue";
+import type Participant from "@/Types/Participant";
 
 interface Props {
     with: {
         competitions: Competition[];
+        participants: Participant[];
     };
 }
 
@@ -19,6 +21,7 @@ const form = useForm({
     competition_id: "",
     name: "",
     points: "0",
+    members: [] as string[],
     image: null as File | null,
 });
 
@@ -70,6 +73,23 @@ const submit = () => {
                     :value="competition.id"
                 >
                     {{ competition.name }}
+                </option>
+            </TextInput>
+
+            <TextInput
+                id="members[]"
+                v-model="form.members"
+                type="select"
+                label="Membros"
+                multiple
+                :error-message="form.errors.members"
+            >
+                <option
+                    v-for="participant in $props.with.participants"
+                    :key="participant.id"
+                    :value="participant.id"
+                >
+                    {{ participant.user?.name ?? participant.id }}
                 </option>
             </TextInput>
 

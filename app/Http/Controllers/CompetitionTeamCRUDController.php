@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Competition;
 use App\Models\CompetitionTeam;
+use App\Models\Participant;
 use Illuminate\Support\Facades\DB;
 
 class CompetitionTeamCRUDController extends CRUDController
@@ -47,6 +48,7 @@ class CompetitionTeamCRUDController extends CRUDController
     {
         return [
             'competitions' => Competition::with('edition')->get(),
+            'participants' => Participant::with('user')->get(),
         ];
     }
 }

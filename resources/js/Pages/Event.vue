@@ -21,13 +21,15 @@ interface Props {
     isStaff: boolean;
 }
 
-const { event } = defineProps<Props>();
+const props = defineProps<Props>();
 
-const speakers = computed(() => event.users?.filter(isSpeaker) ?? []);
+const event = computed(() => props.event);
+
+const speakers = computed(() => event.value.users?.filter(isSpeaker) ?? []);
 
 // It's for you bb 😘 @toni-santos
 // ty luv 😘 @ttoino
-const companies = computed(() => event.users?.filter(isCompany) ?? []);
+const companies = computed(() => event.value.users?.filter(isCompany) ?? []);
 
 // FIXME: duplicated :P
 const formatTimeString = (time: string): string => {
