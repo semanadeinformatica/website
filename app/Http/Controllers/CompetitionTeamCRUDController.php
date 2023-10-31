@@ -18,13 +18,24 @@ class CompetitionTeamCRUDController extends CRUDController
         'points' => 'required|integer',
         'competition_id' => 'required|integer|exists:competitions,id',
         'image' => 'nullable|mimes:jpg,jpeg,png|max:10240',
+        'members' => 'sometimes|array|exists:participants,id',
+    ];
+
+    protected $load = [
+        'members',
     ];
 
     protected function created(array $new): ?array
     {
+
+        $members = $new['members'];
+        unset($new['members']);
+
         DB::beginTransaction();
         /** @var CompetitionTeam */
         $team = CompetitionTeam::create($new);
+
+        $team->members()->sync($members);
 
         if (isset($new['image'])) {
             $team->updateImageCompetitionTeam($new['image']);
@@ -37,6 +48,11 @@ class CompetitionTeamCRUDController extends CRUDController
 
     protected function updated($old, array $new): ?array
     {
+        $members = $new['members'];
+        unset($new['members']);
+
+        $old->members()->sync($members);
+
         if (isset($new['image'])) {
             $old->updateImageCompetitionTeam($new['image']);
         }
