@@ -32,7 +32,9 @@ class EventController extends Controller
         $enrollments = $event->enrollments()->with(['participant' => ['user']])->get();
         $enrollmentCount = $enrollments->count();
 
+        $isStaff = true;
         if (Gate::denies('admin') && Gate::denies('staff', [$edition])) {
+            $isStaff = false; // this works because the check for staff has the same logic as the check for admin on the frontend
             $enrollments = null;
         }
 
@@ -44,6 +46,7 @@ class EventController extends Controller
             'isEnrolled' => $isEnrolled,
             'hasJoined' => $hasJoined,
             'canJoin' => $canJoin,
+            'isStaff' => $isStaff,
         ]);
     }
 

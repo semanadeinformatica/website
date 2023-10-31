@@ -5,20 +5,23 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import type Quest from "@/Types/Quest";
 import { useForm } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
 import route from "ziggy-js";
 
-defineProps<{
+const props = defineProps<{
+    selectedQuest?: Quest;
     quests: Quest[];
 }>();
 
 const error = ref("");
 const scanning = ref(false);
 
+const selectedQuest = computed(() => props.selectedQuest);
+
 const form = useForm({
     quest_code: "",
-    quest: "",
+    quest: selectedQuest.value?.id.toString() ?? "",
 });
 
 const submit = () =>
@@ -110,6 +113,7 @@ const onDetect = async ([firstDetectedCode]) => {
                         v-model="form.quest"
                         label="Quest"
                         type="select"
+                        :disabled="selectedQuest !== undefined"
                         required
                         :error-message="form.errors.quest"
                     >

@@ -213,7 +213,17 @@ class UserController extends UserProfileController
         $user = $request->user();
 
         if ($user->isAdmin() || $user->isStaff($edition)) {
-            $quests = $edition->quests()->get();
+            if (($eventId = $request->input('event')) !== null) {
+                $event = Event::find($eventId);
+
+                if ($event === null) {
+                    $quests = $edition->quests()->get();
+                } else {
+                    $quests = $event->quests()->get();
+                }
+            } else {
+                $quests = $edition->quests()->get();
+            }
         } else {
             /** @var Company */
             $company = $user->usertype;
