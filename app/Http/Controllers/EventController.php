@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EventController extends Controller
@@ -55,12 +56,6 @@ class EventController extends Controller
      */
     public function join(Request $request, Event $event)
     {
-        $user = $request->user();
-
-        // FIXME: when attempting to join multiple times in a row, only the first attempt triggers the banner.
-        if ($user->cannot('join', $event)) {
-            return redirect()->back()->dangerBanner('Não podes inscrever-te neste evento');
-        }
 
         $edition = $request->input('edition');
 
@@ -68,13 +63,38 @@ class EventController extends Controller
             return response('No edition found', 500);
         }
 
+        /** @var User|null */
+        $user = $request->user();
+
+        if ($user === null) {
+            return redirect()->back()->dangerBanner('Inicia sessão para fazer esta ação');
+        }
+
+        if ($user->cannot('join', $event)) {
+            Log::alert('User {user} attempted to join event "{event}" but was denied', [
+                'user' => $user->name,
+                'event' => $event->name,
+            ]);
+
+            return redirect()->back()->dangerBanner('Não podes inscrever-te neste evento');
+        }
+
         $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
         if ($currentEnrollment === null) {
+            Log::alert('User {user} attempted to join event "{event}" while not enrolled in the current edition', [
+                'user' => $user->name,
+                'event' => $event->name,
+            ]);
+
             return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
         }
 
         $currentEnrollment->events()->attach($event);
+        Log::info('User {user} joined event {event}', [
+            'user' => $user->name,
+            'event' => $event->name,
+        ]);
 
         return redirect()->route('profile.show')->banner('Inscrição realizada com sucesso!');
     }
@@ -95,10 +115,19 @@ class EventController extends Controller
         $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
 
         if ($currentEnrollment === null) {
+            Log::alert('User {user} attempted to leave event "{event}" while not enrolled in the current edition', [
+                'user' => $user->name,
+                'event' => $event->name,
+            ]);
+
             return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
         }
 
         $currentEnrollment->events()->detach($event);
+        Log::info('User {user} left event "{event}"', [
+            'user' => $user->name,
+            'event' => $event->name,
+        ]);
 
         return redirect()->route('profile.show')->banner('Inscrição cancelada com sucesso!');
     }

@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RemoveQuestCode implements ShouldBeUnique, ShouldQueue
 {
@@ -27,6 +28,8 @@ class RemoveQuestCode implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::debug("Removing 'quest_code' from user: {name}", ['name' => $this->user->usertype->name]);
+
         $this->user->quest_code = null;
         $this->user->save();
     }

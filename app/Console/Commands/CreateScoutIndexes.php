@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class CreateScoutIndexes extends Command
 {
@@ -26,12 +27,16 @@ class CreateScoutIndexes extends Command
      */
     public function handle()
     {
+        Log::info('Creating Meilisearch Scout indices');
         $this->call('scout:delete-all-indexes');
 
         collect(File::allFiles(app_path('Models')))
             ->map(fn ($item) => 'App\\Models\\'.$item->getBasename('.php'))
             ->filter(fn ($item) => in_array(\Laravel\Scout\Searchable::class, class_uses($item)))
             ->each(function ($item) {
+
+                Log::info('Creating index for "{model}"', ['model' => $item]);
+
                 $this->call('scout:index', [
                     'name' => (new $item())->searchableAs(),
                 ]);
@@ -42,5 +47,6 @@ class CreateScoutIndexes extends Command
             });
 
         $this->call('scout:sync-index-settings');
+        Log::info('Indices created');
     }
 }

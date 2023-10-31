@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Nette\Utils\Json;
 
 /**
  * @template T
@@ -84,6 +86,8 @@ abstract class CRUDController extends Controller
 
         $with = $this->with();
 
+        Log::info('Displaying all {model} records with query: {search}', ['model' => $this->model, 'search' => $search ?? 'none']);
+
         return Inertia::render("CRUD/{$this->view}/Index", [
             'items' => $items,
             'with' => $with,
@@ -96,6 +100,8 @@ abstract class CRUDController extends Controller
         $item = $this->model::find($id);
 
         $with = $this->with();
+
+        Log::info('Displaying {model} record with id: {id}', ['model' => $this->model, 'id' => $id]);
 
         return Inertia::render("CRUD/$this->view/Show", [
             'item' => $item,
@@ -145,6 +151,9 @@ abstract class CRUDController extends Controller
         $newValues = $this->created($validated);
 
         if ($newValues !== null) {
+
+            Log::info('Creating new {model} record with values: {values}', ['model' => $this->model, 'values' => Json::encode($newValues, true)]);
+
             $this->model::create($newValues);
         }
 
@@ -174,6 +183,9 @@ abstract class CRUDController extends Controller
         $newValues = $this->updated($model, $validated);
 
         if ($newValues !== null) {
+
+            Log::info('Updating {model} record with id {id} with values: {values}', ['model' => $this->model, 'id' => $model->id, 'values' => Json::encode($newValues, true)]);
+
             $model->update($newValues);
         }
 
@@ -197,6 +209,9 @@ abstract class CRUDController extends Controller
         $model = $this->model::find($id);
 
         if ($this->destroyed($model->toArray())) {
+
+            Log::alert('Deleting {model} record with id {id}', ['model' => $this->model, 'id' => $model->id]);
+
             $model->delete();
         }
 

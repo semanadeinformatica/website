@@ -25,6 +25,9 @@ class Handler extends ExceptionHandler
                 ->toResponse($request)
                 ->setStatusCode($response->status());
         } elseif ($response->status() === 503) {
+
+            Log::info('Rendering "Coming soon..." page');
+
             return Inertia::render('Maintenance')
                 ->toResponse($request)
                 ->setStatusCode($response->status());
