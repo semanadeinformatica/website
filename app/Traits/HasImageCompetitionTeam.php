@@ -53,7 +53,7 @@ trait HasImageCompetitionTeam
      */
     public function ImageCompetitionTeamUrl(): Attribute
     {
-        return Attribute::get(fn () => Storage::disk($this->ImageCompetitionTeamDisk())->url($this->image_path)); // TODO: should add default image
+        return Attribute::get(fn () => $this->image_path ? Storage::disk($this->ImageCompetitionTeamDisk())->url($this->image_path) : null); // TODO: should add default image
     }
 
     /**
