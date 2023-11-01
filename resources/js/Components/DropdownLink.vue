@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-interface Props {
+type ButtonProps = {
+    as: "button";
+};
+type AnchorProps = {
+    as: "a";
     href: string;
-    as?: "a" | "button";
+};
+type LinkProps = {
+    as?: undefined;
+    href: string;
     method?: "get" | "post";
-}
+    only?: string[];
+};
 
-withDefaults(defineProps<Props>(), {
+type Props = ButtonProps | AnchorProps | LinkProps;
+
+const props = withDefaults(defineProps<Props>(), {
     href: "#",
     as: undefined,
     method: "get",
+    only: undefined,
 });
 
 const classes =
@@ -23,15 +34,16 @@ const classes =
             <slot />
         </button>
 
-        <a v-else-if="as === 'a'" :href="href" :class="classes">
+        <a v-else-if="as === 'a'" :href="props.href" :class="classes">
             <slot />
         </a>
 
         <Link
             v-else
-            :href="href"
-            :method="method"
+            :href="props.href"
+            :method="props.method"
             :class="classes"
+            :only="props.only"
             preserve-state
         >
             <slot />

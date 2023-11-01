@@ -65,7 +65,7 @@ abstract class CRUDController extends Controller
     }
 
     /**
-     * The associated relations to load on the model when rendering the edit view.
+     * The associated relations to load on the model when rendering items.
      */
     protected $load = [];
 
@@ -82,7 +82,7 @@ abstract class CRUDController extends Controller
 
         $filteredQuery = collect($request->query())
             ->intersectByKeys(['sort_by' => '', 'sort_dir' => '', 'query' => '', 'filter_by' => '']);
-        $items = $query->paginate()->appends($filteredQuery->toArray());
+        $items = $query->with($this->load)->paginate()->appends($filteredQuery->toArray());
 
         $with = $this->with();
 

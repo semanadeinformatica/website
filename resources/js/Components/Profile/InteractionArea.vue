@@ -6,13 +6,15 @@ type Props = {
     buttons: Tabs;
 };
 
-const { buttons } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const buttons = computed(() => props.buttons);
 
 const selected = ref<HTMLElement | null>(null);
 
-const firstType = Object.keys(buttons)[0];
+const firstType = Object.keys(buttons.value)[0];
 
-const selectedType = ref<keyof typeof buttons>(firstType);
+const selectedType = ref<keyof typeof buttons.value>(firstType);
 
 watch(selected, (newValue, oldValue) => {
     oldValue?.classList.toggle("selected");
@@ -23,7 +25,7 @@ watch(selected, (newValue, oldValue) => {
 });
 
 const view = computed(() => {
-    return buttons[selectedType.value]?.component;
+    return buttons.value[selectedType.value]?.component;
 });
 
 const toggle = ({ target }: MouseEvent) => {

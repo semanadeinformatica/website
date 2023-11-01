@@ -2,13 +2,17 @@
 import type Slot from "@/Types/Slot";
 import { computed } from "vue";
 
-const { sticker } = defineProps<{
-    active?: boolean;
+const props = defineProps<{
     sticker: Slot;
 }>();
 
+const sticker = computed(() => props.sticker);
+
 const completeness = computed(() => {
-    return Math.min(1, (sticker.completed_count ?? 0) / sticker.total_quests);
+    return Math.min(
+        1,
+        (sticker.value.completed_count ?? 0) / sticker.value.total_quests,
+    );
 });
 </script>
 

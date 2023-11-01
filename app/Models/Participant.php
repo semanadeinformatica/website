@@ -65,7 +65,7 @@ class Participant extends Model
 
     public function competitionTeams(): BelongsToMany
     {
-        return $this->belongsToMany(CompetitionTeam::class);
+        return $this->belongsToMany(CompetitionTeam::class)->using(CompetitionTeamParticipant::class);
     }
 
     public function toSearchableArray(): array

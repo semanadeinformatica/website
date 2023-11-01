@@ -9,9 +9,11 @@ interface Props {
     event: Event;
 }
 
-const { event } = defineProps<Props>();
+const props = defineProps<Props>();
 
-const speakers = computed(() => event.users?.filter(isSpeaker));
+const event = computed(() => props.event);
+
+const speakers = computed(() => event.value.users?.filter(isSpeaker));
 
 const formatTimeString = (time: string): string => {
     return `1970-01-01T${time}.000000Z`;

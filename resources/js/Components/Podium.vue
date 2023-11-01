@@ -1,5 +1,41 @@
+<script setup lang="ts">
+import type CompetitionTeam from "@/Types/CompetitionTeam";
+import { type CompetitionPrizes } from "@/Types/Competition";
+import { computed } from "vue";
+
+interface Props {
+    prizes: CompetitionPrizes;
+    leaderboard: CompetitionTeam[];
+}
+
+const props = defineProps<Props>();
+
+// const leaderboard = computed(() => props.leaderboard);
+// const prizes = computed(() => props.prizes);
+
+const images = computed(() => {
+    // we need to have all 3 teams in order to display stuff
+    if (props.leaderboard.length < 3)
+        return [
+            props.prizes.firstPlace,
+            props.prizes.secondPlace,
+            props.prizes.thirdPlace,
+        ];
+    return props.leaderboard.map((team) =>
+        team.image_competition_team_url
+            ? team.image_competition_team_url
+            : `https://ui-avatars.com/api/?size=512&name=${team.name
+                  .split(" ")
+                  .map((t) => t[0])
+                  .join("+")}&color=f8f5e7&background=d94f04`,
+    );
+});
+
+const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
+</script>
+
 <template>
-    <section class="relative flex justify-center py-28">
+    <section class="relative flex flex-col items-center justify-center py-28">
         <svg
             width="75%"
             height="75%"
@@ -60,7 +96,7 @@
                 height="271"
                 x="471.5"
                 y="3.5"
-                href="/images/fnac_100.svg"
+                :href="images[0]"
                 clip-path="url(#first)"
             />
             <clipPath id="second">
@@ -79,7 +115,7 @@
                 height="271"
                 x="69.5"
                 y="76.5"
-                href="/images/fnac_75.svg"
+                :href="images[1]"
                 clip-path="url(#second)"
             />
 
@@ -99,7 +135,7 @@
                 height="271"
                 x="873.5"
                 y="98.5"
-                href="/images/fnac_50.svg"
+                :href="images[2]"
                 clip-path="url(#third)"
             />
 
@@ -358,5 +394,35 @@
                 </filter>
             </defs>
         </svg>
+
+        <div
+            v-if="hasLeaderboardTeams"
+            class="mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-2023-teal-dark max-xs:grid-cols-1 md:grid"
+        >
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-1 text-xl max-xs:row-start-2"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[1].name
+                }}</span>
+                <span class="">{{ leaderboard[1].points }}</span>
+            </div>
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-3 text-2xl"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[0].name
+                }}</span>
+                <span class="">{{ leaderboard[0].points }}</span>
+            </div>
+            <div
+                class="align-center text-wrap flex flex-col items-center truncate px-1 text-lg"
+            >
+                <span class="whitespace-normal font-bold">{{
+                    leaderboard[2].name
+                }}</span>
+                <span class="">{{ leaderboard[2].points }}</span>
+            </div>
+        </div>
     </section>
 </template>

@@ -7,7 +7,7 @@ interface Props {
     departments: Department[];
 }
 
-const { departments } = defineProps<Props>();
+defineProps<Props>();
 
 const colors: Array<string> = [
     "orange",

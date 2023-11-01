@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import type { User } from "@/Types/User";
@@ -17,13 +17,19 @@ interface Props {
     isParticipant?: boolean;
 }
 
-const { product } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const product = computed(() => props.product);
 
 const buyProduct = () => {
-    router.post(route("shop.product.buy", { product }), undefined, {
-        preserveState: true,
-        onFinish: () => (modalOpen.value = false),
-    });
+    router.post(
+        route("shop.product.buy", { product: product.value }),
+        undefined,
+        {
+            preserveState: true,
+            onFinish: () => (modalOpen.value = false),
+        },
+    );
 };
 </script>
 

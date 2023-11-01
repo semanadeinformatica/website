@@ -7,14 +7,18 @@ import { router } from "@inertiajs/vue3";
 // import { computed } from "vue";
 import route from "ziggy-js";
 import { isAdmin } from "@/Types/User";
+import { computed } from "vue";
 
 interface Props {
     competition: Competition;
     isParticipant: boolean;
     isEnrolled: boolean;
+    isOver: boolean;
 }
 
-const { competition } = defineProps<Props>();
+const props = defineProps<Props>();
+const competition = computed(() => props.competition);
+const leaderboard = computed(() => competition.value.teams?.slice(0, 3) ?? []);
 
 const formattedDate = (
     startDate: string,
@@ -58,7 +62,14 @@ const formattedDate = (
             </span>
         </header>
 
-        <Podium></Podium>
+        <Podium
+            :leaderboard="leaderboard"
+            :prizes="{
+                firstPlace: '/images/fnac_100.svg',
+                secondPlace: '/images/fnac_75.svg',
+                thirdPlace: '/images/fnac_50.svg',
+            }"
+        />
         <!-- RULES -->
 
         <section
@@ -75,7 +86,53 @@ const formattedDate = (
             ></div>
         </section>
 
-        <template v-if="!isAdmin($page.props.auth.user)">
+        <template v-if="isOver">
+            <section
+                class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
+            >
+                <template v-if="competition.teams && competition.teams.length">
+                    <p class="text-center text-2xl font-bold text-2023-teal">
+                        A competição já acabou, vê aqui quem participou
+                    </p>
+                    <span class="text-2xl font-bold text-2023-teal">
+                        Equipas: {{ competition.teams?.length }}
+                    </span>
+                    <div
+                        class="flex w-4/5 flex-col border border-black shadow-lg shadow-2023-teal md:w-1/2"
+                    >
+                        <div
+                            v-for="team in competition.teams ?? []"
+                            :key="team.id"
+                            class="inline-flex w-full justify-between gap-1 p-4 text-lg even:bg-2023-orange even:bg-opacity-20"
+                        >
+                            <img
+                                :src="
+                                    team.image_competition_team_url
+                                        ? team.image_competition_team_url
+                                        : `https://ui-avatars.com/api/?size=512&name=${team.name
+                                              .split(' ')
+                                              .map((t) => t[0])
+                                              .join(
+                                                  '+',
+                                              )}&color=f8f5e7&background=d94f04`
+                                "
+                                class="h-16 w-16 self-center rounded-sm"
+                                :alt="`Image for team ${team.name}`"
+                            />
+                            <div class="flex flex-col items-end self-center">
+                                <span class="text-end">{{ team.name }}</span>
+                                <span>{{ team.points }} pontos</span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <p v-else class="text-lg font-bold text-2023-teal">
+                    A competição acabou mas não houve equipas inscritas desta
+                    vez.
+                </p>
+            </section>
+        </template>
+        <template v-else-if="!isAdmin($page.props.auth.user)">
             <!-- PARTICIPATE -->
             <section
                 v-if="!isEnrolled"

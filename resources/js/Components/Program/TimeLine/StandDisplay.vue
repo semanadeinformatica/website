@@ -9,17 +9,22 @@ interface Props {
     readonly stands: Stand[];
 }
 
-const { stands } = defineProps<Props>();
+const props = defineProps<Props>();
+
+const stands = computed(() => props.stands);
 
 const standTiers = computed(() =>
     Object.fromEntries(
-        stands.map((stand) => [stand.sponsor?.tier?.id, stand.sponsor?.tier]),
+        stands.value.map((stand) => [
+            stand.sponsor?.tier?.id,
+            stand.sponsor?.tier,
+        ]),
     ),
 );
 
 const standsPerTier = computed(
     () =>
-        stands.reduce((acc, stand) => {
+        stands.value.reduce((acc, stand) => {
             const sponsorTier = stand.sponsor?.tier;
             if (!sponsorTier) return acc;
 

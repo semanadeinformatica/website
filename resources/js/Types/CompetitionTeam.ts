@@ -6,7 +6,9 @@ export default interface CompetitionTeam extends Model {
     name: string;
     points: number;
 
-    participants?: Participant[];
+    image_competition_team_url?: string;
+
+    members?: Participant[];
 
     competition_id: number;
     competition?: Competition;

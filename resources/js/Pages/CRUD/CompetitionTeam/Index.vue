@@ -48,10 +48,11 @@ const editions = computed<Record<number, string>>(() =>
         </template>
 
         <template #row="{ item }">
+            ,
             <Row name="competitionTeams" :item="item">
                 <Cell>{{ editions[item.competition_id] }}</Cell>
                 <Cell>{{ item.name }}</Cell>
-                <Cell>{{ item.participants?.length ?? "N/A" }}</Cell>
+                <Cell>{{ item.members?.length ?? "N/A" }}</Cell>
                 <Cell>{{ item.points }}</Cell>
             </Row>
         </template>

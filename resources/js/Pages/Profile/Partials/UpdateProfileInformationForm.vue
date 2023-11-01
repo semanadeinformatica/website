@@ -17,7 +17,7 @@ interface Props {
     user: User | undefined;
 }
 
-const { user: user } = defineProps<Props>();
+const { user } = defineProps<Props>();
 
 const isCompany = checkIsCompany(user);
 const isSpeaker = checkIsSpeaker(user);

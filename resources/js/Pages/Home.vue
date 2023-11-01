@@ -22,7 +22,7 @@ interface Props {
     canEnroll: boolean;
 }
 
-const { sponsorTiers } = defineProps<Props>();
+defineProps<Props>();
 
 const formattedDate = (
     startDate: string,
