@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -75,14 +76,14 @@ abstract class CRUDController extends Controller
 
         $search = $request->query('query');
         if ($isSearchable && $search !== null) {
-            $query = $this->model::search($search);
+            $query = $this->model::search($search)->query(fn (Builder $query) => $query->with($this->load));
         } else {
-            $query = $this->model::orderBy('id');
+            $query = $this->model::with($this->load)->orderBy('id');
         }
 
         $filteredQuery = collect($request->query())
             ->intersectByKeys(['sort_by' => '', 'sort_dir' => '', 'query' => '', 'filter_by' => '']);
-        $items = $query->with($this->load)->paginate()->appends($filteredQuery->toArray());
+        $items = $query->paginate()->appends($filteredQuery->toArray());
 
         $with = $this->with();
 
