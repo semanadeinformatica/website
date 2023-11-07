@@ -74,7 +74,7 @@ return [
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'SINF Website Logs',
             'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
+            'level' => env('LOG_LEVEL', 'error'),
             'replace_placeholders' => true,
         ],
 
