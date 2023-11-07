@@ -78,8 +78,9 @@ class AuthServiceProvider extends ServiceProvider
             )
         ));
 
-        Gate::define('viewProfileOf', fn (User $user, User $profile_user) => (
+        Gate::define('viewProfileOf', fn (User $user, User $profile_user, Edition $edition) => (
             $user->isAdmin() || // admins have access to all profiles
+            $user->isStaff($edition) || // staff have access to all profiles during the edition they are staff of
             $user->is($profile_user) || // users can view their own profile
             (
                 // companies can view profiles of participants who have paid them a visit
@@ -120,6 +121,12 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('redeem', fn (User $user, Product $product, Enrollment $enrollment) => (
             ($user->isAdmin() || $user->isStaff($product->edition)) && // user must be admin or staff
             EnrollmentProduct::where('enrollment_id', $enrollment->id)->where('product_id', $product->id)->where('redeemed', false)->exists() // product must not have been redeemed
+        ));
+
+        Gate::define('downloadCVs', fn (User $user, User $other, Edition $edition) => (
+            $user->isAdmin() || // admins have access to all CVs
+            $user->isStaff($edition) ||
+            $user->is($other)
         ));
     }
 }
