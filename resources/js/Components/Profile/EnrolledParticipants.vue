@@ -2,7 +2,7 @@
 import type Participant from "@/Types/Participant";
 import { usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import PrimaryButton from "../PrimaryButton.vue";
+import route from "ziggy-js";
 
 type Visitor = Participant & {
     can_see_cv: boolean;
@@ -10,10 +10,7 @@ type Visitor = Participant & {
 };
 
 const visitors = usePage().props.participants as Visitor[];
-
-const downloadCVs = () => {
-    console.log("Downloading CVs");
-};
+const user = usePage().props.user as Participant;
 </script>
 
 <template>
@@ -25,15 +22,13 @@ const downloadCVs = () => {
             <h2 class="p-3 text-2xl font-bold text-2023-teal">
                 Participantes que visitaram a sua empresa: {{ visitors.length }}
             </h2>
-            <PrimaryButton
-                color="orange"
-                shadow="teal"
-                text-size="text-xl"
-                padding="py-2 px-4"
-                class="w-full md:w-auto"
-                @click="downloadCVs"
-                >Descarregar CVs</PrimaryButton
+            <a
+                v-if="$page.props"
+                class="inline-flex items-center justify-center border border-black bg-2023-orange px-4 py-2 text-center text-xl font-bold text-white shadow-2023-teal transition-shadow hover:shadow"
+                :href="route('user.company.participants.cvs', { user })"
             >
+                Descarregar CVs
+            </a>
         </div>
         <div
             class="flex w-full flex-col items-center border border-black bg-2023-bg shadow-lg shadow-2023-teal"

@@ -19,6 +19,8 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
+use League\Flysystem\PathPrefixer;
+use ZipArchive;
 
 class UserController extends UserProfileController
 {
@@ -97,7 +99,7 @@ class UserController extends UserProfileController
         $paramUser = User::find($request->route('user'));
 
         if ($paramUser !== null) {
-            if ($requestUser->cannot('viewProfileOf', $paramUser)) {
+            if ($requestUser->cannot('viewProfileOf', [$paramUser, $request->edition])) {
                 // If the currently logged in user is not an admin, they can only view their own profile (or other users if they are a company and the user is a participant of that company)
 
                 return redirect()->route('profile.show')->dangerBanner('Não tens acesso a esta página.');
@@ -241,5 +243,60 @@ class UserController extends UserProfileController
         return Inertia::render('Profile/ScanCode', [
             'quests' => $quests,
         ]);
+    }
+
+    public function downloadParticipantCVs(Request $request, User $user)
+    {
+
+        /** @var Edition|null */
+        $edition = $request->edition;
+
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        if (Gate::allows('downloadCVs', [$user, $edition])) {
+
+            /** @var Company */
+            $company = $user->usertype;
+        }
+
+        $participant_cv_paths = $company->participants()->get()->map((fn ($participant) => $participant->toArray()))->pluck(['cv_path']);
+
+        $zip = new ZipArchive;
+
+        $fileName = Str::slug($user->name, '_').'-participants-cvs.zip';
+
+        $prefixer = new PathPrefixer(public_path('storage'));
+        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === true) {
+
+            // loop the files result
+            foreach ($participant_cv_paths as $key => $file_path) {
+
+                if ($file_path === null) {
+                    continue;
+                }
+
+                $path = $prefixer->prefixPath($file_path);
+
+                if (! file_exists($path)) {
+                    continue;
+                }
+
+                $relativeNameInZipFile = basename($path);
+                if (! $zip->addFile($path, $relativeNameInZipFile)) {
+                    return response()->bannerDanger('Error a gerar o zip.');
+                }
+            }
+
+            $zipPath = $zip->filename;
+
+            if ($zip->close()) {
+                return response()->download($zipPath)->deleteFileAfterSend();
+            }
+        }
+
+        // Download the generated zip
+        return response()->bannerDanger('Error a gerar o zip.');
     }
 }
