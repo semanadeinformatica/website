@@ -29,7 +29,7 @@ WORKDIR /var/www/html
 
 USER root
 
-RUN apk add --no-cache php82-pdo_pgsql php82-pgsql php82-pecl-redis php82-iconv
+RUN apk add --no-cache php82-pdo_pgsql php82-pgsql php82-pecl-redis php82-iconv php82-zip
 
 # Install supercronic (cron alternative)
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.26/supercronic-linux-amd64 \
