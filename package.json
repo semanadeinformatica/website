@@ -46,7 +46,7 @@
         "vue-cookies": "^1.8.3",
         "vue-final-modal": "^4.4.5",
         "vue-i18n": "^9.6.2",
-        "vue-qrcode-reader": "^5.4.0",
+        "vue-qrcode-reader": "^5.5.1",
         "vue3-carousel": "^0.3.1"
     }
 }
