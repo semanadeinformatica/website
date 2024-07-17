@@ -1,0 +1,35 @@
+# dependencies
+FROM composer:2 AS dependencies
+WORKDIR /app
+
+COPY composer.json composer.lock artisan ./
+COPY app/ ./app/
+COPY bootstrap/ ./bootstrap/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY resources/ ./resources/
+COPY routes/ ./routes/
+
+RUN composer install --no-interaction
+
+# migrate
+FROM composer:2 AS migrate
+WORKDIR /app
+
+RUN install-php-extensions pdo_pgsql pgsql redis iconv zip
+
+COPY --from=dependencies /app ./
+
+ARG LARAVEL_ENV=production
+ARG LARAVEL_ENV_FILE=.env.${LARAVEL_ENV}
+ARG LARAVEL_ENV_FILE_KEY=""
+
+ENV APP_ENV=${LARAVEL_ENV}
+
+COPY --chown=nobody ${LARAVEL_ENV_FILE} ./.env.${LARAVEL_ENV}
+RUN [ -z "${LARAVEL_ENV_FILE_KEY}" ] || ( mv .env.${LARAVEL_ENV} .env.${LARAVEL_ENV}.encrypted && php artisan env:decrypt -n --env=${LARAVEL_ENV} --key=${LARAVEL_ENV_FILE_KEY} )
+
+COPY public/ ./public/
+COPY storage/ ./storage/
+
+CMD [ "php", "artisan", "migrate", "-n"]  

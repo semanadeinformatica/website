@@ -30,8 +30,11 @@ services:
     prod:
         build:
             context: .
-            dockerfile: Dockerfile
-            target: production
+            dockerfile: ./dockerfiles/Dockerfile.website
+            target: deploy
+            args:
+                - LARAVEL_ENV=local
+                - LARAVEL_ENV_FILE=.env
         ports:
             - '80:80'
         networks:
@@ -40,15 +43,17 @@ services:
             - pgsql
             - redis
             - meilisearch
+        environment:
+            - APP_URL=http://localhost
     pgsql:
-        image: 'postgres:15'
+        image: 'postgres:16'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
-            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            PGPASSWORD: '${DB_PASSWORD}'
             POSTGRES_DB: '${DB_DATABASE}'
             POSTGRES_USER: '${DB_USERNAME}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
         volumes:
             - 'sail-pgsql:/var/lib/postgresql/data'
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'

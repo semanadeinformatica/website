@@ -1,0 +1,81 @@
+# dev-dependencies
+FROM composer:2 AS dev-dependencies
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-interaction --no-autoloader
+
+# assets-build
+FROM node:20-alpine AS assets-build
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY ./resources/ ./resources
+COPY ./vite.config.ts ./tsconfig.json ./tsconfig.app.json ./tsconfig.node.json ./tailwind.config.js ./postcss.config.js ./
+COPY --from=dev-dependencies /app/vendor ./vendor
+
+RUN npm run build
+
+# laravel-build
+FROM composer:2 AS laravel-build
+WORKDIR /app
+
+COPY composer.json composer.lock artisan ./
+COPY app/ ./app/
+COPY bootstrap/ ./bootstrap/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY resources/ ./resources/
+COPY routes/ ./routes/
+
+RUN composer install --no-interaction --optimize-autoloader --no-dev --prefer-dist
+
+# deploy
+FROM trafex/php-nginx:3.6.0 AS deploy
+WORKDIR /var/www/html
+
+USER root
+RUN apk add --no-cache php83-pdo_pgsql php83-pgsql php83-pecl-redis php83-iconv php83-zip
+
+## Install supercronic (cron alternative)
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.26/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=7a79496cf8ad899b99a719355d4db27422396735
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+    && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+    && chmod +x "$SUPERCRONIC" \
+    && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+    && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
+COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./etc/php/php.ini ${PHP_INI_DIR}/conf.d/php.ini
+COPY --chown=nobody ./etc/crontab ./crontab
+COPY --chown=nobody ./etc/supervisord.conf ./supervisord.conf
+RUN cat ./supervisord.conf >> /etc/supervisor/conf.d/supervisord.conf
+RUN rm ./supervisord.conf
+
+USER nobody
+
+ARG LARAVEL_ENV=production
+ARG LARAVEL_ENV_FILE=.env.${LARAVEL_ENV}
+ARG LARAVEL_ENV_FILE_KEY=""
+
+COPY --chown=nobody ${LARAVEL_ENV_FILE} ./.env.${LARAVEL_ENV}
+COPY --chown=nobody public/ ./public/
+COPY --chown=nobody storage/ ./storage/
+COPY --chown=nobody --from=laravel-build /app/ ./
+COPY --chown=nobody --from=assets-build /app/public/ ./public/
+
+ENV APP_ENV=${LARAVEL_ENV}
+
+RUN [ -z "${LARAVEL_ENV_FILE_KEY}" ] || ( mv .env.${LARAVEL_ENV} .env.${LARAVEL_ENV}.encrypted && php artisan env:decrypt -n --env=${LARAVEL_ENV} --key=${LARAVEL_ENV_FILE_KEY} )
+RUN php artisan storage:link -n
+RUN php artisan event:cache -n
+RUN php artisan route:cache -n
+RUN php artisan view:cache -n
+
+COPY --chown=nobody ./etc/entrypoint.sh /entrypoint.sh
+CMD [ "/entrypoint.sh" ]
