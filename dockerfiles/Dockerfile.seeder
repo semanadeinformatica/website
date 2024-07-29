@@ -32,4 +32,4 @@ RUN [ -z "${LARAVEL_ENV_FILE_KEY}" ] || ( mv .env.${LARAVEL_ENV} .env.${LARAVEL_
 COPY public/ ./public/
 COPY storage/ ./storage/
 
-CMD [ "php", "artisan", "migrate", "-n"]  
+CMD [ "php", "artisan", "migrate", "-n", "--seed"]  
