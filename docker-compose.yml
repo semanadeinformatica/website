@@ -33,7 +33,7 @@ services:
             dockerfile: ./dockerfiles/Dockerfile.website
             target: deploy
             args:
-                - LARAVEL_ENV=local
+                - LARAVEL_ENV=${APP_ENV:-local}
                 - LARAVEL_ENV_FILE=.env
         ports:
             - '80:80'
