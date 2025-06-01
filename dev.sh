@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Peras: I have reworked this script to ensure future developers have a full, self-contained development environment by running it.
 # The includes:

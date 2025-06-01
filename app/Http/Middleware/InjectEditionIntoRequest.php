@@ -16,7 +16,7 @@ class InjectEditionIntoRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $currentEdition = Edition::where('year', '=', now()->year)->get()->first();
+        $currentEdition = Edition::where('year', '=', env('EDITION', now()->year))->get()->first();
 
         if ($currentEdition === null) {
             // There still isn't an edition corresponding to this year, fetch the latest one.
