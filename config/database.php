@@ -74,7 +74,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            'search_path' => str_replace('-', '_', env('DB_SEARCH_PATH', 'public')),
             'sslmode' => 'prefer',
         ],
 

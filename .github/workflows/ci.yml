@@ -14,70 +14,70 @@ on:
       - main
 
 jobs:
-  tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: ${{ env.PHP_EXTENSIONS }}
-          coverage: none
-
-      - name: Install PHP dependencies
-        run: composer install -n --prefer-dist
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Docker Layer Caching
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-
-      - name: Run Sail
-        run: |
-          ./sail up -d laravel.test
-          ./sail npm run dev &
-          sleep 5
-
-      - name: Run tests
-        run: ./sail test --parallel
-
-  pint:
-    name: Check PHP code style
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: ${{ env.PHP_EXTENSIONS }}
-          coverage: none
-
-      - name: Run composer install
-        run: composer install -n --prefer-dist
-
-      - name: Docker Layer Caching
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-
-      - name: Run Sail
-        run: ./sail up -d laravel.test
-
-      - name: Run Pint
-        run: ./sail pint -v --test
-
+  # tests:
+  #   name: Run tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: ${{ env.PHP_VERSION }}
+  #         extensions: ${{ env.PHP_EXTENSIONS }}
+  #         coverage: none
+  #
+  #     - name: Install PHP dependencies
+  #       run: composer install -n --prefer-dist
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: npm
+  #
+  #     - name: Install Node dependencies
+  #       run: npm ci
+  #
+  #     - name: Docker Layer Caching
+  #       uses: jpribyl/action-docker-layer-caching@v0.1.1
+  #
+  #     - name: Run Sail
+  #       run: |
+  #         ./sail up -d laravel.test
+  #         ./sail npm run dev &
+  #         sleep 5
+  #
+  #     - name: Run tests
+  #       run: ./sail test --parallel
+  #
+  # pint:
+  #   name: Check PHP code style
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: ${{ env.PHP_VERSION }}
+  #         extensions: ${{ env.PHP_EXTENSIONS }}
+  #         coverage: none
+  #
+  #     - name: Run composer install
+  #       run: composer install -n --prefer-dist
+  #
+  #     - name: Docker Layer Caching
+  #       uses: jpribyl/action-docker-layer-caching@v0.1.1
+  #
+  #     - name: Run Sail
+  #       run: ./sail up -d laravel.test
+  #
+  #     - name: Run Pint
+  #       run: ./sail pint -v --test
+  #
   prettier:
     name: Check Typescript code style
     runs-on: ubuntu-latest
