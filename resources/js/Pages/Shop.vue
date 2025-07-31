@@ -20,14 +20,14 @@ defineProps<Props>();
                 class="flex content-center items-center justify-center self-center py-10"
             >
                 <h1
-                    class="w-fit border border-black bg-2023-red p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
+                    class="w-fit border border-black bg-2025-blue p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
                 >
                     Loja
                 </h1>
             </div>
             <p
                 v-if="points !== null"
-                class="py-5 text-center text-xl font-bold text-2023-teal-dark"
+                class="py-5 text-center text-xl font-bold text-text-color"
             >
                 Tens {{ points }}
                 <img

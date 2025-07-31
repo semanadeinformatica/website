@@ -397,7 +397,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
 
         <div
             v-if="hasLeaderboardTeams"
-            class="mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-2023-teal-dark max-xs:grid-cols-1 md:grid"
+            class="mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-text-color ax-xs:grid-cols-1 md:grid"
         >
             <div
                 class="align-center text-wrap flex flex-col items-center truncate px-1 text-xl max-xs:row-start-2"

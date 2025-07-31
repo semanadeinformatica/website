@@ -142,13 +142,13 @@ const clearCVFileInput = () => {
             class="mt-3 border-2 border-solid border-black p-3 text-2023-red"
         >
             <p>
-                <span class="font-bold">Porque é que o deves fazer? </span>
-                <span
+                <span class="font-bold text-text-color">Porque é que o deves fazer? </span>
+                <span class="text-text-color"
                     >Esta é uma excelente oportunidade para te dares a conhecer
                     às empresas que participam na SINF!</span
                 >
             </p>
-            <p>
+            <p class="text-text-color">
                 No fim do evento o teu CV será dado a estas empresas para que
                 possam ficar com os teus dados e, possivelmente, manter o
                 contacto contigo.

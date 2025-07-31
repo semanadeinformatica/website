@@ -30,8 +30,8 @@ defineProps<{
         class="flex flex-col items-center gap-4"
     >
         <p
-            class="w-fit border border-black p-2 px-6 text-center text-xl font-bold shadow"
-            :class="textColor[color] || shadowColor[color]"
+            class="text-text-color w-fit border border-black p-2 px-6 text-center text-xl font-bold shadow"
+            :class="shadowColor[color]"
         >
             {{ department.name }}
         </p>
