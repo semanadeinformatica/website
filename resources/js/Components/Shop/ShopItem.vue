@@ -41,7 +41,7 @@ const buyProduct = () => {
             <img :src="product.image_product_url" />
         </div>
         <button
-            class="flex flex-1 flex-col justify-between bg-2023-orange px-4 py-2 text-white disabled:opacity-50"
+            class="flex flex-1 flex-col justify-between bg-2025-blue px-4 py-2 text-white disabled:opacity-50"
             :disabled="!product.canBeBought && !product.enrollments"
             @click="modalOpen = true"
         >
@@ -59,21 +59,21 @@ const buyProduct = () => {
     <VueFinalModal
         v-model="modalOpen"
         class="flex items-center justify-center overflow-clip"
-        content-class="max-w-xl max-h-[80%] mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col gap-8"
+        content-class="max-w-xl max-h-[80%] mx-4 p-4 bg-2025-bg border border-black border-solid flex relative justify-center items-center flex-col gap-8"
     >
         <template v-if="isEnrolled">
             <img
                 :src="product.image_product_url"
                 class="object-fit w-48 justify-center"
             />
-            <p class="text-2023-teal-dark">
+            <p class="text-text-color">
                 Confirmar compra de <b>{{ product.name }}</b> por
                 {{ product.price }}?
             </p>
             <PrimaryButton @click="buyProduct">Comprar</PrimaryButton>
         </template>
         <template v-else>
-            <p class="text-2023-teal-dark">
+            <p class="text-text-color">
                 Antes de comprares este produto, inscreve-te!
             </p>
             <PrimaryButton

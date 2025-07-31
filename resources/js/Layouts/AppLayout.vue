@@ -18,7 +18,7 @@ defineProps<Props>();
             <Navbar />
             <Banner />
         </div>
-        <main class="min-h-screen bg-2023-bg">
+        <main class="min-h-screen bg-2025-bg-gradient">
             <slot />
         </main>
         <Footer />

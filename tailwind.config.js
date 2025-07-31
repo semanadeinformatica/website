@@ -21,12 +21,19 @@ export default {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                "text-color": "#ffffff",
+                "2025-bg-green": "#4b8562",
+                "2025-blue": "#2a9ba0",
+                "2025-bg": "#0f3d56",
                 "2023-bg": "rgb(248, 245, 231)",
                 "2023-red": "rgb(217, 79, 4)",
                 "2023-red-dark": "rgb(177, 93, 93)",
                 "2023-teal": "rgb(0, 113, 114)",
                 "2023-teal-dark": "rgb(2, 82, 89)",
                 "2023-orange": "rgb(242, 147, 37)",
+            },
+            backgroundImage: {
+                "2025-bg-gradient": "linear-gradient(#0f3d56 0%, #2a9ba0 50%, #4b8562 100%)"
             },
             boxShadow: {
                 sm: "2px 2px 0 -1px var(--tw-shadow-color, currentColor), 2px 2px 0 0 black",

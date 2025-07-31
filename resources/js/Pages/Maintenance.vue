@@ -41,7 +41,7 @@ import { OhVueIcon } from "oh-vue-icons";
                 >
             </div>
             <p
-                class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                class="text-text-color mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
             >
                 semana_de_informática
             </p>

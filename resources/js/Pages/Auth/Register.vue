@@ -94,7 +94,7 @@ const submit = () => {
                 >
             </label>
 
-            <label class="flex items-center gap-2 self-stretch">
+            <label class="flex items-center gap-2 self-stretch text-text-color">
                 <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
                 since it makes it so that every account that exists has agreed to this -->
                 <Checkbox
@@ -109,7 +109,7 @@ const submit = () => {
 
             <Link
                 :href="route('login')"
-                class="font-semibold text-2023-teal underline"
+                class="font-semibold text-text-color underline"
             >
                 Já tens conta?
             </Link>
