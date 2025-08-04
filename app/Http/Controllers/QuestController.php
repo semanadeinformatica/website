@@ -36,16 +36,17 @@ class QuestController extends Controller
         if ($user->cannot('give', [$quest, $enrollment])) {
             Log::warning('Current user is not allowed to give quest "{quest}" to user {user}', [
                 'quest' => $quest->name,
-                'user' => $enrollment->participant->usertype->name,
+                'user' => $enrollment->participant->user->name,
             ]);
 
             return redirect()->back()->dangerBanner('Não foi possível atribuir a tarefa ao participante!');
         }
 
         $enrollment->quests()->attach($quest);
+
         Log::info('Quest {quest} given to user {user}', [
             'quest' => $quest->name,
-            'user' => $enrollment->participant->usertype->name,
+            'user' => $enrollment->participant->user->name,
         ]);
 
         return redirect()->back()->banner('Tarefa atribuída com sucesso!');
