@@ -117,7 +117,7 @@ onMounted(() => {
     <section class="h-full w-full">
         <div
             id="tab-picker"
-            class="flex flex-row justify-center gap-4 font-bold text-2023-teal"
+            class="flex flex-row justify-center gap-4 font-bold text-text-color"
         >
             <button
                 v-if="(day.talks?.length ?? 0) > 0"
@@ -157,7 +157,7 @@ onMounted(() => {
         v-if="
             (selectedType === 'talk' || selectedType === 'activity') && !noInfo
         "
-        class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+        class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-text-color shadow-md shadow-white"
     >
         {{ day.theme }}
     </p>

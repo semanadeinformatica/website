@@ -24,7 +24,7 @@ const submit = () => {
     <Head title="Forgot Password" />
 
     <CardLayout title="Repor password" heading="Esqueceste-te da tua password?">
-        <span v-if="status" class="p-4 text-2023-teal">
+        <span v-if="status" class="p-4 text-text-color">
             {{ status }}
         </span>
 
@@ -32,6 +32,7 @@ const submit = () => {
             <TextInput
                 id="email"
                 v-model="form.email"
+                class="bg-white"
                 label="Email"
                 type="email"
                 required

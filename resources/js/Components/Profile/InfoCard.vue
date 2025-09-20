@@ -51,7 +51,7 @@ const iconColor: Record<string, string> = {
 
 <template>
     <div
-        class="m-4 flex justify-between border border-solid border-black bg-2023-bg p-3 text-2023-teal shadow-xl shadow-2023-red-dark max-md:m-2 md:min-w-[30vw]"
+        class="m-4 flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-white max-md:m-2 md:min-w-[30vw]"
     >
         <div class="flex-col">
             <div>

@@ -6,7 +6,7 @@ import { OhVueIcon } from "oh-vue-icons";
 <template>
     <Head title="Brevemente..." />
     <!-- TODO: localization -->
-    <main class="min-h-screen bg-2023-bg">
+    <main class="min-h-screen bg-2025-bg">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-evenly gap-14 py-16"
         >
@@ -35,27 +35,23 @@ import { OhVueIcon } from "oh-vue-icons";
                     src="images/sinf logo.png"
                     alt="Stylized SINF logo"
                 />
-                <span
-                    class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
-                    >2023</span
-                >
             </div>
             <p
-                class="mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                class="text-text-color mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
             >
                 semana_de_informática
             </p>
-            <p class="margin-0 text-center text-2xl font-bold text-2023-teal">
-                25 a 31 de outubro
+            <p class="margin-0 text-center text-2xl font-bold text-white">
+                21 a 24 de outubro
             </p>
             <p
-                class="m-0 text-center text-lg font-bold text-2023-teal max-ml:text-base"
+                class="m-0 text-center text-lg font-bold text-white max-ml:text-base"
             >
                 Estamos a preparar mais uma edição da SINF!
             </p>
             <a
-                href="https://2022.sinf.pt"
-                class="relative m-0 text-center text-lg font-bold text-2023-teal underline max-ml:text-base"
+                href="https://2024.sinf.pt"
+                class="relative m-0 text-center text-lg font-bold text-white underline max-ml:text-base"
             >
                 Revê a edição do último ano aqui!
             </a>
@@ -63,7 +59,7 @@ import { OhVueIcon } from "oh-vue-icons";
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
             >
                 <p
-                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2023-red p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-bg"
+                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2025-bg p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-bg"
                 >
                     Contacta-nos!
                 </p>
@@ -122,7 +118,7 @@ import { OhVueIcon } from "oh-vue-icons";
                     class="hidden flex-col items-center gap-2.5 max-ml:flex"
                 >
                     <p
-                        class="text-lg font-bold text-2023-teal max-ml:text-base"
+                        class="text-lg font-bold text-white max-ml:text-white"
                     >
                         externas@sinf.pt
                     </p>

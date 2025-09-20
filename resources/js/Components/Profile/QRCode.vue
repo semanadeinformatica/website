@@ -31,7 +31,7 @@ const showQRCode = () => {
 
 <template>
     <button
-        class="flex w-fit cursor-pointer rounded-full p-2.5 text-2023-red"
+        class="flex w-fit cursor-pointer rounded-full p-2.5 text-text-color"
         @click="showQRCode"
     >
         <OhVueIcon name="io-qr-code" scale="1.4"></OhVueIcon>
@@ -39,7 +39,7 @@ const showQRCode = () => {
     <VueFinalModal
         v-model="modalOpen"
         class="flex items-center justify-center"
-        content-class="max-w-xl min-w-[20em] mx-4 p-8 pt-12 gap-8 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col"
+        content-class="max-w-xl min-w-[20em] mx-4 p-8 pt-12 gap-8 bg-white border border-black border-solid flex relative justify-center items-center flex-col"
     >
         <span v-if="loading" class="text-lg">A gerar...</span>
         <template v-else>

@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const classes =
-    "block w-full px-2 py-2 text-md text-2023-bg underline font-semibold bg-2023-red-dark hover:bg-2023-red focus:outline-none focus:bg-2023-red transition duration-150 ease-in-out";
+    "block w-full px-2 py-2 text-md text-2023-bg underline font-semibold bg-2025-blue hover:bg-2025-bg focus:outline-none focus:bg-2023-red transition duration-150 ease-in-out";
 </script>
 
 <template>
