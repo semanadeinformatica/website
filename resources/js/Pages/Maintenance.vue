@@ -6,7 +6,7 @@ import { OhVueIcon } from "oh-vue-icons";
 <template>
     <Head title="Brevemente..." />
     <!-- TODO: localization -->
-    <main class="min-h-screen bg-2025-bg">
+    <main class="min-h-screen bg-2025-bg-gradient">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-evenly gap-14 py-16"
         >
@@ -59,7 +59,7 @@ import { OhVueIcon } from "oh-vue-icons";
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
             >
                 <p
-                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2025-bg p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-bg"
+                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2025-blue p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-teal"
                 >
                     Contacta-nos!
                 </p>
@@ -88,7 +88,7 @@ import { OhVueIcon } from "oh-vue-icons";
                         ></OhVueIcon>
                     </a>
                     <p
-                        class="text-lg font-bold text-2023-teal max-[900px]:text-base"
+                        class="text-lg font-bold text-white max-[900px]:text-base"
                     >
                         externas@sinf.pt
                     </p>
