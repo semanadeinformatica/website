@@ -52,7 +52,7 @@ const buttons: Tabs =
 
 <template>
     <AppLayout title="Perfil">
-        <div class="flex flex-col items-center bg-2023-bg pt-6 sm:pt-0">
+        <div class="flex flex-col items-center pt-6 sm:pt-0">
             <div
                 class="relative m-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
             >

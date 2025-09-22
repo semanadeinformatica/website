@@ -59,11 +59,11 @@ const submit = () => {
 
             <label class="flex items-center gap-2 self-stretch">
                 <Checkbox v-model:checked="form.remember" name="remember" />
-                <span class="text-2023-teal">Lembrar-me</span>
+                <span class="text-text-color">Lembrar-me</span>
             </label>
 
             <div
-                class="flex flex-col items-center gap-2 font-semibold text-2023-teal underline"
+                class="flex flex-col items-center gap-2 font-semibold text-text-color underline"
             >
                 <Link :href="route('register')">Ainda não tens conta?</Link>
 

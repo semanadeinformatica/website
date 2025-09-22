@@ -61,14 +61,16 @@ const sendEmailVerification = () => {
 
 <template>
     <FormSection @submitted="updateProfileInformation">
-        <template #title> Informação do Perfil </template>
+        <template #title> <span class="text-text-color">Informação do Perfil </span> </template>
 
         <template #description>
+            <span class="text-text-color">
             Atualiza as informações do perfil da tua conta e o endereço de
             e-mail.
+            </span>
         </template>
 
-        <template #form>
+        <template #form class="bg-red-400">
             <!-- Email -->
             <div class="flex flex-col gap-5">
                 <!-- Name -->

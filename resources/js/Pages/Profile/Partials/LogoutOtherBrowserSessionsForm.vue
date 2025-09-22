@@ -46,15 +46,17 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> Sessões do Browser</template>
+        <template #title> <span class="text-text-color">Sessões do Browser</span></template>
 
         <template #description>
+            <span class="text-text-color">
             Gere e regista as tuas sessões ativas em outros navegadores e
             dispositivos.
+            </span>
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-2023-teal-dark">
+            <div class="max-w-xl text-sm text-text-color">
                 Se necessário, podes terminar a sessão de todos os outros
                 navegadores em todos os teus dispositivos. Algumas das tuase
                 sessões recentes estão listadas abaixo; No entanto, esta lista
@@ -72,7 +74,7 @@ const closeModal = () => {
                     <div>
                         <svg
                             v-if="session.agent.is_desktop"
-                            class="h-8 w-8 text-2023-teal-dark"
+                            class="h-8 w-8 text-text-color"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -88,7 +90,7 @@ const closeModal = () => {
 
                         <svg
                             v-else
-                            class="h-8 w-8 text-2023-teal-dark"
+                            class="h-8 w-8 text-text-color"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -104,7 +106,7 @@ const closeModal = () => {
                     </div>
 
                     <div class="ml-3">
-                        <div class="text-sm text-2023-teal-dark">
+                        <div class="text-sm text-text-color">
                             {{
                                 session.agent.platform
                                     ? session.agent.platform
@@ -119,12 +121,12 @@ const closeModal = () => {
                         </div>
 
                         <div>
-                            <div class="text-xs text-2023-orange">
+                            <div class="text-xs text-text-color">
                                 {{ session.ip_address }},
 
                                 <span
                                     v-if="session.is_current_device"
-                                    class="font-semibold text-2023-orange"
+                                    class="font-semibold text-text-color"
                                     >This device</span
                                 >
                                 <span v-else

@@ -22,9 +22,9 @@ const formatTimeString = (time: string): string => {
 
 <template>
     <article
-        class="relative flex flex-col border-b-2 border-2023-teal-dark pb-4"
+        class="relative flex flex-col border-b-2 border-white pb-4"
     >
-        <h2 class="text-2xl font-bold text-2023-orange">
+        <h2 class="text-2xl font-bold text-text-color">
             <em
                 ><Link
                     :href="route('event.show', event)"
@@ -34,12 +34,12 @@ const formatTimeString = (time: string): string => {
                 ></em
             >
         </h2>
-        <p class="text-lg text-2023-teal-dark">{{ event.topic }}</p>
+        <p class="text-lg text-text-color">{{ event.topic }}</p>
         <ul v-if="speakers" class="flex flex-col">
             <li
                 v-for="user in speakers"
                 :key="user.id"
-                class="font-bold text-2023-teal"
+                class="font-bold text-text-color"
             >
                 {{ user.name
                 }}<template v-if="user.usertype?.organization">
@@ -47,20 +47,20 @@ const formatTimeString = (time: string): string => {
                 >
             </li>
         </ul>
-        <span v-if="event.capacity" class="text-2023-teal"
+        <span v-if="event.capacity" class="text-text-color"
             >Capacidade:
             <span class="font-bold">{{ event.capacity }}</span></span
         >
-        <span v-if="event.location" class="text-2023-teal"
+        <span v-if="event.location" class="text-text-color"
             >Local: <span class="font-bold">{{ event.location }}</span></span
         >
-        <span class="text-2023-teal">
+        <span class="text-text-color">
             {{ $d(new Date(formatTimeString(event.time_start)), "hourMinute") }}
             -
             {{ $d(new Date(formatTimeString(event.time_end)), "hourMinute") }}
         </span>
         <span
-            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2023-orange text-xl font-semibold text-white"
+            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2025-blue border border-white text-xl font-semibold text-white"
             >i</span
         >
     </article>

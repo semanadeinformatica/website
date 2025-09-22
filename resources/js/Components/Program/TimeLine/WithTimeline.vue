@@ -11,7 +11,7 @@ defineProps<Times>();
 
 <template>
     <section
-        class="mt-10 h-full w-full border-l-4 border-2023-teal-dark p-8 py-10 lg:w-4/6"
+        class="mt-10 h-full w-full border-l-4 border-white p-8 py-10 lg:w-4/6"
     >
         <TimelinePoint :timestamp="startTime" label="Início" />
         <slot />

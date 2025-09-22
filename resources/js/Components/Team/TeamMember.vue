@@ -81,7 +81,7 @@ const socialMedia = computed(() => {
             </a>
         </div>
     </div>
-    <p class="max-w-[13em] text-center font-bold" :class="textColor[color]">
+    <p class="max-w-[13em] text-center font-bold text-text-color">
         {{ staff.participant?.user?.name }}
     </p>
 </template>

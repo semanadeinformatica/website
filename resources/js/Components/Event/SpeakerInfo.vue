@@ -37,6 +37,7 @@ const textColor: Record<string, string> = {
     "red-dark": "text-2023-red-dark",
     red: "text-2023-red",
     teal: "text-2023-teal",
+    white: "text-white"
 };
 
 const shadowColor: Record<string, string> = {
@@ -53,6 +54,7 @@ const iconColor: Record<string, string> = {
     "red-dark": "#b15d5d",
     red: "#d94f04",
     teal: "#007172",
+    white: "#ffffff"
 };
 </script>
 

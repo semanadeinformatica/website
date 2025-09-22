@@ -23,7 +23,7 @@ const contacts = [
 </script>
 
 <template>
-    <footer class="bg-2023-bg py-4">
+    <footer class="bg-2025-bg-green py-4">
         <section
             class="relative flex content-center items-center justify-center p-8 md:mx-[30%] lg:mx-[35%]"
         >
@@ -64,10 +64,10 @@ const contacts = [
                 </div>
             </div>
         </section>
-        <PortoTechBanner />
-        <div class="container mx-auto text-center font-bold text-2023-teal">
+        <!-- <PortoTechBanner /> -->
+        <div class="container mx-auto text-center font-bold text-text-color">
             <p>
-                Copyright &copy; 2023
+                Copyright &copy; 2025
                 <a href="https://ni.fe.up.pt/">NIAEFEUP</a>, todos os direitos
                 reservados
             </p>

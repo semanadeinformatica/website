@@ -32,7 +32,7 @@ const pageRoutes: Routes = {
     team: { label: "Equipa" },
 };
 
-const editionRoutes = [2022, 2021, 2020, 2019, 2018];
+const editionRoutes = [2024, 2023, 2022, 2021, 2020, 2019, 2018];
 
 const { props } = usePage();
 
@@ -46,9 +46,9 @@ const isAdmin = checkIsAdmin(props.auth.user);
 </script>
 
 <template>
-    <nav class="flex border-b-2 border-black bg-2023-bg py-2">
+    <nav class="flex border-b-2 border-black bg-2025-bg py-2">
         <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
-            <template #trigger>
+            <template #trigger class="bg-white">
                 <DropdownTrigger class="group">
                     <a :href="route('home')">
                         <img
@@ -59,8 +59,8 @@ const isAdmin = checkIsAdmin(props.auth.user);
                     </a>
                 </DropdownTrigger>
             </template>
-            <template #content>
-                <template v-for="({ label }, page) in homeSections" :key="page">
+            <template #content class="bg-white">
+                <template v-for="({ label }, page) in homeSections" :key="page" class="bg-white">
                     <DropdownLink
                         :href="page !== 'home' ? `/#${page}` : route(page)"
                     >
@@ -82,6 +82,7 @@ const isAdmin = checkIsAdmin(props.auth.user);
                 :key="page"
             >
                 <NavLink
+                    class="text-text-color"
                     :href="
                         route(route().has(page) ? page : 'home', {
                             _query,
@@ -98,7 +99,7 @@ const isAdmin = checkIsAdmin(props.auth.user);
                 width="32"
             >
                 <template #trigger>
-                    <DropdownTrigger>Competições</DropdownTrigger>
+                    <DropdownTrigger class="text-text-color">Competições</DropdownTrigger>
                 </template>
                 <template #content>
                     <template
@@ -119,7 +120,7 @@ const isAdmin = checkIsAdmin(props.auth.user);
             <div class="hidden h-full gap-1 md:flex lg:gap-4">
                 <Dropdown align="center" width="20">
                     <template #trigger>
-                        <DropdownTrigger> 2023 </DropdownTrigger>
+                        <DropdownTrigger class="text-text-color"> 2025 </DropdownTrigger>
                     </template>
                     <template #content>
                         <template

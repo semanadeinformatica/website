@@ -38,12 +38,12 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> Apagar conta</template>
+        <template #title> <span class="text-text-color">Apagar conta</span></template>
 
-        <template #description> Apaga permanentemente a tua conta. </template>
+        <template #description> <span class="text-text-color">Apaga permanentemente a tua conta. </span></template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-2023-red-dark">
+            <div class="max-w-xl text-sm text-text-color">
                 Depois de a tua conta ser excluída, todos os teus recursos e
                 dados serão apagados permanentemente. Antes de apagares a tua
                 conta, por favor faz o download de todos os dados ou informações
@@ -51,7 +51,7 @@ const closeModal = () => {
             </div>
 
             <div class="mt-5">
-                <PrimaryButton color="red" @click="confirmUserDeletion">
+                <PrimaryButton color="blue" @click="confirmUserDeletion">
                     Apagar conta
                 </PrimaryButton>
             </div>
