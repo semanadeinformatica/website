@@ -115,7 +115,7 @@ onUnmounted(() => {
                     :key="`navbar-edition-link-${edition}`"
                 >
                     <ResponsiveNavLink
-                        :href="route('home')"
+                        :href="`https://${edition}.sinf.pt`"
                         :active="edition === new Date().getFullYear()"
                     >
                         {{ edition }}
