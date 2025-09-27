@@ -32,8 +32,8 @@ COPY routes/ ./routes/
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev --prefer-dist
 
-# deploy
-FROM trafex/php-nginx:3.6.0 AS deploy
+# deploy-nocache
+FROM trafex/php-nginx:3.6.0 AS deploy-nocache
 WORKDIR /var/www/html
 
 USER root
@@ -71,11 +71,19 @@ COPY --chown=nobody --from=assets-build /app/public/ ./public/
 
 ENV APP_ENV=${LARAVEL_ENV}
 
-RUN [ -z "${LARAVEL_ENV_FILE_KEY}" ] || ( mv .env.${LARAVEL_ENV} .env.${LARAVEL_ENV}.encrypted && php artisan env:decrypt -n --env=${LARAVEL_ENV} --key=${LARAVEL_ENV_FILE_KEY} )
+ARG LARAVEL_VARS_CONTENT
+
+RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env.local
+
+COPY --chown=nobody ./etc/entrypoint.nocache.sh /entrypoint.sh
+CMD [ "/entrypoint.sh" ]
+
+# deploy
+FROM deploy-nocache AS deploy
+
 RUN php artisan storage:link -n
 RUN php artisan event:cache -n
 RUN php artisan route:cache -n
 RUN php artisan view:cache -n
 
 COPY --chown=nobody ./etc/entrypoint.sh /entrypoint.sh
-CMD [ "/entrypoint.sh" ]

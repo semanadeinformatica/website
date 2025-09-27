@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Upload to NIployments register
+      uses: NIAEFEUP/push-to-niployments@v2.2
+      with:
+        project_name: sinf
+        docker_dockerfile: Dockerfile.website
+        docker_context: .
+        docker_target: deploy
+        docker_build_args: |
+          LARAVEL_ENV=${{ vars.LARAVEL_ENV }}
+          LARAVEL_VARS_CONTENT=${{ vars.LARAVEL_VARS_CONTENT }}
+        NIPLOYMENTS_REGISTRY_URL: ${{ vars.NIPLOYMENTS_REGISTRY_URL }}
+        NIPLOYMENTS_REGISTRY_USERNAME: ${{ vars.NIPLOYMENTS_REGISTRY_USERNAME }}
+        NIPLOYMENTS_REGISTRY_PASSWORD: ${{ secrets.NIPLOYMENTS_REGISTRY_PASSWORD }}
