@@ -76,6 +76,8 @@ CMD [ "/entrypoint.sh" ]
 # deploy
 FROM deploy-nocache AS deploy
 
+ARG LARAVEL_VARS_CONTENT
+
 RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env.local
 
 RUN php artisan storage:link -n
