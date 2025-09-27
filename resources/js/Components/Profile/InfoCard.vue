@@ -16,27 +16,27 @@ defineProps<Props>();
 const socials = {
     facebook: {
         icon: "io-logo-facebook",
-        color: "red",
+        color: "white",
     },
     linkedin: {
         icon: "io-logo-linkedin",
-        color: "red-dark",
+        color: "white",
     },
     github: {
         icon: "io-logo-github",
-        color: "teal-dark",
+        color: "white",
     },
     twitter: {
         icon: "io-logo-twitter",
-        color: "orange",
+        color: "white",
     },
     instagram: {
         icon: "io-logo-instagram",
-        color: "red-dark",
+        color: "white",
     },
     website: {
         icon: "io-logo-globe",
-        color: "teal",
+        color: "white",
     },
 };
 
@@ -51,16 +51,16 @@ const iconColor: Record<string, string> = {
 
 <template>
     <div
-        class="m-4 flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-black/80 max-md:m-2 md:min-w-[30vw]"
+        class="rounded-lg flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-black/80 mr-3 max-md:mr-3 md:min-w-[30vw]"
     >
-        <div class="flex-col">
+        <div class="flex flex-col justify-between items-start space-y-10">
             <div>
                 <p class="font-bold">
                     {{ user?.name }}
                     <span v-if="isStaff" title="Staff">
                         <OhVueIcon
                             name="io-ribbon-outline"
-                            scale="1.3"
+                            scale="1.4"
                         ></OhVueIcon>
                     </span>
                 </p>
@@ -68,20 +68,20 @@ const iconColor: Record<string, string> = {
                     {{ user?.email }}
                 </p>
             </div>
-            <div class="mt-10 flex">
+            <div class="flex space-x-4">
                 <template v-for="(social, key) in socials" :key="key">
                     <a
                         v-if="
                             !isAdmin(user) &&
                             user?.usertype?.social_media?.[key]
                         "
-                        class="flex w-fit rounded-full p-2.5"
+                        class="flex w-fit rounded-full"
                         target="_blank"
                         :href="user.usertype.social_media[key]"
                     >
                         <OhVueIcon
                             :name="social.icon"
-                            scale="1.3"
+                            scale="1"
                             :fill="iconColor[social.color]"
                         ></OhVueIcon>
                     </a>
@@ -91,7 +91,6 @@ const iconColor: Record<string, string> = {
         <div class="flex flex-col items-center justify-between">
             <Link
                 v-if="$page.props.auth.user?.id == user?.id"
-                class="self-start p-2.5"
                 :href="route('profile.edit')"
             >
                 <svg
@@ -104,7 +103,7 @@ const iconColor: Record<string, string> = {
                         stroke="currentColor"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="36"
+                        stroke-width="24"
                         d="M384 224v184a40 40 0 01-40 40H104a40 40 0 01-40-40V168a40 40 0 0140-40h167.48"
                     />
                     <path
@@ -120,10 +119,10 @@ const iconColor: Record<string, string> = {
             <template v-if="isAdmin(user) || isStaff || isCompany(user)">
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <Link
-                    class="flex w-fit cursor-pointer rounded-full text-2023-teal"
+                    class="flex w-fit cursor-pointer rounded-full text-2025-blue"
                     :href="route('user.scan-code')"
                 >
-                    <OhVueIcon name="io-camera" scale="1.4"></OhVueIcon>
+                    <OhVueIcon name="io-camera" scale="1"></OhVueIcon>
                 </Link>
             </template>
             <QRCode

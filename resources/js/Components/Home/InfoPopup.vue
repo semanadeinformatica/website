@@ -33,15 +33,15 @@ const enroll = () => {
         ref="modal"
         v-model="options.modelValue"
         class="flex items-center justify-center"
-        content-class="max-w-xl mx-4 p-4 bg-2023-bg border border-black border-solid flex relative justify-center items-center flex-col gap-8"
+        content-class="max-w-xl mx-4 p-4 bg-2025-blue border border-black border-solid flex relative justify-center items-center flex-col gap-8 rounded-lg"
         @closed="cacheSeenInfo()"
     >
         <div
-            class="flex flex-col items-center gap-6 text-center text-xl text-2023-teal-dark"
+            class="flex flex-col items-center gap-6 text-center text-xl text-white"
         >
-            <img class="w-80" src="images/sinf logo.png" />
+            <img class="w-80 p-6" src="images/sinf logo.png" />
             <p>
-                A <span class="font-bold text-2023-red-dark">SINF</span> está
+                A <span class="font-bold text-2025-blue-dark">SINF</span> está
                 mais interactiva do que nunca!
             </p>
             <ul class="flex flex-col items-center">
@@ -50,7 +50,7 @@ const enroll = () => {
                     <a
                         :href="route('program', { day: 6 })"
                         target="_blank"
-                        class="text-2023-red underline"
+                        class="text-2025-blue-dark underline"
                         >Workshops e Palestras</a
                     >
                 </li>
@@ -59,7 +59,7 @@ const enroll = () => {
                     <a
                         :href="route('program', { day: 1 })"
                         target="_blank"
-                        class="text-2023-red underline"
+                        class="text-2025-blue-dark underline"
                         >Bancas de Empresas</a
                     >
                 </li>
@@ -68,7 +68,7 @@ const enroll = () => {
                     <a
                         :href="route('program', { day: 3 })"
                         target="_blank"
-                        class="text-2023-red underline"
+                        class="text-2025-blue-dark underline"
                         >Competições de CTF e Programação</a
                     >
                 </li>
@@ -78,12 +78,12 @@ const enroll = () => {
                 <a
                     :href="route('shop.show')"
                     target="_blank"
-                    class="text-2023-red underline"
+                    class="text-2025-blue-dark underline"
                     >Loja</a
                 >
             </p>
             <PrimaryButton
-                color="red"
+                color="teal"
                 shadow="teal"
                 text-size="text-2xl"
                 padding="sm:px-8"

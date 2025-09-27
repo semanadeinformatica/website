@@ -43,9 +43,9 @@ const clearPhotoFileInput = () => {
 </script>
 
 <template>
-    <div class="flex items-end max-md:mb-6">
+    <div class="flex items-end max-md:mb-6 justify-center">
         <div
-            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-white max-md:ml-8"
+            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-white max-md:ml-6"
         >
             <img
                 :src="item?.profile_photo_url"
