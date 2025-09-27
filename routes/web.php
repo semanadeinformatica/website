@@ -27,6 +27,7 @@ use App\Http\Controllers\StaffCRUDController;
 use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCRUDController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -68,6 +69,8 @@ Route::prefix('/event')->name('event')->group(function () {
     });
 });
 
+
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::put('/enroll', [EnrollmentController::class, 'store'])
@@ -78,6 +81,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 ->name('quest.give');
         });
 
+        Route::prefix("/certificate")->group(function () {
+            Route::get('/generate', [CertificateController::class, 'generateCertificate'])
+                ->name('certificate.generate');
+
+            Route::get('/preview', [CertificateController::class, 'previewCertificate'])
+                ->name('certificate.preview');
+        });
+
+        
         Route::prefix('admin')
             ->middleware('can:admin')
             ->name('admin.')

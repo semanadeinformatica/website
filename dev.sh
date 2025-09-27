@@ -30,6 +30,8 @@ worker=$!
 rm -rf node_modules
 ./sail npm install
 
+./sail npx puppeteer browsers install chrome
+
 ./sail npm run dev &
 vite=$!
 

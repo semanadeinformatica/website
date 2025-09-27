@@ -8,6 +8,7 @@ import type Slot from "@/Types/Slot";
 import { h } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
+import CertificateWrapper from "@/Components/Profile/CertificateWrapper.vue";
 import type Session from "@/Types/Session";
 import { type User, isCompany, isParticipant } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
@@ -39,6 +40,10 @@ const buttons: Tabs =
                   label: "Conquistas",
                   component: h(StickerWrapper),
               },
+              certificates: {
+                label: "Certificados",
+                component: h(CertificateWrapper),
+              }
           }
         : isCompany(user)
         ? {
