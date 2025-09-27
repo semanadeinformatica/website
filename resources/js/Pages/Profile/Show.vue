@@ -63,7 +63,7 @@ const buttons: Tabs =
                 <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
                 <p
                     v-if="points !== null"
-                    class="text-center text-xl font-bold text-2023-teal-dark"
+                    class="text-center text-xl font-bold text-text-color"
                 >
                     Tens {{ points }}
                     <img
