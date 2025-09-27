@@ -59,11 +59,6 @@ RUN rm ./supervisord.conf
 
 USER nobody
 
-ARG LARAVEL_ENV=production
-ARG LARAVEL_ENV_FILE=.env.${LARAVEL_ENV}
-ARG LARAVEL_ENV_FILE_KEY=""
-
-COPY --chown=nobody ${LARAVEL_ENV_FILE} ./.env.${LARAVEL_ENV}
 COPY --chown=nobody public/ ./public/
 COPY --chown=nobody storage/ ./storage/
 COPY --chown=nobody --from=laravel-build /app/ ./
