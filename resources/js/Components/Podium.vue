@@ -27,7 +27,7 @@ const images = computed(() => {
             : `https://ui-avatars.com/api/?size=512&name=${team.name
                   .split(" ")
                   .map((t) => t[0])
-                  .join("+")}&color=f8f5e7&background=d94f04`,
+                  .join("+")}&color=ffffff&background=3a9699`,
     );
 });
 
@@ -86,7 +86,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
                     y="3.5"
                     width="271"
                     height="271"
-                    rx="15.5"
+                    rx="135.5"
                     stroke="#007172"
                     stroke-width="7"
                 />
@@ -105,7 +105,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
                     y="76.5"
                     width="271"
                     height="271"
-                    rx="15.5"
+                    rx="135.5"
                     stroke="#007172"
                     stroke-width="7"
                 />
@@ -125,7 +125,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
                     y="98.5"
                     width="271"
                     height="271"
-                    rx="15.5"
+                    rx="135.5"
                     stroke="#007172"
                     stroke-width="7"
                 />

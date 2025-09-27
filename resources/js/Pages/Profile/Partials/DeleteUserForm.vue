@@ -61,17 +61,17 @@ const closeModal = () => {
                 <template #title> Apagar conta </template>
 
                 <template #content>
-                    Tens a certeza de que desejas apagar a tua conta? Uma vez
+                    <p>Tens a certeza de que desejas apagar a tua conta? Uma vez
                     que a tua conta é excluída, todos os teus recursos e dados
                     serão apagados permanentemente. Por favor, insere a tua
                     password para confirmar que queres apagar permanentemente a
-                    tua conta.
+                    tua conta.</p>
 
                     <TextInput
                         ref="passwordInput"
                         v-model="form.password"
                         type="password"
-                        class="mt-1 block w-3/4"
+                        class=" p block w-full text-2025-blue"
                         label="Password"
                         autocomplete="current-password"
                         :error-message="form.errors.password"

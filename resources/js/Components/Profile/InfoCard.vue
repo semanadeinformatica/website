@@ -119,7 +119,7 @@ const iconColor: Record<string, string> = {
             <template v-if="isAdmin(user) || isStaff || isCompany(user)">
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <Link
-                    class="flex w-fit cursor-pointer rounded-full text-2025-blue"
+                    class="flex w-fit cursor-pointer rounded-full text-white"
                     :href="route('user.scan-code')"
                 >
                     <OhVueIcon name="io-camera" scale="1"></OhVueIcon>

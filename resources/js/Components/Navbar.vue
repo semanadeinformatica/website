@@ -188,7 +188,7 @@ onUnmounted(() => {
                 </template>
                 <template v-else>
                     <a :href="route('login')">
-                        <OhVueIcon name="io-person" scale="1.7" fill="#025259">
+                        <OhVueIcon name="io-person" scale="1.7" fill="#ffffff">
                         </OhVueIcon>
                     </a>
                 </template>
