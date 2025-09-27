@@ -69,6 +69,7 @@ ENV APP_ENV=${LARAVEL_ENV}
 ARG LARAVEL_VARS_CONTENT
 
 RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env.local
+RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env
 
 COPY --chown=nobody ./etc/entrypoint.nocache.sh /entrypoint.sh
 CMD [ "/entrypoint.sh" ]
@@ -79,6 +80,7 @@ FROM deploy-nocache AS deploy
 ARG LARAVEL_VARS_CONTENT
 
 RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env.local
+RUN echo "${LARAVEL_VARS_CONTENT}" | base64 -d > .env
 
 RUN php artisan storage:link -n
 RUN php artisan event:cache -n
