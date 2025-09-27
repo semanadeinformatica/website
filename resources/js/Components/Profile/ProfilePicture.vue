@@ -45,7 +45,7 @@ const clearPhotoFileInput = () => {
 <template>
     <div class="flex items-end max-md:mb-6">
         <div
-            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-2023-teal max-md:ml-8"
+            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-white max-md:ml-8"
         >
             <img
                 :src="item?.profile_photo_url"
@@ -66,7 +66,7 @@ const clearPhotoFileInput = () => {
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-6 text-2023-teal"
+                class="w-6 text-white"
                 viewBox="0 0 512 512"
             >
                 <path

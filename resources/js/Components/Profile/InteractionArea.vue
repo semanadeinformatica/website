@@ -48,12 +48,12 @@ onMounted(() => {
     <section class="flex h-full w-full flex-1 flex-col pt-10">
         <div
             id="tab-picker"
-            class="flex flex-row justify-center gap-4 pt-5 font-bold text-2023-teal"
+            class="flex flex-row justify-center gap-4 pt-5 font-bold text-2025-blue-dark"
         >
             <button
                 v-for="(button, id) in buttons"
                 :key="id"
-                class="transition"
+                class="transition text-"
                 :data-type="id"
                 @click="toggle"
             >
@@ -68,7 +68,7 @@ onMounted(() => {
 
 <style scoped>
 .selected {
-    color: rgb(242, 147, 37);
+    color: rgb(255, 255, 255);
     text-decoration: underline;
 }
 </style>

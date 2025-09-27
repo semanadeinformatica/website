@@ -66,7 +66,7 @@ defineExpose({ focus: () => input.value?.focus() });
 defineOptions({ inheritAttrs: false });
 
 const baseClass =
-    "peer border border-white bg-white shadow-md shadow-2025-blue px-3 pb-2 pt-6 disabled:opacity-50 disabled:text-gray-500 disabled:shadow-gray-500 disabled:shadow-md";
+    "peer border border-white bg-white shadow-md shadow-black/80 rounded-md px-3 pb-2 pt-6 disabled:opacity-50 disabled:text-gray-500 disabled:shadow-gray-500 disabled:shadow-md";
 
 const visible = ref(false);
 </script>

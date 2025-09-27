@@ -52,7 +52,7 @@ const formattedDate = (
             }}
         </span>
         <span
-            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2025-blue border border-white text-xl font-semibold text-white"
+            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2025-blue border border-white shadow shadow-black/80 text-xl font-semibold text-text-color"
             >i</span
         >
     </article>

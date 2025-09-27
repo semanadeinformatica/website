@@ -3,7 +3,7 @@ import type Department from "@/Types/Department";
 import TeamMember from "./TeamMember.vue";
 
 const shadowColor: Record<string, string> = {
-    orange: "shadow-2023-orange",
+    orange: "shadow-black/80",
     "teal-dark": "shadow-2023-teal-dark",
     "red-dark": "shadow-2023-red-dark",
     red: "shadow-2023-red",
@@ -30,7 +30,7 @@ defineProps<{
         class="flex flex-col items-center gap-4"
     >
         <p
-            class="text-text-color w-fit border border-black p-2 px-6 text-center text-xl font-bold shadow"
+            class="text-text-color w-fit border border-white rounded-md p-2 px-6 text-center text-xl font-bold shadow shadow-black/80"
             :class="shadowColor[color]"
         >
             {{ department.name }}

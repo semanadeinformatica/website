@@ -4,6 +4,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownTrigger from "@/Components/DropdownTrigger.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import route, {
     type QueryParams,
     type RouteParamsWithQueryOverload,
@@ -43,10 +44,30 @@ const options = {
 };
 
 const isAdmin = checkIsAdmin(props.auth.user);
+
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20; // adjust threshold
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
 </script>
 
 <template>
-    <nav class="flex border-b-2 border-black bg-2025-bg py-2">
+    <nav 
+        :class="[
+            'flex border-b-2 border-white py-2 absolute top-0 left-0 w-full',
+            isScrolled ? 'bg-2025-bg shadow-md' : 'bg-transparent'
+        ]"
+    >
         <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
             <template #trigger class="bg-white">
                 <DropdownTrigger class="group">
@@ -82,7 +103,7 @@ const isAdmin = checkIsAdmin(props.auth.user);
                 :key="page"
             >
                 <NavLink
-                    class="text-text-color"
+                    class="text-text-color hover:text-text-color"
                     :href="
                         route(route().has(page) ? page : 'home', {
                             _query,

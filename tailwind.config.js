@@ -22,9 +22,10 @@ export default {
             },
             colors: {
                 "text-color": "#ffffff",
-                "2025-bg-green": "#4b8562",
-                "2025-blue": "#2a9ba0",
-                "2025-bg": "#0f3d56",
+                "2025-bg-green": "#59B672",
+                "2025-blue": "#3A9699",
+                "2025-bg": "#1A74C2",
+                "2025-blue-dark": "#0F3D57",
                 "2023-bg": "rgb(248, 245, 231)",
                 "2023-red": "rgb(217, 79, 4)",
                 "2023-red-dark": "rgb(177, 93, 93)",
@@ -33,7 +34,7 @@ export default {
                 "2023-orange": "rgb(242, 147, 37)",
             },
             backgroundImage: {
-                "2025-bg-gradient": "linear-gradient(#0f3d56 0%, #2a9ba0 50%, #4b8562 100%)"
+                "2025-bg-gradient": "linear-gradient(45deg, #0f3d56 0%, #1A74C2 80%, #59B672 100%)"
             },
             boxShadow: {
                 sm: "2px 2px 0 -1px var(--tw-shadow-color, currentColor), 2px 2px 0 0 black",

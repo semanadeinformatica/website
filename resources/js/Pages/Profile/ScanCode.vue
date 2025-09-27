@@ -58,10 +58,10 @@ const onDetect = async ([firstDetectedCode]) => {
 <template>
     <AppLayout title="Ler QR Code">
         <div
-            class="flex w-full flex-col items-center gap-5 pt-10 text-2023-teal-dark"
+            class="flex w-full flex-col items-center gap-5 pt-10 text-text-color"
         >
             <h2
-                class="w-fit border border-black bg-2023-teal px-3 py-2 text-2xl font-bold text-2023-bg shadow shadow-2023-red"
+                class="w-fit border border-black bg-2023-teal px-3 py-2 text-2xl font-bold text-text-color shadow shadow-2023-red"
             >
                 Instruções
             </h2>

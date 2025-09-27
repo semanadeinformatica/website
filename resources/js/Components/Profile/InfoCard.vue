@@ -51,7 +51,7 @@ const iconColor: Record<string, string> = {
 
 <template>
     <div
-        class="m-4 flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-white max-md:m-2 md:min-w-[30vw]"
+        class="m-4 flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-black/80 max-md:m-2 md:min-w-[30vw]"
     >
         <div class="flex-col">
             <div>
@@ -96,7 +96,7 @@ const iconColor: Record<string, string> = {
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-8 text-2023-teal"
+                    class="w-8 text-text-color"
                     viewBox="0 0 512 512"
                 >
                     <path

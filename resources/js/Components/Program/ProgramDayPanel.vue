@@ -117,11 +117,11 @@ onMounted(() => {
     <section class="h-full w-full">
         <div
             id="tab-picker"
-            class="flex flex-row justify-center gap-4 font-bold text-text-color"
+            class="flex flex-row justify-center gap-4 font-bold text-2025-blue-dark"
         >
             <button
                 v-if="(day.talks?.length ?? 0) > 0"
-                class="transition"
+                class=""
                 data-type="talk"
                 @click="toggle"
             >
@@ -129,7 +129,7 @@ onMounted(() => {
             </button>
             <button
                 v-if="(day.activities?.length ?? 0) > 0"
-                class="transition"
+                class=""
                 data-type="activity"
                 @click="toggle"
             >
@@ -137,7 +137,7 @@ onMounted(() => {
             </button>
             <button
                 v-if="(day.stands?.length ?? 0) > 0"
-                class="transition"
+                class=""
                 data-type="stand"
                 @click="toggle"
             >
@@ -145,7 +145,7 @@ onMounted(() => {
             </button>
             <button
                 v-if="(day.competitions?.length ?? 0) > 0"
-                class="transition"
+                class=""
                 data-type="competitions"
                 @click="toggle"
             >
@@ -157,7 +157,7 @@ onMounted(() => {
         v-if="
             (selectedType === 'talk' || selectedType === 'activity') && !noInfo
         "
-        class="mr-2 mt-5 max-w-2xl border border-solid border-black p-2.5 px-8 text-justify text-lg font-bold text-text-color shadow-md shadow-white"
+        class="mr-2 mt-5 max-w-2xl border border-solid rounded-md border-white p-2.5 px-8 text-justify text-lg font-bold text-text-color shadow-md shadow-black/80"
     >
         {{ day.theme }}
     </p>
@@ -201,7 +201,7 @@ onMounted(() => {
 
 <style scoped>
 .selected {
-    color: rgb(242, 147, 37);
+    color: rgb(255, 255, 255);
     text-decoration: underline;
 }
 </style>

@@ -16,7 +16,7 @@ defineProps<Props>();
             <span class="text-2xl font-bold text-text-color">{{ label }}</span>
             <span
                 v-if="timestamp"
-                class="font-bold md:absolute md:-left-28 md:top-1/2 md:-translate-y-1/2 md:text-xl"
+                class="font-bold md:absolute md:-left-28 md:top-1/2 md:-translate-y-1/2 md:text-xl text-text-color"
                 >{{ $d(new Date(timestamp), "hourMinute") }}</span
             >
         </div>

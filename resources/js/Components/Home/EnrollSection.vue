@@ -15,7 +15,7 @@ import route from "ziggy-js";
             Estamos à tua espera!
         </p>
         <div
-            class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-green p-3 text-center text-3xl font-bold text-white sm:p-12"
+            class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-blue p-3 text-center text-3xl font-bold text-white sm:p-12"
         >
             <PrimaryButton
                 class="bg-2025-blue "

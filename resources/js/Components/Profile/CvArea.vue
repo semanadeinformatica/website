@@ -53,7 +53,7 @@ const clearCVFileInput = () => {
 <template>
     <div class="flex w-full flex-col py-12 md:px-32">
         <div
-            class="flex justify-between border-solid border-black bg-2023-teal-dark p-3 px-8 font-bold text-2023-bg"
+            class="flex justify-between border-solid border-white bg-2023-teal-dark p-3 px-8 font-bold text-2023-bg rounded-md shadow shadow-black/80"
             :class="[previewOpen ? 'border-x border-t' : 'border']"
         >
             <div class="flex items-center">
@@ -107,7 +107,7 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="mx-4 h-fit items-center justify-center border-x border-b border-solid border-black bg-2023-red-dark p-6 font-bold text-2023-bg max-md:mx-2"
+            class="mx-4 h-fit items-center justify-center border-x border-b border-solid rounded-md shadow-black/80 border-black bg-white p-6 font-bold text-2025-blue max-md:mx-2"
             :class="[previewOpen ? 'flex' : 'hidden']"
         >
             <object
@@ -139,10 +139,10 @@ const clearCVFileInput = () => {
                 !item?.usertype?.cv_path &&
                 $page.props.auth.user?.id == item.id
             "
-            class="mt-3 border-2 border-solid border-black p-3 text-2023-red"
+            class="mt-3 border-2 border-solid border-white shadow-black/80 rounded-md p-3 text-2023-red"
         >
             <p>
-                <span class="font-bold text-text-color">Porque é que o deves fazer? </span>
+                <span class="font-bold text-text-color">Por que é que o deves fazer? </span>
                 <span class="text-text-color"
                     >Esta é uma excelente oportunidade para te dares a conhecer
                     às empresas que participam na SINF!</span

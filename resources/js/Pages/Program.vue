@@ -21,7 +21,7 @@ defineProps<Props>();
             class="flex flex-col items-center px-10 py-10 md:px-40"
         >
             <h1
-                class="mb-10 w-fit border border-black bg-2025-blue p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
+                class="mb-10 w-fit border border-white rounded-md bg-2025-blue p-2 px-5 text-2xl font-bold text-white shadow-md shadow-black/80"
             >
                 Programa
             </h1>
@@ -39,7 +39,7 @@ defineProps<Props>();
                             "
                             as="span"
                             :only="['eventDay', 'queryDay']"
-                            class="inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-sm bg-2025-bg text-xl font-bold text-white transition"
+                            class="inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-sm bg-2025-bg text-xl font-bold text-white transition rounded-xl"
                             :class="day == queryDay ? 'bg-2025-blue' : ''"
                             preserve-state
                             preserve-scroll

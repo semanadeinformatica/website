@@ -42,7 +42,7 @@ const formattedDate = (
     <AppLayout title="Competição">
         <header class="flex flex-col items-center gap-4 p-4 text-center">
             <h2
-                class="w-fit border border-solid border-black bg-2025-blue p-3 text-center text-2xl font-bold text-white shadow-md shadow-white xl:text-3xl 2xl:text-4xl"
+                class="w-fit border border-solid border-white bg-2025-blue rounded-md p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
             >
                 {{ competition.name }}
             </h2>
@@ -76,7 +76,7 @@ const formattedDate = (
             class="relative mt-5 border-t border-black bg-2025-blue-teal-dark text-justify"
         >
             <h2
-                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-2xl font-bold text-white shadow-md shadow-2023-bg xl:text-3xl 2xl:text-4xl"
+                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2023-red p-3 text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
             >
                 Regulamento
             </h2>
@@ -98,7 +98,7 @@ const formattedDate = (
                         Equipas: {{ competition.teams?.length }}
                     </span>
                     <div
-                        class="flex w-4/5 flex-col border border-black shadow-lg shadow-2023-teal md:w-1/2"
+                        class="flex w-4/5 flex-col border border-black shadow-lg shadow-black/80 md:w-1/2"
                     >
                         <div
                             v-for="team in competition.teams ?? []"
@@ -119,7 +119,7 @@ const formattedDate = (
                                 class="h-16 w-16 self-center rounded-sm"
                                 :alt="`Image for team ${team.name}`"
                             />
-                            <div class="flex flex-col items-end self-center">
+                            <div class="flex flex-col items-end self-center text-text-color">
                                 <span class="text-end">{{ team.name }}</span>
                                 <span>{{ team.points }} pontos</span>
                             </div>
@@ -170,7 +170,7 @@ const formattedDate = (
 
                 <a
                     :href="competition.registration_link"
-                    class="relative mt-5 content-center justify-center border border-black bg-2025-blue px-8 py-2 text-center text-2xl font-semibold text-white shadow-2023-orange transition-shadow hover:shadow-md active:shadow-none"
+                    class="relative mt-5 content-center justify-center border border-black bg-2025-blue px-8 py-2 text-center text-2xl font-semibold text-white shadow-black/80 transition-shadow hover:shadow-md active:shadow-none"
                 >
                     Participar!
                 </a>

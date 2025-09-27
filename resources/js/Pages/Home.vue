@@ -54,13 +54,13 @@ const formattedDate = (
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
-            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black bg-2025-bg-gradient p-2 px-3 font-bold text-white shadow shadow-2023-teal"
+            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black p-2 px-3 font-bold text-white shadow shadow-2023-teal bg-2025-blue"
         >
             <OhVueIcon name="io-arrow-down" fill="white" />
         </a>
         <!-- LOGO & DATE -->
         <section
-            class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16 bg-2025-bg-gradient"
+            class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
         >
             <img
                 id="svg-1"
@@ -92,21 +92,14 @@ const formattedDate = (
                     >{{ edition.year }}</span
                 > -->
             </div>
+            
             <p
-                class="text-text-color mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
             >
                 semana_de_informática
             </p>
             <p class="margin-0 text-2xl font-bold text-text-color">
-                {{
-                    days.length > 0
-                        ? formattedDate(
-                              $d(new Date(days[0].date), "long"),
-                              $t("general.to"),
-                              $d(new Date(days[days.length - 1].date), "long"),
-                          )
-                        : ""
-                }}
+                21 a 23 de outubro 
             </p>
         </section>
         <!-- ABOUT US -->
@@ -115,7 +108,7 @@ const formattedDate = (
         >
             <h2
                 id="aboutus"
-                class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-black bg-2025-blue p-3 text-3xl font-bold text-white shadow-md shadow-2023-bg"
+                class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-white rounded-md bg-2025-blue p-3 text-3xl font-bold text-white shadow-md shadow-black/80"
             >
                 Sobre nós
             </h2>
@@ -129,7 +122,7 @@ const formattedDate = (
         <!-- GENERAL INFO -->
         <section class="relative flex flex-col py-24 max-xs:items-center">
             <h2
-                class="absolute left-[calc(10%+70px)] top-14 w-fit border border-solid border-black bg-2025-blue p-2 text-2xl font-bold text-white shadow-md shadow-2023-teal-dark max-xs:relative max-xs:left-0 max-xs:top-6"
+                class="absolute left-[calc(10%+70px)] top-14 w-fit border rounded-md border-white bg-2025-blue p-2 text-2xl font-bold text-white shadow-md shadow-black/80  max-xs:relative max-xs:left-0 max-xs:top-6"
             >
                 Este ano temos...
             </h2>
@@ -142,7 +135,7 @@ const formattedDate = (
                 "
             >
                 <div
-                    class="mx-[10%] grid gap-4 border border-solid border-black p-12 text-xl font-bold text-text-color shadow-2xl shadow-2025-blue max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
+                    class="mx-[10%] grid gap-4 border rounded-md border-solid border-white p-12 text-xl font-bold text-text-color shadow-2xl shadow-black/50 max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
                 >
                     <span v-if="days.length !== 0" class="text-center"
                         >{{ days.length }} dias</span
@@ -160,7 +153,7 @@ const formattedDate = (
             </template>
             <template v-else>
                 <div
-                    class="mx-[10%] flex items-center justify-center gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-2023-orange max-lg:grid-cols-2 max-xs:grid-cols-1"
+                    class="mx-[10%] flex items-center justify-center gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-black/50 max-lg:grid-cols-2 max-xs:grid-cols-1"
                 >
                     Muitas novidades para ti! Está quase...
                 </div>
@@ -172,7 +165,7 @@ const formattedDate = (
             class="grid-rows-[repeat(3, 1fr)] my-10 mb-5 grid grid-cols-1 gap-10"
         >
             <p
-                class="mr-[5px] flex w-fit place-self-center border border-solid border-black bg-2023-blue p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
+                class="mr-[5px] flex w-fit place-self-center border border-solid border-white bg-2023-blue p-3 rounded-md text-2xl font-bold text-white shadow shadow-black/80"
             >
                 Oradores
             </p>
@@ -190,7 +183,7 @@ const formattedDate = (
         <!-- SPONSORS -->
         <section id="sponsors" class="flex flex-col gap-10 px-20 py-20">
             <p
-                class="mr-[5px] flex w-min place-self-center border border-solid border-black bg-2023-blue p-3 text-2xl font-bold text-white shadow shadow-2023-bg"
+                class="mr-[5px] flex w-min place-self-center border border-solid border-white rounded-md bg-2023-blue p-3 text-2xl font-bold text-white shadow shadow-black/80"
             >
                 Patrocínios
             </p>

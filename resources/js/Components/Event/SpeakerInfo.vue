@@ -41,7 +41,7 @@ const textColor: Record<string, string> = {
 };
 
 const shadowColor: Record<string, string> = {
-    orange: "shadow-2023-orange",
+    orange: "shadow-black/80",
     "teal-dark": "shadow-2023-teal-dark",
     "red-dark": "shadow-2023-red-dark",
     red: "shadow-2023-red",

@@ -22,7 +22,7 @@ const colors: Array<string> = [
             class="flex flex-col items-center gap-7 pt-10"
         >
             <h1
-                class="w-fit border border-black bg-2025-bg p-2 px-5 text-2xl font-bold text-white shadow-md shadow-2023-bg"
+                class="w-fit border border-white rounded-md bg-2025-bg p-2 px-5 text-2xl font-bold text-white shadow-md shadow-black/80"
             >
                 Equipa
             </h1>

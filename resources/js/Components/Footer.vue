@@ -4,26 +4,26 @@ import PortoTechBanner from "@/Components/Footer/PortoTechBanner.vue";
 
 const contacts = [
     {
-        icon: "io-logo-facebook",
-        bg: "bg-2023-red",
+        social: "facebook",
         url: "https://www.facebook.com/sinfFEUP/",
     },
     {
-        icon: "io-logo-linkedin",
-        bg: "bg-2023-red-dark",
+        social: "linkedin",
         url: "https://pt.linkedin.com/company/sinffeup",
     },
     {
-        icon: "io-logo-instagram",
-        bg: "bg-2023-teal",
+        social: "instagram",
         url: "https://www.instagram.com/sinffeup/?hl=en",
     },
-    { icon: "io-mail", bg: "bg-2023-orange", url: "mailto:geral@sinf.pt" },
+    {
+        social: "web",
+        url: "mailto:geral@sinf.pt",
+    }
 ];
 </script>
 
 <template>
-    <footer class="bg-2025-bg-green py-4">
+    <footer class="bg-2025-blue-dark py-8">
         <section
             class="relative flex content-center items-center justify-center p-8 md:mx-[30%] lg:mx-[35%]"
         >
@@ -33,15 +33,10 @@ const contacts = [
                 <template v-for="platform in contacts" :key="platform">
                     <a
                         class="flex w-fit rounded-full p-2.5"
-                        :class="platform.bg"
                         target="_blank"
                         :href="platform.url"
                     >
-                        <OhVueIcon
-                            :name="platform.icon"
-                            fill="white"
-                            scale="1.3"
-                        ></OhVueIcon>
+                        <img :src="`/images/${platform.social}.svg`" class="h-20 w-20"/>
                     </a>
                 </template>
             </div>
@@ -50,15 +45,10 @@ const contacts = [
                     <template v-for="platform in contacts" :key="platform">
                         <a
                             class="flex w-fit rounded-full p-2.5"
-                            :class="platform.bg"
                             target="_blank"
                             :href="platform.url"
                         >
-                            <OhVueIcon
-                                :name="platform.icon"
-                                fill="white"
-                                scale="1.3"
-                            ></OhVueIcon>
+                            <img :src="`/images/${platform.social}.svg`" class="h-20 w-20"/>
                         </a>
                     </template>
                 </div>

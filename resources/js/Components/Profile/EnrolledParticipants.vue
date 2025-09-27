@@ -19,7 +19,7 @@ const user = usePage().props.user as Participant;
         class="mt-10 flex flex-col items-center gap-3"
     >
         <div class="flex w-full flex-col md:flex-row md:justify-between">
-            <h2 class="p-3 text-2xl font-bold text-2023-teal">
+            <h2 class="p-3 text-2xl font-bold text-text-color">
                 Participantes que visitaram a sua empresa: {{ visitors.length }}
             </h2>
             <a

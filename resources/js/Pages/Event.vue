@@ -64,7 +64,7 @@ const colorPicker = () => {
             ]"
         >
             <h1
-                class="absolute -top-7 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-white max-lg:left-auto"
+                class="absolute -top-7 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 max-lg:left-auto"
             >
                 {{ event.name }}
             </h1>
@@ -73,7 +73,7 @@ const colorPicker = () => {
                 v-html="event.description_html"
             ></div>
             <h1
-                class="absolute -bottom-5 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-xl font-bold text-white shadow-md shadow-white max-lg:left-auto"
+                class="absolute -bottom-5 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-xl font-bold text-white shadow-md shadow-black/80 max-lg:left-auto"
             >
                 Dia
                 {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},
@@ -100,7 +100,7 @@ const colorPicker = () => {
             <div
                 v-for="(company, idx) in companies"
                 :key="idx"
-                class="w-[200px] border border-black shadow shadow-white"
+                class="w-[200px] border border-black shadow shadow-black/80"
             >
                 <Sponsor :company="company" />
             </div>
@@ -193,7 +193,7 @@ const colorPicker = () => {
         >
             <div
                 v-if="enrollments.length > 0"
-                class="flex flex-col items-center overflow-y-auto border border-black bg-2025-blue shadow-lg shadow-white"
+                class="flex flex-col items-center overflow-y-auto border border-black bg-2025-blue shadow-lg shadow-black/80"
             >
                 <div
                     v-for="enrollment in enrollments"
