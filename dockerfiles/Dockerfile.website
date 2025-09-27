@@ -64,6 +64,7 @@ COPY --chown=nobody storage/ ./storage/
 COPY --chown=nobody --from=laravel-build /app/ ./
 COPY --chown=nobody --from=assets-build /app/public/ ./public/
 
+ARG LARAVEL_ENV=production
 ENV APP_ENV=${LARAVEL_ENV}
 
 ARG LARAVEL_VARS_CONTENT
