@@ -11,8 +11,8 @@ const props = defineProps<Props>();
 
 const classes = computed(() => {
     return props.active
-        ? "inline-flex items-center px-1 py-1 border-b border-2023-teal text-lg lg:text-lg font-medium leading-5 text-2023-teal focus:outline-none focus:border-2023-teal transition duration-150 ease-in-out"
-        : "inline-flex items-center px-1 py-1 border-b border-transparent text-lg lg:text-lg font-medium leading-5 text-2023-teal hover:border-2023-teal focus:outline-none focus:border-2023-teal transition duration-150 ease-in-out";
+        ? "inline-flex items-center px-1 py-1 text-lg lg:text-lg font-medium leading-5 text-2025-white focus:outline-none focus:border-2023-teal transition duration-150 ease-in-out"
+        : "inline-flex items-center px-1 py-1 text-lg lg:text-lg font-medium leading-5 text-2025-white hover:border-2023-teal focus:outline-none focus:border-2023-teal transition duration-150 ease-in-out";
 });
 </script>
 

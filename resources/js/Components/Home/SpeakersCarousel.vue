@@ -59,7 +59,7 @@ onMounted(async () => {
             <SpeakerSlide :speaker="speaker" />
         </Slide>
     </Carousel>
-    <div class="align-center flex justify-center gap-3 text-2023-teal">
+    <div class="align-center flex justify-center gap-3 text-white">
         <button @click="prev">
             <OhVueIcon name="io-arrow-back" scale="2"></OhVueIcon>
         </button>

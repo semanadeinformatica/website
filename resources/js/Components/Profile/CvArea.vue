@@ -51,10 +51,10 @@ const clearCVFileInput = () => {
 </script>
 
 <template>
-    <div class="flex w-full flex-col py-12 md:px-32">
+    <div class="flex w-full flex-col py-12">
         <div
-            class="flex justify-between border-solid border-white bg-2023-teal-dark p-3 px-8 font-bold text-2023-bg rounded-md shadow shadow-black/80"
-            :class="[previewOpen ? 'border-x border-t' : 'border']"
+            class="flex justify-between border-solid border-white bg-2025-blue p-3 px-8 font-bold text-white rounded-md"
+            :class="[previewOpen ? 'border-x border-t rounded-b-none' : 'border']"
         >
             <div class="flex items-center">
                 <p>CV</p>
@@ -107,8 +107,8 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="mx-4 h-fit items-center justify-center border-x border-b border-solid rounded-md shadow-black/80 border-black bg-white p-6 font-bold text-2025-blue max-md:mx-2"
-            :class="[previewOpen ? 'flex' : 'hidden']"
+            class="h-fit items-center justify-center border-x border-b border-solid rounded-md border-white bg-2025-blue p-6 font-bold text-white"
+            :class="[previewOpen ? 'flex rounded-t-none' : 'hidden']"
         >
             <object
                 v-if="isParticipant(item) && item.usertype?.cv_path"
@@ -139,7 +139,7 @@ const clearCVFileInput = () => {
                 !item?.usertype?.cv_path &&
                 $page.props.auth.user?.id == item.id
             "
-            class="mt-3 border-2 border-solid border-white shadow-black/80 rounded-md p-3 text-2023-red"
+            class="mt-6 border-2 border-solid border-white shadow-black/80 rounded-md p-3 text-2023-red"
         >
             <p>
                 <span class="font-bold text-text-color">Por que é que o deves fazer? </span>

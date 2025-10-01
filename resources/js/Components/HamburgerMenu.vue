@@ -14,9 +14,8 @@ interface Route {
 }
 type Routes = Record<string, Route>;
 
-const open = ref(false);
-
 const props = defineProps<{
+    modelValue?: boolean;
     options: {
         pages: Routes;
         competitions: Competition[];
@@ -24,12 +23,23 @@ const props = defineProps<{
     };
 }>();
 
-watch(open, () => {
-    document.body.classList.toggle("overflow-hidden");
+const emit = defineEmits<{
+    (e: 'update:modelValue', value: boolean): void;
+}>();
+
+const internalOpen = ref<boolean>(props.modelValue ?? false);
+
+watch(() => props.modelValue, (val) => {
+    if (val !== undefined && val !== internalOpen.value) internalOpen.value = val;
+});
+
+watch(internalOpen, (val) => {
+    emit('update:modelValue', val);
+    document.body.classList.toggle('overflow-hidden', val);
 });
 
 onUnmounted(() => {
-    document.body.classList.remove("overflow-hidden");
+    document.body.classList.remove('overflow-hidden');
 });
 </script>
 
@@ -37,13 +47,13 @@ onUnmounted(() => {
     <div class="flex md:hidden">
         <button
             aria-label="Open navigation menu"
-            class="inline-flex items-center justify-center px-2 text-2023-teal"
-            @click="open = !open"
+            class="inline-flex items-center justify-center px-2 text-white"
+            @click="internalOpen = !internalOpen"
         >
-            <template v-if="!open">
+            <template v-if="!internalOpen">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-10 text-2023-teal-dark"
+                    class="w-10 text-white"
                     viewBox="0 0 512 512"
                 >
                     <path
@@ -60,15 +70,17 @@ onUnmounted(() => {
                 <OhVueIcon
                     name="io-close"
                     scale="2.1"
-                    fill="#025259"
+                    fill="#FFFFFF"
                 ></OhVueIcon>
             </template>
         </button>
     </div>
-    <div
-        v-show="open"
-        class="absolute left-0 top-[4.9rem] m-0 flex h-screen w-full flex-col bg-2023-teal-dark py-6 text-2xl font-semibold text-2023-bg md:hidden"
-    >
+    <teleport to="body">
+        <div
+            v-show="internalOpen"
+            class="fixed left-0 top-0 m-0 flex h-screen w-full flex-col backdrop-blur-3xl py-6 text-2xl font-semibold text-white md:hidden z-20 bg-black/30"
+            style="padding-top:4.9rem"
+        >
         <div class="flex flex-col items-center">
             <template
                 v-for="({ label, _query }, page) in props.options.pages"
@@ -90,7 +102,7 @@ onUnmounted(() => {
             v-if="props.options.competitions.length > 0"
             class="flex flex-col items-center pt-6"
         >
-            <h2 class="pb-3 text-center font-bold text-2023-orange">
+            <h2 class="pb-3 text-center font-bold text-2025-bg-green">
                 Competições
             </h2>
             <template
@@ -105,7 +117,7 @@ onUnmounted(() => {
             </template>
         </section>
         <section class="py-6">
-            <h2 class="pb-3 text-center font-bold text-2023-orange">Edições</h2>
+            <h2 class="pb-3 text-center font-bold text-2025-bg-green">Edições</h2>
             <div
                 class="flex w-full flex-wrap justify-center gap-5 px-12"
                 style="grid-template-columns: repeat(auto-fill, 100px)"
@@ -124,4 +136,5 @@ onUnmounted(() => {
             </div>
         </section>
     </div>
+    </teleport>
 </template>

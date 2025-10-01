@@ -17,17 +17,17 @@ defineProps<Props>();
     <AppLayout title="Loja">
         <template v-if="products.length > 0">
             <div
-                class="flex content-center items-center justify-center self-center py-10"
+                class="flex content-center items-center justify-center self-center py-4"
             >
                 <h1
-                    class="w-fit border border-white rounded-md bg-2025-blue p-2 px-5 text-2xl font-bold text-white shadow-md shadow-black/80"
+                    class="w-fit border border-solid border-white rounded-lg bg-2025-blue p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
                 >
                     Loja
                 </h1>
             </div>
             <p
                 v-if="points !== null"
-                class="py-5 text-center text-xl font-bold text-text-color"
+                class="py-10 text-center text-xl font-bold text-text-color"
             >
                 Tens {{ points }}
                 <img
@@ -58,7 +58,7 @@ defineProps<Props>();
         <template v-else>
             <div class="flex items-center justify-center">
                 <p
-                    class="pt-80 text-center text-5xl font-bold text-2023-teal-dark"
+                    class="pt-80 text-center text-5xl font-bold text-white"
                 >
                     Em breve...
                 </p>

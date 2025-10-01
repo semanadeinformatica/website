@@ -19,10 +19,10 @@ const colors: Array<string> = [
     <AppLayout title="Equipa">
         <div
             v-if="departments.length > 0"
-            class="flex flex-col items-center gap-7 pt-10"
+            class="flex flex-col items-center gap-7 py-4"
         >
             <h1
-                class="w-fit border border-white rounded-md bg-2025-bg p-2 px-5 text-2xl font-bold text-white shadow-md shadow-black/80"
+                class="w-fit border border-solid border-white rounded-lg bg-2025-blue p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
             >
                 Equipa
             </h1>
@@ -34,7 +34,7 @@ const colors: Array<string> = [
             ></SINFTeam>
         </div>
         <div v-else>
-            <p class="pt-80 text-center text-5xl font-bold text-2023-teal-dark">
+            <p class="pt-80 text-center text-5xl font-bold text-white">
                 Em breve...
             </p>
         </div>
