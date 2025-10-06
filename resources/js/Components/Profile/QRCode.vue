@@ -31,10 +31,10 @@ const showQRCode = () => {
 
 <template>
     <button
-        class="flex w-fit cursor-pointer rounded-full p-2.5 text-text-color"
+        class="flex w-fit cursor-pointer rounded-full text-text-color"
         @click="showQRCode"
     >
-        <OhVueIcon name="io-qr-code" scale="1.4"></OhVueIcon>
+        <OhVueIcon name="io-qr-code" scale="1.2"></OhVueIcon>
     </button>
     <VueFinalModal
         v-model="modalOpen"

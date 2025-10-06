@@ -25,28 +25,26 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const classes =
-    "block w-full px-2 py-2 text-md text-2023-bg underline font-semibold bg-2025-blue hover:bg-2025-bg focus:outline-none focus:bg-2023-red transition duration-150 ease-in-out";
+    "block w-full px-2 py-2 text-md text-white underline font-semibold first:rounded-t-lg last:rounded-b-lg bg-2025-blue filter hover:brightness-90 focus:outline-none focus:bg-2025-blue-dark transition duration-150 ease-in-out";
 </script>
 
 <template>
-    <div>
-        <button v-if="as === 'button'" type="submit" :class="classes">
-            <slot />
-        </button>
+    <button v-if="as === 'button'" type="submit" :class="classes">
+        <slot />
+    </button>
 
-        <a v-else-if="as === 'a'" :href="props.href" :class="classes">
-            <slot />
-        </a>
+    <a v-else-if="as === 'a'" :href="props.href" :class="classes">
+        <slot />
+    </a>
 
-        <Link
-            v-else
-            :href="props.href"
-            :method="props.method"
-            :class="classes"
-            :only="props.only"
-            preserve-state
-        >
-            <slot />
-        </Link>
-    </div>
+    <Link
+        v-else
+        :href="props.href"
+        :method="props.method"
+        :class="classes"
+        :only="props.only"
+        preserve-state
+    >
+        <slot />
+    </Link>
 </template>

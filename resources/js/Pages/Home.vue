@@ -98,11 +98,11 @@ const formattedDate = (
 
 
             
-            <p
+            <!-- <p
                 class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
             >
                 semana_de_informática
-            </p>
+            </p> -->
             <p class="margin-0 text-2xl font-bold text-text-color">
                 21 a 23 de outubro 
             </p>
@@ -184,7 +184,7 @@ const formattedDate = (
             </template>
             <template v-else>
                 <p
-                    class="flex w-fit place-self-center text-2xl font-bold text-2023-teal-dark"
+                    class="flex w-fit place-self-center text-2xl font-bold text-white"
                 >
                     Em breve...
                 </p>

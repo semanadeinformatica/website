@@ -55,7 +55,7 @@ defineProps<Props>();
             <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
         </div>
         <div v-else class="flex items-center justify-center">
-            <p class="pt-80 text-center text-5xl font-bold text-text-color">
+            <p class="pt-80 text-center text-5xl font-bold text-white">
                 Em breve...
             </p>
         </div>

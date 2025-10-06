@@ -61,14 +61,14 @@ const onDetect = async ([firstDetectedCode]) => {
             class="flex w-full flex-col items-center gap-5 pt-10 text-text-color"
         >
             <h2
-                class="w-fit border border-black bg-2023-teal px-3 py-2 text-2xl font-bold text-text-color shadow shadow-2023-red"
+                class="w-fit border border-black bg-2025-blue px-3 py-2 text-2xl font-bold text-text-color shadow-md shadow-black/80 rounded-lg"
             >
                 Instruções
             </h2>
             <ul class="flex w-fit flex-col items-center px-4 text-center">
                 <li>
                     No perfil do participante, encontrar o ícone de QR Code
-                    <span class="text-2023-red"
+                    <span class="text-2025-blue"
                         ><OhVueIcon name="io-qr-code" /></span
                     >, clicar no ícone e dar scan ao código.
                 </li>
@@ -77,14 +77,14 @@ const onDetect = async ([firstDetectedCode]) => {
                     dígitos situado no mesmo local.
                 </li>
                 <li>
-                    <span class="font-bold text-2023-red">IMPORTANTE</span> -
+                    <span class="font-bold text-2025-blue">IMPORTANTE</span> -
                     Antes de scannar verificar a tarefa selecionada no dropdown
                     em baixo, o dia deve corresponder ao atual
                 </li>
             </ul>
             <div
                 :hidden="!scanning"
-                class="h-80 w-80 border border-black shadow-lg shadow-2023-red"
+                class="h-80 w-80 border border-black shadow-lg rounded-lg overflow-hidden"
             >
                 <QrcodeStream
                     @camera-on="scanning = true"

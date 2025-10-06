@@ -52,11 +52,11 @@ const buttons: Tabs =
 
 <template>
     <AppLayout title="Perfil">
-        <div class="flex flex-col items-center pt-6 sm:pt-0">
+        <div class="flex flex-col items-center sm:pt-0">
             <div
-                class="relative m-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[85vw]"
+                class="relative mx-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[60vw]"
             >
-                <div class="flex w-full justify-around max-md:flex-col">
+                <div class="flex w-full justify-between max-md:flex-col max-md:space-y-8">
                     <ProfilePicture :item="user" />
                     <InfoCard :user="user" :is-staff="isStaff" />
                 </div>

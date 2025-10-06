@@ -34,7 +34,7 @@ const buyProduct = () => {
 </script>
 
 <template>
-    <div class="flex max-w-[20em] flex-col border-2 border-black">
+    <div class="flex max-w-[20em] flex-col border-2 border-black rounded-lg">
         <div
             class="flex h-[20em] max-w-[20em] items-center border-b-2 border-black p-4"
         >
