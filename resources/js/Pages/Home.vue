@@ -81,6 +81,9 @@ const formattedDate = (
                 alt="Stylized SINF logo"
             />
 
+  
+       
+
             <div class="relative">
                 <img
                     class="w-96 max-ml:w-[300px]"
@@ -92,6 +95,8 @@ const formattedDate = (
                     >{{ edition.year }}</span
                 > -->
             </div>
+
+
             
             <p
                 class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
@@ -101,10 +106,14 @@ const formattedDate = (
             <p class="margin-0 text-2xl font-bold text-text-color">
                 21 a 23 de outubro 
             </p>
+            
+            <!-- CALL TO ACTION -->
+            <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         </section>
+
         <!-- ABOUT US -->
         <section
-            class="relative grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
+            class="relative my-8 grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
         >
             <h2
                 id="aboutus"
@@ -119,6 +128,7 @@ const formattedDate = (
                 {{ $t("homePage.aboutUsText2") }}
             </p>
         </section>
+        
         <!-- GENERAL INFO -->
         <section class="relative flex flex-col py-24 max-xs:items-center">
             <h2
@@ -196,8 +206,7 @@ const formattedDate = (
                 :idx="idx"
             ></SponsorBanner>
         </section>
-        <!-- CALL TO ACTION -->
-        <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
+
         <!-- MAP -->
         <!-- <section class="bg-2023-orange p-10">
             <MapComponent />

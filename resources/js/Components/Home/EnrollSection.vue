@@ -9,16 +9,11 @@ import route from "ziggy-js";
         id="enroll-section"
         class="relative mx-10 flex h-full flex-col items-center max-xs:items-center"
     >
-        <p
-            class="w-fit py-2 text-center text-3xl font-bold text-text-color sm:text-4xl"
-        >
-            Estamos à tua espera!
-        </p>
         <div
-            class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-blue p-3 text-center text-3xl font-bold text-white sm:p-12"
+            class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-blue text-center text-3xl font-bold text-white sm:p-12"
         >
             <PrimaryButton
-                class="bg-2025-blue "
+                class="bg-2025-blue shadow-black/50 shadow"
                 shadow="teal"
                 text-size="sm:text-4xl"
                 padding="sm:px-8"
@@ -30,5 +25,11 @@ import route from "ziggy-js";
                 >Inscrever-me</PrimaryButton
             >
         </div>
+        <!-- <p
+            class="w-fit py-2 text-center text-3xl font-bold text-text-color sm:text-4xl"
+        >
+            Estamos à tua espera!
+        </p> -->
+        
     </section>
 </template>
