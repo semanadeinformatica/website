@@ -13,7 +13,7 @@ import route from "ziggy-js";
             class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-blue text-center text-3xl font-bold text-white sm:p-12"
         >
             <PrimaryButton
-                class="bg-2025-blue shadow-black/50 shadow"
+                class="bg-2025-blue"
                 shadow="teal"
                 text-size="sm:text-4xl"
                 padding="sm:px-8"
@@ -30,6 +30,6 @@ import route from "ziggy-js";
         >
             Estamos à tua espera!
         </p> -->
-        
+
     </section>
 </template>

@@ -81,14 +81,14 @@ const submit = () => {
                     <a
                         target="_blank"
                         :href="route('terms.show')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >Terms of Service</a
                     >
                     and
                     <a
                         target="_blank"
                         :href="route('policy.show')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >Privacy Policy</a
                     ></span
                 >

@@ -66,7 +66,7 @@ defineExpose({ focus: () => input.value?.focus() });
 defineOptions({ inheritAttrs: false });
 
 const baseClass =
-    "peer border border-white bg-white shadow-md shadow-black/80 rounded-md px-3 pb-2 pt-6 disabled:opacity-50 disabled:text-gray-500 disabled:shadow-gray-500 disabled:shadow-md";
+    "peer border border-white bg-white rounded-md px-3 pb-2 pt-6 disabled:opacity-50 disabled:text-gray-500";
 
 const visible = ref(false);
 </script>
@@ -112,7 +112,7 @@ const visible = ref(false);
         <label
             v-if="label"
             :for="id"
-            class="pointer-events-none absolute left-3 top-2 text-xs font-semibold text-2023-teal transition-all peer-disabled:text-gray-500 peer-disabled:opacity-50 peer-placeholder-shown:peer-[&:not(:focus)]:top-4 peer-placeholder-shown:peer-[&:not(:focus)]:text-base"
+            class="pointer-events-none absolute left-3 top-2 text-xs font-semibold text-2025-blue transition-all peer-disabled:text-gray-500 peer-disabled:opacity-50 peer-placeholder-shown:peer-[&:not(:focus)]:top-4 peer-placeholder-shown:peer-[&:not(:focus)]:text-base"
             :aria-describedby="`${id}-error`"
             >{{ label }}</label
         >
@@ -120,7 +120,7 @@ const visible = ref(false);
         <button
             v-if="type === 'password'"
             type="button"
-            class="absolute right-2 top-2 p-2 leading-4 text-2023-teal peer-disabled:text-gray-500 peer-disabled:opacity-50"
+            class="absolute right-2 top-2 p-2 leading-4 text-2025-blue peer-disabled:text-gray-500 peer-disabled:opacity-50"
             @click="visible = !visible"
         >
             <OhVueIcon

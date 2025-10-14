@@ -54,8 +54,12 @@ const formattedDate = (
         <a
             v-if="canEnroll"
             href="#enroll-wrapper"
-            class="group fixed bottom-10 right-12 z-50 cursor-pointer border border-black p-2 px-3 font-bold text-white shadow shadow-2023-teal bg-2025-blue"
-        >
+            class="group fixed bottom-10 right-12 z-50
+                grid place-items-center
+                w-12 h-12 rounded-full
+                text-white shadow bg-2025-bg-gradient
+                transition-transform duration-200 hover:scale-105"
+                >
             <OhVueIcon name="io-arrow-down" fill="white" />
         </a>
         <!-- LOGO & DATE -->
@@ -81,8 +85,8 @@ const formattedDate = (
                 alt="Stylized SINF logo"
             />
 
-  
-       
+
+
 
             <div class="relative">
                 <img
@@ -97,27 +101,27 @@ const formattedDate = (
             </div>
 
 
-            
+
             <!-- <p
                 class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
             >
                 semana_de_informática
             </p> -->
             <p class="margin-0 text-2xl font-bold text-text-color">
-                21 a 23 de outubro 
+                21 a 23 de outubro
             </p>
-            
+
             <!-- CALL TO ACTION -->
             <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
         </section>
 
         <!-- ABOUT US -->
         <section
-            class="relative my-8 grid grid-flow-row grid-cols-2 border-t border-black bg-2023-teal-dark text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
+            class="relative my-8 grid grid-flow-row grid-cols-2 text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2 bg-white/5 backdrop-blur-sm"
         >
             <h2
                 id="aboutus"
-                class="absolute -top-9 left-[calc(50%-88.2415px)] border border-solid border-white rounded-md bg-2025-blue p-3 text-3xl font-bold text-white shadow-md shadow-black/80"
+                class="absolute left-[calc(10%+70px)] top-14 w-fit rounded-md bg-2025-blue p-3 text-3xl font-bold text-white max-xs:relative max-xs:left-0 max-xs:top-6"
             >
                 Sobre nós
             </h2>
@@ -128,13 +132,13 @@ const formattedDate = (
                 {{ $t("homePage.aboutUsText2") }}
             </p>
         </section>
-        
+
         <!-- GENERAL INFO -->
         <section class="relative flex flex-col py-24 max-xs:items-center">
             <h2
-                class="absolute left-[calc(10%+70px)] top-14 w-fit border rounded-md border-white bg-2025-blue p-2 text-2xl font-bold text-white shadow-md shadow-black/80  max-xs:relative max-xs:left-0 max-xs:top-6"
+                class="left-[calc(10%+70px)] top-14 w-fit rounded-md bg-2025-blue-dark p-2 text-2xl font-bold text-white max-xs:relative max-xs:left-0 max-xs:top-6"
             >
-                Este ano temos...
+                Este ano temos
             </h2>
             <template
                 v-if="
@@ -145,7 +149,7 @@ const formattedDate = (
                 "
             >
                 <div
-                    class="mx-[10%] grid gap-4 border rounded-md border-solid border-white p-12 text-xl font-bold text-text-color shadow-2xl shadow-black/50 max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
+                    class="mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-sm border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around"
                 >
                     <span v-if="days.length !== 0" class="text-center"
                         >{{ days.length }} dias</span
@@ -163,7 +167,8 @@ const formattedDate = (
             </template>
             <template v-else>
                 <div
-                    class="mx-[10%] flex items-center justify-center gap-4 border border-solid border-black p-12 text-xl font-bold text-2023-teal shadow-2xl shadow-black/50 max-lg:grid-cols-2 max-xs:grid-cols-1"
+                    class="mx-[10%] flex items-center justify-center gap-4 p-12 text-xl font-bold text-2023-teal shadow-2xl max-lg:grid-cols-2 max-xs:grid-cols-1
+                   bg-white/5 backdrop-blur-sm border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]"
                 >
                     Muitas novidades para ti! Está quase...
                 </div>
@@ -175,7 +180,7 @@ const formattedDate = (
             class="grid-rows-[repeat(3, 1fr)] my-10 mb-5 grid grid-cols-1 gap-10"
         >
             <p
-                class="mr-[5px] flex w-fit place-self-center border border-solid border-white bg-2023-blue p-3 rounded-md text-2xl font-bold text-white shadow shadow-black/80"
+                class="bg-2025-blue-dark mr-[5px] flex w-fit place-self-center p-3 rounded-md text-2xl font-bold text-white"
             >
                 Oradores
             </p>
@@ -193,7 +198,7 @@ const formattedDate = (
         <!-- SPONSORS -->
         <section id="sponsors" class="flex flex-col gap-10 px-20 py-20">
             <p
-                class="mr-[5px] flex w-min place-self-center border border-solid border-white rounded-md bg-2023-blue p-3 text-2xl font-bold text-white shadow shadow-black/80"
+                class=" mr-[5px] flex w-min place-self-center rounded-md bg-2025-blue-dark p-3 text-2xl font-bold text-white "
             >
                 Patrocínios
             </p>

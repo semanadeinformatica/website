@@ -21,7 +21,7 @@ defineProps<Props>();
             class="flex flex-col items-center px-10 py-10 md:px-40"
         >
             <h1
-                class="mb-10 w-fit border border-white rounded-md bg-2025-blue p-2 px-5 text-2xl font-bold text-white shadow-md shadow-black/80"
+                class="mb-10 w-fit border border-white rounded-md bg-2025-blue p-2 px-5 text-3xl font-bold text-white"
             >
                 Programa
             </h1>
@@ -34,7 +34,7 @@ defineProps<Props>();
                         <Link
                             :href="
                                 route(route().current() ?? 'program', {
-                                    day,
+                                    day,    
                                 })
                             "
                             as="span"
