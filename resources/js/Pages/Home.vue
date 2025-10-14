@@ -248,8 +248,8 @@ const formattedDate = (
                 "
             >
                 <div
-                    class="mt-10 mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-sm border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around transition-transform duration-300 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]
+                    class="mt-10 mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around transition-transform duration-300 hover:scale-105
+           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
            focus:outline-none"
                 >
