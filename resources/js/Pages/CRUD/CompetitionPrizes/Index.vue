@@ -51,7 +51,6 @@ const competitionNames = computed<Record<number, string>>(() =>
             <HeaderRow>
                 <Header>Edição</Header>
                 <Header sort-by="place">Lugar</Header>
-                <Header>Imagem</Header>
                 <Header>Competição</Header>
             </HeaderRow>
         </template>
@@ -60,7 +59,6 @@ const competitionNames = computed<Record<number, string>>(() =>
             <Row name="competitionPrizes" :item="item">
                 <Cell>{{ editions[item.competition_id] }}</Cell>
                 <Cell>{{ item.place }}</Cell>
-                <Cell>{{ item.prize_picture?.name ?? "N/A" }}</Cell>
                 <Cell>{{ competitionNames[item.competition_id] }}</Cell>
             </Row>
         </template>
