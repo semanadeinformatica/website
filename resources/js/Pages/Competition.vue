@@ -42,7 +42,7 @@ const formattedDate = (
     <AppLayout title="Competição">
         <header class="flex flex-col items-center gap-4 p-4 text-center">
             <h2
-                class="w-fit border border-solid border-white bg-2025-blue rounded-lg p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
+                class="w-fit bg-2025-blue rounded-lg p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
             >
                 {{ competition.name }}
             </h2>
@@ -73,10 +73,10 @@ const formattedDate = (
         <!-- RULES -->
 
         <section
-            class="relative mt-5 border-t border-black text-justify"
+            class="relative mt-5 border-8 border-white/5 text-justify"
         >
             <h2
-                class="absolute -top-9 left-1/2 -translate-x-1/2 transform border border-solid border-black bg-2025-blue p-3 text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl rounded-lg"
+                class="absolute -top-9 left-1/2 -translate-x-1/2 transform bg-2025-blue-dark p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl rounded-lg"
             >
                 Regulamento
             </h2>
@@ -138,11 +138,11 @@ const formattedDate = (
                 v-if="!isEnrolled"
                 class="relative flex flex-col content-center items-center justify-center py-24"
             >
-                <span class="text-2xl font-bold text-2023-teal">
+                <span class="text-2xl font-bold text-white">
                     Ainda não estás inscrito na SINF
                 </span>
                 <div
-                    class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-blue p-3 text-center text-3xl font-bold text-white sm:p-12"
+                    class="mx-10 flex h-full flex-1 flex-col items-center p-3 text-center text-3xl font-bold text-white sm:p-12"
                 >
                     <PrimaryButton
                         color="orange"
