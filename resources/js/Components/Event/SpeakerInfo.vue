@@ -59,34 +59,40 @@ const iconColor: Record<string, string> = {
 </script>
 
 <template>
+        <div
+            class="flex w-fit flex-row flex-wrap gap-8"
+            :class="reverse ? 'flex-row-reverse self-end' : ''"
+        >
+            <div
+            class="group relative flex flex-col items-center overflow-hidden rounded-full"
+            >
+    <img
+        class="h-52 w-52 object-cover shadow transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:scale-[1.02] group-hover:brightness-95"
+        :src="user.profile_photo_url"
+        :alt="user.usertype?.display_name ?? user.name + ' profile photo'"
+    />
     <div
-        class="flex w-fit flex-row flex-wrap gap-8"
-        :class="reverse ? 'flex-row-reverse self-end' : ''"
+        v-if="Object.keys(user.usertype?.social_media ?? {}).length > 0"
+        class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all duration-300 ease-in-out group-hover:-bottom-7"
+        :class="shadowColor[color]"
     >
-        <div class="flex flex-col items-center gap-5">
-            <img
-                class="h-52 w-52 border-2 border-black object-cover shadow-lg"
-                :class="shadowColor[color]"
-                :src="user.profile_photo_url"
-                :alt="
-                    user.usertype?.display_name ?? user.name + ' profile photo'
-                "
+        <template v-for="(social, key) in socials" :key="key">
+        <a
+            v-if="user.usertype?.social_media?.[key]"
+            :href="String(user.usertype?.social_media?.[key])"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mx-2"
+        >
+            <OhVueIcon
+            :name="social.icon"
+            fill="white"
+            scale="1.4"
             />
-            <div class="flex items-center gap-1">
-                <template v-for="(social, key) in socials" :key="key">
-                    <a
-                        v-if="user.usertype?.social_media?.[key]"
-                        :href="user.usertype?.social_media?.[key]"
-                    >
-                        <OhVueIcon
-                            :name="social.icon"
-                            :fill="iconColor[color]"
-                            scale="1.4"
-                        ></OhVueIcon>
-                    </a>
-                </template>
-            </div>
-        </div>
+        </a>
+        </template>
+    </div>
+    </div>
         <div
             class="flex flex-col justify-center gap-10"
             :class="textColor[color]"

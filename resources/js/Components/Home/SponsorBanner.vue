@@ -7,100 +7,98 @@ import type { CompanyUser } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 
 const carousel = ref<typeof Carousel | null>(null);
-
-const next = () => {
-    carousel.value?.next();
-};
-
-const prev = () => {
-    carousel.value?.prev();
-};
+const next = () => carousel.value?.next();
+const prev = () => carousel.value?.prev();
 
 const props = defineProps<{
-    sponsors: SponsorType[];
-    color: string; // TODO: find a way to force this to be in the theme defined this year
-    title: string;
-    idx: number;
+  sponsors: SponsorType[];
+  color: string; // e.g. '#1A74C2'
+  title: string;
+  idx: number;
 }>();
 
 const numCols = computed(() =>
-    props.sponsors?.length > 3
-        ? Math.ceil(props.sponsors?.length / 2) * 2
-        : props.sponsors?.length * 2,
+  props.sponsors?.length > 3
+    ? Math.ceil(props.sponsors?.length / 2) * 2
+    : props.sponsors?.length * 2
 );
 
 const sizes = ["max-h-72", "max-h-56", "max-h-40"];
-
-const size = computed(() => sizes[props.idx % sizes.length]); // TODO: we know for a fact that there are 3 sizes, so we can just use the idx to get the size. This can change in the following editions so be careful with that
+const size = computed(() => sizes[props.idx % sizes.length]);
 </script>
 
 <template>
-    <div :style="`color: ${color}`">
-        <p class="text-2xl font-bold">{{ title }}</p>
-        <div
-            class="max-h grid justify-around justify-items-stretch gap-4 border border-solid border-black p-10 shadow-2xl max-lg:hidden"
-            :style="`grid-template-columns: repeat(${numCols}, 1fr)`"
-        >
-            <template v-if="sponsors.length">
-                <Sponsor
-                    v-for="(sponsor, i) in sponsors"
-                    :key="sponsor.id"
-                    :company="sponsor.company?.user as CompanyUser"
-                    :class="[
-                        sponsors.length > 3 &&
-                        sponsors.length % 2 &&
-                        i == Math.ceil(props.sponsors.length / 2)
-                            ? 'col-start-2'
-                            : '',
-                        size,
-                    ]"
-                    class="self-center"
-                ></Sponsor>
-            </template>
-            <template v-else>
-                <p class="flex w-fit place-self-center text-2xl font-bold">
-                    Em breve...
-                </p>
-            </template>
-        </div>
-        <div
-            class="relative border border-solid border-black p-10 shadow-2xl lg:hidden"
-        >
-            <template v-if="sponsors.length">
-                <Carousel ref="carousel" :wrap-around="true" :autoplay="2000">
-                    <Slide v-for="sponsor in sponsors" :key="sponsor.id">
-                        <Sponsor
-                            :class="size"
-                            :company="sponsor.company?.user as CompanyUser"
-                        ></Sponsor>
-                    </Slide>
-                </Carousel>
-                <button
-                    class="absolute left-2 top-[calc(50%-20px)]"
-                    @click="prev"
-                >
-                    <OhVueIcon name="io-arrow-back" scale="2"></OhVueIcon>
-                </button>
-                <button
-                    class="absolute right-2 top-[calc(50%-20px)]"
-                    @click="next"
-                >
-                    <OhVueIcon name="io-arrow-forward" scale="2"></OhVueIcon>
-                </button>
-            </template>
-            <template v-else>
-                <p
-                    class="grid place-self-center self-center text-center text-2xl font-bold"
-                >
-                    Em breve...
-                </p>
-            </template>
-        </div>
-    </div>
-</template>
+  <section
+    class="relative flex flex-col items-center gap-8 rounded-2xl p-10
+           bg-white/5 backdrop-blur-sm border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]
+           max-lg:p-8"
+    :style="{ '--tier': color, borderColor: 'var(--tier)' }"
+  >
 
-<style>
-.vfm__overlay {
-    background-color: rgba(248, 245, 231, 0.5);
-}
-</style>
+    <!-- Title -->
+
+    <h3
+    class="text-3xl font-bold"
+    :style="{ color: 'var(--tier)' }"
+    >
+    {{ title }}
+    </h3>
+
+    <!-- Desktop grid -->
+    <div
+      v-if="sponsors.length"
+      class="grid justify-around justify-items-center gap-10 w-full max-lg:hidden"
+      :style="{ gridTemplateColumns: `repeat(${numCols}, 1fr)` }"
+    >
+      <Sponsor
+        v-for="(sponsor, i) in sponsors"
+        :key="sponsor.id"
+        :company="sponsor.company?.user as CompanyUser"
+        :class="[
+          sponsors.length > 3 &&
+          sponsors.length % 2 &&
+          i == Math.ceil(props.sponsors.length / 2)
+            ? 'col-start-2'
+            : '',
+          size,
+        ]"
+        class="transition-transform duration-300 hover:scale-105
+               hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
+               [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]"
+        :style="{ '--halo': `color-mix(in srgb, ${color} 40%, white 0%)` }"
+      />
+    </div>
+
+    <p v-else class="text-2xl font-semibold text-white/80 italic">
+      Em breve...
+    </p>
+
+    <!-- Mobile carousel -->
+    <div v-if="sponsors.length" class="relative w-full lg:hidden">
+      <Carousel ref="carousel" :wrap-around="true" :autoplay="2500" class="px-8">
+        <Slide v-for="sponsor in sponsors" :key="sponsor.id">
+          <Sponsor
+            :class="size"
+            :company="sponsor.company?.user as CompanyUser"
+            class="transition-transform duration-300 hover:scale-105
+                   hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]"
+          />
+        </Slide>
+      </Carousel>
+
+      <!-- Controls -->
+      <button
+        class="absolute left-3 top-[calc(50%-20px)] text-white opacity-80 hover:opacity-100 transition"
+        @click="prev"
+      >
+        <OhVueIcon name="io-arrow-back" scale="2" />
+      </button>
+      <button
+        class="absolute right-3 top-[calc(50%-20px)] text-white opacity-80 hover:opacity-100 transition"
+        @click="next"
+      >
+        <OhVueIcon name="io-arrow-forward" scale="2" />
+      </button>
+    </div>
+  </section>
+</template>

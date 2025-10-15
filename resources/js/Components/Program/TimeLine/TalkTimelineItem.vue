@@ -56,7 +56,7 @@ const formatTimeString = (time: string): string => {
             {{ $d(new Date(formatTimeString(event.time_end)), "hourMinute") }}
         </span>
         <span
-            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-2025-blue border border-white text-xl font-semibold text-white"
+            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-md bg-2025-blue text-xl font-semibold text-white"
             >i</span
         >
     </article>

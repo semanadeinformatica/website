@@ -19,11 +19,13 @@ defineProps<Props>();
             <div
                 class="flex content-center items-center justify-center self-center py-4"
             >
-                <h1
-                    class="w-fit border border-solid border-white rounded-lg bg-2025-blue p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
-                >
-                    Loja
-                </h1>
+              <h2
+                id="aboutus"
+                class=" mb-5 w-fit rounded-md bg-2025-blue p-3 px-6 text-3xl font-bold text-white xl:text-3xl 2xl:text-4xl"
+            >
+                Loja
+            </h2>
+                
             </div>
             <p
                 v-if="points !== null"
