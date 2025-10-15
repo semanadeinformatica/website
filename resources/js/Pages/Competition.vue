@@ -65,9 +65,9 @@ const formattedDate = (
         <Podium
             :leaderboard="leaderboard"
             :prizes="{
-                firstPlace: '/images/10.png',
+                firstPlace: '/images/50.png',
                 secondPlace: '/images/25.png',
-                thirdPlace: '/images/50.png',
+                thirdPlace: '/images/10.png',
             }"
         />
         <!-- RULES -->
