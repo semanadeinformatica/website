@@ -27,4 +27,5 @@ export interface CompetitionPrizes extends Model {
     competition_id: number;
     place: number;
     prize_picture?: string;
+    prize_image_url?: string;
 };

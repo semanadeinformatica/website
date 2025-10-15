@@ -14,11 +14,11 @@ const props = defineProps<Props>();
 // const prizes = computed(() => props.prizes);
 
 const images = computed(() => {
-    if (props.prizes.length > 0 && props.leaderboard.length < 3)
+    if (props.prizes.length > 0 && props.leaderboard.length <= 3)
         return [
-            props.prizes[0].prize_picture,
-            props.prizes[1].prize_picture,
-            props.prizes[2].prize_picture,
+            props.prizes[0].prize_image_url,
+            props.prizes[1].prize_image_url,
+            props.prizes[2].prize_image_url,
         ];
 
     if (props.prizes.length === 0 && props.leaderboard.length < 3) return [];
