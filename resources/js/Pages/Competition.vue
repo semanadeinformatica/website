@@ -65,7 +65,6 @@ const formattedDate = (
         </header>
 
         <Podium
-            v-if="prizes && prizes.length > 0"
             :leaderboard="leaderboard"
             :prizes="prizes"
         />

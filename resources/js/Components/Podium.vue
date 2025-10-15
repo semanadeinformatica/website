@@ -14,13 +14,15 @@ const props = defineProps<Props>();
 // const prizes = computed(() => props.prizes);
 
 const images = computed(() => {
-    // we need to have all 3 teams in order to display stuff
-    if (props.leaderboard.length < 3)
+    if (props.prizes.length > 0 && props.leaderboard.length < 3)
         return [
             props.prizes[0].prize_picture,
             props.prizes[1].prize_picture,
             props.prizes[2].prize_picture,
         ];
+
+    if (props.prizes.length === 0 && props.leaderboard.length < 3) return [];
+
     return props.leaderboard.map((team) =>
         team.image_competition_team_url
             ? team.image_competition_team_url
@@ -37,6 +39,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
 <template>
     <section class="relative flex flex-col items-center justify-center py-28">
         <svg
+            v-if="props.prizes.length > 0"
             width="75%"
             height="75%"
             viewBox="0 0 1220 582"
