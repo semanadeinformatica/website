@@ -29,7 +29,7 @@ class UserCRUDController extends CRUDController
         'instagram' => 'sometimes|nullable|string|url:https|regex:/^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]{1,30}\/?$/',
         'linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[\p{L}0-9-]{3,100}\/?$/u'],
         'twitter' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]{4,15}\/?$/'],
-        'website' => 'sometimes|nullable|string|url:https',
+        'website' => 'sometimes|nullable|string|url',
         'photo' => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
     ];
 
