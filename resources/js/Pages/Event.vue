@@ -64,7 +64,7 @@ const colorPicker = () => {
             ]"
         >
             <h1
-                class="absolute -top-7 mr-2 flex w-fit rounded-md bg-2025-blue px-6 py-2 text-3xl  px-3 text-center font-bold text-white max-lg:left-auto"
+                class="absolute -top-7 left-1/2 -translate-x-1/2 flex rounded-md bg-2025-blue py-2 px-3 text-center text-2xl font-bold text-white"
             >
                 {{ event.name }}
             </h1>
@@ -73,7 +73,7 @@ const colorPicker = () => {
                 v-html="event.description_html"
             ></div>
             <h1
-                class="absolute -bottom-5 mr-2 flex bg-2025-blue w-fit rounded-md bg-2025-blue px-3 py-2 text-xl font-bold text-white max-lg:left-auto"
+                class="absolute -bottom-5 flex bg-2025-blue w-fit rounded-md bg-2025-blue px-3 py-2 text-xl font-bold text-white max-lg:left-auto"
             >
                 Dia
                 {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},

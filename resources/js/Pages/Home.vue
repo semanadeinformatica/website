@@ -20,10 +20,7 @@ const atBottom = computed(() => {
 });
 
 function getSortedSections(): HTMLElement[] {
-  // Grab all top-level sections inside this page. If your layout wraps content,
-  // this still works because we’re querying the rendered DOM.
   const list = Array.from(document.querySelectorAll<HTMLElement>("section"));
-  // Sort by vertical position to be safe
   return list.sort((a, b) => (a.offsetTop ?? 0) - (b.offsetTop ?? 0));
 }
 
@@ -49,7 +46,6 @@ function setupObserver() {
 
   observer = new IntersectionObserver(
     (entries) => {
-      // Choose the section most centered in the viewport
       const visible = entries
         .filter(e => e.isIntersecting)
         .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
@@ -58,7 +54,6 @@ function setupObserver() {
         const idx = sections.value.findIndex(s => s === visible[0].target);
         if (idx >= 0) currentIdx.value = idx;
       } else {
-        // Fallback: find closest by scrollY
         const y = window.scrollY + window.innerHeight * 0.35;
         let nearest = 0;
         let minDelta = Number.POSITIVE_INFINITY;
@@ -72,7 +67,7 @@ function setupObserver() {
     },
     {
       root: null,
-      threshold: [0.25, 0.5, 0.75], // helps pick the "most visible" section
+      threshold: [0.25, 0.5, 0.75], 
     }
   );
 
@@ -85,7 +80,6 @@ onMounted(async () => {
   sections.value = getSortedSections();
   setupObserver();
 
-  // Keep list fresh on resize/content shifts
   const onResize = () => {
     sections.value = getSortedSections();
     setupObserver();
@@ -93,7 +87,6 @@ onMounted(async () => {
   window.addEventListener("resize", onResize);
   window.addEventListener("orientationchange", onResize);
 
-  // Store cleanup on instance for removal later
   (onMounted as any)._onResize = onResize;
 });
 
