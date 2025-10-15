@@ -52,6 +52,7 @@ class CompetitionController extends Controller
             'isOver' => $isOver,
             'isParticipant' => $isParticipant,
             'isEnrolled' => $isEnrolled,
+            'prizes' => $competition->prizes,
         ]);
     }
 }

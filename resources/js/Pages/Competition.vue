@@ -8,12 +8,14 @@ import { router } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { isAdmin } from "@/Types/User";
 import { computed } from "vue";
+import type { CompetitionPrizes } from "@/Types/Competition";
 
 interface Props {
     competition: Competition;
     isParticipant: boolean;
     isEnrolled: boolean;
     isOver: boolean;
+    prizes: CompetitionPrizes[];
 }
 
 const props = defineProps<Props>();
@@ -63,17 +65,14 @@ const formattedDate = (
         </header>
 
         <Podium
+            v-if="prizes && prizes.length > 0"
             :leaderboard="leaderboard"
-            :prizes="{
-                firstPlace: '/images/50.png',
-                secondPlace: '/images/25.png',
-                thirdPlace: '/images/10.png',
-            }"
+            :prizes="prizes"
         />
         <!-- RULES -->
 
         <section
-            class="relative mt-5 border-8 border-white/5 text-justify"
+            class="relative mt-12 border-8 border-white/5 text-justify"
         >
             <h2
                 class="absolute -top-9 left-1/2 -translate-x-1/2 transform bg-2025-blue-dark p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl rounded-lg"

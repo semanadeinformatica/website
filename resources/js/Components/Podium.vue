@@ -4,7 +4,7 @@ import { type CompetitionPrizes } from "@/Types/Competition";
 import { computed } from "vue";
 
 interface Props {
-    prizes: CompetitionPrizes;
+    prizes: CompetitionPrizes[];
     leaderboard: CompetitionTeam[];
 }
 
@@ -17,9 +17,9 @@ const images = computed(() => {
     // we need to have all 3 teams in order to display stuff
     if (props.leaderboard.length < 3)
         return [
-            props.prizes.firstPlace,
-            props.prizes.secondPlace,
-            props.prizes.thirdPlace,
+            props.prizes[0].prize_picture,
+            props.prizes[1].prize_picture,
+            props.prizes[2].prize_picture,
         ];
     return props.leaderboard.map((team) =>
         team.image_competition_team_url

@@ -55,6 +55,11 @@ class Competition extends Model
         ];
     }
 
+    public function prizes(): HasMany
+    {
+        return $this->hasMany(CompetitionPrize::class);
+    }
+
     public function regulationHtml(): Attribute
     {
         return Attribute::get(fn () => Str::markdown($this->regulation, [

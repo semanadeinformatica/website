@@ -23,8 +23,8 @@ export default interface Competition extends Model {
     teams?: CompetitionTeam[];
 }
 
-export type CompetitionPrizes = {
-    firstPlace: string;
-    secondPlace: string;
-    thirdPlace: string;
+export interface CompetitionPrizes extends Model {
+    competition_id: number;
+    place: number;
+    prize_picture?: string;
 };

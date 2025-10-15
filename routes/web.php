@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionTeamCRUDController;
+use App\Http\Controllers\CompetitionPrizeCRUDController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;
@@ -95,6 +96,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/eventDays' => EventDayCRUDController::class,
                     '/competitions' => CompetitionCRUDController::class,
                     '/competitionTeams' => CompetitionTeamCRUDController::class,
+                    '/competitionPrizes' => CompetitionPrizeCRUDController::class,
                     '/slots' => SlotCRUDController::class,
                     '/enrollments' => EnrollmentCRUDController::class,
                     '/eventTypes' => EventTypeCRUDController::class,

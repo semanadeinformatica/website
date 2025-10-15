@@ -5,6 +5,7 @@ import route from "ziggy-js";
 const pageRoutes = {
     "admin.competitions.index": "models.competition",
     "admin.competitionTeams.index": "models.competitionTeam",
+    "admin.competitionPrizes.index": "models.competitionPrize",
     "admin.departments.index": "models.department",
     "admin.editions.index": "models.edition",
     "admin.eventDays.index": "models.eventDay",
