@@ -98,7 +98,7 @@ const formattedDate = (
                         Equipas: {{ competition.teams?.length }}
                     </span>
                     <div
-                        class="flex w-4/5 flex-col border border-black shadow-lg shadow-black/80 md:w-1/2 rounded-lg"
+                        class="flex w-4/5 flex-col border border-white/5 border-8 md:w-1/2 rounded-lg"
                     >
                         <div
                             v-for="team in competition.teams ?? []"
@@ -116,7 +116,7 @@ const formattedDate = (
                                                   '+',
                                               )}&color=ffffff&background=3a9699`
                                 "
-                                class="h-16 w-16 self-center rounded-full border border-black"
+                                class="h-16 w-16 self-center rounded-full border-white/5 border-2"
                                 :alt="`Image for team ${team.name}`"
                             />
                             <div class="flex flex-col items-end self-center text-text-color">
