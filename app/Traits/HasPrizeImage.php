@@ -15,38 +15,34 @@ trait HasPrizeImage
                 Storage::disk($this->competitionPrizeDisk())->delete($previous);
             }
 
-            $this->forceFill([
-                'prize_picture' => $image->storePublicly(
-                    $storagePath, ['disk' => $this->competitionPrizeDisk()]
-                ),
-            ])->save();
+            // `storePublicly()` already prefixes with $storagePath, so don’t prepend it again
+            $path = $image->storePublicly($storagePath, [
+                'disk' => $this->competitionPrizeDisk(),
+            ]);
+
+            $this->forceFill(['prize_picture' => $path])->save();
         });
     }
 
     public function deletePrizeImage()
     {
-        if (is_null($this->prize_picture)) {
-            return;
+        if ($this->prize_picture) {
+            Storage::disk($this->competitionPrizeDisk())->delete($this->prize_picture);
+            $this->forceFill(['prize_picture' => null])->save();
         }
-
-        Storage::disk($this->competitionPrizeDisk())->delete($this->prize_picture);
-
-        $this->forceFill(['prize_picture' => null])->save();
     }
 
     public function prizeImageUrl(): Attribute
     {
-        return Attribute::get(function () {
-            if ($this->prize_picture) {
-                return Storage::disk($this->competitionPrizeDisk())->url($this->prize_picture);
-            }
-
-            return asset('images/default-prize.png');
-        });
+        return Attribute::get(fn () =>
+            $this->prize_picture
+                ? Storage::disk($this->competitionPrizeDisk())->url($this->prize_picture)
+                : asset('images/default-prize.png')
+        );
     }
 
     protected function competitionPrizeDisk(): string
     {
-        return config('filesystems.default', 'public');
+        return 'competition_prize';
     }
 }
