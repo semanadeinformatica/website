@@ -21,11 +21,11 @@ const colors: Array<string> = [
             v-if="departments.length > 0"
             class="flex flex-col items-center gap-7 py-4"
         >
-            <h1
-                class="w-fit border border-solid border-white rounded-lg bg-2025-blue p-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 xl:text-3xl 2xl:text-4xl"
+            <h2
+            class="w-fi bg-2025-blue p-3 text-center text-2xl rounded-md font-bold text-white xl:text-3xl 2xl:text-4xl"
             >
                 Equipa
-            </h1>
+            </h2>
             <SINFTeam
                 v-for="department in departments"
                 :key="department.id"

@@ -53,14 +53,13 @@ const socialMedia = computed(() => {
 </script>
 
 <template>
-    <div
-        class="group-hover group relative flex w-fit flex-col items-center overflow-y-hidden rounded-full border-4"
-        :class="borderColor[color]"
-    >
+        <div
+        class="group relative flex w-fit flex-col items-center overflow-hidden rounded-full "
+        >
         <img
             :src="staff.participant?.user?.profile_photo_url"
             :alt="`${staff.participant?.user?.name}'s image`"
-            class="h-40 w-40 object-cover"
+            class="h-40 w-40 rounded-full object-cover shadow transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02] group-hover:brightness-95"
         />
         <div
             v-if="Object.keys(socialMedia).length > 0"

@@ -58,22 +58,22 @@ const colorPicker = () => {
         </section>
         <!-- details -->
         <section
-            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-2025-blue px-16 py-24"
+            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] px-16 py-24"
             :class="[
                 { 'mt-20': companies.length > 0 && speakers.length === 0 },
             ]"
         >
             <h1
-                class="absolute -top-7 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-center text-2xl font-bold text-white shadow-md shadow-black/80 max-lg:left-auto"
+                class="absolute -top-7 mr-2 flex w-fit rounded-md bg-2025-blue px-6 py-2 text-3xl  px-3 text-center font-bold text-white max-lg:left-auto"
             >
                 {{ event.name }}
             </h1>
             <div
-                class="prose max-w-3xl break-words text-justify font-bold text-white"
+                class="prose max-w-3xl break-words text-justify font-bold text-white "
                 v-html="event.description_html"
             ></div>
             <h1
-                class="absolute -bottom-5 mr-2 flex border border-black bg-2025-blue p-2 px-3 text-xl font-bold text-white shadow-md shadow-black/80 max-lg:left-auto"
+                class="absolute -bottom-5 mr-2 flex bg-2025-blue w-fit rounded-md bg-2025-blue px-3 py-2 text-xl font-bold text-white max-lg:left-auto"
             >
                 Dia
                 {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},
@@ -100,7 +100,7 @@ const colorPicker = () => {
             <div
                 v-for="(company, idx) in companies"
                 :key="idx"
-                class="w-[200px] border border-black shadow shadow-black/80"
+                class="w-[200px]"
             >
                 <Sponsor :company="company" />
             </div>
@@ -116,10 +116,13 @@ const colorPicker = () => {
                         },
                     })
                 "
-                class="inline-flex border border-black bg-2025-blue p-2 px-3 text-center text-2xl font-bold text-white shadow-2023-teal transition hover:shadow-md"
+                class="inline-flex p-2 px-3 text-center text-2xl font-bold text-white bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] transition-transform duration-300 hover:scale-105
+           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
+           hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
+           focus:outline-none"
             >
                 Scan QR Code
-            </Link>
+            </Link> 
         </div>
 
         <!-- sign up -->
@@ -193,7 +196,7 @@ const colorPicker = () => {
         >
             <div
                 v-if="enrollments.length > 0"
-                class="flex flex-col items-center overflow-y-auto border border-black bg-2025-blue shadow-lg shadow-black/80"
+                class="flex flex-col items-center overflow-y-auto bg-2025-blue"
             >
                 <div
                     v-for="enrollment in enrollments"

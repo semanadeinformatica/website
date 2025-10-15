@@ -183,9 +183,6 @@ const formattedDate = (
                 alt="Stylized SINF logo"
             />
 
-
-
-
             <div class="relative">
                 <img
                     class="w-96 max-ml:w-[300px]"
@@ -199,14 +196,13 @@ const formattedDate = (
             </div>
 
 
-
             <!-- <p
                 class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
             >
                 semana_de_informática
             </p> -->
             <p class="margin-0 text-2xl font-bold text-text-color">
-                21 a 23 de outubro
+                21 a 24 de outubro
             </p>
 
             <!-- CALL TO ACTION -->
