@@ -16,9 +16,9 @@ defineProps<Props>();
         <Head :title="title" />
         <div class="sticky top-0 z-30">
             <Navbar />
-            <Banner />
         </div>
         <main class="min-h-screen bg-2025-bg-gradient py-24">
+            <Banner />
             <slot />
         </main>
         <Footer />
