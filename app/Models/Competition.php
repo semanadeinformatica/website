@@ -25,6 +25,7 @@ class Competition extends Model
         'slug',
         'registration_link',
         'regulation',
+        'description',
     ];
 
     protected $casts = [

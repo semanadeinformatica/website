@@ -18,6 +18,7 @@ class CompetitionCRUDController extends CRUDController
         'edition_id' => 'required|integer|exists:editions,id',
         'name' => 'required|string',
         'slug' => 'required|string',
+        'description' => 'nullable|string',
         'registration_link' => 'required|url',
         'regulation' => 'required|string',
     ];

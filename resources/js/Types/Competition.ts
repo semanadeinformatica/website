@@ -10,6 +10,8 @@ export default interface Competition extends Model {
     date_end: string;
     registration_link: string;
 
+    description?: string;
+
     regulation?: string;
 
     /**

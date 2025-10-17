@@ -27,6 +27,7 @@ const form = useForm({
     slug: competition.slug,
     registration_link: competition.registration_link,
     regulation: competition.regulation ?? "",
+    description: competition.description ?? "",
 });
 
 const submit = () => {
@@ -59,6 +60,14 @@ watchEffect(() => {
                 type="text"
                 required
                 :error-message="form.errors.slug"
+            />
+
+            <TextInput
+                id="description"
+                v-model="form.description"
+                label="Descrição"
+                type="textarea"
+                :error-message="form.errors.description"
             />
 
             <TextInput

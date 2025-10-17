@@ -25,6 +25,7 @@ const form = useForm({
     slug: "",
     registration_link: "",
     regulation: "",
+    description: "",
 });
 
 watchEffect(() => {
@@ -67,6 +68,14 @@ const submit = () => {
                 required
                 autocomplete="theme"
                 :error-message="form.errors.theme"
+            />
+
+            <TextInput
+                id="description"
+                v-model="form.description"
+                label="Descrição"
+                type="textarea"
+                :error-message="form.errors.description"
             />
 
             <TextInput

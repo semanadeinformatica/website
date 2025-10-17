@@ -37,7 +37,7 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
 </script>
 
 <template>
-    <section class="relative flex flex-col items-center justify-center py-28">
+    <section class="relative flex flex-col items-center justify-center py-8">
         <svg
             v-if="props.prizes.length > 0"
             width="75%"

@@ -64,14 +64,24 @@ const formattedDate = (
             </span>
         </header>
 
+        <section class="flex flex-col gap-4 items-center justitfy-center p-4 w-full ">
+            <h2
+                class="w-fit bg-2025-blue-dark rounded-md p-2 px-5 text-3xl font-bold text-white "
+            >
+                Descrição
+            </h2>
+            
+            <p class="text-white">{{ competition.description }}</p>
+        </section>
+
         <Podium
             :leaderboard="leaderboard"
             :prizes="prizes"
         />
-        <!-- RULES -->
 
+        <!-- RULES -->
         <section
-            class="relative mt-12 border-8 border-white/5 text-justify"
+            class="relative mt-4 border-8 border-white/5 text-justify"
         >
             <h2
                 class="absolute -top-9 left-1/2 -translate-x-1/2 transform bg-2025-blue-dark p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl rounded-lg"

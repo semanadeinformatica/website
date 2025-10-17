@@ -42,6 +42,7 @@ const editions = computed<Record<number, string>>(() =>
                 >
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="theme">Tema</Header>
+                <Header>Descrição</Header>
                 <Header>Registo</Header>
             </HeaderRow>
         </template>
@@ -51,6 +52,7 @@ const editions = computed<Record<number, string>>(() =>
                 <Cell>{{ editions[item.edition_id] }}</Cell>
                 <Cell>{{ item.name }}</Cell>
                 <Cell>{{ item.theme }}</Cell>
+                <Cell>{{ item.description }}</Cell>
                 <Cell><a :href="item.registration_link">Link</a></Cell>
             </Row>
         </template>
