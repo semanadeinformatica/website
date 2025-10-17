@@ -109,6 +109,7 @@ const onDetect = async ([firstDetectedCode]) => {
 
                 <div class="w-80">
                     <TextInput
+                        class="text-2025-blue-dark"
                         id="quest"
                         v-model="form.quest"
                         label="Quest"
