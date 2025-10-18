@@ -22,20 +22,25 @@ const standTiers = computed(() =>
     ),
 );
 
-const standsPerTier = computed(
-    () =>
-        stands.value.reduce((acc, stand) => {
-            const sponsorTier = stand.sponsor?.tier;
-            if (!sponsorTier) return acc;
+const standsPerTier = computed(() => {
+  const grouped = stands.value.reduce((acc, stand) => {
+    const tier = stand.sponsor?.tier;
+    if (!tier) return acc;
 
-            if (!acc.has(sponsorTier.id)) acc.set(sponsorTier.id, []);
+    if (!acc.has(tier.id)) acc.set(tier.id, []);
+    acc.get(tier.id)!.push(stand);
 
-            acc.get(sponsorTier.id)?.push(stand);
+    return acc;
+  }, new Map<SponsorTier["id"], Stand[]>());
 
-            return acc;
-        }, new Map<SponsorTier["id"], Stand[]>()) ??
-        ({} as Map<SponsorTier["id"], Stand[]>),
-);
+  const sortedEntries = Array.from(grouped.entries()).sort(([idA], [idB]) => {
+    const tierA = stands.value.find((s) => s.sponsor?.tier?.id === idA)?.sponsor?.tier;
+    const tierB = stands.value.find((s) => s.sponsor?.tier?.id === idB)?.sponsor?.tier;
+    return -((tierA?.rank ?? Infinity) - (tierB?.rank ?? Infinity));
+  });
+
+  return new Map(sortedEntries);
+});
 </script>
 
 <template>
