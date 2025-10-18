@@ -31,7 +31,7 @@ class ShopController extends Controller
             return response('No edition found', 500);
         }
 
-        $products = $edition->products()->orderBy('price')->get()->each(function (Product $product) use ($user) {
+        $products = $edition->products()->reorder('price', 'desc')->get()->each(function (Product $product) use ($user) {
             $product->canBeBought =
                 $product->stock <= 0
                     ? false
