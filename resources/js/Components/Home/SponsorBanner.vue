@@ -41,30 +41,22 @@ const numCols = computed(() =>
       {{ title }}
     </h3>
 
-    <div
-      v-if="sponsors.length"
-      class="grid justify-around justify-items-center gap-10 w-full"
-      :style="{ gridTemplateColumns: `repeat(${numCols}, 1fr)` }"
-    >
-      <Sponsor
-        v-for="(sponsor, i) in sponsors"
-        :key="sponsor.id"
-        :company="sponsor.company?.user as CompanyUser"
-        :class="[
-          sponsors.length > 3 &&
-          sponsors.length % 2 &&
-          i == Math.ceil(props.sponsors.length / 2)
-            ? 'col-start-2'
-            : '',
-          size,
-        ]"
-        class="transition-transform duration-300 hover:scale-105
-               hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-               [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]"
-        :style="{ '--halo': `color-mix(in srgb, ${color} 40%, white 0%)` }"
-      />
-    </div>
-
+<div
+  v-if="sponsors.length"
+  class="grid justify-items-center gap-10 w-full"
+  :style="{ gridTemplateColumns: 'repeat(auto-fit, minmax(5em, 1fr))' }"
+>
+  <Sponsor
+    v-for="(sponsor, i) in sponsors"
+    :key="sponsor.id"
+    :company="sponsor.company?.user as CompanyUser"
+    class="max-w-[200px] w-full flex items-center justify-center
+           transition-transform duration-300 hover:scale-105
+           hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
+           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]"
+    :style="{ '--halo': `color-mix(in srgb, ${color} 40%, white 0%)` }"
+  />
+</div>
     <p v-else class="text-2xl font-semibold text-white/80 italic">
       Em breve...
     </p>
