@@ -64,8 +64,8 @@ watch(
                 break;
             case "stand":
                 times.value = {
-                    start: "1970-01-01T09:00:00.000000Z",
-                    end: "1970-01-01T16:00:00.000000Z",
+                    start: "1970-01-01T08:00:00.000000Z",
+                    end: "1970-01-01T17:00:00.000000Z",
                 };
                 return;
             case "competitions":
