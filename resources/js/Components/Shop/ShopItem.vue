@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { computed, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import type { User } from "@/Types/User";
@@ -19,11 +19,16 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const product = computed(() => props.product);
+const product = reactive<BuyableProduct>({ ...props.product });
+
+watch(
+  () => props.product,
+  (newVal) => Object.assign(product, newVal)
+);
 
 const buyProduct = () => {
   router.post(
-    route("shop.product.buy", { product: product.value }),
+    route("shop.product.buy", { product }),
     undefined,
     {
       preserveState: true,
@@ -53,8 +58,9 @@ const buyProduct = () => {
     </div>
 
     <!-- NAME + PRICE + CTA -->
-    <div class="flex flex-1 flex-col justify-between text-white">
+    <div class="flex flex-1 flex-col justify-between text-white gap-4">
       <h2 class="mb-4 text-start text-xl font-bold">{{ product.name }}</h2>
+      <p>Quantidade: {{ product.stock }}</p>
 
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2 text-xl">
