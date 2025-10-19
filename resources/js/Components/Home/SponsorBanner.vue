@@ -16,16 +16,12 @@ const props = defineProps<{
   color: string;
   title: string;
   idx: number;
+  tierSize?: string;
 }>();
 
 const sizes = ["max-h-72", "max-h-56", "max-h-40"];
 const size = computed(() => sizes[props.idx % sizes.length]);
 
-const numCols = computed(() =>
-  props.sponsors?.length > 3
-    ? Math.ceil(props.sponsors?.length / 2) * 2
-    : props.sponsors?.length * 2
-);
 </script>
 
 <template>
@@ -40,12 +36,14 @@ const numCols = computed(() =>
     <h3 class="text-3xl font-bold" :style="{ color: 'var(--tier)' }">
       {{ title }}
     </h3>
+    
 
 <div
   v-if="sponsors.length"
   class="grid justify-items-center gap-10 w-full"
-  :style="{ gridTemplateColumns: 'repeat(auto-fit, minmax(5em, 1fr))' }"
+  :style="{ gridTemplateColumns: `repeat(auto-fit, minmax(5em, 1fr))` }"
 >
+
   <Sponsor
     v-for="(sponsor, i) in sponsors"
     :key="sponsor.id"

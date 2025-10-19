@@ -7,6 +7,7 @@ import route from "ziggy-js";
 type Visitor = Participant & {
     can_see_cv: boolean;
     can_see_linkedin: boolean;
+    can_see_all: boolean;
 };
 
 const visitors = usePage().props.participants as Visitor[];
@@ -65,7 +66,7 @@ const user = usePage().props.user as Participant;
         </div>
     </section>
     <div v-else class="flex h-full flex-1 items-center justify-center">
-        <p class="text-center text-2xl font-bold text-2023-teal">
+        <p class="text-center text-2xl font-bold text-text-color">
             Ainda nenhum participante visitou a sua empresa.
         </p>
     </div>

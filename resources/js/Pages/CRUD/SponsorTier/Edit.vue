@@ -24,6 +24,7 @@ const form = useForm({
     rank: tier.rank.toString(),
     canSeeCV: tier.canSeeCV,
     canSeeLinkedin: tier.canSeeLinkedin,
+    canSeeAll: tier.canSeeAll,
 });
 
 const submit = () => {
@@ -94,6 +95,18 @@ const submit = () => {
                     v-model:checked="form.canSeeLinkedin"
                 />
             </label>
+
+            <label
+                for="canSeeAll"
+                class="flex flex-row items-center gap-6"
+            >
+                Consegue ver todos os participantes?
+                <Checkbox
+                    id="canSeeAll"
+                    v-model:checked="form.canSeeAll"
+                />
+            </label>
+
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

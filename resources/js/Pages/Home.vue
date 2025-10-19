@@ -134,6 +134,10 @@ const formattedDate = (
 
     return `${startDate} ${separator} ${endDate}`;
 };
+
+const tierSize = (tier: SponsorTier) => {
+    return "15em";
+};
 </script>
 
 <template>
@@ -297,6 +301,7 @@ const formattedDate = (
                 v-for="(tier, idx) in sponsorTiers"
                 :key="tier.id"
                 :title="tier.name"
+                :tierSize="tierSize(tier)"
                 :sponsors="tier.sponsors ?? []"
                 :color="tier.color"
                 :idx="idx"

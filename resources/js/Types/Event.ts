@@ -19,6 +19,8 @@ export default interface Event extends Model {
 
     enrollments?: Enrollment[];
 
+    enroll_in_site: boolean;
+
     users?: User[];
 
     event_type_id: number;

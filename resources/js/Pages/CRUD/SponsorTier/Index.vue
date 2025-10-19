@@ -47,6 +47,7 @@ const editions = computed<Record<number, string>>(() =>
                 <Header>Cor</Header>
                 <Header>Pode ver CVs</Header>
                 <Header>Pode ver Linkedin</Header>
+                <Header>Pode ver de todos os participantes</Header>
             </HeaderRow>
         </template>
 
@@ -62,6 +63,7 @@ const editions = computed<Record<number, string>>(() =>
                 </Cell>
                 <Cell>{{ item.canSeeCV ? "✓" : "❌" }}</Cell>
                 <Cell>{{ item.canSeeLinkedin ? "✓" : "❌" }}</Cell>
+                <Cell>{{ item.canSeeAll ? "✓" : "❌" }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

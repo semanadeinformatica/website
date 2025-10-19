@@ -17,6 +17,7 @@ class SponsorTierCRUDController extends CRUDController
         'rank' => 'required|integer',
         'canSeeCV' => 'required|boolean',
         'canSeeLinkedin' => 'required|boolean',
+        'canSeeAll' => 'required|boolean',
         'edition_id' => 'required|exists:editions,id',
     ];
 

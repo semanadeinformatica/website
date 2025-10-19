@@ -3,9 +3,9 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import type Quest from "@/Types/Quest";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
 import route from "ziggy-js";
 
@@ -53,6 +53,18 @@ const onDetect = async ([firstDetectedCode]) => {
 
     if (form.quest && form.quest_code) submit();
 };
+
+
+const showScanResult = ref(false);
+
+const message = computed(() => usePage().props.jetstream.flash?.banner || "");
+const id = computed(() => usePage().props.jetstream.flash?.bannerId || "");
+
+
+watch(id, async () => {
+    showScanResult.value = true;
+})
+
 </script>
 
 <template>
@@ -129,6 +141,7 @@ const onDetect = async ([firstDetectedCode]) => {
                 </div>
 
                 <PrimaryButton type="submit">Confirmar</PrimaryButton>
+                <p v-if="showScanResult">{{ message }}</p>
             </form>
         </div>
     </AppLayout>

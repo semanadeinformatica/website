@@ -42,6 +42,7 @@ const colorPicker = () => {
     
     return colors[pos];
 };
+
 </script>
 
 <template>
@@ -132,6 +133,7 @@ const colorPicker = () => {
         >
             <p
                 class="flex w-fit flex-col text-center text-3xl font-bold text-text-color"
+                v-if="event.enroll_in_site"
             >
                 <span v-if="hasJoined">Vemo-nos lá!</span>
                 <span v-else-if="!isEnrolled"
@@ -149,7 +151,7 @@ const colorPicker = () => {
             </p>
 
             <PrimaryButton
-                v-if="!isEnrolled || canJoin"
+                v-if="event.enroll_in_site && (!isEnrolled || canJoin)"
                 color="teal-dark"
                 shadow="red"
                 text-size="sm:text-3xl"

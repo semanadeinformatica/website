@@ -24,6 +24,7 @@ class EventCRUDController extends CRUDController
         'location' => 'sometimes|nullable|string',
         'external_url' => 'sometimes|nullable|string',
         'topic' => 'required|string',
+        'enroll_in_site' => 'required|boolean',
         'capacity' => 'nullable|numeric|integer',
         'event_day_id' => 'required|exists:event_days,id',
         'event_type_id' => 'required|exists:event_types,id',

@@ -30,6 +30,7 @@ class Event extends Model
         'topic',
         'capacity',
         'event_day_id',
+        'enroll_in_site',
         'description',
         'event_type_id',
         'location',

@@ -62,6 +62,7 @@ const event_types = computed<Record<number, string>>(() =>
                 >
                 <Header sort-by="capacity">Capacidade</Header>
                 <Header sort-by="capacity">Local</Header>
+                <Header sort-by="capacity">Inscrição no site</Header>
             </HeaderRow>
         </template>
 
@@ -74,6 +75,7 @@ const event_types = computed<Record<number, string>>(() =>
                 <Cell>{{ event_types[item.event_type_id] }}</Cell>
                 <Cell>{{ item.capacity ?? "N/A" }}</Cell>
                 <Cell>{{ item.location }}</Cell>
+                <Cell>{{ item.enroll_in_site ? "Sim" : "Não" }}</Cell>
             </Row>
         </template>
     </CRUDLayout>

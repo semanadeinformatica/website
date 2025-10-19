@@ -9,6 +9,7 @@ export default interface SponsorTier extends Model {
 
     canSeeCV: boolean;
     canSeeLinkedin: boolean;
+    canSeeAll: boolean;
 
     edition_id: number;
     edition?: Edition;

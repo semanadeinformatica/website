@@ -7,6 +7,7 @@ import type EventType from "@/Types/EventType";
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
+import Checkbox from "@/Components/Checkbox.vue";
 
 interface Props {
     with: {
@@ -29,6 +30,7 @@ const form = useForm({
     event_type_id: "",
     location: "",
     external_url: "",
+    enroll_in_site: true,
     users: [] as string[],
 });
 
@@ -87,6 +89,18 @@ const submit = () => {
                 type="text"
                 :error-message="form.errors.location"
             />
+
+            <label
+                for="enroll_in_site"
+                class="flex flex-row items-center gap-6"
+            >
+                Inscrição no site?
+                <Checkbox
+                    id="enroll_in_site"
+                    v-model:checked="form.enroll_in_site"
+                />
+            </label>
+
 
             <TextInput
                 id="external_url"

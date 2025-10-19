@@ -17,6 +17,7 @@ class SponsorTier extends Model
         'rank',
         'canSeeCV',
         'canSeeLinkedin',
+        'canSeeAll',
         'edition_id',
     ];
 
