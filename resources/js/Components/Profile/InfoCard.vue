@@ -2,7 +2,7 @@
 import { type User, isAdmin, isParticipant, isCompany } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import QRCode from "./QRCode.vue";
 
@@ -12,6 +12,8 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const page = usePage();
 
 const socials = {
     facebook: {
@@ -47,6 +49,8 @@ const iconColor: Record<string, string> = {
     red: "#d94f04",
     teal: "#007172",
 };
+
+const authUser = page.props.auth.user;
 </script>
 
 <template>
@@ -116,7 +120,7 @@ const iconColor: Record<string, string> = {
                     />
                 </svg>
             </Link>
-            <template v-if="isAdmin(user) || isStaff || isCompany(user)">
+            <template v-if="(authUser.id && authUser.id === user.id) && (isAdmin(user) || isStaff || isCompany(user))">
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <Link
                     class="flex w-fit cursor-pointer rounded-full text-white"
@@ -126,7 +130,7 @@ const iconColor: Record<string, string> = {
                 </Link>
             </template>
             <QRCode
-                v-if="isParticipant(user) && user.usertype"
+                v-if="(authUser.id && authUser.id === user.id) && (isParticipant(user) && user.usertype)"
                 :participant="user.usertype"
             ></QRCode>
         </div>

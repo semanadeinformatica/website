@@ -87,6 +87,10 @@ class AuthServiceProvider extends ServiceProvider
                 $user->isCompany() &&
                 $profile_user->isParticipant() &&
                 $user->usertype->participants()->exists($profile_user)
+            ) ||
+            (
+                $user->isCompany() && 
+                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
             )
         ));
 
@@ -106,6 +110,13 @@ class AuthServiceProvider extends ServiceProvider
                 $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() && // If the company does not have the right access, just shortcut the check
                 $cv_user->isParticipant() &&
                 $user->usertype->participants()->exists($cv_user)
+            )
+        ));
+
+        Gate::define('viewAll', fn (User $user, Edition $edition) => (
+            (
+                $user->isCompany() &&
+                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
             )
         ));
 

@@ -13,6 +13,7 @@ import { type User, isCompany, isParticipant } from "@/Types/User";
 import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue";
 import type { Tabs } from "@/Types/ProfilePage";
 import { usePage } from "@inertiajs/vue3";
+import AllParticipants from "@/Components/Profile/AllParticipants.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -22,10 +23,11 @@ interface Props {
     user: User; // The user to render, can be the logged in user or another user
     isStaff: boolean;
     canViewCV: boolean;
+    canViewAll: boolean;
     points?: number;
 }
 
-const { user } = defineProps<Props>();
+const { user, canViewAll } = defineProps<Props>();
 const page = usePage();
 
 const buttons: Tabs =
@@ -48,6 +50,15 @@ const buttons: Tabs =
               },
           }
         : {};
+
+if (canViewAll) {
+    buttons["allParticipants"] = {
+        label: "Todos",
+        component: h(AllParticipants),
+    };
+}
+
+const authUser = page.props.auth.user;
 </script>
 
 <template>
@@ -62,7 +73,7 @@ const buttons: Tabs =
                 </div>
                 <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
                 <p
-                    v-if="points !== null"
+                    v-if="points !== null && authUser && authUser.id === user.id"
                     class="text-center text-xl font-bold text-text-color"
                 >
                     Tens {{ points }}

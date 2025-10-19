@@ -48,6 +48,7 @@ class UserController extends UserProfileController
         $tickets = $edition->events()->with('event_day')->whereNull('external_url');
         $participants = null;
         $canViewCv = $request->user()->can('viewCVOf', [$user, $edition]);
+        $canViewAll = $request->user()->can('viewAll', [$edition]);
 
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
@@ -75,9 +76,11 @@ class UserController extends UserProfileController
             'tickets' => fn () => $tickets->get(),
             'slots' => fn () => $slots->get(),
             'participants' => fn () => $participants?->get() ?? [],
+            'allParticipants' => fn () => $this->getAllParticipants($user, $edition),
             'user' => fn () => $user,
             'isStaff' => fn () => $user->isStaff($edition),
             'canViewCV' => fn () => $canViewCv,
+            'canViewAll' => fn () => $canViewAll,
             'points' => $points ?? null,
         ]);
     }
@@ -109,6 +112,24 @@ class UserController extends UserProfileController
         }
 
         return $user;
+    }
+
+    private function getAllParticipants(User $user, Edition $edition) {
+        $company = $user->usertype;
+        
+        if ($company instanceof Company) {
+            $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
+
+            if ($sponsor !== null && $sponsor->tier->canSeeAll) {
+                $participants = Participant::with("user")->whereHas('enrollments', function ($query) use ($edition) {
+                    $query->where('edition_id', $edition->id);
+                })->get();
+
+                return $participants;
+            }
+        }
+
+        return [];
     }
 
     private function getParticipants(User $user, Edition $edition)
