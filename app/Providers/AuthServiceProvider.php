@@ -116,7 +116,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('viewAll', fn (User $user, Edition $edition) => (
             (
                 $user->isCompany() &&
-                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
+                $user->usertype?->sponsors()->where('edition_id', $edition->id)->first()?->tier?->canSeeAll
             )
         ));
 
