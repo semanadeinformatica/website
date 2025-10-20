@@ -139,5 +139,14 @@ class AuthServiceProvider extends ServiceProvider
             $user->isStaff($edition) ||
             $user->is($other)
         ));
+
+        Gate::define('downloadAllCVs', fn (User $user, User $other, Edition $edition) => (
+            $user->isAdmin() || // admins have access to all CVs
+            $user->isStaff($edition) ||
+            (
+                $user->isCompany() && 
+                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
+            )
+        ));
     }
 }

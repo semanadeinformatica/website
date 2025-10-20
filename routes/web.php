@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::prefix('/{user}')->whereNumber('user')->controller(UserController::class)->group(function () {
                 Route::get('/profile', 'show')->name('user.profile');
                 Route::get('/participants/cv', 'downloadParticipantCVs')->name('user.company.participants.cvs');
+                Route::get('/participants/cv/all', 'downloadAllParticipantCVs')->name('user.company.participants.cvs.all');
             });
 
             Route::get('/scan-code', [UserController::class, 'scanQuestCode'])
