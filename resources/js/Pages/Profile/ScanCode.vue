@@ -106,6 +106,9 @@ watch(id, async () => {
                 ></QrcodeStream>
             </div>
             <p class="text-center text-red-600">{{ error }}</p>
+
+            <p v-if="showScanResult">{{ message }}</p>
+
             <form class="contents" @submit.prevent="submit">
                 <div class="w-80">
                     <TextInput
