@@ -64,7 +64,7 @@ const formattedDate = (
             </span>
         </header>
 
-        <section class="flex flex-col gap-4 items-center justitfy-center p-4 w-full ">
+        <section v-if="competition.description && competition.description !== ''" class="flex flex-col gap-4 items-center justitfy-center p-4 w-full ">
             <h2
                 class="w-fit bg-2025-blue-dark rounded-md p-2 px-5 text-3xl font-bold text-white "
             >
