@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Banner from "@/Components/Banner.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -107,7 +108,7 @@ watch(id, async () => {
             </div>
             <p class="text-center text-red-600">{{ error }}</p>
 
-            <p v-if="showScanResult">{{ message }}</p>
+            <Banner v-if="showScanResult" :message="message"></Banner>
 
             <form class="contents" @submit.prevent="submit">
                 <div class="w-80">
