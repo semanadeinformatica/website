@@ -125,7 +125,7 @@ class AuthServiceProvider extends ServiceProvider
             ! $user->isStaff($product->edition) && // user must not be staff
             $user->usertype->enrollments()->where('edition_id', $product->edition->id)->exists() && // user must be enrolled in the current edition
             $user->usertype->enrollments()->where('edition_id', $product->edition->id)->first()->products()->where('product_id', $product->id)->doesntExist() && // user must not have the product
-            $user->usertype->enrollments()->where('edition_id', $edition)->where('points', '>=', $product->price)->exists() && // user must have enough points
+            $user->usertype->enrollments()->where('points', '>=', $product->price)->exists() && // user must have enough points
             $product->stock > 0 // product must be in stock
         ));
 
