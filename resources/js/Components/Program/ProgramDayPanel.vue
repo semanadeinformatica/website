@@ -119,7 +119,7 @@ onMounted(() => {
     <section class="h-full w-full">
         <div
             id="tab-picker"
-            class="flex mx-auto flex-row w-fit p-2 justify-center gap-4 font-bold text-[#2596be] rounded-md  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
+            class="flex mx-auto flex-row flex-wrap w-fit p-2 justify-center gap-4 font-bold text-[#2596be] rounded-md  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
         >
             <button
                 v-if="(day.talks?.length ?? 0) > 0"
