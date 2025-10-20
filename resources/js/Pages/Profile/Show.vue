@@ -30,6 +30,8 @@ interface Props {
 const { user, canViewAll } = defineProps<Props>();
 const page = usePage();
 
+const authUser = page.props.auth.user;
+
 const buttons: Tabs =
     isParticipant(user) && !isCompany(page.props.auth.user!)
         ? {
@@ -51,14 +53,13 @@ const buttons: Tabs =
           }
         : {};
 
-if (canViewAll) {
+if (canViewAll && authUser && authUser.id === user.id) {
     buttons["allParticipants"] = {
         label: "Todos",
         component: h(AllParticipants),
     };
 }
 
-const authUser = page.props.auth.user;
 </script>
 
 <template>
