@@ -37,7 +37,7 @@ const socials = {
         color: "white",
     },
     website: {
-        icon: "io-logo-globe",
+        icon: "io-globe-outline",
         color: "white",
     },
 };
