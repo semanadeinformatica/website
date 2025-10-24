@@ -137,7 +137,7 @@ const buyProduct = () => {
             v-if="!enrollment.pivot.redeemed"
             :href="route('shop.product.redeem', { product, enrollment })"
             method="post"
-            class="font-semibold text-2025-blue hover:underline"
+            class="font-semibold text-white hover:underline"
           >
             Entregar
           </Link>
