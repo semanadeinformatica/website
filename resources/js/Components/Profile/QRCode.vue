@@ -5,7 +5,7 @@ import { OhVueIcon } from "oh-vue-icons";
 import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const props = defineProps<{
     participant: Participant;

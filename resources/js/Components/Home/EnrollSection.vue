@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { router } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import { type User, isCompany, isParticipant } from "@/Types/User";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: User | undefined;

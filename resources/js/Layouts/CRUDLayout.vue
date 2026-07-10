@@ -5,7 +5,7 @@ import type Model from "@/Types/Model";
 import type Paginated from "@/Types/Paginated";
 import AdminLayout from "./AdminLayout.vue";
 import { Link } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
 import useSearch from "@/composables/useSearch";
 

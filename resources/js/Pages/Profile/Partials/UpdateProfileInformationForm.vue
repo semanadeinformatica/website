@@ -11,7 +11,7 @@ import {
     isSpeaker as checkIsSpeaker,
     isAdmin as checkIsAdmin,
 } from "@/Types/User";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     user: User | undefined;

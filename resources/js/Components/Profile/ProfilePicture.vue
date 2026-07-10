@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: User | undefined;

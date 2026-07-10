@@ -4,7 +4,7 @@ import { useForm } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const confirmingUserDeletion = ref(false);

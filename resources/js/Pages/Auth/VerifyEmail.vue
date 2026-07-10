@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import CardLayout from "@/Layouts/CardLayout.vue";
 
 interface Props {

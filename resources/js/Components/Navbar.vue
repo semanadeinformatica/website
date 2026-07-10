@@ -5,7 +5,8 @@ import DropdownTrigger from "@/Components/DropdownTrigger.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
 import { ref, onMounted, onUnmounted } from "vue";
-import route, {
+import {
+    route,
     type QueryParams,
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";

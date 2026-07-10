@@ -5,7 +5,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import type Competition from "@/Types/Competition";
 import { router } from "@inertiajs/vue3";
 // import { computed } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { isAdmin } from "@/Types/User";
 import { computed } from "vue";
 import type { CompetitionPrizes } from "@/Types/Competition";

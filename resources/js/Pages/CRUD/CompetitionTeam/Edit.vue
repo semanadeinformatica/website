@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type CompetitionTeam from "@/Types/CompetitionTeam";
 import ImageInput from "@/Components/ImageInput.vue";
 import type Participant from "@/Types/Participant";

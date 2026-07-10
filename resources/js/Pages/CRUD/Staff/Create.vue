@@ -6,7 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { computed } from "vue";
 import TextInput from "@/Components/TextInput.vue";
 

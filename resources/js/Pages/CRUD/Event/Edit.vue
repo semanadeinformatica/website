@@ -7,7 +7,7 @@ import type EventDay from "@/Types/EventDay";
 import type EventType from "@/Types/EventType";
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import Checkbox from "@/Components/Checkbox.vue";
 
 interface Props {

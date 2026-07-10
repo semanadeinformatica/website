@@ -5,7 +5,7 @@ import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import { computed } from "vue";
 import { isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import Sponsor from "@/Components/Home/Sponsor.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { router, Link } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import type Enrollment from "@/Types/Enrollment";

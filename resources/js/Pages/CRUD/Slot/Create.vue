@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Quest from "@/Types/Quest";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";

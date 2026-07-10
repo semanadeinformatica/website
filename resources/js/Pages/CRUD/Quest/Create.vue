@@ -7,7 +7,7 @@ import type Event from "@/Types/Event";
 import type Stand from "@/Types/Stand";
 import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     with: {

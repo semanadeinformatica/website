@@ -2,7 +2,7 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
 import type EventType from "@/Types/EventType";
 

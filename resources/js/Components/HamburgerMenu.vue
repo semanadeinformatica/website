@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import route, {
+import {
+    route,
     type QueryParams,
     type RouteParamsWithQueryOverload,
 } from "ziggy-js";

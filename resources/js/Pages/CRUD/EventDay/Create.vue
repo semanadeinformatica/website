@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
 
 interface Props {

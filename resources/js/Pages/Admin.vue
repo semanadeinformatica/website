@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const pageRoutes = {
     "admin.competitions.index": "models.competition",

@@ -6,7 +6,7 @@ import type Company from "@/Types/Company";
 import type Edition from "@/Types/Edition";
 import type SponsorTier from "@/Types/SponsorTier";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     with: {

@@ -6,7 +6,7 @@ import ActionSection from "@/Components/ActionSection.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type Session from "@/Types/Session";
 
 interface Props {

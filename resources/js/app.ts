@@ -5,8 +5,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createVfm } from "vue-final-modal";
 import VueCookies from "vue-cookies";
-// @ts-expect-error: Ziggy does not have type declarations
-import { ZiggyVue } from "ziggy";
+import { ZiggyVue } from "ziggy-js";
 import { addIcons } from "oh-vue-icons";
 import { createI18n } from "vue-i18n";
 import messages from "./messages";

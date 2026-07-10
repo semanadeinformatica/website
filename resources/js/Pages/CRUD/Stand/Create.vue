@@ -5,7 +5,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import type EventDay from "@/Types/EventDay";
 import type Sponsor from "@/Types/Sponsor";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     with: {

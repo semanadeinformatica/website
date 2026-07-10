@@ -4,7 +4,7 @@ import DialogModal from "./DialogModal.vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import TextInput from "./TextInput.vue";
 import axios from "axios";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     title: string;

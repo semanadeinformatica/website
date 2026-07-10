@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Competition from "@/Types/Competition";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { Link } from "@inertiajs/vue3";
 
 interface Props {

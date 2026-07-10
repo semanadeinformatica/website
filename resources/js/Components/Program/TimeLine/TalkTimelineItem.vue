@@ -3,7 +3,7 @@ import type Event from "@/Types/Event";
 import { isSpeaker } from "@/Types/User";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     event: Event;

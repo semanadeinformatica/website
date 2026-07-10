@@ -3,7 +3,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     status: string;

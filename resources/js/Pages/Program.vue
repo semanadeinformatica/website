@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProgramDayPanel from "@/Components/Program/ProgramDayPanel.vue";
 import type EventDay from "@/Types/EventDay";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { Link } from "@inertiajs/vue3";
 
 interface Props {

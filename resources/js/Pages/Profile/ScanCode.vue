@@ -8,7 +8,7 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed, ref, watch } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const props = defineProps<{
     selectedQuest?: Quest;

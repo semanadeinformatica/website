@@ -5,7 +5,7 @@ import ActionSection from "@/Components/ActionSection.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import axios from "axios";
 
 interface Props {

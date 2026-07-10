@@ -3,7 +3,7 @@ import { type User, isAdmin, isParticipant, isCompany } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
 import { Link, usePage } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import QRCode from "./QRCode.vue";
 
 interface Props {

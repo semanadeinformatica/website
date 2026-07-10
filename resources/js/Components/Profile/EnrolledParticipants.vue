@@ -2,7 +2,7 @@
 import type Participant from "@/Types/Participant";
 import { usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 type Visitor = Participant & {
     can_see_cv: boolean;

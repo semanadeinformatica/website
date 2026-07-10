@@ -2,7 +2,7 @@
 import NavLink from "@/Components/NavLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { OhVueIcon } from "oh-vue-icons";
 
 interface Route {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
 import { Link } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     state: "used" | "acquired" | "available";

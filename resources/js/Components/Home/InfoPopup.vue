@@ -3,7 +3,7 @@ import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import { inject, onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { router } from "@inertiajs/vue3";
 import PrimaryButton from "../PrimaryButton.vue";
 

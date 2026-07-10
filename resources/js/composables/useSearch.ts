@@ -1,5 +1,5 @@
 import { ref, unref, watch } from "vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { router } from "@inertiajs/vue3";
 
 const useSearch = (param: string = "query", only?: string[]) => {

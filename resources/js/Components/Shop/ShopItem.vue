@@ -5,7 +5,7 @@ import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import type { User } from "@/Types/User";
 import { Link, router } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { type BuyableProduct } from "@/Types/ShopPage";
 
 const modalOpen = ref(false);
