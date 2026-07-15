@@ -33,11 +33,11 @@ COPY routes/ ./routes/
 RUN composer install --no-interaction --optimize-autoloader --no-dev --prefer-dist
 
 # deploy-nocache
-FROM trafex/php-nginx:3.6.0 AS deploy-nocache
+FROM trafex/php-nginx:3.10.0 AS deploy-nocache
 WORKDIR /var/www/html
 
 USER root
-RUN apk add --no-cache php83-pdo_pgsql php83-pgsql php83-pecl-redis php83-iconv php83-zip
+RUN apk add --no-cache php84-pdo_pgsql php84-pgsql php84-pecl-redis php84-iconv php84-zip
 
 ## Install supercronic (cron alternative)
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.26/supercronic-linux-amd64 \
