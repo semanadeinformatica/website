@@ -35,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo('/');
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $DEVELOPMENT = ['maintenance', 'local', 'testing'];
