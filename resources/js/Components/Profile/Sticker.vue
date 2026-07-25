@@ -43,7 +43,7 @@ const completeness = computed(() => {
             }"
         />
         <div
-            class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black bg-opacity-50 p-4 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
+            class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/50 p-4 text-center text-white opacity-0 transition-all duration-500 group-hover:opacity-100"
         >
             <span class="line-clamp-3 truncate whitespace-normal">{{
                 sticker.name

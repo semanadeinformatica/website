@@ -12,8 +12,8 @@ const props = defineProps<Props>();
 
 const classes = computed(() => {
     return props.active
-        ? "flex flex-col w-fit py-4 bg-transparent underline text-white text-center font-medium focus:outline-hidden transition duration-150 ease-in-out"
-        : "flex flex-col w-fit py-4 bg-transparent hover:underline focus:underline text-white text-center font-medium leading-5 focus:outline-hidden transition duration-150 ease-in-out";
+        ? "flex flex-col w-fit py-4 bg-transparent underline text-white text-center font-medium cursor-pointer focus:outline-hidden transition duration-150 ease-in-out"
+        : "flex flex-col w-fit py-4 bg-transparent hover:underline focus:underline text-white text-center font-medium leading-5 cursor-pointer focus:outline-hidden transition duration-150 ease-in-out";
 });
 </script>
 

@@ -203,7 +203,7 @@ const colorPicker = () => {
                 <div
                     v-for="enrollment in enrollments"
                     :key="enrollment.id"
-                    class="flex w-full items-center justify-between gap-3 p-3 even:bg-2025-bg even:bg-opacity-20"
+                    class="flex w-full items-center justify-between gap-3 p-3 even:bg-2025-bg/20"
                 >
                     {{ enrollment.participant?.user?.name ?? enrollment.id }} -
                     {{ enrollment.participant?.user?.email ?? enrollment.id }}

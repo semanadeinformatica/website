@@ -38,7 +38,7 @@ const user = usePage().props.user as Participant;
             <div
                 v-for="visitor in allParticipants"
                 :key="visitor.id"
-                class="flex w-full items-center justify-between p-3 even:bg-white even:bg-opacity-20"
+                class="flex w-full items-center justify-between p-3 even:bg-white/20"
             >
                 <a
                     :href="route('user.profile', { user: visitor.user })"

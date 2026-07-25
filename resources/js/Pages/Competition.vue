@@ -111,7 +111,7 @@ const formattedDate = (
                         <div
                             v-for="team in competition.teams ?? []"
                             :key="team.id"
-                            class="inline-flex w-full justify-between gap-1 p-4 text-lg even:bg-2025-blue even:bg-opacity-20"
+                            class="inline-flex w-full justify-between gap-1 p-4 text-lg even:bg-2025-blue/20"
                         >
                             <img
                                 :src="
