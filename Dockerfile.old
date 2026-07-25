@@ -12,7 +12,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY ./resources/ ./resources
-COPY ./vite.config.ts ./tsconfig.json ./tsconfig.app.json ./tsconfig.node.json ./postcss.config.js ./
+COPY ./vite.config.ts ./tsconfig.json ./tsconfig.app.json ./tsconfig.node.json ./
 COPY --from=dev-dependencies /app/vendor ./vendor
 
 RUN npm run build
