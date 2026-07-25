@@ -125,9 +125,9 @@ watch(id, async () => {
 
                 <div class="w-80">
                     <TextInput
-                        class="text-2025-blue-dark"
                         id="quest"
                         v-model="form.quest"
+                        class="text-2025-blue-dark"
                         label="Quest"
                         type="select"
                         :disabled="selectedQuest !== undefined"

@@ -70,7 +70,7 @@ const sendEmailVerification = () => {
             </span>
         </template>
 
-        <template #form class="bg-red-400">
+        <template #form>
             <!-- Email -->
             <div class="flex flex-col gap-5">
                 <!-- Name -->

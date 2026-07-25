@@ -71,7 +71,7 @@ onUnmounted(() => {
         ]"
     >
         <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
-            <template #trigger class="bg-white">
+            <template #trigger>
                 <DropdownTrigger class="group">
                     <a :href="route('home')">
                         <img
@@ -82,8 +82,8 @@ onUnmounted(() => {
                     </a>
                 </DropdownTrigger>
             </template>
-            <template #content class="bg-white">
-                <template v-for="({ label }, page) in homeSections" :key="page" class="bg-white">
+            <template #content>
+                <template v-for="({ label }, page) in homeSections" :key="page">
                     <DropdownLink
                         :href="page !== 'home' ? `/#${page}` : route(page)"
                     >

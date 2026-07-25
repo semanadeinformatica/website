@@ -45,7 +45,7 @@ const size = computed(() => sizes[props.idx % sizes.length]);
 >
 
   <Sponsor
-    v-for="(sponsor, i) in sponsors"
+    v-for="sponsor in sponsors"
     :key="sponsor.id"
     :company="sponsor.company?.user as CompanyUser"
     class="max-w-[200px] w-full flex items-center justify-center
@@ -94,7 +94,7 @@ const size = computed(() => sizes[props.idx % sizes.length]);
         :transition="600"
         class="w-full overflow-hidden"
       >
-        <Slide v-for="(sponsor, i) in sponsors" :key="sponsor.id">
+        <Slide v-for="sponsor in sponsors" :key="sponsor.id">
           <div class="flex justify-center items-center h-72 sm:h-88" :class="[size]">
             <Sponsor
               :company="sponsor.company?.user as CompanyUser"

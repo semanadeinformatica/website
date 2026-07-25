@@ -3,22 +3,6 @@ import type Staff from "@/Types/Staff";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed } from "vue";
 
-const borderColor: Record<string, string> = {
-    orange: "border-2023-orange",
-    "teal-dark": "border-2023-teal-dark",
-    "red-dark": "border-2023-red-dark",
-    red: "border-2023-red",
-    teal: "border-2023-teal",
-};
-
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-    red: "text-2023-red",
-    teal: "text-2023-teal",
-};
-
 const socialIcon: Record<string, string> = {
     github: "io-logo-github",
     linkedin: "io-logo-linkedin",

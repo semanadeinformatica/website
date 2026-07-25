@@ -10,14 +10,6 @@ const shadowColor: Record<string, string> = {
     teal: "shadow-2023-teal",
 };
 
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-    red: "text-2023-red",
-    teal: "text-2023-teal",
-};
-
 defineProps<{
     department: Department;
     color: string;

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { OhVueIcon } from "oh-vue-icons";
-import PortoTechBanner from "@/Components/Footer/PortoTechBanner.vue";
 
 const contacts = [
     {
@@ -36,7 +34,8 @@ const contacts = [
                         target="_blank"
                         :href="platform.url"
                     >
-                        <img :src="`/images/${platform.social}.svg`" class="h-20 w-20 hover:scale-105
+                        <img
+:src="`/images/${platform.social}.svg`" class="h-20 w-20 hover:scale-105
            filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]"/>
                     </a>
@@ -56,7 +55,6 @@ const contacts = [
                 </div>
             </div>
         </section>
-        <!-- <PortoTechBanner /> -->
         <div class="container mx-auto text-center font-bold text-text-color">
             <p>
                 Copyright &copy; 2025

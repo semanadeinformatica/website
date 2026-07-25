@@ -132,8 +132,8 @@ const colorPicker = () => {
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
             <p
-                class="flex w-fit flex-col text-center text-3xl font-bold text-text-color"
                 v-if="event.enroll_in_site"
+                class="flex w-fit flex-col text-center text-3xl font-bold text-text-color"
             >
                 <span v-if="hasJoined">Vemo-nos lá!</span>
                 <span v-else-if="!isEnrolled"

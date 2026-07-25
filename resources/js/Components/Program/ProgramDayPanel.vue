@@ -33,8 +33,6 @@ const toggle = ({ target }: MouseEvent) => {
     selected.value = target as HTMLElement;
 };
 
-const hasTheme = computed(() => !!day.value.theme && day.value.theme.trim().length > 0)
-
 watch(selected, (newValue, oldValue) => {
     oldValue?.classList.toggle("selected");
     newValue?.classList.toggle("selected");

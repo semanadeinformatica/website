@@ -48,14 +48,6 @@ const shadowColor: Record<string, string> = {
     teal: "shadow-2023-teal",
 };
 
-const iconColor: Record<string, string> = {
-    orange: "#f29325",
-    "teal-dark": "#025259",
-    "red-dark": "#b15d5d",
-    red: "#d94f04",
-    teal: "#007172",
-    white: "#ffffff"
-};
 </script>
 
 <template>

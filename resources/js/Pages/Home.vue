@@ -9,7 +9,6 @@ import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";
 import type SponsorTier from "@/Types/SponsorTier";
-import { default as MapComponent } from "@/Components/Home/Map.vue";
 import { ref, onMounted, onBeforeUnmount, computed, nextTick } from "vue";
 
 const sections = ref<HTMLElement[]>([]);
@@ -40,6 +39,7 @@ function goNextOrTop() {
 }
 
 let observer: IntersectionObserver | null = null;
+let savedOnResize: (() => void) | null = null;
 
 function setupObserver() {
   if (observer) observer.disconnect();
@@ -67,7 +67,7 @@ function setupObserver() {
     },
     {
       root: null,
-      threshold: [0.25, 0.5, 0.75], 
+      threshold: [0.25, 0.5, 0.75],
     }
   );
 
@@ -87,15 +87,15 @@ onMounted(async () => {
   window.addEventListener("resize", onResize);
   window.addEventListener("orientationchange", onResize);
 
-  (onMounted as any)._onResize = onResize;
+  savedOnResize = onResize;
 });
 
 onBeforeUnmount(() => {
   if (observer) observer.disconnect();
-  const onResize = (onMounted as any)._onResize;
-  if (onResize) {
-    window.removeEventListener("resize", onResize);
-    window.removeEventListener("orientationchange", onResize);
+  if (savedOnResize) {
+    window.removeEventListener("resize", savedOnResize);
+    window.removeEventListener("orientationchange", savedOnResize);
+    savedOnResize = null;
   }
 });
 
@@ -112,30 +112,7 @@ interface Props {
 
 defineProps<Props>();
 
-const formattedDate = (
-    startDate: string,
-    separator: string,
-    endDate: string,
-) => {
-    const startDateArray = startDate.split(" ");
-    const endDateArray = endDate.split(" ");
-
-    let pointer = 0;
-
-    while (
-        startDateArray[startDateArray.length - pointer - 1] ===
-        endDateArray[endDateArray.length - pointer - 1]
-    )
-        pointer++;
-
-    startDate = startDateArray
-        .slice(0, startDateArray.length - pointer)
-        .join(" ");
-
-    return `${startDate} ${separator} ${endDate}`;
-};
-
-const tierSize = (tier: SponsorTier) => {
+const tierSize = () => {
     return "15em";
 };
 </script>
@@ -146,7 +123,6 @@ const tierSize = (tier: SponsorTier) => {
         <button
             v-if="canEnroll"
             type="button"
-            @click="goNextOrTop"
             aria-label="Scroll to next section"
             class="group fixed bottom-10 right-12 z-50 grid place-items-center
                     w-12 h-12 rounded-full text-white bg-2025-bg-green
@@ -154,6 +130,7 @@ const tierSize = (tier: SponsorTier) => {
            filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
            focus:outline-hidden"
+            @click="goNextOrTop"
             >
             <OhVueIcon :name="atBottom ? 'io-arrow-up' : 'io-arrow-down'" fill="white" />
         </button>
@@ -186,18 +163,8 @@ const tierSize = (tier: SponsorTier) => {
                     src="images/sinf logo.png"
                     alt="Stylized SINF logo"
                 />
-                <!-- <span
-                    class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
-                    >{{ edition.year }}</span
-                > -->
             </div>
 
-
-            <!-- <p
-                class="text-text-color mr-2 border border-solid border-white rounded-md p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-black/80"
-            >
-                semana_de_informática
-            </p> -->
             <p class="margin-0 text-2xl font-bold text-text-color">
                 21 a 24 de outubro
             </p>
@@ -231,7 +198,7 @@ const tierSize = (tier: SponsorTier) => {
             >
                 Este ano temos
             </p>
-                
+
             <template
                 v-if="
                     days.length !== 0 ||
@@ -242,7 +209,7 @@ const tierSize = (tier: SponsorTier) => {
             >
                 <div
                     class="mt-10 mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around transition-transform duration-300 hover:scale-105
-           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
+           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
            focus:outline-hidden"
                 >
@@ -301,17 +268,12 @@ const tierSize = (tier: SponsorTier) => {
                 v-for="(tier, idx) in sponsorTiers"
                 :key="tier.id"
                 :title="tier.name"
-                :tierSize="tierSize(tier)"
+                :tier-size="tierSize(tier)"
                 :sponsors="tier.sponsors ?? []"
                 :color="tier.color"
                 :idx="idx"
             ></SponsorBanner>
         </section>
-
-        <!-- MAP -->
-        <!-- <section class="bg-2023-orange p-10">
-            <MapComponent />
-        </section> -->
     </AppLayout>
 </template>
 
