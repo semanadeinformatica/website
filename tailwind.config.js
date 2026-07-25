@@ -1,9 +1,9 @@
-import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
 import typography from "@tailwindcss/typography";
 import containers from "@tailwindcss/container-queries";
-import plugin from "tailwindcss/plugin";
-import transformThemeValue from "tailwindcss/lib/util/transformThemeValue";
+
+const plugin = (fn) => fn;
+const transformThemeValue = () => (v) => v;
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -18,7 +18,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Figtree", "ui-sans-serif", "system-ui", "Roboto", "sans-serif"],
             },
             colors: {
                 "text-color": "#ffffff",
