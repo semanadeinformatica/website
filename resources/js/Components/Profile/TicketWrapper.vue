@@ -35,7 +35,7 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
     </svg>
     <p
         v-if="($page.props.tickets as EventTicket[]).length === 0"
-        class="flex w-full flex-auto items-center justify-center pt-8 text-center text-2xl font-bold text-text-color"
+        class="text-text-color flex w-full flex-auto items-center justify-center pt-8 text-center text-2xl font-bold"
     >
         Ainda não há eventos marcados. Verifica mais tarde!
     </p>

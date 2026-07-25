@@ -101,7 +101,6 @@ const submit = () => {
                 />
             </label>
 
-
             <TextInput
                 id="external_url"
                 v-model="form.external_url"

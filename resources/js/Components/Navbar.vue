@@ -50,24 +50,27 @@ const isScrolled = ref(false);
 const isMenuOpen = ref(false);
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 20; // adjust threshold
+    isScrolled.value = window.scrollY > 20; // adjust threshold
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+    window.removeEventListener("scroll", handleScroll);
 });
-
 </script>
 
 <template>
-    <nav 
+    <nav
         :class="[
-            'flex py-2 absolute top-0 left-0 w-full',
-            isScrolled ? 'backdrop-blur-3xl' : (isMenuOpen ? 'bg-transparent' : 'bg-transparent')
+            'absolute top-0 left-0 flex w-full py-2',
+            isScrolled
+                ? 'backdrop-blur-3xl'
+                : isMenuOpen
+                  ? 'bg-transparent'
+                  : 'bg-transparent',
         ]"
     >
         <Dropdown align="center" width="32" class="ml-10 max-md:hidden">
@@ -94,7 +97,7 @@ onUnmounted(() => {
         </Dropdown>
         <NavLink :href="route('home')" class="md:hidden">
             <img
-                class="w-24 max-md:w-16 p-2 ml-3"
+                class="ml-3 w-24 p-2 max-md:w-16"
                 src="/images/cy-sinf-small.svg"
                 alt="Stylized SINF logo"
             />
@@ -122,7 +125,9 @@ onUnmounted(() => {
                 width="32"
             >
                 <template #trigger>
-                    <DropdownTrigger class="text-text-color">Competições</DropdownTrigger>
+                    <DropdownTrigger class="text-text-color"
+                        >Competições</DropdownTrigger
+                    >
                 </template>
                 <template #content>
                     <template
@@ -143,7 +148,9 @@ onUnmounted(() => {
             <div class="hidden h-full gap-1 md:flex lg:gap-4">
                 <Dropdown align="center" width="20">
                     <template #trigger>
-                        <DropdownTrigger class="text-text-color"> 2025 </DropdownTrigger>
+                        <DropdownTrigger class="text-text-color">
+                            2025
+                        </DropdownTrigger>
                     </template>
                     <template #content>
                         <template

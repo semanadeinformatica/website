@@ -28,21 +28,18 @@ const form = useForm({
     name: user ? user.name : "",
     email: user ? user.email : "",
     type: (user?.usertype_type.split("\\").pop() ?? "").toLowerCase() as
-        | "participant"
-        | "company"
-        | "speaker"
-        | "admin",
-    title: isSpeaker ? user?.usertype?.title ?? "" : "",
+        "participant" | "company" | "speaker" | "admin",
+    title: isSpeaker ? (user?.usertype?.title ?? "") : "",
     description:
-        isCompany || isSpeaker ? user?.usertype?.description ?? "" : "",
-    organization: isSpeaker ? user?.usertype?.organization ?? "" : "",
-    public_email: !isAdmin ? user?.usertype?.social_media?.email ?? "" : "",
-    facebook: !isAdmin ? user?.usertype?.social_media?.facebook ?? "" : "",
-    github: !isAdmin ? user?.usertype?.social_media?.github ?? "" : "",
-    instagram: !isAdmin ? user?.usertype?.social_media?.instagram ?? "" : "",
-    linkedin: !isAdmin ? user?.usertype?.social_media?.linkedin ?? "" : "",
-    twitter: !isAdmin ? user?.usertype?.social_media?.twitter ?? "" : "",
-    website: !isAdmin ? user?.usertype?.social_media?.website ?? "" : "",
+        isCompany || isSpeaker ? (user?.usertype?.description ?? "") : "",
+    organization: isSpeaker ? (user?.usertype?.organization ?? "") : "",
+    public_email: !isAdmin ? (user?.usertype?.social_media?.email ?? "") : "",
+    facebook: !isAdmin ? (user?.usertype?.social_media?.facebook ?? "") : "",
+    github: !isAdmin ? (user?.usertype?.social_media?.github ?? "") : "",
+    instagram: !isAdmin ? (user?.usertype?.social_media?.instagram ?? "") : "",
+    linkedin: !isAdmin ? (user?.usertype?.social_media?.linkedin ?? "") : "",
+    twitter: !isAdmin ? (user?.usertype?.social_media?.twitter ?? "") : "",
+    website: !isAdmin ? (user?.usertype?.social_media?.website ?? "") : "",
 });
 
 const verificationLinkSent = ref(false);
@@ -61,12 +58,14 @@ const sendEmailVerification = () => {
 
 <template>
     <FormSection @submitted="updateProfileInformation">
-        <template #title> <span class="text-text-color">Informação do Perfil </span> </template>
+        <template #title>
+            <span class="text-text-color">Informação do Perfil </span>
+        </template>
 
         <template #description>
             <span class="text-text-color">
-            Atualiza as informações do perfil da tua conta e o endereço de
-            e-mail.
+                Atualiza as informações do perfil da tua conta e o endereço de
+                e-mail.
             </span>
         </template>
 
@@ -104,7 +103,7 @@ const sendEmailVerification = () => {
                             :href="route('verification.send')"
                             method="post"
                             as="button"
-                            class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                            class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                             @click.prevent="sendEmailVerification"
                         >
                             Clica aqui para reenviar o e-mail de verificação.

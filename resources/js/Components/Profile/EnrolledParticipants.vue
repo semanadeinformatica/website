@@ -20,19 +20,19 @@ const user = usePage().props.user as Participant;
         class="mt-10 flex flex-col items-center gap-3"
     >
         <div class="flex w-full flex-col md:flex-row md:justify-between">
-            <h2 class="p-3 text-2xl font-bold text-text-color">
+            <h2 class="text-text-color p-3 text-2xl font-bold">
                 Participantes que visitaram a sua empresa: {{ visitors.length }}
             </h2>
             <a
                 v-if="$page.props"
-                class="inline-flex items-center justify-center border border-black bg-2025-dark px-4 py-2 text-center text-xl font-bold text-white shadow-2023-teal transition-shadow hover:shadow"
+                class="bg-2025-dark shadow-2023-teal inline-flex items-center justify-center border border-black px-4 py-2 text-center text-xl font-bold text-white transition-shadow hover:shadow"
                 :href="route('user.company.participants.cvs', { user })"
             >
                 Descarregar CVs
             </a>
         </div>
         <div
-            class="flex w-full flex-col items-center border border-black bg-2025-bg shadow-lg shadow-2023-teal"
+            class="bg-2025-bg shadow-2023-teal flex w-full flex-col items-center border border-black shadow-lg"
         >
             <div
                 v-for="visitor in visitors"
@@ -71,7 +71,7 @@ const user = usePage().props.user as Participant;
         </div>
     </section>
     <div v-else class="flex h-full flex-1 items-center justify-center">
-        <p class="text-center text-2xl font-bold text-text-color">
+        <p class="text-text-color text-center text-2xl font-bold">
             Ainda nenhum participante visitou a sua empresa.
         </p>
     </div>

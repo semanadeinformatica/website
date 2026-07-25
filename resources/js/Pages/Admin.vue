@@ -30,7 +30,7 @@ const pageRoutes = {
         >
             <template v-for="(label, page) in pageRoutes" :key="page">
                 <a
-                    class="w-full place-self-center wrap-break-word border border-black bg-2023-teal-dark p-6 text-center text-white shadow-2023-red transition-all hover:shadow-md"
+                    class="bg-2023-teal-dark shadow-2023-red w-full place-self-center border border-black p-6 text-center wrap-break-word text-white transition-all hover:shadow-md"
                     :href="route(page)"
                     >{{ $t(label, 2) }}</a
                 >

@@ -21,11 +21,13 @@ const close = () => emit("close");
             </div>
 
             <div class="mt-4 space-y-4 text-sm text-white">
-                <slot name="content"/>
+                <slot name="content" />
             </div>
         </div>
 
-        <div class="flex flex-row justify-end bg-2025-blue px-4 py-4 text-right">
+        <div
+            class="bg-2025-blue flex flex-row justify-end px-4 py-4 text-right"
+        >
             <slot name="footer" />
         </div>
     </Modal>

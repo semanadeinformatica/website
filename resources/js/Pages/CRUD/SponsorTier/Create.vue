@@ -101,11 +101,8 @@ const submit = () => {
                 />
             </label>
 
-            <label
-                for="canSeeAll"
-                class="flex flex-row items-center gap-6"
-            >
-                Consegue ver todos os participantes (ou só quem visita a banca)?   
+            <label for="canSeeAll" class="flex flex-row items-center gap-6">
+                Consegue ver todos os participantes (ou só quem visita a banca)?
                 <Checkbox
                     id="canSeeAll"
                     v-model="form.canSeeAll"
@@ -113,7 +110,6 @@ const submit = () => {
                     value="false"
                 />
             </label>
-
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

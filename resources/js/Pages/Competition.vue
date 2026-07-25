@@ -44,16 +44,16 @@ const formattedDate = (
     <AppLayout title="Competição">
         <header class="flex flex-col items-center gap-4 p-4 text-center">
             <h2
-                class="w-fit bg-2025-blue rounded-lg p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
+                class="bg-2025-blue w-fit rounded-lg p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
             >
                 {{ competition.name }}
             </h2>
             <span
-                class="inline-flex w-3/4 justify-center text-xl font-bold text-text-color pt-4"
+                class="text-text-color inline-flex w-3/4 justify-center pt-4 text-xl font-bold"
                 >{{ competition.theme }}</span
             >
             <span
-                class="inline-flex justify-center text-xl font-bold text-text-color"
+                class="text-text-color inline-flex justify-center text-xl font-bold"
                 >{{
                     formattedDate(
                         $d(new Date(competition.date_start), "fullTime"),
@@ -64,32 +64,30 @@ const formattedDate = (
             </span>
         </header>
 
-        <section v-if="competition.description && competition.description !== ''" class="flex flex-col gap-4 items-center justitfy-center p-4 w-full ">
+        <section
+            v-if="competition.description && competition.description !== ''"
+            class="justitfy-center flex w-full flex-col items-center gap-4 p-4"
+        >
             <h2
-                class="w-fit bg-2025-blue-dark rounded-md p-2 px-5 text-3xl font-bold text-white "
+                class="bg-2025-blue-dark w-fit rounded-md p-2 px-5 text-3xl font-bold text-white"
             >
                 Descrição
             </h2>
-            
+
             <p class="text-white">{{ competition.description }}</p>
         </section>
 
-        <Podium
-            :leaderboard="leaderboard"
-            :prizes="prizes"
-        />
+        <Podium :leaderboard="leaderboard" :prizes="prizes" />
 
         <!-- RULES -->
-        <section
-            class="relative mt-4 border-8 border-white/5 text-justify"
-        >
+        <section class="relative mt-4 border-8 border-white/5 text-justify">
             <h2
-                class="absolute -top-9 left-1/2 -translate-x-1/2 transform bg-2025-blue-dark p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl rounded-lg"
+                class="bg-2025-blue-dark absolute -top-9 left-1/2 -translate-x-1/2 transform rounded-lg p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
             >
                 Regulamento
             </h2>
             <div
-                class="prose prose-lg max-w-none wrap-break-word p-20 text-white max-lg:pb-10 lg:columns-2"
+                class="prose prose-lg max-w-none p-20 wrap-break-word text-white max-lg:pb-10 lg:columns-2"
                 v-html="competition.regulation_html"
             ></div>
         </section>
@@ -99,19 +97,19 @@ const formattedDate = (
                 class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
             >
                 <template v-if="competition.teams && competition.teams.length">
-                    <p class="text-center text-2xl font-bold text-text-color">
+                    <p class="text-text-color text-center text-2xl font-bold">
                         A competição já acabou, vê aqui quem participou
                     </p>
-                    <span class="text-2xl font-bold text-text-color">
+                    <span class="text-text-color text-2xl font-bold">
                         Equipas: {{ competition.teams?.length }}
                     </span>
                     <div
-                        class="flex w-4/5 flex-col border border-white/5 border-8 md:w-1/2 rounded-lg"
+                        class="flex w-4/5 flex-col rounded-lg border border-8 border-white/5 md:w-1/2"
                     >
                         <div
                             v-for="team in competition.teams ?? []"
                             :key="team.id"
-                            class="inline-flex w-full justify-between gap-1 p-4 text-lg even:bg-2025-blue/20"
+                            class="even:bg-2025-blue/20 inline-flex w-full justify-between gap-1 p-4 text-lg"
                         >
                             <img
                                 :src="
@@ -124,17 +122,19 @@ const formattedDate = (
                                                   '+',
                                               )}&color=ffffff&background=3a9699`
                                 "
-                                class="h-16 w-16 self-center rounded-full border-white/5 border-2"
+                                class="h-16 w-16 self-center rounded-full border-2 border-white/5"
                                 :alt="`Image for team ${team.name}`"
                             />
-                            <div class="flex flex-col items-end self-center text-text-color">
+                            <div
+                                class="text-text-color flex flex-col items-end self-center"
+                            >
                                 <span class="text-end">{{ team.name }}</span>
                                 <span>{{ team.points }} pontos</span>
                             </div>
                         </div>
                     </div>
                 </template>
-                <p v-else class="text-lg font-bold text-2023-teal">
+                <p v-else class="text-2023-teal text-lg font-bold">
                     A competição acabou mas não houve equipas inscritas desta
                     vez.
                 </p>
@@ -171,14 +171,14 @@ const formattedDate = (
                 class="relative flex content-center items-center justify-center py-24"
             >
                 <h1
-                    class="absolute top-4 m-4 flex justify-center p-3 text-4xl font-black text-text-color"
+                    class="text-text-color absolute top-4 m-4 flex justify-center p-3 text-4xl font-black"
                 >
                     Vamos a isto?
                 </h1>
 
                 <a
                     :href="competition.registration_link"
-                    class="relative mt-5 content-center justify-center border border-black bg-2025-blue px-8 py-2 text-center text-2xl font-semibold text-white shadow-black/80 transition-shadow hover:shadow-md active:shadow-none"
+                    class="bg-2025-blue relative mt-5 content-center justify-center border border-black px-8 py-2 text-center text-2xl font-semibold text-white shadow-black/80 transition-shadow hover:shadow-md active:shadow-none"
                 >
                     Participar!
                 </a>

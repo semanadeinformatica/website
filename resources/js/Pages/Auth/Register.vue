@@ -81,20 +81,20 @@ const submit = () => {
                     <a
                         target="_blank"
                         :href="route('terms.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
                         >Terms of Service</a
                     >
                     and
                     <a
                         target="_blank"
                         :href="route('policy.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
                         >Privacy Policy</a
                     ></span
                 >
             </label>
 
-            <label class="flex items-center gap-2 self-stretch text-text-color">
+            <label class="text-text-color flex items-center gap-2 self-stretch">
                 <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
                 since it makes it so that every account that exists has agreed to this -->
                 <Checkbox
@@ -109,7 +109,7 @@ const submit = () => {
 
             <Link
                 :href="route('login')"
-                class="font-semibold text-text-color underline"
+                class="text-text-color font-semibold underline"
             >
                 Já tens conta?
             </Link>

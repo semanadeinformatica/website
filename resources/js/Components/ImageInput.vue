@@ -50,7 +50,7 @@ const updatePreview = () => {
             v-if="preview"
             :src="preview"
             alt=""
-            class="max-h-40 w-auto border border-black object-contain shadow-md shadow-2023-red"
+            class="shadow-2023-red max-h-40 w-auto border border-black object-contain shadow-md"
         />
 
         <OhVueIcon v-else name="io-image" class="h-20 w-20" />
@@ -60,7 +60,7 @@ const updatePreview = () => {
         <span
             v-show="errorMessage"
             :id="`${id}-error`"
-            class="mt-2 font-semibold text-2023-red"
+            class="text-2023-red mt-2 font-semibold"
             >{{ errorMessage }}</span
         >
     </label>

@@ -9,10 +9,7 @@ interface Props {
 
 defineProps<Props>();
 
-const colors: Array<string> = [
-    "2025-bg",
-];
-
+const colors: Array<string> = ["2025-bg"];
 </script>
 
 <template>
@@ -22,7 +19,7 @@ const colors: Array<string> = [
             class="flex flex-col items-center gap-7 py-4"
         >
             <h2
-            class="w-fi bg-2025-blue p-3 text-center text-2xl rounded-md font-bold text-white xl:text-3xl 2xl:text-4xl"
+                class="w-fi bg-2025-blue rounded-md p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
             >
                 Equipa
             </h2>

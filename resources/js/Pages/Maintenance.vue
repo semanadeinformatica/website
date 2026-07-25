@@ -6,38 +6,38 @@ import { OhVueIcon } from "oh-vue-icons";
 <template>
     <Head title="Brevemente..." />
     <!-- TODO: localization -->
-    <main class="min-h-screen bg-2025-bg-gradient">
+    <main class="bg-2025-bg-gradient min-h-screen">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-evenly gap-14 py-16"
         >
             <img
                 id="svg-1"
-                class="absolute left-[7%] w-36 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute left-[7%] w-36 opacity-50"
                 src="images/cy-sinf.svg"
                 alt="Stylized SINF logo"
             />
             <img
                 id="svg-2"
-                class="absolute right-[7%] top-16 w-32 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute top-16 right-[7%] w-32 opacity-50"
                 src="images/rc-sinf.svg"
                 alt="Stylized SINF logo"
             />
             <img
                 id="svg-3"
-                class="absolute bottom-28 right-[15%] w-20 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute right-[15%] bottom-28 w-20 opacity-50"
                 src="images/oc-sinf.svg"
                 alt="Stylized SINF logo"
             />
 
             <div class="relative">
                 <img
-                    class="w-96 max-ml:w-72"
+                    class="max-ml:w-72 w-96"
                     src="images/sinf logo.png"
                     alt="Stylized SINF logo"
                 />
             </div>
             <p
-                class="text-text-color mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold text-2023-teal shadow-md shadow-2023-teal"
+                class="text-text-color text-2023-teal shadow-2023-teal mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold shadow-md"
             >
                 semana_de_informática
             </p>
@@ -45,13 +45,13 @@ import { OhVueIcon } from "oh-vue-icons";
                 21 a 24 de outubro
             </p>
             <p
-                class="m-0 text-center text-lg font-bold text-white max-ml:text-base"
+                class="max-ml:text-base m-0 text-center text-lg font-bold text-white"
             >
                 Estamos a preparar mais uma edição da SINF!
             </p>
             <a
                 href="https://2024.sinf.pt"
-                class="relative m-0 text-center text-lg font-bold text-white underline max-ml:text-base"
+                class="max-ml:text-base relative m-0 text-center text-lg font-bold text-white underline"
             >
                 Revê a edição do último ano aqui!
             </a>
@@ -59,16 +59,16 @@ import { OhVueIcon } from "oh-vue-icons";
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
             >
                 <p
-                    class="left-[calc(50% - 86.5px)] absolute top-[-30px] w-max border border-solid border-black bg-2025-blue p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-teal"
+                    class="left-[calc(50% - 86.5px)] bg-2025-blue shadow-2023-teal absolute top-[-30px] w-max border border-solid border-black p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md"
                 >
                     Contacta-nos!
                 </p>
                 <div
                     id="contacts-content-desktop"
-                    class="flex w-full flex-row items-center justify-evenly gap-2.5 max-ml:hidden"
+                    class="max-ml:hidden flex w-full flex-row items-center justify-evenly gap-2.5"
                 >
                     <a
-                        class="flex w-fit rounded-full bg-2023-red p-2"
+                        class="bg-2023-red flex w-fit rounded-full p-2"
                         target="_blank"
                         href="https://www.facebook.com/NIAEFEUP"
                     >
@@ -78,7 +78,7 @@ import { OhVueIcon } from "oh-vue-icons";
                         ></OhVueIcon>
                     </a>
                     <a
-                        class="flex w-fit rounded-full bg-2023-red-dark p-2"
+                        class="bg-2023-red-dark flex w-fit rounded-full p-2"
                         target="_blank"
                         href="https://www.linkedin.com/company/nifeup/mycompany/"
                     >
@@ -93,7 +93,7 @@ import { OhVueIcon } from "oh-vue-icons";
                         externas@sinf.pt
                     </p>
                     <a
-                        class="flex w-fit rounded-full bg-2023-teal p-2"
+                        class="bg-2023-teal flex w-fit rounded-full p-2"
                         target="_blank"
                         href="https://www.instagram.com/niaefeup/"
                     >
@@ -103,7 +103,7 @@ import { OhVueIcon } from "oh-vue-icons";
                         ></OhVueIcon>
                     </a>
                     <a
-                        class="flex w-fit rounded-full bg-2023-orange p-2"
+                        class="bg-2023-orange flex w-fit rounded-full p-2"
                         target="_blank"
                         href="https://twitter.com/niaefeup"
                     >
@@ -115,16 +115,14 @@ import { OhVueIcon } from "oh-vue-icons";
                 </div>
                 <div
                     id="contacts-content-mobile"
-                    class="hidden flex-col items-center gap-2.5 max-ml:flex"
+                    class="max-ml:flex hidden flex-col items-center gap-2.5"
                 >
-                    <p
-                        class="text-lg font-bold text-white max-ml:text-white"
-                    >
+                    <p class="max-ml:text-white text-lg font-bold text-white">
                         externas@sinf.pt
                     </p>
                     <div class="grid grid-cols-2 justify-center gap-2.5">
                         <a
-                            class="flex w-fit rounded-full bg-2023-red p-2"
+                            class="bg-2023-red flex w-fit rounded-full p-2"
                             target="_blank"
                             href="https://www.facebook.com/NIAEFEUP"
                         >
@@ -134,7 +132,7 @@ import { OhVueIcon } from "oh-vue-icons";
                             ></OhVueIcon>
                         </a>
                         <a
-                            class="flex w-fit rounded-full bg-2023-red-dark p-2"
+                            class="bg-2023-red-dark flex w-fit rounded-full p-2"
                             target="_blank"
                             href="https://www.linkedin.com/company/nifeup/mycompany/"
                         >
@@ -144,7 +142,7 @@ import { OhVueIcon } from "oh-vue-icons";
                             ></OhVueIcon>
                         </a>
                         <a
-                            class="flex w-fit rounded-full bg-2023-teal p-2"
+                            class="bg-2023-teal flex w-fit rounded-full p-2"
                             target="_blank"
                             href="https://www.instagram.com/niaefeup/"
                         >
@@ -154,7 +152,7 @@ import { OhVueIcon } from "oh-vue-icons";
                             ></OhVueIcon>
                         </a>
                         <a
-                            class="flex w-fit rounded-full bg-2023-orange p-2"
+                            class="bg-2023-orange flex w-fit rounded-full p-2"
                             target="_blank"
                             href="https://twitter.com/niaefeup"
                         >

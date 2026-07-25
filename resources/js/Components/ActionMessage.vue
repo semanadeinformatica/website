@@ -13,7 +13,7 @@ defineProps<Props>();
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
         >
-            <div v-show="on" class="text-sm text-2023-teal">
+            <div v-show="on" class="text-2023-teal text-sm">
                 <slot />
             </div>
         </transition>

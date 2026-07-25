@@ -38,12 +38,18 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> <span class="text-text-color">Apagar conta</span></template>
+        <template #title>
+            <span class="text-text-color">Apagar conta</span></template
+        >
 
-        <template #description> <span class="text-text-color">Apaga permanentemente a tua conta. </span></template>
+        <template #description>
+            <span class="text-text-color"
+                >Apaga permanentemente a tua conta.
+            </span></template
+        >
 
         <template #content>
-            <div class="max-w-xl text-sm text-text-color">
+            <div class="text-text-color max-w-xl text-sm">
                 Depois de a tua conta ser excluída, todos os teus recursos e
                 dados serão apagados permanentemente. Antes de apagares a tua
                 conta, por favor faz o download de todos os dados ou informações
@@ -61,17 +67,19 @@ const closeModal = () => {
                 <template #title> Apagar conta </template>
 
                 <template #content>
-                    <p>Tens a certeza de que desejas apagar a tua conta? Uma vez
-                    que a tua conta é excluída, todos os teus recursos e dados
-                    serão apagados permanentemente. Por favor, insere a tua
-                    password para confirmar que queres apagar permanentemente a
-                    tua conta.</p>
+                    <p>
+                        Tens a certeza de que desejas apagar a tua conta? Uma
+                        vez que a tua conta é excluída, todos os teus recursos e
+                        dados serão apagados permanentemente. Por favor, insere
+                        a tua password para confirmar que queres apagar
+                        permanentemente a tua conta.
+                    </p>
 
                     <TextInput
                         ref="passwordInput"
                         v-model="form.password"
                         type="password"
-                        class=" p block w-full text-2025-blue"
+                        class="p text-2025-blue block w-full"
                         label="Password"
                         autocomplete="current-password"
                         :error-message="form.errors.password"

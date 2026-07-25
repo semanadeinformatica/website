@@ -53,8 +53,10 @@ const clearCVFileInput = () => {
 <template>
     <div class="flex w-full flex-col py-12">
         <div
-            class="flex justify-between border-solid border-white bg-2025-blue p-3 px-8 font-bold text-white rounded-md"
-            :class="[previewOpen ? 'border-x border-t rounded-b-none' : 'border']"
+            class="bg-2025-blue flex justify-between rounded-md border-solid border-white p-3 px-8 font-bold text-white"
+            :class="[
+                previewOpen ? 'rounded-b-none border-x border-t' : 'border',
+            ]"
         >
             <div class="flex items-center">
                 <p>CV</p>
@@ -65,7 +67,7 @@ const clearCVFileInput = () => {
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 text-2023-bg"
+                        class="text-2023-bg w-6"
                         viewBox="0 0 512 512"
                     >
                         <path
@@ -92,7 +94,7 @@ const clearCVFileInput = () => {
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 text-2023-bg"
+                    class="text-2023-bg w-6"
                     viewBox="0 0 512 512"
                 >
                     <path
@@ -107,7 +109,7 @@ const clearCVFileInput = () => {
             </button>
         </div>
         <div
-            class="h-fit items-center justify-center border-x border-b border-solid rounded-md border-white bg-2025-blue p-6 font-bold text-white"
+            class="bg-2025-blue h-fit items-center justify-center rounded-md border-x border-b border-solid border-white p-6 font-bold text-white"
             :class="[previewOpen ? 'flex rounded-t-none' : 'hidden']"
         >
             <object
@@ -124,7 +126,7 @@ const clearCVFileInput = () => {
                 target="_blank"
                 :href="item.usertype?.cv_url"
             >
-                <div class="flex text-2023-bg">
+                <div class="text-2023-bg flex">
                     <p class="mr-1">CV</p>
                     <OhVueIcon name="io-open" scale="1.3"></OhVueIcon>
                 </div>
@@ -139,10 +141,12 @@ const clearCVFileInput = () => {
                 !item?.usertype?.cv_path &&
                 $page.props.auth.user?.id == item.id
             "
-            class="mt-6 border-2 border-solid border-white shadow-black/80 rounded-md p-3 text-2023-red"
+            class="text-2023-red mt-6 rounded-md border-2 border-solid border-white p-3 shadow-black/80"
         >
             <p>
-                <span class="font-bold text-text-color">Por que é que o deves fazer? </span>
+                <span class="text-text-color font-bold"
+                    >Por que é que o deves fazer?
+                </span>
                 <span class="text-text-color"
                     >Esta é uma excelente oportunidade para te dares a conhecer
                     às empresas que participam na SINF!</span

@@ -165,10 +165,7 @@ const submit = () => {
                 </option>
             </TextInput>
 
-            <label
-                for="enroll_in_site"
-                class=""
-            >
+            <label for="enroll_in_site" class="">
                 Inscrição no site?
                 <Checkbox
                     id="enroll_in_site"

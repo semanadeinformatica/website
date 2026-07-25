@@ -33,7 +33,7 @@ const attribution =
             <LMarker :lat-lng="center">
                 <LIcon>
                     <OhVueIcon
-                        class="absolute bottom-[-9px] right-[-14px]"
+                        class="absolute right-[-14px] bottom-[-9px]"
                         name="io-location-sharp"
                         fill="#d94f04"
                         scale="2"

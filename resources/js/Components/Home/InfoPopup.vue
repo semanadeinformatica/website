@@ -41,7 +41,7 @@ const enroll = () => {
         >
             <img class="w-80 p-6" src="images/sinf logo.png" />
             <p>
-                A <span class="font-bold text-2025-blue-dark">SINF</span> está
+                A <span class="text-2025-blue-dark font-bold">SINF</span> está
                 mais interactiva do que nunca!
             </p>
             <ul class="flex flex-col items-center">

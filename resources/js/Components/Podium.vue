@@ -400,28 +400,28 @@ const hasLeaderboardTeams = computed(() => props.leaderboard.length >= 3);
 
         <div
             v-if="hasLeaderboardTeams"
-            class="mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle text-text-color ax-xs:grid-cols-1 md:grid"
+            class="text-text-color ax-xs:grid-cols-1 mt-10 hidden w-3/4 grid-cols-3 items-center gap-4 px-1.5 text-center align-middle md:grid"
         >
             <div
-                class="align-center text-wrap flex flex-col items-center truncate px-1 text-xl max-xs:row-start-2"
+                class="align-center max-xs:row-start-2 flex flex-col items-center truncate px-1 text-xl text-wrap"
             >
-                <span class="whitespace-normal font-bold">{{
+                <span class="font-bold whitespace-normal">{{
                     leaderboard[1].name
                 }}</span>
                 <span class="">{{ leaderboard[1].points }}</span>
             </div>
             <div
-                class="align-center text-wrap flex flex-col items-center truncate px-3 text-2xl"
+                class="align-center flex flex-col items-center truncate px-3 text-2xl text-wrap"
             >
-                <span class="whitespace-normal font-bold">{{
+                <span class="font-bold whitespace-normal">{{
                     leaderboard[0].name
                 }}</span>
                 <span class="">{{ leaderboard[0].points }}</span>
             </div>
             <div
-                class="align-center text-wrap flex flex-col items-center truncate px-1 text-lg"
+                class="align-center flex flex-col items-center truncate px-1 text-lg text-wrap"
             >
-                <span class="whitespace-normal font-bold">{{
+                <span class="font-bold whitespace-normal">{{
                     leaderboard[2].name
                 }}</span>
                 <span class="">{{ leaderboard[2].points }}</span>

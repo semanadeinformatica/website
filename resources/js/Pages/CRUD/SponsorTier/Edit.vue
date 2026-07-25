@@ -96,17 +96,10 @@ const submit = () => {
                 />
             </label>
 
-            <label
-                for="canSeeAll"
-                class="flex flex-row items-center gap-6"
-            >
+            <label for="canSeeAll" class="flex flex-row items-center gap-6">
                 Consegue ver todos os participantes?
-                <Checkbox
-                    id="canSeeAll"
-                    v-model:checked="form.canSeeAll"
-                />
+                <Checkbox id="canSeeAll" v-model:checked="form.canSeeAll" />
             </label>
-
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

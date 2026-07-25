@@ -24,7 +24,7 @@ const submit = () => {
     <Head title="Forgot Password" />
 
     <CardLayout title="Repor password" heading="Esqueceste-te da tua password?">
-        <span v-if="status" class="p-4 text-text-color">
+        <span v-if="status" class="text-text-color p-4">
             {{ status }}
         </span>
 

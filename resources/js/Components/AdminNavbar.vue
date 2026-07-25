@@ -18,7 +18,7 @@ const pageRoutes: Routes = {
 </script>
 
 <template>
-    <nav class="relative z-30 flex border-b-2 border-black bg-2023-bg py-6">
+    <nav class="bg-2023-bg relative z-30 flex border-b-2 border-black py-6">
         <div class="flex h-full w-full pl-5 md:hidden">
             <img
                 class="flex md:hidden"

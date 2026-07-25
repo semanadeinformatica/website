@@ -64,4 +64,3 @@ const competitionNames = computed<Record<number, string>>(() =>
         </template>
     </CRUDLayout>
 </template>
-

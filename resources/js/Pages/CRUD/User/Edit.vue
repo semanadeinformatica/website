@@ -27,21 +27,19 @@ const form = useForm({
     name: user.name,
     email: user.email,
     type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
-        | "participant"
-        | "company"
-        | "speaker"
-        | "admin",
-    title: isSpeaker ? user.usertype?.title ?? "" : "",
-    display_name: isSpeaker ? user.usertype?.display_name ?? "" : "",
-    description: isCompany || isSpeaker ? user.usertype?.description ?? "" : "",
-    organization: isSpeaker ? user.usertype?.organization ?? "" : "",
-    public_email: !isAdmin ? user?.usertype?.social_media?.email ?? "" : "",
-    facebook: !isAdmin ? user?.usertype?.social_media?.facebook ?? "" : "",
-    github: !isAdmin ? user?.usertype?.social_media?.github ?? "" : "",
-    instagram: !isAdmin ? user?.usertype?.social_media?.instagram ?? "" : "",
-    linkedin: !isAdmin ? user?.usertype?.social_media?.linkedin ?? "" : "",
-    twitter: !isAdmin ? user?.usertype?.social_media?.twitter ?? "" : "",
-    website: !isAdmin ? user?.usertype?.social_media?.website ?? "" : "",
+        "participant" | "company" | "speaker" | "admin",
+    title: isSpeaker ? (user.usertype?.title ?? "") : "",
+    display_name: isSpeaker ? (user.usertype?.display_name ?? "") : "",
+    description:
+        isCompany || isSpeaker ? (user.usertype?.description ?? "") : "",
+    organization: isSpeaker ? (user.usertype?.organization ?? "") : "",
+    public_email: !isAdmin ? (user?.usertype?.social_media?.email ?? "") : "",
+    facebook: !isAdmin ? (user?.usertype?.social_media?.facebook ?? "") : "",
+    github: !isAdmin ? (user?.usertype?.social_media?.github ?? "") : "",
+    instagram: !isAdmin ? (user?.usertype?.social_media?.instagram ?? "") : "",
+    linkedin: !isAdmin ? (user?.usertype?.social_media?.linkedin ?? "") : "",
+    twitter: !isAdmin ? (user?.usertype?.social_media?.twitter ?? "") : "",
+    website: !isAdmin ? (user?.usertype?.social_media?.website ?? "") : "",
     photo: null as File | null,
 });
 

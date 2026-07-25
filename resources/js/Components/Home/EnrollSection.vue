@@ -7,10 +7,10 @@ import { route } from "ziggy-js";
 <template>
     <section
         id="enroll-section"
-        class="relative mx-10 flex h-full flex-col items-center max-xs:items-center"
+        class="max-xs:items-center relative mx-10 flex h-full flex-col items-center"
     >
         <div
-            class="mx-10 flex h-full flex-1 flex-col items-center bg-2025-bg-blue text-center text-3xl font-bold text-white sm:p-12"
+            class="bg-2025-bg-blue mx-10 flex h-full flex-1 flex-col items-center text-center text-3xl font-bold text-white sm:p-12"
         >
             <PrimaryButton
                 class="bg-2025-blue"
@@ -30,6 +30,5 @@ import { route } from "ziggy-js";
         >
             Estamos à tua espera!
         </p> -->
-
     </section>
 </template>

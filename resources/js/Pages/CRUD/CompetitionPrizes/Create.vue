@@ -64,9 +64,7 @@ const submit = () => {
                 </option>
             </TextInput>
 
-
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>
     </CardLayout>
 </template>
-

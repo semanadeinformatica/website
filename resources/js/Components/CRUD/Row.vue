@@ -13,7 +13,7 @@ defineProps<Props>();
 </script>
 
 <template>
-    <tr class="border border-black even:bg-2023-orange/20">
+    <tr class="even:bg-2023-orange/20 border border-black">
         <Cell>{{ item.id.toString() }}</Cell>
         <slot></slot>
         <Cell>

@@ -47,10 +47,10 @@ const accentColor = () => {
 <template>
     <Link :href="route('event.show', event)" class="relative">
         <div
-            class="grid aspect-5/2 place-content-stretch place-items-stretch @container"
+            class="@container grid aspect-5/2 place-content-stretch place-items-stretch"
             :class="[
                 state == 'available'
-                    ? 'cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none [@media(hover:hover)]:blur-xs'
+                    ? 'cursor-pointer opacity-50 grayscale transition-all select-none hover:blur-none [@media(hover:hover)]:blur-xs'
                     : '',
             ]"
         >
@@ -148,7 +148,7 @@ const accentColor = () => {
                     </span>
 
                     <span
-                        class="line-clamp-4 truncate whitespace-normal px-[1em]"
+                        class="line-clamp-4 truncate px-[1em] whitespace-normal"
                         >{{ event.name }}</span
                     >
                 </div>

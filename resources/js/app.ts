@@ -38,29 +38,29 @@ const i18n = createI18n({
                 year: "numeric",
                 month: "numeric",
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             long: {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             day: {
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             hourMinute: {
                 hour: "numeric",
                 minute: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             fullTime: {
                 month: "numeric",
                 day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
         },
         pt: {
@@ -68,29 +68,29 @@ const i18n = createI18n({
                 year: "numeric",
                 month: "numeric",
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             long: {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             day: {
                 day: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             hourMinute: {
                 hour: "numeric",
                 minute: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
             fullTime: {
                 month: "numeric",
                 day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
-                timeZone: "Europe/Lisbon"
+                timeZone: "Europe/Lisbon",
             },
         },
     },

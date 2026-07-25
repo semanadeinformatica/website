@@ -15,7 +15,7 @@ const close = () => emit("close");
         :closeable="closeable"
         @close="close"
     >
-        <div class="bg-white px-4 pb-4 pt-5 dark:bg-gray-800 sm:p-6 sm:pb-4">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
             <div class="sm:flex sm:items-start">
                 <div
                     class="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
@@ -36,7 +36,7 @@ const close = () => emit("close");
                     </svg>
                 </div>
 
-                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3
                         class="text-lg font-medium text-gray-900 dark:text-gray-100"
                     >

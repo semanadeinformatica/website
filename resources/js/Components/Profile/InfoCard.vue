@@ -55,9 +55,9 @@ const authUser = page.props.auth.user;
 
 <template>
     <div
-        class="rounded-lg flex justify-between border border-solid border-black bg-2025-blue p-3 text-text-color shadow-xl shadow-black/80 mr-3 max-md:mr-3 md:min-w-[30vw]"
+        class="bg-2025-blue text-text-color mr-3 flex justify-between rounded-lg border border-solid border-black p-3 shadow-xl shadow-black/80 max-md:mr-3 md:min-w-[30vw]"
     >
-        <div class="flex flex-col justify-between items-start space-y-10">
+        <div class="flex flex-col items-start justify-between space-y-10">
             <div>
                 <p class="font-bold">
                     {{ user?.name }}
@@ -99,7 +99,7 @@ const authUser = page.props.auth.user;
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-8 text-text-color"
+                    class="text-text-color w-8"
                     viewBox="0 0 512 512"
                 >
                     <path
@@ -120,7 +120,13 @@ const authUser = page.props.auth.user;
                     />
                 </svg>
             </Link>
-            <template v-if="(authUser.id && authUser.id === user.id) && (isAdmin(user) || isStaff || isCompany(user))">
+            <template
+                v-if="
+                    authUser.id &&
+                    authUser.id === user.id &&
+                    (isAdmin(user) || isStaff || isCompany(user))
+                "
+            >
                 <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <Link
                     class="flex w-fit cursor-pointer rounded-full text-white"
@@ -130,7 +136,12 @@ const authUser = page.props.auth.user;
                 </Link>
             </template>
             <QRCode
-                v-if="(authUser.id && authUser.id === user.id) && (isParticipant(user) && user.usertype)"
+                v-if="
+                    authUser.id &&
+                    authUser.id === user.id &&
+                    isParticipant(user) &&
+                    user.usertype
+                "
                 :participant="user.usertype"
             ></QRCode>
         </div>

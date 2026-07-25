@@ -112,7 +112,7 @@ const visible = ref(false);
         <label
             v-if="label"
             :for="id"
-            class="pointer-events-none absolute left-3 top-2 text-xs font-semibold text-2025-blue transition-all peer-disabled:text-gray-500 peer-disabled:opacity-50 peer-not-focus:peer-placeholder-shown:top-4 peer-not-focus:peer-placeholder-shown:text-base"
+            class="text-2025-blue pointer-events-none absolute top-2 left-3 text-xs font-semibold transition-all peer-not-focus:peer-placeholder-shown:top-4 peer-not-focus:peer-placeholder-shown:text-base peer-disabled:text-gray-500 peer-disabled:opacity-50"
             :aria-describedby="`${id}-error`"
             >{{ label }}</label
         >
@@ -120,7 +120,7 @@ const visible = ref(false);
         <button
             v-if="type === 'password'"
             type="button"
-            class="absolute right-2 top-2 p-2 leading-4 text-2025-blue peer-disabled:text-gray-500 peer-disabled:opacity-50"
+            class="text-2025-blue absolute top-2 right-2 p-2 leading-4 peer-disabled:text-gray-500 peer-disabled:opacity-50"
             @click="visible = visible!"
         >
             <OhVueIcon
@@ -132,7 +132,7 @@ const visible = ref(false);
         <span
             v-show="errorMessage"
             :id="`${id}-error`"
-            class="mt-2 font-semibold text-2023-red"
+            class="text-2023-red mt-2 font-semibold"
             >{{ errorMessage }}</span
         >
     </div>
