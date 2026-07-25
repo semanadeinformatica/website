@@ -28,7 +28,7 @@ const size = computed(() => sizes[props.idx % sizes.length]);
   <!-- Desktop -->
   <section
     class="relative flex flex-col items-center gap-8 rounded-2xl p-10
-           bg-white/5 backdrop-blur-sm border-[3px]
+           bg-white/5 backdrop-blur-xs border-[3px]
            shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]
            w-full max-lg:hidden overflow-hidden"
     :style="{ '--tier': color, borderColor: 'var(--tier)' }"
@@ -51,7 +51,7 @@ const size = computed(() => sizes[props.idx % sizes.length]);
     class="max-w-[200px] w-full flex items-center justify-center
            transition-transform duration-300 hover:scale-105
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]"
+           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]"
     :style="{ '--halo': `color-mix(in srgb, ${color} 40%, white 0%)` }"
   />
 </div>
@@ -64,7 +64,7 @@ const size = computed(() => sizes[props.idx % sizes.length]);
   v-if="sponsors.length"
   class="relative flex flex-col items-center gap-6 py-10 px-4
          w-screen -mx-[calc(50vw-50%)]
-         bg-white/5 backdrop-blur-sm border-t-[3px] border-b-[3px]
+         bg-white/5 backdrop-blur-xs border-t-[3px] border-b-[3px]
          border-white/20 lg:hidden overflow-hidden"
   :style="{ '--tier': color, borderColor: 'var(--tier)' }"
 >
@@ -95,12 +95,12 @@ const size = computed(() => sizes[props.idx % sizes.length]);
         class="w-full overflow-hidden"
       >
         <Slide v-for="(sponsor, i) in sponsors" :key="sponsor.id">
-          <div class="flex justify-center items-center h-[18rem] sm:h-[22rem]" :class="[size]">
+          <div class="flex justify-center items-center h-72 sm:h-88" :class="[size]">
             <Sponsor
               :company="sponsor.company?.user as CompanyUser"
               class="transition-transform duration-300 hover:scale-105
                      hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-                     [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]"
+                     filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]"
             />
           </div>
         </Slide>

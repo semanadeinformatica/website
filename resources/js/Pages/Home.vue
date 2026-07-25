@@ -151,9 +151,9 @@ const tierSize = (tier: SponsorTier) => {
             class="group fixed bottom-10 right-12 z-50 grid place-items-center
                     w-12 h-12 rounded-full text-white bg-2025-bg-green
                     transition-transform duration-300 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]
+           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-           focus:outline-none"
+           focus:outline-hidden"
             >
             <OhVueIcon :name="atBottom ? 'io-arrow-up' : 'io-arrow-down'" fill="white" />
         </button>
@@ -208,7 +208,7 @@ const tierSize = (tier: SponsorTier) => {
 
         <!-- ABOUT US -->
         <section
-            class="relative my-8 grid grid-flow-row grid-cols-2 text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2 bg-white/5 backdrop-blur-sm"
+            class="relative my-8 grid grid-flow-row grid-cols-2 text-justify max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2 bg-white/5 backdrop-blur-xs"
         >
             <h2
                 id="aboutus"
@@ -241,10 +241,10 @@ const tierSize = (tier: SponsorTier) => {
                 "
             >
                 <div
-                    class="mt-10 mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around transition-transform duration-300 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
+                    class="mt-10 mx-[10%] grid gap-4 rounded-md p-12 text-xl font-bold bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] text-text-color max-lg:grid-cols-2 max-xs:grid-cols-1 md:flex md:flex-row md:items-center md:justify-around transition-transform duration-300 hover:scale-105
+           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-           focus:outline-none"
+           focus:outline-hidden"
                 >
                     <span v-if="days.length !== 0" class="text-center"
                         >{{ days.length }} dias</span
@@ -263,7 +263,7 @@ const tierSize = (tier: SponsorTier) => {
             <template v-else>
                 <div
                     class="mx-[10%] flex items-center justify-center gap-4 p-12 text-xl font-bold text-2023-teal shadow-2xl max-lg:grid-cols-2 max-xs:grid-cols-1
-                   bg-white/5 backdrop-blur-sm border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]"
+                   bg-white/5 backdrop-blur-xs border-[3px] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]"
                 >
                     Muitas novidades para ti! Está quase...
                 </div>

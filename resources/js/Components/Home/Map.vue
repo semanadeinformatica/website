@@ -12,7 +12,7 @@ const attribution =
 
 <template>
     <div
-        class="align-center flex h-full w-full justify-center overflow-hidden rounded"
+        class="align-center flex h-full w-full justify-center overflow-hidden rounded-sm"
     >
         <LMap
             :zoom="zoom"
@@ -33,7 +33,7 @@ const attribution =
             <LMarker :lat-lng="center">
                 <LIcon>
                     <OhVueIcon
-                        class="absolute -bottom-[9px] -right-[14px]"
+                        class="absolute bottom-[-9px] right-[-14px]"
                         name="io-location-sharp"
                         fill="#d94f04"
                         scale="2"

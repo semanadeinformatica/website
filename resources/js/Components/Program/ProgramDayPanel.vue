@@ -119,7 +119,7 @@ onMounted(() => {
     <section class="h-full w-full">
         <div
             id="tab-picker"
-            class="flex mx-auto flex-row flex-wrap w-fit p-2 justify-center gap-4 font-bold text-[#2596be] rounded-md  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
+            class="flex mx-auto flex-row flex-wrap w-fit p-2 justify-center gap-4 font-bold text-[#2596be] rounded-md  bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
         >
             <button
                 v-if="(day.talks?.length ?? 0) > 0"
@@ -159,7 +159,7 @@ onMounted(() => {
         v-if="
             (selectedType === 'talk' || selectedType === 'activity') && !noInfo
         "
-        class="mr-2 mt-5 max-w-2xl rounded-md  p-2.5 px-8 text-justify text-lg font-bold text-text-color  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
+        class="mr-2 mt-5 max-w-2xl rounded-md  p-2.5 px-8 text-justify text-lg font-bold text-text-color  bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
     >
         {{ day.theme }}
     </p>-->

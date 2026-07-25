@@ -30,11 +30,11 @@ defineProps<Props>();
   <VueFinalModal
     v-model="options.modelValue"
     class="flex items-center justify-center"
-    overlay-class="!bg-[rgba(0,0,0,0.7)] backdrop-blur-sm"
+    overlay-class="bg-[rgba(0,0,0,0.7)]! backdrop-blur-xs"
     content-class="
       max-w-xl min-w-[20em] mx-4 p-8 gap-7
       rounded-2xl bg-2025-blue text-white
-      border-0 ring-1 ring-white/10 shadow-none bg-clip-padding outline-none
+      border-0 ring-1 ring-white/10 shadow-none bg-clip-padding outline-hidden
       flex flex-col items-center justify-center
     "
   >
@@ -61,7 +61,7 @@ defineProps<Props>();
       </span>
 
       <div
-        class="prose prose-invert text-justify leading-relaxed break-words
+        class="prose prose-invert text-justify leading-relaxed wrap-break-word
                max-md:max-h-96 max-md:overflow-y-auto"
         v-html="company?.usertype?.description_html"
       ></div>

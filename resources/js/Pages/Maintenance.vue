@@ -59,7 +59,7 @@ import { OhVueIcon } from "oh-vue-icons";
                 class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
             >
                 <p
-                    class="left-[calc(50% - 86.5px)] absolute -top-[30px] w-max border border-solid border-black bg-2025-blue p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-teal"
+                    class="left-[calc(50% - 86.5px)] absolute top-[-30px] w-max border border-solid border-black bg-2025-blue p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md shadow-2023-teal"
                 >
                     Contacta-nos!
                 </p>

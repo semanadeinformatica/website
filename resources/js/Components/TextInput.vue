@@ -93,7 +93,7 @@ const visible = ref(false);
             :id="id"
             ref="input"
             v-model="value"
-            :class="[baseClass, 'min-h-[calc(theme(spacing.1)*7)]']"
+            :class="[baseClass, 'min-h-7']"
             :placeholder="placeholder ?? ''"
             v-bind="$attrs"
         />
@@ -112,7 +112,7 @@ const visible = ref(false);
         <label
             v-if="label"
             :for="id"
-            class="pointer-events-none absolute left-3 top-2 text-xs font-semibold text-2025-blue transition-all peer-disabled:text-gray-500 peer-disabled:opacity-50 peer-placeholder-shown:peer-[&:not(:focus)]:top-4 peer-placeholder-shown:peer-[&:not(:focus)]:text-base"
+            class="pointer-events-none absolute left-3 top-2 text-xs font-semibold text-2025-blue transition-all peer-disabled:text-gray-500 peer-disabled:opacity-50 peer-not-focus:peer-placeholder-shown:top-4 peer-not-focus:peer-placeholder-shown:text-base"
             :aria-describedby="`${id}-error`"
             >{{ label }}</label
         >
@@ -121,7 +121,7 @@ const visible = ref(false);
             v-if="type === 'password'"
             type="button"
             class="absolute right-2 top-2 p-2 leading-4 text-2025-blue peer-disabled:text-gray-500 peer-disabled:opacity-50"
-            @click="visible = !visible"
+            @click="visible = visible!"
         >
             <OhVueIcon
                 :name="visible ? 'io-eye' : 'io-eye-off'"

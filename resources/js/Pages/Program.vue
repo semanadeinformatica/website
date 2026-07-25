@@ -40,10 +40,10 @@ defineProps<Props>();
                             "
                             as="span"
                             :only="['eventDay', 'queryDay']"
-                            class="inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-sm bg-2025-bg text-xl font-bold text-white transition rounded-xl transition-transform duration-300 hover:scale-105
-                            [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]
+                            class="inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-xs bg-2025-bg text-xl font-bold text-white transition rounded-xl transition-transform duration-300 hover:scale-105
+                            filter-[drop-shadow(0_0_0_rgba(0,0,0,0))]
                             hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-                            focus:outline-none"
+                            focus:outline-hidden"
                             :class="day == queryDay ? 'bg-2025-blue' : ''"
                             preserve-state
                             preserve-scroll

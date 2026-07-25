@@ -47,10 +47,10 @@ const accentColor = () => {
 <template>
     <Link :href="route('event.show', event)" class="relative">
         <div
-            class="grid aspect-[5/2] place-content-stretch place-items-stretch @container"
+            class="grid aspect-5/2 place-content-stretch place-items-stretch @container"
             :class="[
                 state == 'available'
-                    ? 'cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none [@media(hover:hover)]:blur-sm'
+                    ? 'cursor-pointer select-none opacity-50 grayscale transition-all hover:blur-none [@media(hover:hover)]:blur-xs'
                     : '',
             ]"
         >
@@ -69,7 +69,7 @@ const accentColor = () => {
                 />
                 <template v-else>
                     <path
-                        class="origin-left -translate-x-[6px] -rotate-6"
+                        class="origin-left translate-x-[-6px] -rotate-6"
                         d="M0 16C8 16 16 8 16 0H144C152 0 160 8 160 16V24H158V68H162V78H158V122H162V132H158V176H160V184C160 192 152 200 144 200H16C16 192 8 184 0 184V176C4 174 4 170 0 168V160C4 158 4 154 0 152V144C4 142 4 138 0 136V128C4 126 4 122 0 120V112C4 110 4 106 0 104V96C4 94 4 90 0 88V80C4 78 4 74 0 72V64C4 62 4 58 0 56V48C4 46 4 42 0 40V32C4 30 4 26 0 24V16Z"
                         stroke="black"
                         stroke-width="2px"
@@ -93,7 +93,7 @@ const accentColor = () => {
                     class="flex w-[32.4%] flex-col py-[3.2%]"
                     :class="[
                         state == 'used'
-                            ? 'ticket-left-clip-path -mr-[.4%] origin-left -translate-x-[3.7%] -rotate-6'
+                            ? 'ticket-left-clip-path mr-[-0.4%] origin-left translate-x-[-3.7%] -rotate-6'
                             : '',
                         mainColor(),
                     ]"
@@ -135,7 +135,7 @@ const accentColor = () => {
                     class="flex w-[68.4%] flex-col gap-[1em] py-[3.2%]"
                     :class="[
                         state == 'used'
-                            ? 'ticket-right-clip-path -ml-[.4%] origin-right translate-x-[3.7%] rotate-6'
+                            ? 'ticket-right-clip-path ml-[-0.4%] origin-right translate-x-[3.7%] rotate-6'
                             : '',
                         mainColor(),
                     ]"

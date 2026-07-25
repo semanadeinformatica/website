@@ -59,7 +59,7 @@ const colorPicker = () => {
         </section>
         <!-- details -->
         <section
-            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] px-16 py-24"
+            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] px-16 py-24"
             :class="[
                 { 'mt-20': companies.length > 0 && speakers.length === 0 },
             ]"
@@ -70,7 +70,7 @@ const colorPicker = () => {
                 {{ event.name }}
             </h1>
             <div
-                class="prose max-w-3xl break-words text-justify font-bold text-white "
+                class="prose max-w-3xl wrap-break-word text-justify font-bold text-white "
                 v-html="event.description_html"
             ></div>
             <h1
@@ -117,10 +117,10 @@ const colorPicker = () => {
                         },
                     })
                 "
-                class="inline-flex p-2 px-3 text-center text-2xl font-bold text-white bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] transition-transform duration-300 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
+                class="inline-flex p-2 px-3 text-center text-2xl font-bold text-white bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] transition-transform duration-300 hover:scale-105
+           filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
            hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-           focus:outline-none"
+           focus:outline-hidden"
             >
                 Scan QR Code
             </Link> 

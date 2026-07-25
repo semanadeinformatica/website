@@ -42,7 +42,7 @@ const buyProduct = () => {
   <!-- CARD (glass style + hover) -->
   <div
     class="group relative flex max-w-[20em] flex-col rounded-2xl p-10
-           bg-white/5 backdrop-blur-sm  border-0 ring-1 ring-white/10 
+           bg-white/5 backdrop-blur-xs  border-0 ring-1 ring-white/10 
            shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)]
            transition-all duration-300 max-lg:p-8 select-none
            hover:scale-[1.02]
@@ -72,7 +72,7 @@ const buyProduct = () => {
           class="rounded-md bg-2025-blue px-4 py-2 text-sm font-semibold text-white
                  transition-all duration-200
                  hover:bg-white hover:text-2025-blue
-                 focus:outline-none focus:ring-2 focus:ring-white/60
+                 focus:outline-hidden focus:ring-2 focus:ring-white/60
                  disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="!product.canBeBought && !product.enrollments"
           @click="modalOpen = true"
@@ -122,7 +122,7 @@ const buyProduct = () => {
         v-if="product.enrollments.length > 0"
         class="flex max-h-72 w-full flex-col items-center overflow-y-auto
                rounded-lg border-[3px] border-2025-blue
-               bg-white/5 backdrop-blur-sm
+               bg-white/5 backdrop-blur-xs
                shadow-[0_0_20px_-8px_rgba(255,255,255,0.2)]"
       >
         <div

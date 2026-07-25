@@ -89,7 +89,7 @@ const formattedDate = (
                 Regulamento
             </h2>
             <div
-                class="prose prose-lg max-w-none break-words p-20 text-white max-lg:pb-10 lg:columns-2"
+                class="prose prose-lg max-w-none wrap-break-word p-20 text-white max-lg:pb-10 lg:columns-2"
                 v-html="competition.regulation_html"
             ></div>
         </section>
@@ -171,7 +171,7 @@ const formattedDate = (
                 class="relative flex content-center items-center justify-center py-24"
             >
                 <h1
-                    class="absolute top-[1rem] m-4 flex justify-center p-3 text-4xl font-black text-text-color"
+                    class="absolute top-4 m-4 flex justify-center p-3 text-4xl font-black text-text-color"
                 >
                     Vamos a isto?
                 </h1>
