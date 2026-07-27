@@ -33,7 +33,7 @@ const page = usePage();
 const authUser = page.props.auth.user;
 
 const buttons: Tabs =
-    isParticipant(user) && !isCompany(page.props.auth.user!)
+    isParticipant(user) && !isCompany(page.props.auth.user)
         ? {
               ticket: {
                   label: "Bilhetes",

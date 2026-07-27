@@ -156,7 +156,9 @@ const colorPicker = () => {
                     if (!(isEnrolled && event.external_url)) {
                         $page.props.auth.user
                             ? isEnrolled
-                                ? router.put(route('event.join', event))
+                                ? router.put(
+                                      route('event.join', { event: event.id }),
+                                  )
                                 : router.get(route('home') + '#enroll-section') // HACK: this is a hack
                             : router.get(route('register'));
                     }
@@ -182,7 +184,7 @@ const colorPicker = () => {
                 shadow="red"
                 text-size="sm:text-3xl"
                 padding="sm:px-8"
-                @click="router.put(route('event.leave', event))"
+                @click="router.put(route('event.leave', { event: event.id }))"
             >
                 Cancela a inscrição
             </PrimaryButton>

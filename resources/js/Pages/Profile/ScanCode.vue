@@ -48,8 +48,9 @@ const onError = (err: Error) => {
     else error.value = err.message;
 };
 
-// @ts-expect-error: firstDetectedCode comes from the qrcode-reader package which has no types
-const onDetect = async ([firstDetectedCode]) => {
+const onDetect = async (detectedCodes: { rawValue: string }[]) => {
+    const firstDetectedCode = detectedCodes[0];
+    if (!firstDetectedCode) return;
     form.quest_code = firstDetectedCode.rawValue;
 
     if (form.quest && form.quest_code) submit();

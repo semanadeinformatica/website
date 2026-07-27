@@ -121,10 +121,6 @@ interface Props {
 }
 
 defineProps<Props>();
-
-const tierSize = () => {
-    return "15em";
-};
 </script>
 
 <template>
@@ -272,7 +268,6 @@ const tierSize = () => {
                 v-for="(tier, idx) in sponsorTiers"
                 :key="tier.id"
                 :title="tier.name"
-                :tier-size="tierSize(tier)"
                 :sponsors="tier.sponsors ?? []"
                 :color="tier.color"
                 :idx="idx"

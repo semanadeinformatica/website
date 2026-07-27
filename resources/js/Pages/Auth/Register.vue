@@ -12,6 +12,7 @@ const form = useForm({
     password: "",
     password_confirmation: "",
     terms: false,
+    data_sharing_agreement: false,
 });
 
 const submit = () => {
@@ -99,6 +100,7 @@ const submit = () => {
                 since it makes it so that every account that exists has agreed to this -->
                 <Checkbox
                     id="data_sharing_agreement"
+                    v-model:checked="form.data_sharing_agreement"
                     name="data_sharing_agreement"
                     required
                 />
