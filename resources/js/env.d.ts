@@ -8,7 +8,8 @@ declare global {
 }
 
 declare module "@inertiajs/core" {
-    type PageProps = MyPageProps;
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface PageProps extends MyPageProps {}
 }
 
 export {};
