@@ -1,165 +1,165 @@
 name: CI
 
 env:
-  PHP_VERSION: 8.4
-  PHP_EXTENSIONS: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
-  NODE_VERSION: 22
+    PHP_VERSION: 8.4
+    PHP_EXTENSIONS: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+    NODE_VERSION: 22
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  # tests:
-  #   name: Run tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v7
-  #
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: ${{ env.PHP_VERSION }}
-  #         extensions: ${{ env.PHP_EXTENSIONS }}
-  #         coverage: none
-  #
-  #     - name: Install PHP dependencies
-  #       run: composer install -n --prefer-dist
-  #
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v7
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #         cache: npm
-  #
-  #     - name: Install Node dependencies
-  #       run: npm ci
-  #
-  #     - name: Docker Layer Caching
-  #       uses: jpribyl/action-docker-layer-caching@v0.1.1
-  #
-  #     - name: Run Sail
-  #       run: |
-  #         ./sail up -d laravel.test
-  #         ./sail npm run dev &
-  #         sleep 5
-  #
-  #     - name: Run tests
-  #       run: ./sail test --parallel
-  #
-  # pint:
-  #   name: Check PHP code style
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v7
-  #
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: ${{ env.PHP_VERSION }}
-  #         extensions: ${{ env.PHP_EXTENSIONS }}
-  #         coverage: none
-  #
-  #     - name: Run composer install
-  #       run: composer install -n --prefer-dist
-  #
-  #     - name: Docker Layer Caching
-  #       uses: jpribyl/action-docker-layer-caching@v0.1.1
-  #
-  #     - name: Run Sail
-  #       run: ./sail up -d laravel.test
-  #
-  #     - name: Run Pint
-  #       run: ./sail pint -v --test
-  #
-  prettier:
-    name: Check Typescript code style
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+    tests:
+        name: Run tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  extensions: ${{ env.PHP_EXTENSIONS }}
+                  coverage: none
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install PHP dependencies
+              run: composer install -n --prefer-dist
 
-      - name: Run Prettier
-        run: npm run format
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
 
-  eslint:
-    name: Lint Typescript code
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+            - name: Install Node dependencies
+              run: npm ci
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+            - name: Docker Layer Caching
+              uses: jpribyl/action-docker-layer-caching@v0.1.1
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Run Sail
+              run: |
+                  ./sail up -d laravel.test
+                  ./sail npm run dev &
+                  sleep 5
 
-      - name: Run Eslint
-        run: npm run lint
+            - name: Run tests
+              run: ./sail test --parallel
 
-  vue-tsc:
-    name: Type check Typescript code
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+    pint:
+        name: Check PHP code style
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  extensions: ${{ env.PHP_EXTENSIONS }}
+                  coverage: none
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Run composer install
+              run: composer install -n --prefer-dist
 
-      - name: Run vue-tsc
-        run: npm run type-check
+            - name: Docker Layer Caching
+              uses: jpribyl/action-docker-layer-caching@v0.1.1
 
-  build:
-    name: Build assets
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+            - name: Run Sail
+              run: ./sail up -d laravel.test
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: ${{ env.PHP_EXTENSIONS }}
-          coverage: none
+            - name: Run Pint
+              run: ./sail pint -v --test
 
-      - name: Install PHP dependencies
-        run: composer install -n --prefer-dist
+    prettier:
+        name: Check Typescript code style
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
 
-      - name: Install Node dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Build assets
-        run: npm run build
+            - name: Run Prettier
+              run: npm run format
+
+    eslint:
+        name: Lint Typescript code
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run Eslint
+              run: npm run lint
+
+    vue-tsc:
+        name: Type check Typescript code
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run vue-tsc
+              run: npm run type-check
+
+    build:
+        name: Build assets
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  extensions: ${{ env.PHP_EXTENSIONS }}
+                  coverage: none
+
+            - name: Install PHP dependencies
+              run: composer install -n --prefer-dist
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+
+            - name: Install Node dependencies
+              run: npm ci
+
+            - name: Build assets
+              run: npm run build
