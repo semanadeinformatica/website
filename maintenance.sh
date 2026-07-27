@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 EXECUTABLE=(./sail artisan)
 
@@ -30,4 +30,3 @@ case "$1" in
         usage
         ;;
 esac
-
