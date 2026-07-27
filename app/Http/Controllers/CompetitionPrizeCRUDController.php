@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\CompetitionPrize;
 use App\Models\Competition;
-
+use App\Models\CompetitionPrize;
 use Illuminate\Support\Facades\DB;
 
 class CompetitionPrizeCRUDController extends CRUDController
@@ -51,5 +49,4 @@ class CompetitionPrizeCRUDController extends CRUDController
             'competitions' => Competition::with('edition')->get(),
         ];
     }
-
 }

@@ -1,12 +1,17 @@
 <?php
 
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\InjectEditionIntoRequest;
+use App\Http\Middleware\LogRequestIPs;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -25,13 +30,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->prepend([
-            \App\Http\Middleware\InjectEditionIntoRequest::class,
-            \App\Http\Middleware\LogRequestIPs::class,
+            InjectEditionIntoRequest::class,
+            LogRequestIPs::class,
         ]);
 
         $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            HandleInertiaRequests::class,
+            AddLinkHeadersForPreloadedAssets::class,
         ]);
 
         $middleware->redirectGuestsTo(fn () => route('login'));
@@ -42,14 +47,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $DEVELOPMENT = ['maintenance', 'local', 'testing'];
         $ERROR_PAGES = [500, 404, 403];
 
-        $exceptions->renderable(function (\Throwable $e, Request $request) use ($DEVELOPMENT, $ERROR_PAGES) {
+        $exceptions->renderable(function (Throwable $e, Request $request) use ($DEVELOPMENT, $ERROR_PAGES) {
             if (app()->environment($DEVELOPMENT)) {
                 return null;
             }
 
             $status = $e instanceof HttpException
                 ? $e->getStatusCode()
-                : ($e instanceof \Illuminate\Session\TokenMismatchException ? 419 : 500);
+                : ($e instanceof TokenMismatchException ? 419 : 500);
 
             if (in_array($status, $ERROR_PAGES)) {
                 return Inertia::render('Error', ['status' => $status])

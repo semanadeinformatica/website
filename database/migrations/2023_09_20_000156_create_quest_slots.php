@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Enrollment;
+use App\Models\Participant;
 use App\Models\Quest;
 use App\Models\Slot;
 use Illuminate\Database\Migrations\Migration;
@@ -37,7 +39,7 @@ return new class extends Migration
         // "Sticker book"
         createManyToManyRelation(Slot::class, Enrollment::class);
 
-        //Triggers
+        // Triggers
         DB::unprepared('
             CREATE OR REPLACE FUNCTION update_quest_slots() RETURNS TRIGGER AS $$
                 DECLARE
@@ -155,8 +157,8 @@ return new class extends Migration
         // Visit history
         Schema::create('visit_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Participant::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

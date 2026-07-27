@@ -20,8 +20,7 @@ class RemoveQuestCode implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         public Participant $user,
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

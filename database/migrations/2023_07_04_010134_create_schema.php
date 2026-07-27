@@ -1,5 +1,13 @@
 <?php
 
+use App\Models\Edition;
+use App\Models\Enrollment;
+use App\Models\Event;
+use App\Models\Participant;
+use App\Models\Product;
+use App\Models\Quest;
+use App\Models\SocialMedia;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -31,20 +39,20 @@ return new class extends Migration
         });
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->enum('tier', ['PLATINUM', 'GOLD', 'SILVER']);
-            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class)->unique()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -60,7 +68,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('price')->unsigned();
             $table->integer('stock')->unsigned();
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -72,7 +80,7 @@ return new class extends Migration
             $table->dateTime('date_end');
             $table->string('topic');
             $table->integer('capacity')->unsigned()->nullable();
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('speakers', function (Blueprint $table) {
@@ -81,8 +89,8 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->string('organization')->nullable();
-            $table->foreignIdFor(\App\Models\SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Event::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(SocialMedia::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Event::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -97,15 +105,15 @@ return new class extends Migration
 
             $table->morphs('requirement');
 
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
         // Enrollment
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Participant::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
 
             // this will be calculated by a trigger
             $table->integer('points')->unsigned()->default(0);
@@ -115,18 +123,18 @@ return new class extends Migration
 
         // Many to many
         Schema::create('enrollment_event', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Event::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Event::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'event_id']);
         });
         Schema::create('enrollment_quest', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Quest::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Quest::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'quest_id']);
         });
         Schema::create('enrollment_product', function (Blueprint $table) {
-            $table->foreignIdFor(\App\Models\Enrollment::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Enrollment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->primary(['enrollment_id', 'product_id']);
         });
 

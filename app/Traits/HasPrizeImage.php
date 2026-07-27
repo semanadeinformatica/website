@@ -34,8 +34,7 @@ trait HasPrizeImage
 
     public function prizeImageUrl(): Attribute
     {
-        return Attribute::get(fn () =>
-            $this->prize_picture
+        return Attribute::get(fn () => $this->prize_picture
                 ? Storage::disk($this->competitionPrizeDisk())->url($this->prize_picture)
                 : asset('images/default-prize.png')
         );

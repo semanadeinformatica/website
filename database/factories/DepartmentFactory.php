@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
+use App\Models\Edition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Department>
+ * @extends Factory<Department>
  */
 class DepartmentFactory extends Factory
 {
@@ -18,7 +20,7 @@ class DepartmentFactory extends Factory
     {
         return [
             'name' => fake()->unique()->word(),
-            'edition_id' => \App\Models\Edition::factory(),
+            'edition_id' => Edition::factory(),
         ];
     }
 }

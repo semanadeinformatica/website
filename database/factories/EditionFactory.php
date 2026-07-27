@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Edition;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Edition>
+ * @extends Factory<Edition>
  */
 class EditionFactory extends Factory
 {

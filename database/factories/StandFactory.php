@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\EventDay;
 use App\Models\Sponsor;
+use App\Models\Stand;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Stand>
+ * @extends Factory<Stand>
  */
 class StandFactory extends Factory
 {

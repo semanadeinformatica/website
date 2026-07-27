@@ -38,7 +38,9 @@ const form = useForm({
     name: quest.name,
     category: quest.category.toLowerCase(),
     requirement:
-        quest.requirement_type && quest.requirement_id !== undefined && quest.requirement_id !== null
+        quest.requirement_type &&
+        quest.requirement_id !== undefined &&
+        quest.requirement_id !== null
             ? (quest.requirement_type.split("\\").pop() ?? "").toLowerCase() +
               ";" +
               quest.requirement_id.toString()

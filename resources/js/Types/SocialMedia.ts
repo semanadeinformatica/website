@@ -9,4 +9,3 @@ export default interface SocialMedia extends Model {
     twitter?: string;
     website?: string;
 }
-

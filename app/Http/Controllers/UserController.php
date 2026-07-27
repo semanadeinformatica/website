@@ -114,14 +114,15 @@ class UserController extends UserProfileController
         return $user;
     }
 
-    private function getAllParticipants(User $user, Edition $edition) {
+    private function getAllParticipants(User $user, Edition $edition)
+    {
         $company = $user->usertype;
-        
+
         if ($company instanceof Company) {
             $sponsor = $company->sponsors()->where('edition_id', $edition->id)->first();
 
             if ($sponsor !== null && $sponsor->tier->canSeeAll) {
-                $participants = Participant::with("user")->whereHas('enrollments', function ($query) use ($edition) {
+                $participants = Participant::with('user')->whereHas('enrollments', function ($query) use ($edition) {
                     $query->where('edition_id', $edition->id);
                 })->get();
 
@@ -266,13 +267,14 @@ class UserController extends UserProfileController
         ]);
     }
 
-    public function downloadAllParticipantCVs(Request $request, User $user) {
+    public function downloadAllParticipantCVs(Request $request, User $user)
+    {
         /** @var Edition|null */
         $edition = $request->edition;
         if ($edition === null) {
             return response('No edition found', 500);
         }
-        
+
         if (Gate::allows('downloadAllCVs', [$user, $edition])) {
             /** @var Company */
             $company = $user->usertype;
@@ -284,62 +286,65 @@ class UserController extends UserProfileController
             })
             ->pluck('cv_path')
             ->filter();
-        
+
         if ($participant_cv_paths->isEmpty()) {
             return redirect()->back()->dangerBanner('Nenhum CV foi encontrado para adicionar ao zip.');
         }
-        
-        $fileName = Str::slug($user->name, '_') . '-participants-cvs.zip';
-        $zipPath = storage_path('app/temp/' . $fileName);
-        
-        if (!file_exists(storage_path('app/temp'))) {
+
+        $fileName = Str::slug($user->name, '_').'-participants-cvs.zip';
+        $zipPath = storage_path('app/temp/'.$fileName);
+
+        if (! file_exists(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0755, true);
         }
-        
+
         $zip = new ZipArchive;
         $prefixer = new PathPrefixer(storage_path('app/public'));
-        
+
         $openResult = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        
+
         if ($openResult !== true) {
             \Log::error('Failed to create ZIP file', [
                 'path' => $zipPath,
-                'error_code' => $openResult
+                'error_code' => $openResult,
             ]);
-            return redirect()->back()->dangerBanner('Error a criar o ficheiro zip: ' . $openResult);
+
+            return redirect()->back()->dangerBanner('Error a criar o ficheiro zip: '.$openResult);
         }
-        
+
         $addedFiles = 0;
-        
+
         foreach ($participant_cv_paths as $file_path) {
             $path = $prefixer->prefixPath($file_path);
-            
-            if (!file_exists($path)) {
+
+            if (! file_exists($path)) {
                 \Log::warning('CV file not found', ['path' => $path]);
+
                 continue;
             }
-            
+
             // Use participant name or ID to avoid filename conflicts
             $relativeNameInZipFile = basename($path);
-            
+
             if ($zip->addFile($path, $relativeNameInZipFile)) {
                 $addedFiles++;
             } else {
                 \Log::error('Failed to add file to ZIP', ['path' => $path]);
             }
         }
-        
+
         $zip->close();
-        
+
         if ($addedFiles === 0) {
             @unlink($zipPath);
+
             return redirect()->back()->dangerBanner('Nenhum CV foi encontrado para adicionar ao zip.');
         }
-        
-        if (!file_exists($zipPath)) {
+
+        if (! file_exists($zipPath)) {
             return redirect()->back()->dangerBanner('Error a gerar o zip.');
         }
-        
+
         return response()->download($zipPath)->deleteFileAfterSend();
     }
 
@@ -350,72 +355,75 @@ class UserController extends UserProfileController
         if ($edition === null) {
             return response('No edition found', 500);
         }
-        
+
         if (Gate::allows('downloadCVs', [$user, $edition])) {
             /** @var Company */
             $company = $user->usertype;
         }
-        
+
         $participant_cv_paths = $company->participants()
             ->get()
             ->pluck('cv_path')
             ->filter();
-        
+
         if ($participant_cv_paths->isEmpty()) {
             return redirect()->back()->dangerBanner('Nenhum CV foi encontrado para adicionar ao zip.');
         }
-        
-        $fileName = Str::slug($user->name, '_') . '-participants-cvs.zip';
-        $zipPath = storage_path('app/temp/' . $fileName);
-        
-        if (!file_exists(storage_path('app/temp'))) {
+
+        $fileName = Str::slug($user->name, '_').'-participants-cvs.zip';
+        $zipPath = storage_path('app/temp/'.$fileName);
+
+        if (! file_exists(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0755, true);
         }
-        
+
         $zip = new ZipArchive;
         $prefixer = new PathPrefixer(storage_path('app/public'));
-        
+
         $openResult = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        
+
         if ($openResult !== true) {
             \Log::error('Failed to create ZIP file', [
                 'path' => $zipPath,
-                'error_code' => $openResult
+                'error_code' => $openResult,
             ]);
-            return redirect()->back()->dangerBanner('Error a criar o ficheiro zip: ' . $openResult);
+
+            return redirect()->back()->dangerBanner('Error a criar o ficheiro zip: '.$openResult);
         }
-        
+
         $addedFiles = 0;
-        
+
         foreach ($participant_cv_paths as $file_path) {
             $path = $prefixer->prefixPath($file_path);
-            
-            if (!file_exists($path)) {
+
+            if (! file_exists($path)) {
                 \Log::warning('CV file not found', ['path' => $path]);
+
                 continue;
             }
-            
+
             // Use participant name or ID to avoid filename conflicts
             $relativeNameInZipFile = basename($path);
-            
+
             if ($zip->addFile($path, $relativeNameInZipFile)) {
                 $addedFiles++;
             } else {
                 \Log::error('Failed to add file to ZIP', ['path' => $path]);
             }
         }
-        
+
         $zip->close();
-        
+
         if ($addedFiles === 0) {
             @unlink($zipPath);
+
             return redirect()->back()->dangerBanner('Nenhum CV foi encontrado para adicionar ao zip.');
         }
-        
-        if (!file_exists($zipPath)) {
+
+        if (! file_exists($zipPath)) {
             return redirect()->back()->dangerBanner('Error a gerar o zip.');
         }
-        
+
         return response()->download($zipPath)->deleteFileAfterSend();
     }
 }

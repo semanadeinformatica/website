@@ -4,11 +4,12 @@ namespace Database\Factories;
 
 use App\Models\Company;
 use App\Models\Edition;
+use App\Models\Sponsor;
 use App\Models\SponsorTier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sponsor>
+ * @extends Factory<Sponsor>
  */
 class SponsorFactory extends Factory
 {

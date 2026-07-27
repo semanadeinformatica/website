@@ -26,9 +26,9 @@ class CreateDbSchema extends Command
      */
     public function handle()
     {
-        $conn = DB::connectUsing("pgsql", [
+        $conn = DB::connectUsing('pgsql', [
             ...config('database.connections.pgsql'),
-            'search_path' => "public",
+            'search_path' => 'public',
         ]);
 
         $search_path = config('database.connections.pgsql.search_path');
