@@ -8,7 +8,7 @@
         "format:fix": "prettier --write *.js *.ts resources/js/",
         "lint": "eslint resources/js/",
         "lint:fix": "eslint --fix resources/js/",
-        "type-check": "vue-tsc --noEmit -p tsconfig.app.json && rm tsconfig.app.tsbuildinfo"
+        "type-check": "vue-tsc --noEmit -p tsconfig.app.json"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^3.6.1",
