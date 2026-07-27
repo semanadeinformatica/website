@@ -37,9 +37,9 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'scheme' => env('MAIL_SCHEME'),
+            'host' => env('MAIL_HOST', '127.0.0.1'),
+            'port' => env('MAIL_PORT', 2525),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
@@ -54,7 +54,6 @@ return [
             'transport' => 'mailgun',
             'domain' => env('MAILGUN_DOMAIN'),
             'secret' => env('MAILGUN_SECRET'),
-            'endpoint' => env('MAILGUN_ENDPOINT', 'api.eu.mailgun.net'),
         ],
 
         'postmark' => [
@@ -84,6 +83,15 @@ return [
                 'smtp',
                 'log',
             ],
+        ],
+
+        'roundrobin' => [
+            'transport' => 'roundrobin',
+            'mailers' => [
+                'ses',
+                'postmark',
+            ],
+            'retry_after' => 60,
         ],
     ],
 
