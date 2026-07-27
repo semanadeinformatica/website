@@ -2,11 +2,6 @@
 
 namespace App\Providers;
 
-use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
-use App\Actions\Jetstream\DeleteUser;
 use App\Maintenance\EnvMaintenanceMode;
 use App\Models\Edition;
 use App\Models\Enrollment;
@@ -16,26 +11,15 @@ use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\MaintenanceModeManager;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Laravel\Fortify\Fortify;
-use Laravel\Jetstream\Jetstream;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         $this->app->extend(
@@ -52,14 +36,9 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         $this->configureUrls();
-        $this->configureFortify();
-        $this->configureJetstream();
         $this->configureGates();
     }
 
@@ -68,76 +47,6 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
-    }
-
-    protected function configureFortify(): void
-    {
-        Fortify::ignoreRoutes();
-
-        Route::group([
-            'namespace' => 'Laravel\Fortify\Http\Controllers',
-            'domain' => config('fortify.domain', null),
-            'prefix' => config('fortify.prefix'),
-        ], function () {
-            $this->loadRoutesFrom(base_path('routes/fortify.php'));
-        });
-
-        Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
-        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
-        RateLimiter::for('login', function (Request $request) {
-            $email = (string) $request->email;
-
-            return Limit::perMinute(5)->by($email.$request->ip());
-        });
-
-        RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
-        });
-    }
-
-    protected function configureJetstream(): void
-    {
-        Jetstream::ignoreRoutes();
-
-        Route::group([
-            'namespace' => 'Laravel\Jetstream\Http\Controllers',
-            'domain' => config('jetstream.domain', null),
-            'prefix' => config('jetstream.prefix', config('jetstream.path')),
-        ], function () {
-            $this->loadRoutesFrom(base_path('routes/jetstream.php'));
-        });
-
-        Jetstream::defaultApiTokenPermissions(['read']);
-
-        Jetstream::permissions([
-            'create',
-            'read',
-            'update',
-            'delete',
-        ]);
-
-        RedirectResponse::macro('banner', function ($message) {
-            /** @var \Illuminate\Http\RedirectResponse $this */
-            return $this->with('flash', [
-                'bannerStyle' => 'success',
-                'banner' => $message,
-                'bannerId' => Str::uuid(),
-            ]);
-        });
-
-        RedirectResponse::macro('dangerBanner', function ($message) {
-            /** @var \Illuminate\Http\RedirectResponse $this */
-            return $this->with('flash', [
-                'bannerStyle' => 'danger',
-                'banner' => $message,
-                'bannerId' => Str::uuid(),
-            ]);
-        });
-
-        Jetstream::deleteUsersUsing(DeleteUser::class);
     }
 
     protected function configureGates(): void
