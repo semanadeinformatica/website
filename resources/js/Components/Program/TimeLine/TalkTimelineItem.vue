@@ -25,7 +25,7 @@ const formatTimeString = (time: string): string => {
         <h2 class="text-text-color text-2xl font-bold">
             <em
                 ><Link
-                    :href="route('event.show', event)"
+                    :href="route('event.show', { event: event.id })"
                     preserve-state
                     preserve-scroll
                     >{{ event.name }}</Link

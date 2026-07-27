@@ -94,7 +94,7 @@ const authUser = page.props.auth.user;
         </div>
         <div class="flex flex-col items-center justify-between">
             <Link
-                v-if="$page.props.auth.user?.id == user?.id"
+                v-if="$page.props.auth.user?.id === user?.id"
                 :href="route('profile.edit')"
             >
                 <svg
@@ -122,8 +122,8 @@ const authUser = page.props.auth.user;
             </Link>
             <template
                 v-if="
-                    authUser.id &&
-                    authUser.id === user.id &&
+                    authUser?.id &&
+                    authUser.id === user?.id &&
                     (isAdmin(user) || isStaff || isCompany(user))
                 "
             >
@@ -137,8 +137,8 @@ const authUser = page.props.auth.user;
             </template>
             <QRCode
                 v-if="
-                    authUser.id &&
-                    authUser.id === user.id &&
+                    authUser?.id &&
+                    authUser.id === user?.id &&
                     isParticipant(user) &&
                     user.usertype
                 "

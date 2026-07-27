@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Modal, { type Props, type Emits } from "./Modal.vue";
 
-defineProps<Partial<Props>>();
+defineProps<Props>();
 
 const emit = defineEmits<Emits>();
 

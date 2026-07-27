@@ -27,7 +27,7 @@ watch(
 );
 
 const buyProduct = () => {
-    router.post(route("shop.product.buy", { product }), undefined, {
+    router.post(route("shop.product.buy", { product: product.id }), undefined, {
         preserveState: true,
         onFinish: () => (modalOpen.value = false),
     });
@@ -136,8 +136,8 @@ const buyProduct = () => {
                         v-if="!enrollment.pivot.redeemed"
                         :href="
                             route('shop.product.redeem', {
-                                product,
-                                enrollment,
+                                product: product.id,
+                                enrollment: enrollment.id,
                             })
                         "
                         method="post"

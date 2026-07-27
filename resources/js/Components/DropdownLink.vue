@@ -1,21 +1,12 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-type ButtonProps = {
-    as: "button";
-};
-type AnchorProps = {
-    as: "a";
-    href: string;
-};
-type LinkProps = {
-    as?: undefined;
-    href: string;
+interface Props {
+    as?: "button" | "a" | undefined;
+    href?: string;
     method?: "get" | "post";
     only?: string[];
-};
-
-type Props = ButtonProps | AnchorProps | LinkProps;
+}
 
 const props = withDefaults(defineProps<Props>(), {
     href: "#",

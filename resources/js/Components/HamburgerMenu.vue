@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from "vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import {
-    route,
-    type QueryParams,
-    type RouteParamsWithQueryOverload,
-} from "ziggy-js";
+import { route, type HasQueryParam } from "ziggy-js";
 import type Competition from "@/Types/Competition";
 import { OhVueIcon } from "oh-vue-icons";
 
 interface Route {
     label: string;
-    _query?: QueryParams;
+    _query?: HasQueryParam["_query"];
 }
 type Routes = Record<string, Route>;
 
@@ -95,7 +91,7 @@ onUnmounted(() => {
                         :href="
                             route(route().has(page) ? page : 'home', {
                                 _query,
-                            } as RouteParamsWithQueryOverload)
+                            })
                         "
                         :active="page === route().current()"
                     >
@@ -115,7 +111,11 @@ onUnmounted(() => {
                     :key="competition.id"
                 >
                     <ResponsiveNavLink
-                        :href="route('competition.show', { competition })"
+                        :href="
+                            route('competition.show', {
+                                competition: competition.slug,
+                            })
+                        "
                     >
                         {{ competition.name }}
                     </ResponsiveNavLink>

@@ -45,7 +45,7 @@ const accentColor = () => {
 </script>
 
 <template>
-    <Link :href="route('event.show', event)" class="relative">
+    <Link :href="route('event.show', { event: event.id })" class="relative">
         <div
             class="@container grid aspect-5/2 place-content-stretch place-items-stretch"
             :class="[

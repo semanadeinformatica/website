@@ -5,18 +5,14 @@ import DropdownTrigger from "@/Components/DropdownTrigger.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import HamburgerMenu from "@/Components/HamburgerMenu.vue";
 import { ref, onMounted, onUnmounted } from "vue";
-import {
-    route,
-    type QueryParams,
-    type RouteParamsWithQueryOverload,
-} from "ziggy-js";
+import { route, type HasQueryParam } from "ziggy-js";
 import { usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { isAdmin as checkIsAdmin } from "@/Types/User";
 
 interface Route {
     label: string;
-    _query?: QueryParams;
+    _query?: HasQueryParam["_query"];
 }
 type Routes = Record<string, Route>;
 
@@ -112,7 +108,7 @@ onUnmounted(() => {
                     :href="
                         route(route().has(page) ? page : 'home', {
                             _query,
-                        } as RouteParamsWithQueryOverload)
+                        })
                     "
                     :active="page === route().current()"
                 >
@@ -135,7 +131,11 @@ onUnmounted(() => {
                         :key="competition.id"
                     >
                         <DropdownLink
-                            :href="route('competition.show', { competition })"
+                            :href="
+                                route('competition.show', {
+                                    competition: competition.slug,
+                                })
+                            "
                         >
                             {{ competition.name }}
                         </DropdownLink>

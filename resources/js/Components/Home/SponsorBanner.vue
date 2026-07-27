@@ -15,7 +15,6 @@ const props = defineProps<{
     color: string;
     title: string;
     idx: number;
-    tierSize?: string;
 }>();
 
 const sizes = ["max-h-72", "max-h-56", "max-h-40"];

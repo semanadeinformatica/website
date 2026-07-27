@@ -32,7 +32,11 @@ const formattedDate = (
         <h2 class="text-text-color text-2xl font-bold">
             <em
                 ><Link
-                    :href="route('competition.show', competition)"
+                    :href="
+                        route('competition.show', {
+                            competition: competition.slug,
+                        })
+                    "
                     preserve-state
                     preserve-scroll
                     >{{ competition.name }}</Link

@@ -17,10 +17,12 @@ defineProps<Props>();
         <Cell>{{ item.id.toString() }}</Cell>
         <slot></slot>
         <Cell>
-            <Link :href="route(`admin.${name}.edit`, item)">Editar</Link>
+            <Link :href="route(`admin.${name}.edit`, { id: item.id })"
+                >Editar</Link
+            >
             <Link
                 method="delete"
-                :href="route(`admin.${name}.destroy`, item)"
+                :href="route(`admin.${name}.destroy`, { id: item.id })"
                 class="ml-2"
                 >Apagar</Link
             >
