@@ -27,7 +27,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.products.update", product));
+    form.post(route("admin.products.update", { product: product.id }));
 };
 </script>
 
@@ -37,7 +37,7 @@ const submit = () => {
             <ImageInput
                 id="image"
                 v-model="form.image"
-                :initial-preview="item.image_product_url"
+                :initial-preview="product.image_product_url"
                 label="Imagem do produto"
                 class="self-stretch"
                 :error-message="form.errors.image"

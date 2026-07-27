@@ -46,7 +46,7 @@ const usertypeMap = {
         <template #row="{ item }">
             <Row name="users" :item="item">
                 <Cell
-                    ><Link :href="route('user.profile', item)">{{
+                    ><Link :href="route('user.profile', { user: item })">{{
                         item.name
                     }}</Link></Cell
                 >

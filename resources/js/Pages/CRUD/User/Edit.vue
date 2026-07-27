@@ -44,7 +44,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.users.update", user));
+    form.post(route("admin.users.update", { user: user.id }));
 };
 </script>
 
@@ -54,7 +54,7 @@ const submit = () => {
             <ImageInput
                 id="photo"
                 v-model="form.photo"
-                :initial-preview="item.profile_photo_url"
+                :initial-preview="user.profile_photo_url"
                 label="Foto de perfil"
                 class="self-stretch"
                 :error-message="form.errors.photo"
@@ -153,7 +153,7 @@ const submit = () => {
                     />
 
                     <TextInput
-                        id=".github"
+                        id="github"
                         v-model="form.github"
                         label="GitHub"
                         type="url"

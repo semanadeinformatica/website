@@ -27,7 +27,11 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.competitionPrizes.update", competitionPrize));
+    form.post(
+        route("admin.competitionPrizes.update", {
+            competitionPrize: competitionPrize.id,
+        }),
+    );
 };
 </script>
 
@@ -37,8 +41,8 @@ const submit = () => {
             <ImageInput
                 id="image"
                 v-model="form.prize_picture"
-                :initial-preview="item.prize_picture"
-                label="Imagem da equipa"
+                :initial-preview="competitionPrize.prize_picture"
+                label="Imagem do prémio"
                 class="self-stretch"
                 :error-message="form.errors.prize_picture"
             />

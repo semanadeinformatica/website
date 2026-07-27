@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.enrollments.update", enrollment));
+    form.put(route("admin.enrollments.update", { enrollment: enrollment.id }));
 };
 </script>
 

@@ -27,7 +27,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.sponsors.update", sponsor));
+    form.put(route("admin.sponsors.update", { sponsor: sponsor.id }));
 };
 </script>
 

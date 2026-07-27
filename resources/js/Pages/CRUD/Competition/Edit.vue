@@ -31,7 +31,9 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.competitions.update", competition));
+    form.put(
+        route("admin.competitions.update", { competition: competition.id }),
+    );
 };
 
 watchEffect(() => {
@@ -50,12 +52,12 @@ watchEffect(() => {
                 required
                 autofocus
                 autocomplete="name"
-                :error-message="form.errors.theme"
+                :error-message="form.errors.name"
             />
 
             <TextInput
                 id="slug"
-                :model-value="form.slug"
+                v-model="form.slug"
                 label="Nome que aparece no URL"
                 type="text"
                 required

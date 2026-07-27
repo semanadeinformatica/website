@@ -27,7 +27,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.slots.update", slot));
+    form.post(route("admin.slots.update", { slot: slot.id }));
 };
 </script>
 
@@ -37,7 +37,7 @@ const submit = () => {
             <ImageInput
                 id="image"
                 v-model="form.image"
-                :initial-preview="item.image_slot_url"
+                :initial-preview="slot.image_slot_url"
                 label="Imagem do slot"
                 class="self-stretch"
                 :error-message="form.errors.image"

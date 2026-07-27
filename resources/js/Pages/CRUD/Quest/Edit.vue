@@ -38,14 +38,16 @@ const form = useForm({
     name: quest.name,
     category: quest.category.toLowerCase(),
     requirement:
-        (quest.requirement_type?.split("\\").pop() ?? "").toLowerCase() +
-        ";" +
-        quest.requirement_id?.toString(),
+        quest.requirement_type && quest.requirement_id !== undefined && quest.requirement_id !== null
+            ? (quest.requirement_type.split("\\").pop() ?? "").toLowerCase() +
+              ";" +
+              quest.requirement_id.toString()
+            : "general;0",
     edition_id: quest.edition_id.toString(),
 });
 
 const submit = () => {
-    form.put(route("admin.quests.update", quest));
+    form.put(route("admin.quests.update", { quest: quest.id }));
 };
 </script>
 

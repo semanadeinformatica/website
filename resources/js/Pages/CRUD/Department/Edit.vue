@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.departments.update", department));
+    form.put(route("admin.departments.update", { department: department.id }));
 };
 </script>
 

@@ -17,7 +17,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.eventTypes.update", eventType));
+    form.put(route("admin.eventTypes.update", { eventType: eventType.id }));
 };
 </script>
 

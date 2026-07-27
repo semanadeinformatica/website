@@ -35,7 +35,7 @@ const editions = computed<Record<number, string>>(() =>
 );
 
 const submit = () => {
-    form.put(route("admin.staff.update", props.item));
+    form.put(route("admin.staff.update", { staff: props.item.id }));
 };
 </script>
 

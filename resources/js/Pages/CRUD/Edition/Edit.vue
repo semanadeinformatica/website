@@ -18,7 +18,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.editions.update", edition));
+    form.put(route("admin.editions.update", { edition: edition.id }));
 };
 </script>
 
