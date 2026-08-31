@@ -5,7 +5,7 @@ import ActionSection from "@/Components/ActionSection.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import axios from "axios";
 
 interface Props {
@@ -107,35 +107,39 @@ const disableTwoFactorAuthentication = () => {
 
 <template>
     <ActionSection>
-        <template #title> <span class="text-text-color">Autenticação de 2 fatores </span></template>
+        <template #title>
+            <span class="text-text-color"
+                >Autenticação de 2 fatores
+            </span></template
+        >
 
         <template #description>
             <span class="text-text-color">
-            Adiciona segurança à tua conta usando autenticação de
-            dois fatores.
+                Adiciona segurança à tua conta usando autenticação de dois
+                fatores.
             </span>
         </template>
 
         <template #content>
             <h3
                 v-if="twoFactorEnabled && !confirming"
-                class="text-lg font-medium text-text-color"
+                class="text-text-color text-lg font-medium"
             >
                 Ativaste a autenticação de dois fatores.
             </h3>
 
             <h3
                 v-else-if="twoFactorEnabled && confirming"
-                class="text-lg font-medium text-text-color"
+                class="text-text-color text-lg font-medium"
             >
                 Conclui a autenticação de dois fatores.
             </h3>
 
-            <h3 v-else class="text-lg font-medium text-text-color">
+            <h3 v-else class="text-text-color text-lg font-medium">
                 Não ativaste a autenticação de dois fatores.
             </h3>
 
-            <div class="mt-3 max-w-xl text-sm text-text-color">
+            <div class="text-text-color mt-3 max-w-xl text-sm">
                 <p>
                     Quando a autenticação de dois fatores for ativada, ser-te-á
                     solicitado um token aleatório e seguro durante a
@@ -146,7 +150,7 @@ const disableTwoFactorAuthentication = () => {
 
             <div v-if="twoFactorEnabled">
                 <div v-if="qrCode">
-                    <div class="mt-4 max-w-xl text-sm text-text-color">
+                    <div class="text-text-color mt-4 max-w-xl text-sm">
                         <p v-if="confirming" class="font-semibold">
                             Para terminar de ativar a autenticação de dois
                             fatores, digitaliza o código QR a seguir usando a
@@ -163,13 +167,13 @@ const disableTwoFactorAuthentication = () => {
                     </div>
 
                     <div
-                        class="mt-4 inline-block bg-2025-blue p-2"
+                        class="bg-2025-blue mt-4 inline-block p-2"
                         v-html="qrCode"
                     />
 
                     <div
                         v-if="setupKey"
-                        class="mt-4 max-w-xl text-sm text-text-color"
+                        class="text-text-color mt-4 max-w-xl text-sm"
                     >
                         <p class="font-semibold">
                             Setup Key: <span v-html="setupKey"></span>
@@ -192,7 +196,7 @@ const disableTwoFactorAuthentication = () => {
                 </div>
 
                 <div v-if="recoveryCodes.length > 0 && !confirming">
-                    <div class="mt-4 max-w-xl text-sm text-text-color">
+                    <div class="text-text-color mt-4 max-w-xl text-sm">
                         <p class="font-semibold">
                             Armazena estes códigos de recuperação numa gestor de
                             senhas seguro. Eles podem ser usados para recuperar
@@ -214,6 +218,9 @@ const disableTwoFactorAuthentication = () => {
             <div class="mt-5">
                 <div v-if="!twoFactorEnabled">
                     <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para ativar a autenticação de dois fatores."
+                        button="Confirmar"
                         @confirmed="enableTwoFactorAuthentication"
                     >
                         <PrimaryButton
@@ -228,6 +235,9 @@ const disableTwoFactorAuthentication = () => {
 
                 <div v-else>
                     <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para confirmar a autenticação de dois fatores."
+                        button="Confirmar"
                         @confirmed="confirmTwoFactorAuthentication"
                     >
                         <PrimaryButton
@@ -241,7 +251,12 @@ const disableTwoFactorAuthentication = () => {
                         </PrimaryButton>
                     </ConfirmsPassword>
 
-                    <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
+                    <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para regenerar os códigos de recuperação."
+                        button="Confirmar"
+                        @confirmed="regenerateRecoveryCodes"
+                    >
                         <PrimaryButton
                             v-if="recoveryCodes.length > 0 && !confirming"
                             class="mr-3"
@@ -250,7 +265,12 @@ const disableTwoFactorAuthentication = () => {
                         </PrimaryButton>
                     </ConfirmsPassword>
 
-                    <ConfirmsPassword @confirmed="showRecoveryCodes">
+                    <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para mostrar os códigos de recuperação."
+                        button="Confirmar"
+                        @confirmed="showRecoveryCodes"
+                    >
                         <PrimaryButton
                             v-if="recoveryCodes.length === 0 && !confirming"
                             class="mr-3"
@@ -260,6 +280,9 @@ const disableTwoFactorAuthentication = () => {
                     </ConfirmsPassword>
 
                     <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para desativar a autenticação de dois fatores."
+                        button="Confirmar"
                         @confirmed="disableTwoFactorAuthentication"
                     >
                         <PrimaryButton
@@ -273,6 +296,9 @@ const disableTwoFactorAuthentication = () => {
                     </ConfirmsPassword>
 
                     <ConfirmsPassword
+                        title="Confirmar Password"
+                        content="Confirma a tua senha para desativar a autenticação de dois fatores."
+                        button="Confirmar"
                         @confirmed="disableTwoFactorAuthentication"
                     >
                         <PrimaryButton

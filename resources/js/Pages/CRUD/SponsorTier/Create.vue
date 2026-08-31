@@ -4,7 +4,7 @@ import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import Checkbox from "@/Components/Checkbox.vue";
 
 interface Props {
@@ -101,11 +101,8 @@ const submit = () => {
                 />
             </label>
 
-            <label
-                for="canSeeAll"
-                class="flex flex-row items-center gap-6"
-            >
-                Consegue ver todos os participantes (ou só quem visita a banca)?   
+            <label for="canSeeAll" class="flex flex-row items-center gap-6">
+                Consegue ver todos os participantes (ou só quem visita a banca)?
                 <Checkbox
                     id="canSeeAll"
                     v-model="form.canSeeAll"
@@ -113,7 +110,6 @@ const submit = () => {
                     value="false"
                 />
             </label>
-
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

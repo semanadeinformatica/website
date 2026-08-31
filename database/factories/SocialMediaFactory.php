@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\SocialMedia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialMedia>
+ * @extends Factory<SocialMedia>
  */
 class SocialMediaFactory extends Factory
 {

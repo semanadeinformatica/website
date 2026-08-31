@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type Competition from "@/Types/Competition";
 import slugify from "slugify";
 import { watchEffect } from "vue";
@@ -31,7 +31,9 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.competitions.update", competition));
+    form.put(
+        route("admin.competitions.update", { competition: competition.id }),
+    );
 };
 
 watchEffect(() => {
@@ -50,12 +52,12 @@ watchEffect(() => {
                 required
                 autofocus
                 autocomplete="name"
-                :error-message="form.errors.theme"
+                :error-message="form.errors.name"
             />
 
             <TextInput
                 id="slug"
-                :model-value="form.slug"
+                v-model="form.slug"
                 label="Nome que aparece no URL"
                 type="text"
                 required

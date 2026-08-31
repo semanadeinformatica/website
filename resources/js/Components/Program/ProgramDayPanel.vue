@@ -33,8 +33,6 @@ const toggle = ({ target }: MouseEvent) => {
     selected.value = target as HTMLElement;
 };
 
-const hasTheme = computed(() => !!day.value.theme && day.value.theme.trim().length > 0)
-
 watch(selected, (newValue, oldValue) => {
     oldValue?.classList.toggle("selected");
     newValue?.classList.toggle("selected");
@@ -119,7 +117,7 @@ onMounted(() => {
     <section class="h-full w-full">
         <div
             id="tab-picker"
-            class="flex mx-auto flex-row flex-wrap w-fit p-2 justify-center gap-4 font-bold text-[#2596be] rounded-md  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
+            class="mx-auto flex w-fit flex-row flex-wrap justify-center gap-4 rounded-md bg-white/5 p-2 font-bold text-[#2596be] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] backdrop-blur-xs"
         >
             <button
                 v-if="(day.talks?.length ?? 0) > 0"
@@ -159,12 +157,12 @@ onMounted(() => {
         v-if="
             (selectedType === 'talk' || selectedType === 'activity') && !noInfo
         "
-        class="mr-2 mt-5 max-w-2xl rounded-md  p-2.5 px-8 text-justify text-lg font-bold text-text-color  bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
+        class="mr-2 mt-5 max-w-2xl rounded-md  p-2.5 px-8 text-justify text-lg font-bold text-text-color  bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
     >
         {{ day.theme }}
     </p>-->
     <template v-if="noInfo">
-        <p class="pt-40 text-4xl font-bold text-2023-teal-dark">Em breve...</p>
+        <p class="text-2023-teal-dark pt-40 text-4xl font-bold">Em breve...</p>
     </template>
     <template v-else>
         <WithTimeline :start-time="times.start" :end-time="times.end">

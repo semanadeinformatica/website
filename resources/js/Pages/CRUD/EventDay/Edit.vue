@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import TextInput from "@/Components/TextInput.vue";
 
 interface Props {
@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.eventDays.update", eventDay));
+    form.put(route("admin.eventDays.update", { eventDay: eventDay.id }));
 };
 </script>
 

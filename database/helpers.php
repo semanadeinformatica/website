@@ -2,14 +2,15 @@
 
 namespace DatabaseHelpers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
  * Creates a Many-to-Many relationship.
  *
- * @param  \Illuminate\Database\Eloquent\Model|string  $model1
- * @param  \Illuminate\Database\Eloquent\Model|string  $model2
+ * @param  Model|string  $model1
+ * @param  Model|string  $model2
  */
 function createManyToManyRelation($model1, $model2)
 {

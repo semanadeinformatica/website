@@ -5,7 +5,7 @@ import ActionMessage from "@/Components/ActionMessage.vue";
 import FormSection from "@/Components/FormSection.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const passwordInput = ref<HTMLInputElement | null>(null);
 const currentPasswordInput = ref<HTMLInputElement | null>(null);
@@ -38,12 +38,14 @@ const updatePassword = () => {
 
 <template>
     <FormSection @submitted="updatePassword">
-        <template #title> <span class="text-text-color">Atualizar Password </span></template>
+        <template #title>
+            <span class="text-text-color">Atualizar Password </span></template
+        >
 
         <template #description>
             <span class="text-text-color">
-            Garante que a tua conta usa uma senha longa e aleatória para se
-            manter segura.
+                Garante que a tua conta usa uma senha longa e aleatória para se
+                manter segura.
             </span>
         </template>
 

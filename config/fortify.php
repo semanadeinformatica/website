@@ -1,6 +1,5 @@
 <?php
 
-use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
 
 return [
@@ -50,6 +49,8 @@ return [
 
     'email' => 'email',
 
+    'lowercase_usernames' => true,
+
     /*
     |--------------------------------------------------------------------------
     | Home Path
@@ -61,7 +62,7 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => '/',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,6 +91,8 @@ return [
     */
 
     'middleware' => ['web'],
+
+    'auth_middleware' => 'auth',
 
     /*
     |--------------------------------------------------------------------------

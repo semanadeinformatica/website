@@ -5,7 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type Enrollment from "@/Types/Enrollment";
 
 interface Props {
@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.enrollments.update", enrollment));
+    form.put(route("admin.enrollments.update", { enrollment: enrollment.id }));
 };
 </script>
 

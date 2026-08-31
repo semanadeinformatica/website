@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
-use App\Http\Controllers\CompetitionTeamCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
+use App\Http\Controllers\CompetitionTeamCRUDController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentCRUDController;

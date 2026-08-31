@@ -24,43 +24,43 @@ const description = computed(() => {
 
 <template>
     <Head :title="props.status.toString()" />
-    <main class="min-h-screen bg-2023-bg">
+    <main class="bg-2023-bg min-h-screen">
         <div
             class="flex min-h-screen flex-col content-center items-center justify-center gap-44 py-16"
         >
             <img
                 id="svg-1"
-                class="absolute left-[7%] w-36 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute left-[7%] w-36 opacity-50"
                 src="/../images/cy-sinf.svg"
                 alt="Stylized SINF logo"
             />
             <img
                 id="svg-2"
-                class="absolute right-[7%] top-16 w-32 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute top-16 right-[7%] w-32 opacity-50"
                 src="/../images/rc-sinf.svg"
                 alt="Stylized SINF logo"
             />
             <img
                 id="svg-3"
-                class="absolute bottom-28 right-[15%] w-20 animate-2023-maintenance-jump opacity-50 max-ml:hidden"
+                class="animate-2023-maintenance-jump max-ml:hidden absolute right-[15%] bottom-28 w-20 opacity-50"
                 src="/../images/oc-sinf.svg"
                 alt="Stylized SINF logo"
             />
 
             <div class="relative">
                 <img
-                    class="w-96 max-ml:w-72"
+                    class="max-ml:w-72 w-96"
                     src="/../images/sinf logo.png"
                     alt="Stylized SINF logo"
                 />
                 <span
-                    class="margin-0 absolute -bottom-5 right-0 text-xl font-bold text-2023-teal"
+                    class="margin-0 text-2023-teal absolute right-0 -bottom-5 text-xl font-bold"
                     >2023</span
                 >
             </div>
 
             <div
-                class="flex w-fit flex-col items-center gap-7 text-center text-2023-teal-dark"
+                class="text-2023-teal-dark flex w-fit flex-col items-center gap-7 text-center"
             >
                 <h1 class="text-8xl">{{ props.status }}</h1>
                 <p>{{ description }}</p>
@@ -72,7 +72,7 @@ const description = computed(() => {
                     Regressar
                 </PrimaryButton>
             </div>
-            <div class="text-center text-lg text-2023-teal-dark">
+            <div class="text-2023-teal-dark text-center text-lg">
                 <p class="font-bold">Mais informações</p>
                 <p>geral@sinf.pt</p>
             </div>

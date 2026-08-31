@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
-import "vue3-carousel/dist/carousel.css";
+import "vue3-carousel/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
 import type { SpeakerUser, User } from "@/Types/User";
 import { OhVueIcon } from "oh-vue-icons";

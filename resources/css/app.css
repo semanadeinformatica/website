@@ -1,6 +1,60 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    --color-text-color: #ffffff;
+    --color-2025-bg-green: #59B672;
+    --color-2025-blue: #3A9699;
+    --color-2025-bg: #1A74C2;
+    --color-2025-blue-dark: #0F3D57;
+    --color-2023-bg: rgb(248, 245, 231);
+    --color-2023-red: rgb(217, 79, 4);
+    --color-2023-red-dark: rgb(177, 93, 93);
+    --color-2023-teal: rgb(0, 113, 114);
+    --color-2023-teal-dark: rgb(2, 82, 89);
+    --color-2023-orange: rgb(242, 147, 37);
+
+    --background-image-2025-bg-gradient: linear-gradient(45deg, #0f3d56 0%, #1A74C2 80%, #59B672 100%);
+
+    --shadow-sm: 2px 2px 0 -1px var(--tw-shadow-color, currentColor), 2px 2px 0 0 black;
+    --shadow: 4px 4px 0 -1px var(--tw-shadow-color, currentColor), 4px 4px 0 0 black;
+    --shadow-md: 6px 6px 0 -1px var(--tw-shadow-color, currentColor), 6px 6px 0 0 black;
+    --shadow-lg: 8px 8px 0 -1px var(--tw-shadow-color, currentColor), 8px 8px 0 0 black;
+    --shadow-xl: 12px 12px 0 -1px var(--tw-shadow-color, currentColor), 12px 12px 0 0 black;
+    --shadow-2xl: 16px 16px 0 -1px var(--tw-shadow-color, currentColor), 16px 16px 0 0 black;
+
+    --animate-2023-maintenance-jump: 2023-jump 2s cubic-bezier(0.46, 0.03, 0.52, 0.96)
+        infinite;
+
+    --breakpoint-ml: 900px;
+    --breakpoint-xs: 500px;
+}
+
+@keyframes 2023-jump {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-30px);
+    }
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
+}
 
 [x-cloak] {
     display: none;

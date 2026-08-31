@@ -4,7 +4,7 @@ import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import Checkbox from "@/Components/Checkbox.vue";
 import type SponsorTier from "@/Types/SponsorTier";
 
@@ -28,7 +28,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.sponsorTiers.update", tier));
+    form.put(route("admin.sponsorTiers.update", { sponsorTier: tier.id }));
 };
 </script>
 
@@ -96,17 +96,10 @@ const submit = () => {
                 />
             </label>
 
-            <label
-                for="canSeeAll"
-                class="flex flex-row items-center gap-6"
-            >
+            <label for="canSeeAll" class="flex flex-row items-center gap-6">
                 Consegue ver todos os participantes?
-                <Checkbox
-                    id="canSeeAll"
-                    v-model:checked="form.canSeeAll"
-                />
+                <Checkbox id="canSeeAll" v-model:checked="form.canSeeAll" />
             </label>
-
 
             <PrimaryButton type="submit">Atribuir</PrimaryButton>
         </form>

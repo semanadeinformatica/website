@@ -37,7 +37,7 @@ const textColor: Record<string, string> = {
     "red-dark": "text-2023-red-dark",
     red: "text-2023-red",
     teal: "text-2023-teal",
-    white: "text-white"
+    white: "text-white",
 };
 
 const shadowColor: Record<string, string> = {
@@ -47,52 +47,45 @@ const shadowColor: Record<string, string> = {
     red: "shadow-2023-red",
     teal: "shadow-2023-teal",
 };
-
-const iconColor: Record<string, string> = {
-    orange: "#f29325",
-    "teal-dark": "#025259",
-    "red-dark": "#b15d5d",
-    red: "#d94f04",
-    teal: "#007172",
-    white: "#ffffff"
-};
 </script>
 
 <template>
-        <div
-            class="flex w-fit flex-row flex-wrap gap-8"
-            :class="reverse ? 'flex-row-reverse self-end' : ''"
-        >
-            <div
-            class="group relative flex flex-col items-center overflow-hidden rounded-full"
-            >
-    <img
-        class="h-52 w-52 object-cover shadow transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:scale-[1.02] group-hover:brightness-95"
-        :src="user.profile_photo_url"
-        :alt="user.usertype?.display_name ?? user.name + ' profile photo'"
-    />
     <div
-        v-if="Object.keys(user.usertype?.social_media ?? {}).length > 0"
-        class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all duration-300 ease-in-out group-hover:-bottom-7"
-        :class="shadowColor[color]"
+        class="flex w-fit flex-row flex-wrap gap-8"
+        :class="reverse ? 'flex-row-reverse self-end' : ''"
     >
-        <template v-for="(social, key) in socials" :key="key">
-        <a
-            v-if="user.usertype?.social_media?.[key]"
-            :href="String(user.usertype?.social_media?.[key])"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mx-2"
+        <div
+            class="group relative flex flex-col items-center overflow-hidden rounded-full"
         >
-            <OhVueIcon
-            :name="social.icon"
-            fill="white"
-            scale="1.4"
+            <img
+                class="h-52 w-52 object-cover shadow transition-all duration-300 ease-in-out group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:brightness-95"
+                :src="user.profile_photo_url"
+                :alt="
+                    user.usertype?.display_name ?? user.name + ' profile photo'
+                "
             />
-        </a>
-        </template>
-    </div>
-    </div>
+            <div
+                v-if="Object.keys(user.usertype?.social_media ?? {}).length > 0"
+                class="absolute -bottom-32 flex w-full flex-row items-center justify-center pt-1 pb-10 transition-all duration-300 ease-in-out group-hover:-bottom-7"
+                :class="shadowColor[color]"
+            >
+                <template v-for="(social, key) in socials" :key="key">
+                    <a
+                        v-if="user.usertype?.social_media?.[key]"
+                        :href="String(user.usertype?.social_media?.[key])"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mx-2"
+                    >
+                        <OhVueIcon
+                            :name="social.icon"
+                            fill="white"
+                            scale="1.4"
+                        />
+                    </a>
+                </template>
+            </div>
+        </div>
         <div
             class="flex flex-col justify-center gap-10"
             :class="textColor[color]"
@@ -116,7 +109,7 @@ const iconColor: Record<string, string> = {
                 </div>
             </div>
             <div
-                class="prose col-span-2 row-start-2 max-w-4xl break-words text-inherit"
+                class="prose col-span-2 row-start-2 max-w-4xl wrap-break-word text-inherit"
                 :class="reverse ? 'text-right' : ''"
                 v-html="user.usertype?.description_html"
             ></div>

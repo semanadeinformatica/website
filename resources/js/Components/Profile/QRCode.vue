@@ -5,7 +5,7 @@ import { OhVueIcon } from "oh-vue-icons";
 import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const props = defineProps<{
     participant: Participant;
@@ -31,7 +31,7 @@ const showQRCode = () => {
 
 <template>
     <button
-        class="flex w-fit cursor-pointer rounded-full text-text-color"
+        class="text-text-color flex w-fit cursor-pointer rounded-full"
         @click="showQRCode"
     >
         <OhVueIcon name="io-qr-code" scale="1.2"></OhVueIcon>
@@ -44,7 +44,7 @@ const showQRCode = () => {
         <span v-if="loading" class="text-lg">A gerar...</span>
         <template v-else>
             <div v-html="participant.quest_qr_code"></div>
-            <span class="font-mono font-bold text-2023-teal-dark">
+            <span class="text-2023-teal-dark font-mono font-bold">
                 {{ participant.quest_code }}
             </span>
         </template>

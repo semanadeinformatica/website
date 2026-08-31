@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Department;
+use App\Models\Edition;
+use App\Models\Participant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +17,7 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
             $table->unique(['name', 'edition_id']);
             $table->timestamps();
         });
@@ -22,8 +25,8 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
             $table->boolean('coordinator');
-            $table->foreignIdFor(\App\Models\Participant::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Department::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Participant::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Department::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 

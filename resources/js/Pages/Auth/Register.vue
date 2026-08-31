@@ -4,7 +4,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "../../Layouts/CardLayout.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const form = useForm({
     name: "",
@@ -12,6 +12,7 @@ const form = useForm({
     password: "",
     password_confirmation: "",
     terms: false,
+    data_sharing_agreement: false,
 });
 
 const submit = () => {
@@ -81,24 +82,25 @@ const submit = () => {
                     <a
                         target="_blank"
                         :href="route('terms.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
                         >Terms of Service</a
                     >
                     and
                     <a
                         target="_blank"
                         :href="route('policy.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
                         >Privacy Policy</a
                     ></span
                 >
             </label>
 
-            <label class="flex items-center gap-2 self-stretch text-text-color">
+            <label class="text-text-color flex items-center gap-2 self-stretch">
                 <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
                 since it makes it so that every account that exists has agreed to this -->
                 <Checkbox
                     id="data_sharing_agreement"
+                    v-model:checked="form.data_sharing_agreement"
                     name="data_sharing_agreement"
                     required
                 />
@@ -109,7 +111,7 @@ const submit = () => {
 
             <Link
                 :href="route('login')"
-                class="font-semibold text-text-color underline"
+                class="text-text-color font-semibold underline"
             >
                 Já tens conta?
             </Link>

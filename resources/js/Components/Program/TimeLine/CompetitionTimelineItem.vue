@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Competition from "@/Types/Competition";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { Link } from "@inertiajs/vue3";
 
 interface Props {
@@ -28,20 +28,22 @@ const formattedDate = (
 </script>
 
 <template>
-    <article
-        class="relative flex flex-col border-b-2 border-white pb-4"
-    >
-        <h2 class="text-2xl font-bold text-text-color">
+    <article class="relative flex flex-col border-b-2 border-white pb-4">
+        <h2 class="text-text-color text-2xl font-bold">
             <em
                 ><Link
-                    :href="route('competition.show', competition)"
+                    :href="
+                        route('competition.show', {
+                            competition: competition.slug,
+                        })
+                    "
                     preserve-state
                     preserve-scroll
                     >{{ competition.name }}</Link
                 ></em
             >
         </h2>
-        <p class="text-lg text-text-color">{{ competition.theme }}</p>
+        <p class="text-text-color text-lg">{{ competition.theme }}</p>
         <span class="text-text-color">
             {{
                 formattedDate(
@@ -52,7 +54,7 @@ const formattedDate = (
             }}
         </span>
         <span
-            class="absolute -left-[calc(2rem+17.75px)] top-0 inline-flex h-8 w-8 items-center justify-center rounded-md bg-2025-blue text-xl font-semibold text-white"
+            class="bg-2025-blue absolute top-0 -left-[calc(2rem+17.75px)] inline-flex h-8 w-8 items-center justify-center rounded-md text-xl font-semibold text-white"
             >i</span
         >
     </article>

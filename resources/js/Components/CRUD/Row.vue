@@ -2,7 +2,7 @@
 import type Model from "@/Types/Model";
 import Cell from "./Cell.vue";
 import { Link } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: Model;
@@ -13,14 +13,16 @@ defineProps<Props>();
 </script>
 
 <template>
-    <tr class="border border-black even:bg-2023-orange even:bg-opacity-20">
+    <tr class="even:bg-2023-orange/20 border border-black">
         <Cell>{{ item.id.toString() }}</Cell>
         <slot></slot>
         <Cell>
-            <Link :href="route(`admin.${name}.edit`, item)">Editar</Link>
+            <Link :href="route(`admin.${name}.edit`, { id: item.id })"
+                >Editar</Link
+            >
             <Link
                 method="delete"
-                :href="route(`admin.${name}.destroy`, item)"
+                :href="route(`admin.${name}.destroy`, { id: item.id })"
                 class="ml-2"
                 >Apagar</Link
             >

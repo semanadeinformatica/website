@@ -10,14 +10,6 @@ const shadowColor: Record<string, string> = {
     teal: "shadow-2023-teal",
 };
 
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-    red: "text-2023-red",
-    teal: "text-2023-teal",
-};
-
 defineProps<{
     department: Department;
     color: string;
@@ -30,7 +22,7 @@ defineProps<{
         class="flex flex-col items-center gap-4"
     >
         <p
-            class="text-text-color w-fit bg-2025-blue-dark rounded-md p-2 px-6 text-center text-xl font-bold"
+            class="text-text-color bg-2025-blue-dark w-fit rounded-md p-2 px-6 text-center text-xl font-bold"
             :class="shadowColor[color]"
         >
             {{ department.name }}

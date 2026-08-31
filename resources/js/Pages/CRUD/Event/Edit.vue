@@ -7,7 +7,7 @@ import type EventDay from "@/Types/EventDay";
 import type EventType from "@/Types/EventType";
 import type { User } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import Checkbox from "@/Components/Checkbox.vue";
 
 interface Props {
@@ -37,7 +37,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.events.update", event));
+    form.put(route("admin.events.update", { event: event.id }));
 };
 </script>
 
@@ -165,10 +165,7 @@ const submit = () => {
                 </option>
             </TextInput>
 
-            <label
-                for="enroll_in_site"
-                class=""
-            >
+            <label for="enroll_in_site" class="">
                 Inscrição no site?
                 <Checkbox
                     id="enroll_in_site"

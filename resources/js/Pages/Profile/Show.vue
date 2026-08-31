@@ -33,7 +33,7 @@ const page = usePage();
 const authUser = page.props.auth.user;
 
 const buttons: Tabs =
-    isParticipant(user) && !isCompany(page.props.auth.user!)
+    isParticipant(user) && !isCompany(page.props.auth.user)
         ? {
               ticket: {
                   label: "Bilhetes",
@@ -45,13 +45,13 @@ const buttons: Tabs =
               },
           }
         : isCompany(user)
-        ? {
-              visitHistory: {
-                  label: "Visitas",
-                  component: h(EnrolledParticipants),
-              },
-          }
-        : {};
+          ? {
+                visitHistory: {
+                    label: "Visitas",
+                    component: h(EnrolledParticipants),
+                },
+            }
+          : {};
 
 if (canViewAll && authUser && authUser.id === user.id) {
     buttons["allParticipants"] = {
@@ -59,7 +59,6 @@ if (canViewAll && authUser && authUser.id === user.id) {
         component: h(AllParticipants),
     };
 }
-
 </script>
 
 <template>
@@ -68,14 +67,18 @@ if (canViewAll && authUser && authUser.id === user.id) {
             <div
                 class="relative mx-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[60vw]"
             >
-                <div class="flex w-full justify-between max-md:flex-col max-md:space-y-8">
+                <div
+                    class="flex w-full justify-between max-md:flex-col max-md:space-y-8"
+                >
                     <ProfilePicture :item="user" />
                     <InfoCard :user="user" :is-staff="isStaff" />
                 </div>
                 <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
                 <p
-                    v-if="points !== null && authUser && authUser.id === user.id"
-                    class="text-center text-xl font-bold text-text-color"
+                    v-if="
+                        points !== null && authUser && authUser.id === user.id
+                    "
+                    class="text-text-color text-center text-xl font-bold"
                 >
                     Tens {{ points }}
                     <img

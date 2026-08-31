@@ -6,7 +6,7 @@ import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
 import Header from "@/Components/CRUD/Header.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { Link } from "@inertiajs/vue3";
 
 interface Props {
@@ -46,7 +46,7 @@ const usertypeMap = {
         <template #row="{ item }">
             <Row name="users" :item="item">
                 <Cell
-                    ><Link :href="route('user.profile', item)">{{
+                    ><Link :href="route('user.profile', { user: item })">{{
                         item.name
                     }}</Link></Cell
                 >

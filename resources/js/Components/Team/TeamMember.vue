@@ -3,22 +3,6 @@ import type Staff from "@/Types/Staff";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed } from "vue";
 
-const borderColor: Record<string, string> = {
-    orange: "border-2023-orange",
-    "teal-dark": "border-2023-teal-dark",
-    "red-dark": "border-2023-red-dark",
-    red: "border-2023-red",
-    teal: "border-2023-teal",
-};
-
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-    red: "text-2023-red",
-    teal: "text-2023-teal",
-};
-
 const socialIcon: Record<string, string> = {
     github: "io-logo-github",
     linkedin: "io-logo-linkedin",
@@ -53,17 +37,17 @@ const socialMedia = computed(() => {
 </script>
 
 <template>
-        <div
-        class="group relative flex w-fit flex-col items-center overflow-hidden rounded-full "
-        >
+    <div
+        class="group relative flex w-fit flex-col items-center overflow-hidden rounded-full"
+    >
         <img
             :src="staff.participant?.user?.profile_photo_url"
             :alt="`${staff.participant?.user?.name}'s image`"
-            class="h-40 w-40 rounded-full object-cover shadow transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02] group-hover:brightness-95"
+            class="h-40 w-40 rounded-full object-cover shadow transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:brightness-95"
         />
         <div
             v-if="Object.keys(socialMedia).length > 0"
-            class="absolute -bottom-32 flex w-full flex-row items-center justify-center pb-10 pt-1 transition-all group-hover:-bottom-7"
+            class="absolute -bottom-32 flex w-full flex-row items-center justify-center pt-1 pb-10 transition-all group-hover:-bottom-7"
             :class="bgColor[color]"
         >
             <a
@@ -80,7 +64,7 @@ const socialMedia = computed(() => {
             </a>
         </div>
     </div>
-    <p class="max-w-[13em] text-center font-bold text-text-color">
+    <p class="text-text-color max-w-[13em] text-center font-bold">
         {{ staff.participant?.user?.name }}
     </p>
 </template>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Edition;
+use App\Models\EventDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,7 @@ class ProgramController extends Controller
         $validated = $validator->validated();
         $queryDay = isset($validated['day']) ? $validated['day'] : $this->getCurrentProgramDay($edition);
 
-        /** @var \App\Models\EventDay|null $eventDay */
+        /** @var EventDay|null $eventDay */
         $eventDay = $edition->event_days()->orderBy('date', 'ASC')->skip($queryDay - 1)->first();
 
         // FIXME: we need to do this since 'Model::load' and 'Model::with' work on the table, not on a specific model.

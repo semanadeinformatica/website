@@ -6,7 +6,7 @@ import type EventDay from "@/Types/EventDay";
 import type Sponsor from "@/Types/Sponsor";
 import type Stand from "@/Types/Stand";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: Stand;
@@ -24,7 +24,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.stands.update", stand));
+    form.put(route("admin.stands.update", { stand: stand.id }));
 };
 </script>
 

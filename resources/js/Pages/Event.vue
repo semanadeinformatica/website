@@ -5,7 +5,7 @@ import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import { computed } from "vue";
 import { isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import Sponsor from "@/Components/Home/Sponsor.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { router, Link } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import type Enrollment from "@/Types/Enrollment";
@@ -39,10 +39,9 @@ const formatTimeString = (time: string): string => {
 const colorPicker = () => {
     const colors = ["white"];
     const pos = Math.floor(Math.random() * colors.length);
-    
+
     return colors[pos];
 };
-
 </script>
 
 <template>
@@ -59,22 +58,22 @@ const colorPicker = () => {
         </section>
         <!-- details -->
         <section
-            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] px-16 py-24"
+            class="m relative mt-32 flex flex-row flex-wrap justify-center gap-8 bg-white/5 px-16 py-24 shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] backdrop-blur-xs"
             :class="[
                 { 'mt-20': companies.length > 0 && speakers.length === 0 },
             ]"
         >
             <h1
-                class="absolute -top-7 left-1/2 -translate-x-1/2 flex rounded-md bg-2025-blue py-2 px-3 text-center text-2xl font-bold text-white"
+                class="bg-2025-blue absolute -top-7 left-1/2 flex -translate-x-1/2 rounded-md px-3 py-2 text-center text-2xl font-bold text-white"
             >
                 {{ event.name }}
             </h1>
             <div
-                class="prose max-w-3xl break-words text-justify font-bold text-white "
+                class="prose max-w-3xl text-justify font-bold wrap-break-word text-white"
                 v-html="event.description_html"
             ></div>
             <h1
-                class="absolute -bottom-5 flex bg-2025-blue w-fit rounded-md bg-2025-blue px-3 py-2 text-xl font-bold text-white max-lg:left-auto"
+                class="bg-2025-blue bg-2025-blue absolute -bottom-5 flex w-fit rounded-md px-3 py-2 text-xl font-bold text-white max-lg:left-auto"
             >
                 Dia
                 {{ event.event_day ? $d(event.event_day.date, "day") : "N/A" }},
@@ -117,13 +116,10 @@ const colorPicker = () => {
                         },
                     })
                 "
-                class="inline-flex p-2 px-3 text-center text-2xl font-bold text-white bg-white/5 backdrop-blur-sm shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] transition-transform duration-300 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))] border-0 ring-1 ring-white/10 
-           hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]
-           focus:outline-none"
+                class="inline-flex border-0 bg-white/5 p-2 px-3 text-center text-2xl font-bold text-white shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] ring-1 ring-white/10 filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] backdrop-blur-xs transition-transform duration-300 hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)] focus:outline-hidden"
             >
                 Scan QR Code
-            </Link> 
+            </Link>
         </div>
 
         <!-- sign up -->
@@ -132,8 +128,8 @@ const colorPicker = () => {
             class="flex w-full flex-col items-center gap-4 place-self-center py-24"
         >
             <p
-                class="flex w-fit flex-col text-center text-3xl font-bold text-text-color"
                 v-if="event.enroll_in_site"
+                class="text-text-color flex w-fit flex-col text-center text-3xl font-bold"
             >
                 <span v-if="hasJoined">Vemo-nos lá!</span>
                 <span v-else-if="!isEnrolled"
@@ -160,7 +156,9 @@ const colorPicker = () => {
                     if (!(isEnrolled && event.external_url)) {
                         $page.props.auth.user
                             ? isEnrolled
-                                ? router.put(route('event.join', event))
+                                ? router.put(
+                                      route('event.join', { event: event.id }),
+                                  )
                                 : router.get(route('home') + '#enroll-section') // HACK: this is a hack
                             : router.get(route('register'));
                     }
@@ -186,7 +184,7 @@ const colorPicker = () => {
                 shadow="red"
                 text-size="sm:text-3xl"
                 padding="sm:px-8"
-                @click="router.put(route('event.leave', event))"
+                @click="router.put(route('event.leave', { event: event.id }))"
             >
                 Cancela a inscrição
             </PrimaryButton>
@@ -198,18 +196,18 @@ const colorPicker = () => {
         >
             <div
                 v-if="enrollments.length > 0"
-                class="flex flex-col items-center overflow-y-auto bg-2025-blue"
+                class="bg-2025-blue flex flex-col items-center overflow-y-auto"
             >
                 <div
                     v-for="enrollment in enrollments"
                     :key="enrollment.id"
-                    class="flex w-full items-center justify-between gap-3 p-3 even:bg-2025-bg even:bg-opacity-20"
+                    class="even:bg-2025-bg/20 flex w-full items-center justify-between gap-3 p-3"
                 >
                     {{ enrollment.participant?.user?.name ?? enrollment.id }} -
                     {{ enrollment.participant?.user?.email ?? enrollment.id }}
                 </div>
             </div>
-            <p v-else class="text-center text-2xl font-bold text-text-color">
+            <p v-else class="text-text-color text-center text-2xl font-bold">
                 Ainda nenhum participante se inscreveu neste evento.
             </p>
         </div>

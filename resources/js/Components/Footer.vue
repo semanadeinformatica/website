@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { OhVueIcon } from "oh-vue-icons";
-import PortoTechBanner from "@/Components/Footer/PortoTechBanner.vue";
-
 const contacts = [
     {
         social: "facebook",
@@ -18,7 +15,7 @@ const contacts = [
     {
         social: "web",
         url: "mailto:geral@sinf.pt",
-    }
+    },
 ];
 </script>
 
@@ -36,9 +33,10 @@ const contacts = [
                         target="_blank"
                         :href="platform.url"
                     >
-                        <img :src="`/images/${platform.social}.svg`" class="h-20 w-20 hover:scale-105
-           [filter:drop-shadow(0_0_0_rgba(0,0,0,0))]
-           hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]"/>
+                        <img
+                            :src="`/images/${platform.social}.svg`"
+                            class="h-20 w-20 filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]"
+                        />
                     </a>
                 </template>
             </div>
@@ -50,14 +48,16 @@ const contacts = [
                             target="_blank"
                             :href="platform.url"
                         >
-                            <img :src="`/images/${platform.social}.svg`" class="h-20 w-20"/>
+                            <img
+                                :src="`/images/${platform.social}.svg`"
+                                class="h-20 w-20"
+                            />
                         </a>
                     </template>
                 </div>
             </div>
         </section>
-        <!-- <PortoTechBanner /> -->
-        <div class="container mx-auto text-center font-bold text-text-color">
+        <div class="text-text-color container mx-auto text-center font-bold">
             <p>
                 Copyright &copy; 2025
                 <a href="https://ni.fe.up.pt/">NIAEFEUP</a>, todos os direitos

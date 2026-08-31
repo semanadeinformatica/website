@@ -3,7 +3,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     status: string;
@@ -24,7 +24,7 @@ const submit = () => {
     <Head title="Forgot Password" />
 
     <CardLayout title="Repor password" heading="Esqueceste-te da tua password?">
-        <span v-if="status" class="p-4 text-text-color">
+        <span v-if="status" class="text-text-color p-4">
             {{ status }}
         </span>
 

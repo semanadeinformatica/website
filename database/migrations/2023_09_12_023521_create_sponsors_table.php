@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Company;
+use App\Models\Edition;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +16,8 @@ return new class extends Migration
         Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
             $table->enum('tier', ['PLATINUM', 'GOLD', 'SILVER']);
-            $table->foreignIdFor(\App\Models\Edition::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Edition::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 

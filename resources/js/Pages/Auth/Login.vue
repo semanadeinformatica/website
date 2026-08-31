@@ -4,7 +4,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import CardLayout from "../../Layouts/CardLayout.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     canResetPassword: boolean;
@@ -63,7 +63,7 @@ const submit = () => {
             </label>
 
             <div
-                class="flex flex-col items-center gap-2 font-semibold text-text-color underline"
+                class="text-text-color flex flex-col items-center gap-2 font-semibold underline"
             >
                 <Link :href="route('register')">Ainda não tens conta?</Link>
 

@@ -6,7 +6,7 @@ import ActionSection from "@/Components/ActionSection.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type Session from "@/Types/Session";
 
 interface Props {
@@ -46,17 +46,19 @@ const closeModal = () => {
 
 <template>
     <ActionSection>
-        <template #title> <span class="text-text-color">Sessões do Browser</span></template>
+        <template #title>
+            <span class="text-text-color">Sessões do Browser</span></template
+        >
 
         <template #description>
             <span class="text-text-color">
-            Gere e regista as tuas sessões ativas em outros navegadores e
-            dispositivos.
+                Gere e regista as tuas sessões ativas em outros navegadores e
+                dispositivos.
             </span>
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-text-color">
+            <div class="text-text-color max-w-xl text-sm">
                 Se necessário, podes terminar a sessão de todos os outros
                 navegadores em todos os teus dispositivos. Algumas das tuase
                 sessões recentes estão listadas abaixo; No entanto, esta lista
@@ -74,7 +76,7 @@ const closeModal = () => {
                     <div>
                         <svg
                             v-if="session.agent.is_desktop"
-                            class="h-8 w-8 text-text-color"
+                            class="text-text-color h-8 w-8"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -90,7 +92,7 @@ const closeModal = () => {
 
                         <svg
                             v-else
-                            class="h-8 w-8 text-text-color"
+                            class="text-text-color h-8 w-8"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -106,7 +108,7 @@ const closeModal = () => {
                     </div>
 
                     <div class="ml-3">
-                        <div class="text-sm text-text-color">
+                        <div class="text-text-color text-sm">
                             {{
                                 session.agent.platform
                                     ? session.agent.platform
@@ -121,12 +123,12 @@ const closeModal = () => {
                         </div>
 
                         <div>
-                            <div class="text-xs text-text-color">
+                            <div class="text-text-color text-xs">
                                 {{ session.ip_address }},
 
                                 <span
                                     v-if="session.is_current_device"
-                                    class="font-semibold text-text-color"
+                                    class="text-text-color font-semibold"
                                     >This device</span
                                 >
                                 <span v-else

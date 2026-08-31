@@ -3,7 +3,7 @@ import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 import { inject, onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import { router } from "@inertiajs/vue3";
 import PrimaryButton from "../PrimaryButton.vue";
 
@@ -41,7 +41,7 @@ const enroll = () => {
         >
             <img class="w-80 p-6" src="images/sinf logo.png" />
             <p>
-                A <span class="font-bold text-2025-blue-dark">SINF</span> está
+                A <span class="text-2025-blue-dark font-bold">SINF</span> está
                 mais interactiva do que nunca!
             </p>
             <ul class="flex flex-col items-center">

@@ -1,6 +1,8 @@
+import path from "path";
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     publicDir: "public",
@@ -12,10 +14,11 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            ziggy: "/vendor/tightenco/ziggy/dist/vue.m",
+            "ziggy-js": path.resolve("vendor/tightenco/ziggy"),
         },
     },
     plugins: [
+        tailwindcss(),
         laravel({
             publicDirectory: "public",
             input: "resources/js/app.ts",

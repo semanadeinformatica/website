@@ -1,21 +1,12 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-type ButtonProps = {
-    as: "button";
-};
-type AnchorProps = {
-    as: "a";
-    href: string;
-};
-type LinkProps = {
-    as?: undefined;
-    href: string;
+interface Props {
+    as?: "button" | "a" | undefined;
+    href?: string;
     method?: "get" | "post";
     only?: string[];
-};
-
-type Props = ButtonProps | AnchorProps | LinkProps;
+}
 
 const props = withDefaults(defineProps<Props>(), {
     href: "#",
@@ -25,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const classes =
-    "block w-full px-2 py-2 text-md text-white underline font-semibold first:rounded-t-lg last:rounded-b-lg bg-white/20 filter hover:brightness-90 focus:outline-none focus:bg-2025-blue transition duration-150 ease-in-out";
+    "block w-full px-2 py-2 text-md text-white underline font-semibold first:rounded-t-lg last:rounded-b-lg bg-white/20 filter cursor-pointer hover:brightness-90 focus:outline-hidden focus:bg-2025-blue transition duration-150 ease-in-out";
 </script>
 
 <template>

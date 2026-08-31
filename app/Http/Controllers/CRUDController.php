@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Laravel\Scout\Searchable;
 use Nette\Utils\Json;
 
 /**
@@ -36,7 +37,7 @@ abstract class CRUDController extends Controller
     /**
      * The validation rules for the store method.
      *
-     * @param  T  $old The old model.
+     * @param  T  $old  The old model.
      * @return array<string, string | array<int|string>>
      */
     protected function storeRules(): array
@@ -47,7 +48,7 @@ abstract class CRUDController extends Controller
     /**
      * The validation rules for the update method.
      *
-     * @param  T  $old The old model.
+     * @param  T  $old  The old model.
      * @return array<string, string | array<int|string>>
      */
     protected function updateRules($old): array
@@ -72,7 +73,7 @@ abstract class CRUDController extends Controller
 
     public function index(Request $request)
     {
-        $isSearchable = in_array(\Laravel\Scout\Searchable::class, class_uses($this->model));
+        $isSearchable = in_array(Searchable::class, class_uses($this->model));
 
         $search = $request->query('query');
         if ($isSearchable && $search !== null) {
@@ -136,7 +137,7 @@ abstract class CRUDController extends Controller
      * The returned array will be used to create the new model,
      * unless null is returned, in which case no model will be created.
      *
-     * @param  array<string, mixed>  $new The validated values.
+     * @param  array<string, mixed>  $new  The validated values.
      * @return array<string, mixed>|null
      */
     protected function created(array $new): ?array
@@ -166,8 +167,8 @@ abstract class CRUDController extends Controller
      * The returned array will be used to update the model, unless
      * null is returned, in which case the model will not be updated.
      *
-     * @param  T  $old The old model.
-     * @param  array<string, mixed>  $new The validated values.
+     * @param  T  $old  The old model.
+     * @param  array<string, mixed>  $new  The validated values.
      * @return array<string, mixed>|null
      */
     protected function updated($old, array $new): ?array
@@ -198,7 +199,7 @@ abstract class CRUDController extends Controller
      * If true is returned, the model will be deleted.
      * If false is returned, the model will not be deleted.
      *
-     * @param  T  $old The old model.
+     * @param  T  $old  The old model.
      */
     protected function destroyed($old): bool
     {

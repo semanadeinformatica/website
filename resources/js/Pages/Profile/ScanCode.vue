@@ -8,7 +8,7 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { OhVueIcon } from "oh-vue-icons";
 import { computed, ref, watch } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 const props = defineProps<{
     selectedQuest?: Quest;
@@ -48,33 +48,31 @@ const onError = (err: Error) => {
     else error.value = err.message;
 };
 
-// @ts-expect-error: firstDetectedCode comes from the qrcode-reader package which has no types
-const onDetect = async ([firstDetectedCode]) => {
+const onDetect = async (detectedCodes: { rawValue: string }[]) => {
+    const firstDetectedCode = detectedCodes[0];
+    if (!firstDetectedCode) return;
     form.quest_code = firstDetectedCode.rawValue;
 
     if (form.quest && form.quest_code) submit();
 };
-
 
 const showScanResult = ref(false);
 
 const message = computed(() => usePage().props.jetstream.flash?.banner || "");
 const id = computed(() => usePage().props.jetstream.flash?.bannerId || "");
 
-
 watch(id, async () => {
     showScanResult.value = true;
-})
-
+});
 </script>
 
 <template>
     <AppLayout title="Ler QR Code">
         <div
-            class="flex w-full flex-col items-center gap-5 pt-10 text-text-color"
+            class="text-text-color flex w-full flex-col items-center gap-5 pt-10"
         >
             <h2
-                class="w-fit border border-black bg-2025-blue px-3 py-2 text-2xl font-bold text-text-color shadow-md shadow-black/80 rounded-lg"
+                class="bg-2025-blue text-text-color w-fit rounded-lg border border-black px-3 py-2 text-2xl font-bold shadow-md shadow-black/80"
             >
                 Instruções
             </h2>
@@ -90,14 +88,14 @@ watch(id, async () => {
                     dígitos situado no mesmo local.
                 </li>
                 <li>
-                    <span class="font-bold text-2025-blue">IMPORTANTE</span> -
+                    <span class="text-2025-blue font-bold">IMPORTANTE</span> -
                     Antes de scannar verificar a tarefa selecionada no dropdown
                     em baixo, o dia deve corresponder ao atual
                 </li>
             </ul>
             <div
                 :hidden="!scanning"
-                class="h-80 w-80 border border-black shadow-lg rounded-lg overflow-hidden"
+                class="h-80 w-80 overflow-hidden rounded-lg border border-black shadow-lg"
             >
                 <QrcodeStream
                     @camera-on="scanning = true"
@@ -118,16 +116,16 @@ watch(id, async () => {
                         label="Código"
                         type="text"
                         required
-                        class="font-mono text-2025-blue-dark"
+                        class="text-2025-blue-dark font-mono"
                         :error-message="form.errors.quest_code"
                     />
                 </div>
 
                 <div class="w-80">
                     <TextInput
-                        class="text-2025-blue-dark"
                         id="quest"
                         v-model="form.quest"
+                        class="text-2025-blue-dark"
                         label="Quest"
                         type="select"
                         :disabled="selectedQuest !== undefined"

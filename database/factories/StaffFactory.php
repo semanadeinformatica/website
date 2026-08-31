@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
+use App\Models\Participant;
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Staff>
+ * @extends Factory<Staff>
  */
 class StaffFactory extends Factory
 {
@@ -18,8 +21,8 @@ class StaffFactory extends Factory
     {
         return [
             'coordinator' => fake()->boolean(20),
-            'participant_id' => \App\Models\Participant::factory(),
-            'department_id' => \App\Models\Department::factory(),
+            'participant_id' => Participant::factory(),
+            'department_id' => Department::factory(),
         ];
     }
 }

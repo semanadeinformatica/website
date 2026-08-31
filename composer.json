@@ -8,32 +8,27 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "fedeisas/laravel-mail-css-inliner": "^5.2",
-        "guzzlehttp/guzzle": "^7.2",
-        "http-interop/http-factory-guzzle": "^1.2",
-        "inertiajs/inertia-laravel": "^2.0.2",
-        "laravel/framework": "^10.10",
-        "laravel/jetstream": "^4.0",
-        "laravel/sanctum": "^3.2",
-        "laravel/scout": "^10.5",
-        "laravel/tinker": "^2.8",
+        "php": "^8.4",
+        "guzzlehttp/guzzle": "^7.14",
+        "inertiajs/inertia-laravel": "^3.0",
+        "laravel/framework": "^13.0",
+        "laravel/jetstream": "^5.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/scout": "^11.0",
+        "laravel/tinker": "^3.0",
         "meilisearch/meilisearch-php": "^1.4",
-        "motomedialab/laravel-vite-helper": "^1.4",
-        "staudenmeir/eloquent-has-many-deep": "^1.18",
-        "symfony/http-client": "^6.3",
-        "symfony/mailgun-mailer": "^6.3",
-        "tightenco/ziggy": "^1.0"
+        "staudenmeir/eloquent-has-many-deep": "^1.22",
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.9",
-        "brianium/paratest": "^7.1",
+        "barryvdh/laravel-debugbar": "^4.0",
+        "brianium/paratest": "^7.23",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.1",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^13.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -75,8 +70,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "pestphp/pest-plugin": true
         }
     },
     "minimum-stability": "stable",

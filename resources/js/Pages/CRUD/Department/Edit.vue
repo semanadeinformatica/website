@@ -5,7 +5,7 @@ import TextInput from "@/Components/TextInput.vue";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: Department;
@@ -23,7 +23,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("admin.departments.update", department));
+    form.put(route("admin.departments.update", { department: department.id }));
 };
 </script>
 

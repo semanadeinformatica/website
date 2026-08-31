@@ -28,7 +28,7 @@ console.log("Banner.vue");
             }"
         >
             <div
-                class="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-2"
+                class="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between gap-4 px-4 py-2"
             >
                 <OhVueIcon
                     :name="

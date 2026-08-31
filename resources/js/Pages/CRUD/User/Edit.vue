@@ -10,7 +10,7 @@ import {
     isAdmin as checkIsAdmin,
 } from "@/Types/User";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 
 interface Props {
     item: User;
@@ -27,26 +27,24 @@ const form = useForm({
     name: user.name,
     email: user.email,
     type: (user.usertype_type.split("\\").pop() ?? "").toLowerCase() as
-        | "participant"
-        | "company"
-        | "speaker"
-        | "admin",
-    title: isSpeaker ? user.usertype?.title ?? "" : "",
-    display_name: isSpeaker ? user.usertype?.display_name ?? "" : "",
-    description: isCompany || isSpeaker ? user.usertype?.description ?? "" : "",
-    organization: isSpeaker ? user.usertype?.organization ?? "" : "",
-    public_email: !isAdmin ? user?.usertype?.social_media?.email ?? "" : "",
-    facebook: !isAdmin ? user?.usertype?.social_media?.facebook ?? "" : "",
-    github: !isAdmin ? user?.usertype?.social_media?.github ?? "" : "",
-    instagram: !isAdmin ? user?.usertype?.social_media?.instagram ?? "" : "",
-    linkedin: !isAdmin ? user?.usertype?.social_media?.linkedin ?? "" : "",
-    twitter: !isAdmin ? user?.usertype?.social_media?.twitter ?? "" : "",
-    website: !isAdmin ? user?.usertype?.social_media?.website ?? "" : "",
+        "participant" | "company" | "speaker" | "admin",
+    title: isSpeaker ? (user.usertype?.title ?? "") : "",
+    display_name: isSpeaker ? (user.usertype?.display_name ?? "") : "",
+    description:
+        isCompany || isSpeaker ? (user.usertype?.description ?? "") : "",
+    organization: isSpeaker ? (user.usertype?.organization ?? "") : "",
+    public_email: !isAdmin ? (user?.usertype?.social_media?.email ?? "") : "",
+    facebook: !isAdmin ? (user?.usertype?.social_media?.facebook ?? "") : "",
+    github: !isAdmin ? (user?.usertype?.social_media?.github ?? "") : "",
+    instagram: !isAdmin ? (user?.usertype?.social_media?.instagram ?? "") : "",
+    linkedin: !isAdmin ? (user?.usertype?.social_media?.linkedin ?? "") : "",
+    twitter: !isAdmin ? (user?.usertype?.social_media?.twitter ?? "") : "",
+    website: !isAdmin ? (user?.usertype?.social_media?.website ?? "") : "",
     photo: null as File | null,
 });
 
 const submit = () => {
-    form.post(route("admin.users.update", user));
+    form.post(route("admin.users.update", { user: user.id }));
 };
 </script>
 
@@ -56,7 +54,7 @@ const submit = () => {
             <ImageInput
                 id="photo"
                 v-model="form.photo"
-                :initial-preview="item.profile_photo_url"
+                :initial-preview="user.profile_photo_url"
                 label="Foto de perfil"
                 class="self-stretch"
                 :error-message="form.errors.photo"
@@ -155,7 +153,7 @@ const submit = () => {
                     />
 
                     <TextInput
-                        id=".github"
+                        id="github"
                         v-model="form.github"
                         label="GitHub"
                         type="url"

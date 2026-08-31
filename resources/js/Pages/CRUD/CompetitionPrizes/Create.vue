@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import ImageInput from "@/Components/ImageInput.vue";
 
 interface Props {
@@ -64,9 +64,7 @@ const submit = () => {
                 </option>
             </TextInput>
 
-
             <PrimaryButton type="submit">Criar</PrimaryButton>
         </form>
     </CardLayout>
 </template>
-

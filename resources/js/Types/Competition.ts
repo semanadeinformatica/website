@@ -30,4 +30,4 @@ export interface CompetitionPrizes extends Model {
     place: number;
     prize_picture?: string;
     prize_image_url?: string;
-};
+}

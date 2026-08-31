@@ -4,7 +4,7 @@ import CardLayout from "@/Layouts/CardLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
-import route from "ziggy-js";
+import { route } from "ziggy-js";
 import type CompetitionTeam from "@/Types/CompetitionTeam";
 import ImageInput from "@/Components/ImageInput.vue";
 import type Participant from "@/Types/Participant";
@@ -29,7 +29,11 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("admin.competitionTeams.update", competitionTeam));
+    form.post(
+        route("admin.competitionTeams.update", {
+            competitionTeam: competitionTeam.id,
+        }),
+    );
 };
 </script>
 
@@ -39,7 +43,7 @@ const submit = () => {
             <ImageInput
                 id="image"
                 v-model="form.image"
-                :initial-preview="item.image_competition_team_url"
+                :initial-preview="competitionTeam.image_competition_team_url"
                 label="Imagem da equipa"
                 class="self-stretch"
                 :error-message="form.errors.image"
@@ -48,7 +52,7 @@ const submit = () => {
             <TextInput
                 id="name"
                 v-model="form.name"
-                label="Tema"
+                label="Nome da equipa"
                 type="text"
                 required
                 autofocus
