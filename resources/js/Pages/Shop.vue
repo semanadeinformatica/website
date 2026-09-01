@@ -15,53 +15,60 @@ defineProps<Props>();
 
 <template>
     <AppLayout title="Loja">
-        <template v-if="products.length > 0">
+        <div class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
             <div
-                class="flex content-center items-center justify-center self-center py-4"
+                v-if="points !== null && points !== undefined"
+                class="mb-10 flex justify-center"
             >
-                <h2
-                    id="aboutus"
-                    class="bg-2025-blue mb-5 w-fit rounded-md p-3 px-6 text-3xl font-bold text-white xl:text-3xl 2xl:text-4xl"
+                <div
+                    class="pill-container gap-2.5 px-5 py-2 text-xs text-neutral-300 shadow-none sm:text-sm"
                 >
-                    Loja
-                </h2>
+                    <span>O teu saldo:</span>
+                    <span
+                        class="flex items-center gap-1.5 font-bold text-white"
+                    >
+                        <span class="text-sm font-semibold sm:text-base">{{
+                            points
+                        }}</span>
+                        <img
+                            class="h-4 w-4 object-contain"
+                            alt="SINFrão"
+                            title="SINFrão"
+                            src="/images/sinf-2026-sm.svg"
+                        />
+                    </span>
+                </div>
             </div>
-            <p
-                v-if="points !== null"
-                class="text-text-color py-10 text-center text-xl font-bold"
+
+            <template v-if="products.length > 0">
+                <section
+                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4"
+                >
+                    <ShopItem
+                        v-for="product in products"
+                        :key="product.id"
+                        :product="product"
+                        :points="points"
+                        :is-participant="isParticipant"
+                        :is-enrolled="isEnrolled"
+                    />
+                </section>
+            </template>
+
+            <div
+                v-else
+                class="flex flex-col items-center justify-center py-28 text-center"
             >
-                Tens {{ points }}
-                <img
-                    class="inline w-5 align-text-top"
-                    alt="SINFrão"
-                    title="SINFrão"
-                    src="/images/cy-sinf-small.svg"
-                />
-            </p>
-            <section
-                class="align-center grid justify-center gap-10 px-32"
-                style="
-                    grid-template-columns: repeat(
-                        auto-fill,
-                        minmax(18em, 20em)
-                    );
-                "
-            >
-                <ShopItem
-                    v-for="product in products"
-                    :key="product.id"
-                    :product="product"
-                    :is-participant="isParticipant"
-                    :is-enrolled="isEnrolled"
-                />
-            </section>
-        </template>
-        <template v-else>
-            <div class="flex items-center justify-center">
-                <p class="pt-80 text-center text-5xl font-bold text-white">
-                    Em breve...
+                <div class="pill-container mb-4 px-6 py-2.5">
+                    <span class="text-sm font-medium text-neutral-400">
+                        Em breve...
+                    </span>
+                </div>
+                <p class="max-w-md text-sm text-neutral-400">
+                    A loja da edição 2026 estará disponível brevemente. Fica
+                    atento às novidades!
                 </p>
             </div>
-        </template>
+        </div>
     </AppLayout>
 </template>

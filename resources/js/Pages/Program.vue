@@ -17,7 +17,6 @@ defineProps<Props>();
 <template>
     <AppLayout title="Programa">
         <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-
             <template v-if="totalDays !== 0 && eventDay !== undefined">
                 <ProgramDaySelector
                     :days="days"

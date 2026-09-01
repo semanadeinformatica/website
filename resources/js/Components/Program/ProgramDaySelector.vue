@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type EventDay from "@/Types/EventDay";
@@ -11,7 +10,7 @@ interface Props {
     eventDay?: EventDay;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const formatShortDate = (dateStr?: Date | string): string => {
     if (!dateStr) return "";
@@ -28,22 +27,6 @@ const formatShortDate = (dateStr?: Date | string): string => {
         return "";
     }
 };
-
-const formattedFullDate = computed(() => {
-    if (!props.eventDay?.date) return "";
-    try {
-        const d = new Date(props.eventDay.date);
-        const dateStr = d.toLocaleDateString("pt-PT", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            timeZone: "Europe/Lisbon",
-        });
-        return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-    } catch {
-        return "";
-    }
-});
 </script>
 
 <template>
@@ -69,9 +52,7 @@ const formattedFullDate = computed(() => {
                     <span class="font-semibold">Dia {{ dayIndex }}</span>
                     <template
                         v-if="
-                            dayIndex === queryDay &&
-                            days &&
-                            days[dayIndex - 1]
+                            dayIndex === queryDay && days && days[dayIndex - 1]
                         "
                     >
                         <span class="opacity-35">•</span>
@@ -86,7 +67,7 @@ const formattedFullDate = computed(() => {
         <div v-if="eventDay" class="flex flex-col items-center gap-1.5">
             <p
                 v-if="eventDay.theme"
-                class="max-w-2xl text-sm font-normal leading-relaxed sm:text-base"
+                class="max-w-2xl text-sm leading-relaxed font-normal sm:text-base"
             >
                 {{ eventDay.theme }}
             </p>
