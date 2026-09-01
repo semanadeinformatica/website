@@ -6,7 +6,7 @@ import GlowingOrbs from "@/Components/GlowingOrbs.vue";
 <template>
     <Head title="semana de informática 2026" />
 
-    <div class="relative min-h-screen bg-black text-white">
+    <div class="relative min-h-screen bg-olive-950 text-white">
         <GlowingOrbs />
 
         <main class="relative z-10 min-h-screen">
