@@ -1,70 +1,146 @@
 <script setup lang="ts">
-const contacts = [
+import { Link } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
+
+const socialLinks = [
     {
-        social: "facebook",
-        url: "https://www.facebook.com/sinfFEUP/",
+        name: "Instagram",
+        url: "https://www.instagram.com/sinffeup/",
+        icon: "instagram",
     },
     {
-        social: "linkedin",
+        name: "LinkedIn",
         url: "https://pt.linkedin.com/company/sinffeup",
+        icon: "linkedin",
     },
     {
-        social: "instagram",
-        url: "https://www.instagram.com/sinffeup/?hl=en",
-    },
-    {
-        social: "web",
-        url: "mailto:geral@sinf.pt",
+        name: "Facebook",
+        url: "https://www.facebook.com/sinffeup/",
+        icon: "facebook",
     },
 ];
+
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <footer class="bg-2025-blue-dark py-8">
-        <section
-            class="relative flex content-center items-center justify-center p-8 md:mx-[30%] lg:mx-[35%]"
+    <footer class="relative mt-24 overflow-hidden px-4 py-14 sm:px-6 lg:px-8">
+        <div
+            class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+            aria-hidden="true"
         >
             <div
-                class="hidden w-full flex-row items-center justify-evenly md:flex"
-            >
-                <template v-for="platform in contacts" :key="platform">
+                class="absolute inset-0 backdrop-blur-[2px]"
+                style="
+                    mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 100%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 100%
+                    );
+                "
+            />
+            <div
+                class="absolute inset-0 backdrop-blur-[6px]"
+                style="
+                    mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 75%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 75%
+                    );
+                "
+            />
+            <div
+                class="absolute inset-0 backdrop-blur-md"
+                style="
+                    mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 50%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 50%
+                    );
+                "
+            />
+            <div
+                class="absolute inset-0 backdrop-blur-xl"
+                style="
+                    mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 30%
+                    );
+                    -webkit-mask-image: linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 1) 0%,
+                        rgba(0, 0, 0, 0) 30%
+                    );
+                "
+            />
+            <div
+                class="absolute inset-0 bg-linear-to-t from-black/90 via-black/55 to-black/0"
+            />
+            <div
+                class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"
+            />
+        </div>
+
+        <div
+            class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 md:flex-row"
+        >
+            <div class="flex flex-col items-center gap-3 md:items-start">
+                <Link
+                    :href="route('home')"
+                    class="transition-opacity hover:opacity-80"
+                >
+                    <img
+                        src="/images/sinf2026.svg"
+                        alt="SINF 2026"
+                        class="h-7 w-auto sm:h-8"
+                    />
+                </Link>
+                <p class="text-center text-xs text-neutral-400 md:text-left">
+                    Copyright &copy; {{ currentYear }}
                     <a
-                        class="flex w-fit rounded-full p-2.5"
+                        href="https://niaefeup.pt/"
                         target="_blank"
-                        :href="platform.url"
+                        rel="noopener noreferrer"
+                        class="font-semibold text-white transition-colors"
                     >
-                        <img
-                            :src="`/images/${platform.social}.svg`"
-                            class="h-20 w-20 filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)]"
-                        />
-                    </a>
-                </template>
+                        NIAEFEUP </a
+                    >. Todos os direitos reservados.
+                </p>
             </div>
-            <div class="flex flex-col items-center gap-2 md:hidden">
-                <div class="grid grid-cols-2 justify-center gap-3">
-                    <template v-for="platform in contacts" :key="platform">
-                        <a
-                            class="flex w-fit rounded-full p-2.5"
-                            target="_blank"
-                            :href="platform.url"
-                        >
-                            <img
-                                :src="`/images/${platform.social}.svg`"
-                                class="h-20 w-20"
-                            />
-                        </a>
-                    </template>
-                </div>
+
+            <div class="pill-container gap-1 px-2 py-1 shadow-none">
+                <a
+                    v-for="social in socialLinks"
+                    :key="social.name"
+                    :href="social.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :aria-label="social.name"
+                    class="flex h-8 w-8 items-center justify-center rounded-full p-1.5 transition-all duration-200 hover:scale-110 hover:bg-white/10"
+                >
+                    <img
+                        :src="`/images/${social.icon}.svg`"
+                        :alt="social.name"
+                        class="h-full w-full object-contain"
+                    />
+                </a>
             </div>
-        </section>
-        <div class="text-text-color container mx-auto text-center font-bold">
-            <p>
-                Copyright &copy; 2025
-                <a href="https://ni.fe.up.pt/">NIAEFEUP</a>, todos os direitos
-                reservados
-            </p>
         </div>
     </footer>
 </template>
-
-<style></style>

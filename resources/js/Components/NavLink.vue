@@ -5,19 +5,33 @@ import { Link } from "@inertiajs/vue3";
 interface Props {
     href: string;
     active?: boolean;
+    as?: "a" | "button";
 }
 
 const props = defineProps<Props>();
 
+const isExternalOrAnchor = computed(() => {
+    return (
+        props.as === "a" ||
+        props.href.startsWith("#") ||
+        props.href.startsWith("/#") ||
+        props.href.startsWith("http")
+    );
+});
+
 const classes = computed(() => {
-    return props.active
-        ? "inline-flex items-center px-1 py-1 text-lg lg:text-lg font-medium leading-5 text-2025-white focus:outline-hidden focus:border-2023-teal transition duration-150 ease-in-out"
-        : "inline-flex items-center px-1 py-1 text-lg lg:text-lg font-medium leading-5 text-2025-white hover:border-2023-teal focus:outline-hidden focus:border-2023-teal transition duration-150 ease-in-out";
+    return props.active ? "pill-item pill-item-active" : "pill-item";
 });
 </script>
 
 <template>
-    <Link :href="href" :class="classes">
+    <a v-if="isExternalOrAnchor" :href="href" :class="classes">
+        <slot />
+    </a>
+    <button v-else-if="as === 'button'" type="button" :class="classes">
+        <slot />
+    </button>
+    <Link v-else :href="href" :class="classes">
         <slot />
     </Link>
 </template>

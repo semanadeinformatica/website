@@ -1,113 +1,15 @@
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { router } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
-import EnrollSection from "@/Components/Home/EnrollSection.vue";
 import InfoPopup from "@/Components/Home/InfoPopup.vue";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
-import { OhVueIcon } from "oh-vue-icons";
 import type SponsorTier from "@/Types/SponsorTier";
-import { ref, onMounted, onBeforeUnmount, computed, nextTick } from "vue";
-
-const sections = ref<HTMLElement[]>([]);
-const currentIdx = ref(0);
-
-const atBottom = computed(() => {
-    return (
-        sections.value.length > 0 &&
-        currentIdx.value >= sections.value.length - 1
-    );
-});
-
-function getSortedSections(): HTMLElement[] {
-    const list = Array.from(document.querySelectorAll<HTMLElement>("section"));
-    return list.sort((a, b) => (a.offsetTop ?? 0) - (b.offsetTop ?? 0));
-}
-
-function scrollToSection(idx: number) {
-    const el = sections.value[idx];
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function goNextOrTop() {
-    if (atBottom.value) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
-    const next = Math.min(currentIdx.value + 1, sections.value.length - 1);
-    scrollToSection(next);
-}
-
-let observer: IntersectionObserver | null = null;
-let savedOnResize: (() => void) | null = null;
-
-function setupObserver() {
-    if (observer) observer.disconnect();
-
-    observer = new IntersectionObserver(
-        (entries) => {
-            const visible = entries
-                .filter((e) => e.isIntersecting)
-                .sort(
-                    (a, b) =>
-                        (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0),
-                );
-
-            if (visible[0]) {
-                const idx = sections.value.findIndex(
-                    (s) => s === visible[0].target,
-                );
-                if (idx >= 0) currentIdx.value = idx;
-            } else {
-                const y = window.scrollY + window.innerHeight * 0.35;
-                let nearest = 0;
-                let minDelta = Number.POSITIVE_INFINITY;
-                sections.value.forEach((s, i) => {
-                    const top = s.getBoundingClientRect().top + window.scrollY;
-                    const delta = Math.abs(top - y);
-                    if (delta < minDelta) {
-                        minDelta = delta;
-                        nearest = i;
-                    }
-                });
-                currentIdx.value = nearest;
-            }
-        },
-        {
-            root: null,
-            threshold: [0.25, 0.5, 0.75],
-        },
-    );
-
-    sections.value.forEach((s) => observer!.observe(s));
-}
-
-onMounted(async () => {
-    await nextTick();
-    sections.value = getSortedSections();
-    setupObserver();
-
-    const onResize = () => {
-        sections.value = getSortedSections();
-        setupObserver();
-    };
-    window.addEventListener("resize", onResize);
-    window.addEventListener("orientationchange", onResize);
-
-    savedOnResize = onResize;
-});
-
-onBeforeUnmount(() => {
-    if (observer) observer.disconnect();
-    if (savedOnResize) {
-        window.removeEventListener("resize", savedOnResize);
-        window.removeEventListener("orientationchange", savedOnResize);
-        savedOnResize = null;
-    }
-});
 
 interface Props {
     edition: Edition;
@@ -121,171 +23,287 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const isAtBottom = ref(false);
+
+function updateScrollState() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    isAtBottom.value = scrollY + windowHeight >= documentHeight - 60;
+}
+
+function handleQuickScroll() {
+    if (isAtBottom.value) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+    }
+
+    const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("section"),
+    );
+    if (!sections.length) return;
+
+    const currentY = window.scrollY || window.pageYOffset;
+    const navOffset = 70;
+
+    const nextSection = sections.find((section) => {
+        const top = section.getBoundingClientRect().top + currentY;
+        return top > currentY + navOffset + 20;
+    });
+
+    if (nextSection) {
+        const targetY =
+            nextSection.getBoundingClientRect().top + currentY - navOffset;
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+    } else {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+        });
+    }
+}
+
+onMounted(() => {
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState, { passive: true });
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", updateScrollState);
+    window.removeEventListener("resize", updateScrollState);
+});
 </script>
 
 <template>
     <AppLayout title="Home">
         <InfoPopup v-if="$page.props.auth.user && canEnroll" />
-        <button
-            v-if="canEnroll"
-            type="button"
-            aria-label="Scroll to next section"
-            class="group bg-2025-bg-green fixed right-12 bottom-10 z-50 grid h-12 w-12 place-items-center rounded-full text-white filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] transition-transform duration-300 hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)] focus:outline-hidden"
-            @click="goNextOrTop"
-        >
-            <OhVueIcon
-                :name="atBottom ? 'io-arrow-up' : 'io-arrow-down'"
-                fill="white"
-            />
-        </button>
-        <!-- LOGO & DATE -->
-        <section
-            class="relative flex min-h-screen flex-col content-center items-center justify-evenly gap-16 py-16"
-        >
-            <img
-                id="svg-1"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute left-[7%] w-36 opacity-50"
-                src="images/cy-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-2"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute top-16 right-[7%] w-32 opacity-50"
-                src="images/rc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-3"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute right-[15%] bottom-24 w-24 opacity-50"
-                src="images/oc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
 
+        <button
+            type="button"
+            :aria-label="
+                isAtBottom ? 'Scroll to top' : 'Scroll to next section'
+            "
+            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+            @click="handleQuickScroll"
+        >
+            <svg
+                v-if="isAtBottom"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+            </svg>
+            <svg
+                v-else
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+            </svg>
+        </button>
+
+        <section
+            class="relative flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center gap-8 px-4 py-16 text-center"
+        >
             <div class="relative">
                 <img
-                    class="max-ml:w-[300px] w-96"
-                    src="images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    class="h-16 w-auto max-w-[85vw] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300 hover:brightness-110 sm:h-24 md:h-32"
+                    src="/images/sinf2026.svg"
+                    alt="Semana de Informática 2026"
                 />
             </div>
 
-            <p class="margin-0 text-text-color text-2xl font-bold">
-                21 a 24 de outubro
-            </p>
-
-            <!-- CALL TO ACTION -->
-            <EnrollSection v-if="canEnroll" id="enroll-wrapper" />
-        </section>
-
-        <!-- ABOUT US -->
-        <section
-            class="relative my-8 grid grid-flow-row grid-cols-2 bg-white/5 text-justify backdrop-blur-xs max-lg:grid-flow-col max-lg:grid-cols-1 max-lg:grid-rows-2"
-        >
-            <h2
-                id="aboutus"
-                class="bg-2025-blue absolute -top-9 left-[calc(50%-88.2415px)] w-fit rounded-md p-3 text-3xl font-bold text-white"
-            >
-                Sobre nós
-            </h2>
-            <p class="p-20 text-lg text-white max-lg:pb-10">
-                {{ $t("homePage.aboutUsText1") }}
-            </p>
-            <p class="p-20 text-lg text-white max-lg:py-10">
-                {{ $t("homePage.aboutUsText2") }}
-            </p>
-        </section>
-
-        <!-- GENERAL INFO -->
-        <section class="max-xs:items-center relative flex flex-col py-24">
             <p
-                class="bg-2025-blue-dark mr-[5px] flex w-fit place-self-center rounded-md p-3 text-2xl font-bold text-white"
+                class="text-lg font-medium text-neutral-300 sm:text-xl md:text-2xl"
             >
-                Este ano temos
+                16 a 19 de novembro
             </p>
 
-            <template
-                v-if="
-                    days.length !== 0 ||
-                    standCount !== 0 ||
-                    talkCount !== 0 ||
-                    activityCount !== 0
-                "
-            >
-                <div
-                    class="text-text-color max-xs:grid-cols-1 mx-[10%] mt-10 grid gap-4 rounded-md border-0 bg-white/5 p-12 text-xl font-bold shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] ring-1 ring-white/10 filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] backdrop-blur-xs transition-transform duration-300 hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)] focus:outline-hidden max-lg:grid-cols-2 md:flex md:flex-row md:items-center md:justify-around"
+            <div v-if="canEnroll" class="pill-container">
+                <button
+                    type="button"
+                    class="pill-item px-6 py-2 text-sm font-semibold sm:text-base"
+                    @click="
+                        $page.props.auth.user
+                            ? router.put(route('enroll'))
+                            : router.get(route('register'))
+                    "
                 >
-                    <span v-if="days.length !== 0" class="text-center"
-                        >{{ days.length }} dias</span
+                    Inscrever-me
+                </button>
+            </div>
+        </section>
+
+        <section
+            id="aboutus"
+            class="relative mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8"
+        >
+            <div class="mb-10 flex justify-center">
+                <div class="pill-container">
+                    <span class="pill-item font-semibold text-white">
+                        Sobre nós
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div
+                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.01] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <p
+                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
                     >
-                    <span v-if="standCount !== 0" class="text-center"
-                        >{{ standCount }} bancas</span
+                        {{ $t("homePage.aboutUsText1") }}
+                    </p>
+                </div>
+                <div
+                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.01] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <p
+                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
                     >
-                    <span v-if="talkCount !== 0" class="text-center"
-                        >{{ talkCount }} palestras</span
+                        {{ $t("homePage.aboutUsText2") }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
+            <div class="mb-10 flex justify-center">
+                <div class="pill-container">
+                    <span class="pill-item font-semibold text-white">
+                        Este ano temos
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+                <div
+                    v-if="days.length !== 0"
+                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <span
+                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
                     >
-                    <span v-if="activityCount !== 0" class="text-center"
-                        >{{ activityCount }} atividades</span
+                        {{ days.length }}
+                    </span>
+                    <span
+                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
                     >
+                        dias
+                    </span>
+                </div>
+
+                <div
+                    v-if="standCount !== 0"
+                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <span
+                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
+                    >
+                        {{ standCount }}
+                    </span>
+                    <span
+                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
+                    >
+                        bancas
+                    </span>
+                </div>
+
+                <div
+                    v-if="talkCount !== 0"
+                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <span
+                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
+                    >
+                        {{ talkCount }}
+                    </span>
+                    <span
+                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
+                    >
+                        palestras
+                    </span>
+                </div>
+
+                <div
+                    v-if="activityCount !== 0"
+                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <span
+                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
+                    >
+                        {{ activityCount }}
+                    </span>
+                    <span
+                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
+                    >
+                        atividades
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section id="speakers" class="relative w-full overflow-hidden py-20">
+            <div class="mb-10 flex justify-center px-4">
+                <div class="pill-container">
+                    <span class="pill-item font-semibold text-white">
+                        Oradores
+                    </span>
+                </div>
+            </div>
+
+            <template v-if="speakers.length !== 0">
+                <div class="w-full px-2 sm:px-4 md:px-6">
+                    <SpeakersCarousel :speakers="speakers" />
                 </div>
             </template>
-            <template v-else>
-                <div
-                    class="text-2023-teal max-xs:grid-cols-1 mx-[10%] flex items-center justify-center gap-4 border-[3px] bg-white/5 p-12 text-xl font-bold shadow-2xl shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] backdrop-blur-xs max-lg:grid-cols-2"
-                >
-                    Muitas novidades para ti! Está quase...
-                </div>
-            </template>
-        </section>
-        <!-- SPEAKERS -->
-        <section
-            id="speakers"
-            class="grid-rows-[repeat(3, 1fr)] my-10 mb-5 grid grid-cols-1 gap-10"
-        >
-            <p
-                class="bg-2025-blue-dark mr-[5px] flex w-fit place-self-center rounded-md p-3 text-2xl font-bold text-white"
-            >
-                Oradores
-            </p>
-            <template v-if="speakers.length != 0">
-                <SpeakersCarousel :speakers="speakers ?? []"></SpeakersCarousel>
-            </template>
-            <template v-else>
-                <p
-                    class="flex w-fit place-self-center text-2xl font-bold text-white"
-                >
+            <div v-else class="flex justify-center px-4">
+                <div class="pill-container px-6 py-3 text-sm text-neutral-400">
                     Em breve...
-                </p>
-            </template>
+                </div>
+            </div>
         </section>
-        <!-- SPONSORS -->
-        <section id="sponsors" class="flex flex-col gap-10 px-20 py-20">
-            <p
-                class="bg-2025-blue-dark mr-[5px] flex w-min place-self-center rounded-md p-3 text-2xl font-bold text-white"
-            >
-                Patrocínios
-            </p>
-            <SponsorBanner
-                v-for="(tier, idx) in sponsorTiers"
-                :key="tier.id"
-                :title="tier.name"
-                :sponsors="tier.sponsors ?? []"
-                :color="tier.color"
-                :idx="idx"
-            ></SponsorBanner>
+
+        <section
+            id="sponsors"
+            class="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8"
+        >
+            <div class="mb-10 flex justify-center">
+                <div class="pill-container">
+                    <span class="pill-item font-semibold text-white">
+                        Patrocínios
+                    </span>
+                </div>
+            </div>
+
+            <div class="space-y-12">
+                <SponsorBanner
+                    v-for="(tier, idx) in sponsorTiers"
+                    :key="tier.id"
+                    :title="tier.name"
+                    :sponsors="tier.sponsors ?? []"
+                    :color="tier.color"
+                    :idx="idx"
+                />
+            </div>
         </section>
     </AppLayout>
 </template>
-
-<style>
-#svg-1 {
-    animation-delay: -0.5s;
-}
-
-#svg-2 {
-    animation-delay: -1s;
-}
-
-#svg-3 {
-    animation-delay: -0.8s;
-}
-</style>

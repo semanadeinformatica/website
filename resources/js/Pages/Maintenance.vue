@@ -4,99 +4,84 @@ import { Head } from "@inertiajs/vue3";
 
 <template>
     <Head title="semana de informática 2026" />
-    <!-- TODO: localization -->
-    <main class="maintenance-bg min-h-screen bg-black">
+
+    <div class="relative min-h-screen bg-black text-white">
         <div
-            class="flex min-h-screen flex-col content-center items-center justify-evenly"
+            class="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+            aria-hidden="true"
         >
-            <div class="relative flex flex-col items-center">
-                <img
-                    id="svg-logo"
-                    class="w-96 p-4 select-none"
-                    src="images/sinf2026.svg"
-                    alt="SINF 2026 logo"
-                />
-                <p
-                    class="absolute top-full inset-x-0 mt-12 sm:mt-24 text-center font-['Inter'] text-lg font-medium tracking-wide text-white select-none"
-                    style="font-family: 'Inter', sans-serif;"
-                >
-                    Brevemente
-                </p>
-                <div
-                    class="absolute top-full inset-x-0 mt-22 sm:mt-34 flex flex-row items-center justify-center space-x-3 select-none"
-                >
-                    <a
-                        href="https://www.instagram.com/sinffeup/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
+            <div
+                class="glow-orb-crimson-1 absolute top-[-20%] right-[-15%] h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]"
+            />
+            <div
+                class="glow-orb-purple-1 absolute bottom-[-20%] left-[-15%] h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]"
+            />
+            <div
+                class="glow-orb-crimson-2 absolute right-[-5%] bottom-[-10%] h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]"
+            />
+            <div
+                class="glow-orb-purple-2 absolute top-[-10%] left-[-5%] h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]"
+            />
+        </div>
+
+        <main class="relative z-10 min-h-screen">
+            <div
+                class="flex min-h-screen flex-col content-center items-center justify-evenly"
+            >
+                <div class="relative flex flex-col items-center">
+                    <img
+                        id="svg-logo"
+                        class="h-32 p-4 select-none"
+                        src="/images/sinf2026.svg"
+                        alt="SINF 2026 logo"
+                    />
+                    <p
+                        class="absolute inset-x-0 top-full mt-12 text-center text-lg font-medium tracking-wide text-white select-none sm:mt-24"
                     >
-                        <img
-                            class="w-4"
-                            src="images/instagram.svg"
-                            alt="Instagram"
-                        />
-                    </a>
-                    <a
-                        href="https://www.facebook.com/sinffeup/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
+                        Brevemente
+                    </p>
+                    <div
+                        class="absolute inset-x-0 top-full mt-22 flex flex-row items-center justify-center space-x-3 select-none sm:mt-34"
                     >
-                        <img
-                            class="w-4"
-                            src="images/facebook.svg"
-                            alt="Facebook"
-                        />
-                    </a>
-                    <a
-                        href="https://www.linkedin.com/company/sinffeup"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
-                    >
-                        <img
-                            class="w-4"
-                            src="images/linkedin.svg"
-                            alt="LinkedIn"
-                        />
-                    </a>
+                        <a
+                            href="https://www.instagram.com/sinffeup/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-white transition-opacity hover:opacity-80"
+                        >
+                            <img
+                                class="w-4"
+                                src="/images/instagram.svg"
+                                alt="Instagram"
+                            />
+                        </a>
+                        <a
+                            href="https://www.facebook.com/sinffeup/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-white transition-opacity hover:opacity-80"
+                        >
+                            <img
+                                class="w-4"
+                                src="/images/facebook.svg"
+                                alt="Facebook"
+                            />
+                        </a>
+                        <a
+                            href="https://www.linkedin.com/company/sinffeup"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-white transition-opacity hover:opacity-80"
+                        >
+                            <img
+                                class="w-4"
+                                src="/images/linkedin.svg"
+                                alt="LinkedIn"
+                            />
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </template>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-.maintenance-bg {
-    background-image:
-        radial-gradient(
-            ellipse 70% 20% at 58% 46%,
-            rgb(154 0 54 / 100%) 0%,
-            rgb(64 0 23 / 0%) 100%
-        ),
-        radial-gradient(
-            ellipse 70% 20% at 42% 54%,
-            rgb(106 0 255 / 85%) 0%,
-            rgb(34 1 153 / 0%) 100%
-        );
-}
-
-@media (min-width: 640px) {
-    .maintenance-bg {
-        background-image:
-            radial-gradient(
-                ellipse 30% 24% at 58% 44%,
-                rgb(154 0 54 / 100%) 0%,
-                rgb(64 0 23 / 0%) 100%
-            ),
-            radial-gradient(
-                ellipse 30% 24% at 42% 58%,
-                rgb(106 0 255 / 85%) 0%,
-                rgb(34 1 153 / 0%) 100%
-            );
-    }
-}
-</style>
