@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import ProgramDaySelector from "@/Components/Program/ProgramDaySelector.vue";
 import ProgramDayPanel from "@/Components/Program/ProgramDayPanel.vue";
 import type EventDay from "@/Types/EventDay";
-import { route } from "ziggy-js";
-import { Link } from "@inertiajs/vue3";
 
 interface Props {
+    days?: EventDay[];
     eventDay?: EventDay;
     queryDay: number;
     totalDays: number;
@@ -16,55 +16,36 @@ defineProps<Props>();
 
 <template>
     <AppLayout title="Programa">
-        <div
-            v-if="totalDays !== 0 && eventDay !== undefined"
-            class="flex flex-col items-center px-10 py-10 md:px-40"
-        >
-            <h2
-                class="bg-2025-blue mb-10 w-fit rounded-md p-2 px-5 text-3xl font-bold text-white"
-            >
-                Programa
-            </h2>
+        <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
 
-            <section class="mb-5 flex flex-col items-center gap-5">
-                <div
-                    id="daySelection"
-                    class="flex w-fit flex-row flex-wrap justify-center gap-4"
-                >
-                    <template v-for="(day, idx) in totalDays" :key="idx">
-                        <Link
-                            :href="
-                                route(route().current() ?? 'program', {
-                                    day,
-                                })
-                            "
-                            as="span"
-                            :only="['eventDay', 'queryDay']"
-                            class="bg-2025-bg inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-xl rounded-xs text-xl font-bold text-white filter-[drop-shadow(0_0_0_rgba(0,0,0,0))] transition transition-transform duration-300 hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(255,255,255,0.28)] focus:outline-hidden"
-                            :class="day == queryDay ? 'bg-2025-blue' : ''"
-                            preserve-state
-                            preserve-scroll
-                        >
-                            {{ day }}
-                        </Link>
-                    </template>
+            <template v-if="totalDays !== 0 && eventDay !== undefined">
+                <ProgramDaySelector
+                    :days="days"
+                    :total-days="totalDays"
+                    :query-day="queryDay"
+                    :event-day="eventDay"
+                />
+
+                <ProgramDayPanel
+                    :key="eventDay.id"
+                    :day="eventDay"
+                    :query-day="queryDay"
+                />
+            </template>
+
+            <div
+                v-else
+                class="flex flex-col items-center justify-center py-28 text-center"
+            >
+                <div class="pill-container mb-4 px-6 py-2.5">
+                    <span class="text-sm font-medium text-neutral-400">
+                        Em breve...
+                    </span>
                 </div>
-                <span class="text-text-color font-bold">{{
-                    $d(new Date(eventDay.date), "long")
-                }}</span>
-            </section>
-            <ProgramDayPanel :key="eventDay.id" :day="eventDay" />
-        </div>
-        <div v-else class="flex items-center justify-center">
-            <p class="pt-80 text-center text-5xl font-bold text-white">
-                Em breve...
-            </p>
+                <p class="max-w-md text-sm text-neutral-400">
+                    O programa da edição 2026 estará disponível brevemente.
+                </p>
+            </div>
         </div>
     </AppLayout>
 </template>
-
-<style scoped>
-.selected {
-    background-color: rgb(242, 147, 37);
-}
-</style>

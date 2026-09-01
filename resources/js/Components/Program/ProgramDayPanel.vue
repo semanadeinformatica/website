@@ -1,178 +1,171 @@
 <script setup lang="ts">
 import type EventDay from "@/Types/EventDay";
-import { ref, onMounted, watch, type UnwrapRef, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import WithTimeline from "@/Components/Program/TimeLine/WithTimeline.vue";
 import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
-import ActivityTimelineAction from "./TimeLine/ActivityTimelineItem.vue";
-import TalkTimelineAction from "./TimeLine/TalkTimelineItem.vue";
+import ActivityTimelineItem from "./TimeLine/ActivityTimelineItem.vue";
+import TalkTimelineItem from "./TimeLine/TalkTimelineItem.vue";
 import CompetitionTimelineItem from "./TimeLine/CompetitionTimelineItem.vue";
-import type Event from "@/Types/Event";
 
 interface Props {
     day: EventDay;
 }
 
 const props = defineProps<Props>();
-
 const day = computed(() => props.day);
 
-const selected = ref<HTMLElement | null>(null);
-const selectedType = ref<"talk" | "activity" | "stand" | "competitions">(
-    "talk",
-);
+type TabType = "talk" | "activity" | "stand" | "competitions";
 
-const noInfo = computed(
-    () =>
-        day.value.activities?.length === 0 &&
-        day.value.talks?.length === 0 &&
-        day.value.stands?.length === 0 &&
-        day.value.competitions?.length === 0,
-);
+interface TabOption {
+    id: TabType;
+    label: string;
+    count: number;
+}
 
-const toggle = ({ target }: MouseEvent) => {
-    selected.value = target as HTMLElement;
-};
-
-watch(selected, (newValue, oldValue) => {
-    oldValue?.classList.toggle("selected");
-    newValue?.classList.toggle("selected");
-    selectedType.value =
-        (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? "talk";
+const availableTabs = computed<TabOption[]>(() => {
+    const tabs: TabOption[] = [];
+    if (day.value.talks?.length) {
+        tabs.push({
+            id: "talk",
+            label: "Palestras",
+            count: day.value.talks.length,
+        });
+    }
+    if (day.value.activities?.length) {
+        tabs.push({
+            id: "activity",
+            label: "Atividades",
+            count: day.value.activities.length,
+        });
+    }
+    if (day.value.stands?.length) {
+        tabs.push({
+            id: "stand",
+            label: "Bancas",
+            count: day.value.stands.length,
+        });
+    }
+    if (day.value.competitions?.length) {
+        tabs.push({
+            id: "competitions",
+            label: "Competições",
+            count: day.value.competitions.length,
+        });
+    }
+    return tabs;
 });
 
-const times = ref<{ start?: string; end?: string }>({
-    start: undefined,
-    end: undefined,
-});
+const selectedType = ref<TabType>(availableTabs.value[0]?.id ?? "talk");
 
+// If day changes or current tab has no items, switch to first available tab
 watch(
-    selectedType,
-    (_selectedType) => {
-        const parseTimeString = (time: string) => {
-            return `1970-01-01T${time}.000000Z`;
-        };
-
-        let items: Event[] = [];
-        switch (_selectedType) {
-            case "activity":
-                items = day.value.activities ?? [];
-                break;
-            case "talk":
-                items = day.value.talks ?? [];
-                break;
-            case "stand":
-                times.value = {
-                    start: "1970-01-01T08:00:00.000000Z",
-                    end: "1970-01-01T17:00:00.000000Z",
-                };
-                return;
-            case "competitions":
-                if (day.value.competitions?.length === 0)
-                    times.value = {
-                        start: undefined,
-                        end: undefined,
-                    };
-                else {
-                    times.value = {
-                        start: day.value.competitions?.[0].date_start,
-                        end: day.value.competitions?.[
-                            day.value.competitions.length - 1
-                        ].date_end,
-                    };
-                }
-                return;
+    availableTabs,
+    (tabs) => {
+        if (!tabs.some((t) => t.id === selectedType.value) && tabs.length > 0) {
+            const firstTab = tabs[0];
+            if (firstTab) {
+                selectedType.value = firstTab.id;
+            }
         }
-
-        if (items.length === 0) {
-            times.value = {
-                start: undefined,
-                end: undefined,
-            };
-            return;
-        }
-
-        const startTime = parseTimeString(items[0].time_start);
-        const endTime = parseTimeString(items[items.length - 1].time_end);
-
-        times.value = { start: startTime, end: endTime };
     },
-    {
-        immediate: true,
-    },
+    { immediate: true },
 );
 
-onMounted(() => {
-    selected.value = document.querySelector(
-        "#tab-picker > button:first-of-type",
-    ) as HTMLElement;
-    if (selected.value) {
-        selectedType.value =
-            (selected.value.dataset.type as UnwrapRef<typeof selectedType>) ??
-            "talk";
+const times = computed<{ start?: string; end?: string }>(() => {
+    const parseTimeString = (time: string) => `1970-01-01T${time}.000000Z`;
+
+    switch (selectedType.value) {
+        case "activity": {
+            const items = day.value.activities ?? [];
+            if (!items.length) return {};
+            const first = items[0];
+            const last = items[items.length - 1];
+            return {
+                start: first ? parseTimeString(first.time_start) : undefined,
+                end: last ? parseTimeString(last.time_end) : undefined,
+            };
+        }
+        case "talk": {
+            const items = day.value.talks ?? [];
+            if (!items.length) return {};
+            const first = items[0];
+            const last = items[items.length - 1];
+            return {
+                start: first ? parseTimeString(first.time_start) : undefined,
+                end: last ? parseTimeString(last.time_end) : undefined,
+            };
+        }
+        case "stand":
+            return {
+                start: "1970-01-01T08:00:00.000000Z",
+                end: "1970-01-01T17:00:00.000000Z",
+            };
+        case "competitions": {
+            const comps = day.value.competitions ?? [];
+            if (!comps.length) return {};
+            const first = comps[0];
+            const last = comps[comps.length - 1];
+            return {
+                start: first?.date_start,
+                end: last?.date_end,
+            };
+        }
+        default:
+            return {};
     }
 });
 </script>
 
 <template>
-    <section class="h-full w-full">
-        <div
-            id="tab-picker"
-            class="mx-auto flex w-fit flex-row flex-wrap justify-center gap-4 rounded-md bg-white/5 p-2 font-bold text-[#2596be] shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] backdrop-blur-xs"
-        >
-            <button
-                v-if="(day.talks?.length ?? 0) > 0"
-                class=""
-                data-type="talk"
-                @click="toggle"
-            >
-                Palestras
-            </button>
-            <button
-                v-if="(day.activities?.length ?? 0) > 0"
-                class=""
-                data-type="activity"
-                @click="toggle"
-            >
-                Atividades
-            </button>
-            <button
-                v-if="(day.stands?.length ?? 0) > 0"
-                class=""
-                data-type="stand"
-                @click="toggle"
-            >
-                Bancas
-            </button>
-            <button
-                v-if="(day.competitions?.length ?? 0) > 0"
-                class=""
-                data-type="competitions"
-                @click="toggle"
-            >
-                Competições
-            </button>
+    <div class="w-full">
+        <div v-if="availableTabs.length > 1" class="mb-10 flex justify-center">
+            <div class="pill-container flex-wrap justify-center gap-1.5 p-1">
+                <button
+                    v-for="tab in availableTabs"
+                    :key="tab.id"
+                    type="button"
+                    class="pill-item cursor-pointer gap-2 px-4 py-2 text-sm font-medium transition-all"
+                    :class="{ 'pill-item-active': selectedType === tab.id }"
+                    @click="selectedType = tab.id"
+                >
+                    <span>{{ tab.label }}</span>
+                    <span
+                        class="rounded-full px-1.5 py-0.5 text-[11px] transition-colors"
+                        :class="
+                            selectedType === tab.id
+                                ? 'bg-white/20 text-white'
+                                : 'bg-white/5 text-neutral-400'
+                        "
+                    >
+                        {{ tab.count }}
+                    </span>
+                </button>
+            </div>
         </div>
-    </section>
-    <!--<p
-        v-if="
-            (selectedType === 'talk' || selectedType === 'activity') && !noInfo
-        "
-        class="mr-2 mt-5 max-w-2xl rounded-md  p-2.5 px-8 text-justify text-lg font-bold text-text-color  bg-white/5 backdrop-blur-xs shadow-[0_0_40px_-12px_rgba(255,255,255,0.18)] "
-    >
-        {{ day.theme }}
-    </p>-->
-    <template v-if="noInfo">
-        <p class="text-2023-teal-dark pt-40 text-4xl font-bold">Em breve...</p>
-    </template>
-    <template v-else>
-        <WithTimeline :start-time="times.start" :end-time="times.end">
-            <div class="flex flex-col gap-8">
-                <template v-if="selectedType === 'stand'">
-                    <StandDisplay :stands="day.stands!" />
-                </template>
 
-                <template v-else-if="selectedType === 'activity'">
-                    <ActivityTimelineAction
+        <div
+            v-if="availableTabs.length === 0"
+            class="flex flex-col items-center justify-center py-20 text-center"
+        >
+            <div class="pill-container mb-3 px-5 py-2">
+                <span class="text-sm font-medium text-neutral-400">
+                    Sem eventos agendados
+                </span>
+            </div>
+            <p class="text-xs text-neutral-500">
+                Nenhuma atividade ou palestra disponível para este dia de
+                momento.
+            </p>
+        </div>
+
+        <template v-else-if="selectedType === 'stand'">
+            <StandDisplay :stands="day.stands ?? []" />
+        </template>
+
+        <template v-else>
+            <WithTimeline :start-time="times.start" :end-time="times.end">
+                <template v-if="selectedType === 'activity'">
+                    <ActivityTimelineItem
                         v-for="activity in day.activities"
                         :key="activity.id"
                         :event="activity"
@@ -180,7 +173,7 @@ onMounted(() => {
                 </template>
 
                 <template v-else-if="selectedType === 'talk'">
-                    <TalkTimelineAction
+                    <TalkTimelineItem
                         v-for="talk in day.talks"
                         :key="talk.id"
                         :event="talk"
@@ -194,14 +187,7 @@ onMounted(() => {
                         :competition="competition"
                     />
                 </template>
-            </div>
-        </WithTimeline>
-    </template>
+            </WithTimeline>
+        </template>
+    </div>
 </template>
-
-<style scoped>
-.selected {
-    color: #ffffff;
-    text-decoration: underline;
-}
-</style>

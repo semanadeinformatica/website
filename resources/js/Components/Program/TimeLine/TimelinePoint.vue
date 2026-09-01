@@ -2,23 +2,36 @@
 interface Props {
     label: string;
     timestamp?: string;
+    type?: "start" | "end";
 }
 
 defineProps<Props>();
+
+const formatTime = (time?: string): string => {
+    if (!time) return "";
+    const isoString = time.includes("T") ? time : `1970-01-01T${time}.000000Z`;
+    try {
+        const d = new Date(isoString);
+        return d.toLocaleTimeString("pt-PT", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Lisbon",
+        });
+    } catch {
+        return time.slice(0, 5);
+    }
+};
 </script>
 
 <template>
-    <div class="relative my-4">
-        <span
-            class="absolute top-1/2 left-[-2.865rem] h-6 w-6 -translate-y-1/2 rounded-2xl bg-white"
-        ></span>
-        <div class="flex flex-col md:block">
-            <span class="text-text-color text-2xl font-bold">{{ label }}</span>
-            <span
-                v-if="timestamp"
-                class="text-text-color font-bold md:absolute md:top-1/2 md:-left-28 md:-translate-y-1/2 md:text-xl"
-                >{{ $d(new Date(timestamp), "hourMinute") }}</span
-            >
+    <div class="flex items-center gap-3 py-2">
+        <div
+            class="pill-container gap-2 px-3.5 py-1 text-xs text-neutral-300 shadow-none"
+        >
+            <span class="font-medium text-white">{{ label }}</span>
+            <span v-if="timestamp" class="text-neutral-400">
+                • {{ formatTime(timestamp) }}
+            </span>
         </div>
     </div>
 </template>

@@ -13,12 +13,11 @@ const props = defineProps<Props>();
 
 const stands = computed(() => props.stands);
 
-const standTiers = computed(() =>
+const standTiers = computed<Record<number, SponsorTier>>(() =>
     Object.fromEntries(
-        stands.value.map((stand) => [
-            stand.sponsor?.tier?.id,
-            stand.sponsor?.tier,
-        ]),
+        stands.value
+            .filter((stand) => stand.sponsor?.tier != null)
+            .map((stand) => [stand.sponsor!.tier!.id, stand.sponsor!.tier!]),
     ),
 );
 
@@ -31,14 +30,12 @@ const standsPerTier = computed(() => {
         acc.get(tier.id)!.push(stand);
 
         return acc;
-    }, new Map<SponsorTier["id"], Stand[]>());
+    }, new Map<number, Stand[]>());
 
     const sortedEntries = Array.from(grouped.entries()).sort(([idA], [idB]) => {
-        const tierA = stands.value.find((s) => s.sponsor?.tier?.id === idA)
-            ?.sponsor?.tier;
-        const tierB = stands.value.find((s) => s.sponsor?.tier?.id === idB)
-            ?.sponsor?.tier;
-        return -((tierA?.rank ?? Infinity) - (tierB?.rank ?? Infinity));
+        const tierA = standTiers.value[idA];
+        const tierB = standTiers.value[idB];
+        return -((tierA?.rank ?? 0) - (tierB?.rank ?? 0));
     });
 
     return new Map(sortedEntries);
@@ -46,29 +43,30 @@ const standsPerTier = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-12">
+    <div class="space-y-12 py-4">
         <template v-for="[tierId, tierStands] in standsPerTier" :key="tierId">
-            <section v-if="tierStands.length > 0" class="flex flex-col gap-3">
-                <span
-                    class="text-3xl font-bold"
-                    :style="`color: ${standTiers[tierId].color}`"
+            <section v-if="tierStands.length > 0" class="w-full">
+                <div class="mb-6 flex items-center justify-center">
+                    <div class="pill-container gap-2.5 px-4 py-1.5 shadow-none">
+                        <h3
+                            class="text-xs font-semibold tracking-wider uppercase"
+                            :style="{
+                                color: standTiers[tierId]?.color || '#ffffff',
+                            }"
+                        >
+                            {{ standTiers[tierId]?.name }}
+                        </h3>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-wrap items-center justify-center gap-4 sm:gap-6"
                 >
-                    {{ standTiers[tierId].name }}
-                </span>
-                <div class="flex flex-row flex-wrap gap-4">
-                    <div
+                    <Sponsor
                         v-for="stand in tierStands"
                         :key="stand.id"
-                        class="w-48 border border-black shadow-lg"
-                        :style="`color: ${standTiers[tierId].color}`"
-                    >
-                        <Sponsor
-                            :company="
-                                stand.sponsor?.company?.user as CompanyUser
-                            "
-                        >
-                        </Sponsor>
-                    </div>
+                        :company="stand.sponsor?.company?.user as CompanyUser"
+                    />
                 </div>
             </section>
         </template>

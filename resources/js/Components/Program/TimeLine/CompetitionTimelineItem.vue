@@ -9,53 +9,92 @@ interface Props {
 
 defineProps<Props>();
 
-const formattedDate = (
-    startDate: string,
-    separator: string,
-    endDate: string,
-) => {
-    const startDateArray = startDate.split(" ");
-    const endDateArray = endDate.split(" ");
-
-    let pointer = 0;
-
-    while (startDateArray[pointer] === endDateArray[pointer]) pointer++;
-
-    endDate = endDateArray.slice(pointer).join(" ");
-
-    return `${startDate} ${separator} ${endDate}`;
+const formatDateTime = (dateStr?: string): string => {
+    if (!dateStr) return "";
+    try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("pt-PT", {
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Lisbon",
+        });
+    } catch {
+        return dateStr;
+    }
 };
 </script>
 
 <template>
-    <article class="relative flex flex-col border-b-2 border-white pb-4">
-        <h2 class="text-text-color text-2xl font-bold">
-            <em
-                ><Link
+    <div class="group relative">
+        <div
+            class="absolute top-8 -left-9.25 hidden h-2.5 w-2.5 rounded-full bg-neutral-600 ring-4 ring-black transition-all duration-300 group-hover:scale-125 sm:flex"
+        />
+
+        <article
+            class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out hover:scale-[1.01] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-7"
+        >
+            <div class="mb-4 flex flex-wrap items-center gap-2.5">
+                <div
+                    class="pill-container gap-1.5 px-3 py-1 text-xs text-neutral-300 shadow-none"
+                >
+                    <svg
+                        class="h-3.5 w-3.5 text-neutral-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                    </svg>
+                    <span>
+                        {{ formatDateTime(competition.date_start) }}
+                        <template v-if="competition.date_end">
+                            - {{ formatDateTime(competition.date_end) }}
+                        </template>
+                    </span>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold tracking-tight sm:text-2xl">
+                <Link
                     :href="
                         route('competition.show', {
                             competition: competition.slug,
                         })
                     "
+                    class="inline-flex items-center gap-2 text-white transition-colors hover:text-neutral-200"
                     preserve-state
                     preserve-scroll
-                    >{{ competition.name }}</Link
-                ></em
+                >
+                    <span>{{ competition.name }}</span>
+                    <svg
+                        class="h-4 w-4 text-neutral-500 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                    </svg>
+                </Link>
+            </h3>
+
+            <p
+                v-if="competition.theme"
+                class="mt-2 text-sm leading-relaxed text-neutral-300 sm:text-base"
             >
-        </h2>
-        <p class="text-text-color text-lg">{{ competition.theme }}</p>
-        <span class="text-text-color">
-            {{
-                formattedDate(
-                    $d(new Date(competition.date_start), "fullTime"),
-                    "-",
-                    $d(new Date(competition.date_end), "fullTime"),
-                )
-            }}
-        </span>
-        <span
-            class="bg-2025-blue absolute top-0 -left-[calc(2rem+17.75px)] inline-flex h-8 w-8 items-center justify-center rounded-md text-xl font-semibold text-white"
-            >i</span
-        >
-    </article>
+                {{ competition.theme }}
+            </p>
+        </article>
+    </div>
 </template>
