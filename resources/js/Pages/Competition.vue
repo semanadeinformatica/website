@@ -1,188 +1,388 @@
 <script setup lang="ts">
-import Podium from "@/Components/Podium.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import type Competition from "@/Types/Competition";
-import { router } from "@inertiajs/vue3";
-// import { computed } from "vue";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import { isAdmin } from "@/Types/User";
-import { computed } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Podium from "@/Components/Competition/Podium.vue";
+import CompetitionLeaderboard from "@/Components/Competition/CompetitionLeaderboard.vue";
+import type Competition from "@/Types/Competition";
 import type { CompetitionPrizes } from "@/Types/Competition";
+import { type User } from "@/Types/User";
 
 interface Props {
     competition: Competition;
     isParticipant: boolean;
     isEnrolled: boolean;
     isOver: boolean;
-    prizes: CompetitionPrizes[];
+    prizes?: CompetitionPrizes[];
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    prizes: () => [],
+});
+
+const page = usePage();
+const user = computed(() => page.props.auth?.user as User | undefined);
+
 const competition = computed(() => props.competition);
 const leaderboard = computed(() => competition.value.teams?.slice(0, 3) ?? []);
 
-const formattedDate = (
-    startDate: string,
-    separator: string,
-    endDate: string,
-) => {
-    const startDateArray = startDate.split(" ");
-    const endDateArray = endDate.split(" ");
+const formatDateRange = (startStr?: string, endStr?: string): string => {
+    if (!startStr || !endStr) return "";
+    try {
+        const s = new Date(startStr);
+        const e = new Date(endStr);
+        const startDay = s.toLocaleDateString("pt-PT", {
+            day: "numeric",
+            month: "short",
+            timeZone: "Europe/Lisbon",
+        });
+        const startTime = s.toLocaleTimeString("pt-PT", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Lisbon",
+        });
+        const endTime = e.toLocaleTimeString("pt-PT", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Lisbon",
+        });
+        const endDay = e.toLocaleDateString("pt-PT", {
+            day: "numeric",
+            month: "short",
+            timeZone: "Europe/Lisbon",
+        });
 
-    let pointer = 0;
-
-    while (startDateArray[pointer] === endDateArray[pointer]) pointer++;
-
-    endDate = endDateArray.slice(pointer).join(" ");
-
-    return `${startDate} ${separator} ${endDate}`;
+        if (startDay === endDay) {
+            return `${startDay}, ${startTime} - ${endTime}`;
+        }
+        return `${startDay} ${startTime} — ${endDay} ${endTime}`;
+    } catch {
+        return "";
+    }
 };
+
+const handleEnrollClick = () => {
+    if (user.value) {
+        router.put(route("enroll"));
+    } else {
+        router.get(route("register"));
+    }
+};
+
+type CompetitionTab = "teams" | "prizes" | "regulation";
+
+const hasTeams = computed(() => (competition.value.teams?.length ?? 0) > 0);
+const hasPrizes = computed(() => (props.prizes?.length ?? 0) > 0);
+const hasRegulation = computed(() =>
+    Boolean(competition.value.regulation_html),
+);
+
+const availableTabs = computed(() => {
+    const list: { key: CompetitionTab; label: string; count?: number }[] = [];
+    if (hasTeams.value) {
+        list.push({
+            key: "teams",
+            label: "Equipas",
+            count: competition.value.teams?.length,
+        });
+    }
+    if (hasPrizes.value) {
+        list.push({
+            key: "prizes",
+            label: "Prémios",
+            count: props.prizes?.length,
+        });
+    }
+    if (hasRegulation.value) {
+        list.push({
+            key: "regulation",
+            label: "Regulamento",
+        });
+    }
+    return list;
+});
+
+const defaultTab = computed<CompetitionTab>(() => {
+    if (hasTeams.value) return "teams";
+    if (hasPrizes.value) return "prizes";
+    return "regulation";
+});
+
+const activeTab = ref<CompetitionTab>(defaultTab.value);
+
+const isAtBottom = ref(false);
+
+function updateScrollState() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    isAtBottom.value = scrollY + windowHeight >= documentHeight - 60;
+}
+
+function handleQuickScroll() {
+    if (isAtBottom.value) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+    }
+
+    const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("section"),
+    );
+    if (!sections.length) return;
+
+    const currentY = window.scrollY || window.pageYOffset;
+    const navOffset = 70;
+
+    const nextSection = sections.find((section) => {
+        const top = section.getBoundingClientRect().top + currentY;
+        return top > currentY + navOffset + 20;
+    });
+
+    if (nextSection) {
+        const targetY =
+            nextSection.getBoundingClientRect().top + currentY - navOffset;
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+    } else {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+        });
+    }
+}
+
+onMounted(() => {
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState, { passive: true });
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", updateScrollState);
+    window.removeEventListener("resize", updateScrollState);
+});
 </script>
 
 <template>
-    <AppLayout title="Competição">
-        <header class="flex flex-col items-center gap-4 p-4 text-center">
-            <h2
-                class="bg-2025-blue w-fit rounded-lg p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
-            >
-                {{ competition.name }}
-            </h2>
-            <span
-                class="text-text-color inline-flex w-3/4 justify-center pt-4 text-xl font-bold"
-                >{{ competition.theme }}</span
-            >
-            <span
-                class="text-text-color inline-flex justify-center text-xl font-bold"
-                >{{
-                    formattedDate(
-                        $d(new Date(competition.date_start), "fullTime"),
-                        "-",
-                        $d(new Date(competition.date_end), "fullTime"),
-                    )
-                }}
-            </span>
-        </header>
-
-        <section
-            v-if="competition.description && competition.description !== ''"
-            class="justitfy-center flex w-full flex-col items-center gap-4 p-4"
+    <AppLayout :title="competition.name">
+        <button
+            type="button"
+            :aria-label="
+                isAtBottom ? 'Scroll to top' : 'Scroll to next section'
+            "
+            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+            @click="handleQuickScroll"
         >
-            <h2
-                class="bg-2025-blue-dark w-fit rounded-md p-2 px-5 text-3xl font-bold text-white"
+            <svg
+                v-if="isAtBottom"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
             >
-                Descrição
-            </h2>
-
-            <p class="text-white">{{ competition.description }}</p>
-        </section>
-
-        <Podium :leaderboard="leaderboard" :prizes="prizes" />
-
-        <!-- RULES -->
-        <section class="relative mt-4 border-8 border-white/5 text-justify">
-            <h2
-                class="bg-2025-blue-dark absolute -top-9 left-1/2 -translate-x-1/2 transform rounded-lg p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+            </svg>
+            <svg
+                v-else
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
             >
-                Regulamento
-            </h2>
-            <div
-                class="prose prose-lg max-w-none p-20 wrap-break-word text-white max-lg:pb-10 lg:columns-2"
-                v-html="competition.regulation_html"
-            ></div>
-        </section>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+            </svg>
+        </button>
 
-        <template v-if="isOver">
-            <section
-                class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
-            >
-                <template v-if="competition.teams && competition.teams.length">
-                    <p class="text-text-color text-center text-2xl font-bold">
-                        A competição já acabou, vê aqui quem participou
-                    </p>
-                    <span class="text-text-color text-2xl font-bold">
-                        Equipas: {{ competition.teams?.length }}
-                    </span>
-                    <div
-                        class="flex w-4/5 flex-col rounded-lg border border-8 border-white/5 md:w-1/2"
+        <div
+            class="relative mx-auto max-w-5xl space-y-12 px-4 py-16 sm:space-y-16 sm:px-6 lg:px-8"
+        >
+            <header class="flex flex-col items-center gap-6 text-center">
+                <div class="space-y-3">
+                    <h1
+                        class="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
                     >
-                        <div
-                            v-for="team in competition.teams ?? []"
-                            :key="team.id"
-                            class="even:bg-2025-blue/20 inline-flex w-full justify-between gap-1 p-4 text-lg"
+                        {{ competition.name }}
+                    </h1>
+                    <p
+                        v-if="competition.theme"
+                        class="text-base font-medium text-neutral-300 sm:text-lg md:text-xl"
+                    >
+                        {{ competition.theme }}
+                    </p>
+                </div>
+
+                <div
+                    class="mt-2 flex w-full flex-col gap-6 rounded-3xl border border-white/8 bg-black/50 p-6 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md sm:p-8"
+                >
+                    <div
+                        v-if="competition.date_start && competition.date_end"
+                        class="flex items-center gap-2 text-xs text-neutral-400 sm:text-sm"
+                    >
+                        <svg
+                            class="h-4 w-4 text-neutral-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                         >
-                            <img
-                                :src="
-                                    team.image_competition_team_url
-                                        ? team.image_competition_team_url
-                                        : `https://ui-avatars.com/api/?size=512&name=${team.name
-                                              .split(' ')
-                                              .map((t) => t[0])
-                                              .join(
-                                                  '+',
-                                              )}&color=ffffff&background=3a9699`
-                                "
-                                class="h-16 w-16 self-center rounded-full border-2 border-white/5"
-                                :alt="`Image for team ${team.name}`"
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                             />
-                            <div
-                                class="text-text-color flex flex-col items-end self-center"
-                            >
-                                <span class="text-end">{{ team.name }}</span>
-                                <span>{{ team.points }} pontos</span>
-                            </div>
+                        </svg>
+                        <span class="font-medium text-neutral-300">
+                            {{
+                                formatDateRange(
+                                    competition.date_start,
+                                    competition.date_end,
+                                )
+                            }}
+                        </span>
+                    </div>
+
+                    <p
+                        v-if="competition.description"
+                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
+                    >
+                        {{ competition.description }}
+                    </p>
+
+                    <div class="border-t border-white/8 pt-6">
+                        <div v-if="isOver" class="text-center sm:text-left">
+                            <p class="text-xs text-neutral-400 sm:text-sm">
+                                Esta competição já acabou. Obrigado pela participação!
+                            </p>
+                        </div>
+
+                        <div
+                            v-else
+                            class="flex flex-col items-center justify-between gap-4 sm:flex-row"
+                        >
+                            <template v-if="!isEnrolled">
+                                <p
+                                    class="text-center text-xs text-neutral-400 sm:text-left sm:text-sm"
+                                >
+                                    Precisas de estar inscrito na SINF 2026 para
+                                    participar.
+                                </p>
+                                <button
+                                    type="button"
+                                    class="pill-container pill-item bg-sinf-crimson/80 hover:bg-sinf-crimson shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                    @click="handleEnrollClick"
+                                >
+                                    Inscrever-me na SINF
+                                </button>
+                            </template>
+
+                            <template v-else-if="competition.registration_link">
+                                <p
+                                    class="text-center text-xs text-neutral-400 sm:text-left sm:text-sm"
+                                >
+                                    As inscrições para esta competição estão
+                                    abertas.
+                                </p>
+                                <a
+                                    :href="competition.registration_link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pill-container pill-item bg-sinf-purple/80 hover:bg-sinf-purple shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                >
+                                    <span>Inscrever Equipa</span>
+                                    <svg
+                                        class="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </a>
+                            </template>
                         </div>
                     </div>
-                </template>
-                <p v-else class="text-2023-teal text-lg font-bold">
-                    A competição acabou mas não houve equipas inscritas desta
-                    vez.
-                </p>
-            </section>
-        </template>
-        <template v-else-if="!isAdmin($page.props.auth.user)">
-            <!-- PARTICIPATE -->
-            <section
-                v-if="!isEnrolled"
-                class="relative flex flex-col content-center items-center justify-center py-24"
-            >
-                <span class="text-2xl font-bold text-white">
-                    Ainda não estás inscrito na SINF
-                </span>
-                <div
-                    class="mx-10 flex h-full flex-1 flex-col items-center p-3 text-center text-3xl font-bold text-white sm:p-12"
-                >
-                    <PrimaryButton
-                        color="orange"
-                        shadow="teal"
-                        text-size="sm:text-4xl"
-                        padding="sm:px-8"
-                        @click="
-                            $page.props.auth.user
-                                ? router.put(route('enroll'))
-                                : router.get(route('register'))
-                        "
-                        >Inscreve-te</PrimaryButton
-                    >
                 </div>
-            </section>
-            <section
-                v-else-if="isEnrolled && isParticipant"
-                class="relative flex content-center items-center justify-center py-24"
-            >
-                <h1
-                    class="text-text-color absolute top-4 m-4 flex justify-center p-3 text-4xl font-black"
-                >
-                    Vamos a isto?
-                </h1>
+            </header>
 
-                <a
-                    :href="competition.registration_link"
-                    class="bg-2025-blue relative mt-5 content-center justify-center border border-black px-8 py-2 text-center text-2xl font-semibold text-white shadow-black/80 transition-shadow hover:shadow-md active:shadow-none"
+            <div v-if="availableTabs.length > 0" class="flex justify-center">
+                <div class="pill-container flex-wrap justify-center gap-1 p-1">
+                    <button
+                        v-for="tab in availableTabs"
+                        :key="tab.key"
+                        type="button"
+                        class="pill-item cursor-pointer gap-2 px-5 py-2 text-xs font-semibold transition-all sm:text-sm"
+                        :class="{ 'pill-item-active': activeTab === tab.key }"
+                        @click="activeTab = tab.key"
+                    >
+                        <span>{{ tab.label }}</span>
+                        <span
+                            v-if="tab.count !== undefined"
+                            class="py-0.2 rounded-full px-1.5 text-[10px] transition-colors"
+                            :class="
+                                activeTab === tab.key
+                                    ? 'bg-white/20 text-white'
+                                    : 'bg-white/8 text-neutral-400'
+                            "
+                        >
+                            {{ tab.count }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div v-if="activeTab === 'teams'" class="space-y-12 sm:space-y-16">
+                <div v-if="isOver && leaderboard.length >= 3" class="space-y-4">
+                    <Podium mode="winners" :leaderboard="leaderboard" />
+                </div>
+
+                <CompetitionLeaderboard :teams="competition.teams ?? []" />
+            </div>
+
+            <div v-else-if="activeTab === 'prizes'" class="space-y-8">
+                <Podium mode="prizes" :prizes="prizes" />
+            </div>
+
+            <div v-else-if="activeTab === 'regulation'" class="w-full">
+                <div
+                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md sm:p-10"
                 >
-                    Participar!
-                </a>
-            </section>
-        </template>
+                    <div
+                        class="prose prose-invert prose-headings:text-white prose-p:leading-relaxed prose-a:text-sinf-purple-light hover:prose-a:text-white prose-strong:text-white max-w-none leading-relaxed wrap-break-word text-neutral-300"
+                        v-html="competition.regulation_html"
+                    />
+                </div>
+            </div>
+
+            <div
+                v-if="availableTabs.length === 0"
+                class="flex flex-col items-center justify-center py-20 text-center"
+            >
+                <div class="pill-container mb-4 px-6 py-2.5">
+                    <span class="text-sm font-medium text-neutral-400">
+                        Em breve...
+                    </span>
+                </div>
+                <p class="max-w-md text-sm text-neutral-400">
+                    Os detalhes e regulamento da competição estarão disponíveis
+                    brevemente.
+                </p>
+            </div>
+        </div>
     </AppLayout>
 </template>
