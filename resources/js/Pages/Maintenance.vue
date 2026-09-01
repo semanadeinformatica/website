@@ -1,183 +1,102 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
 </script>
 
 <template>
-    <Head title="Brevemente..." />
+    <Head title="semana de informática 2026" />
     <!-- TODO: localization -->
-    <main class="bg-2025-bg-gradient min-h-screen">
+    <main class="maintenance-bg min-h-screen bg-black">
         <div
-            class="flex min-h-screen flex-col content-center items-center justify-evenly gap-14 py-16"
+            class="flex min-h-screen flex-col content-center items-center justify-evenly"
         >
-            <img
-                id="svg-1"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute left-[7%] w-36 opacity-50"
-                src="images/cy-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-2"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute top-16 right-[7%] w-32 opacity-50"
-                src="images/rc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-3"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute right-[15%] bottom-28 w-20 opacity-50"
-                src="images/oc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-
-            <div class="relative">
+            <div class="relative flex flex-col items-center">
                 <img
-                    class="max-ml:w-72 w-96"
-                    src="images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    id="svg-logo"
+                    class="w-96 p-4 select-none"
+                    src="images/sinf2026.svg"
+                    alt="SINF 2026 logo"
                 />
-            </div>
-            <p
-                class="text-text-color text-2023-teal shadow-2023-teal mr-2 border border-solid border-black p-2.5 px-8 text-lg font-bold shadow-md"
-            >
-                semana_de_informática
-            </p>
-            <p class="margin-0 text-center text-2xl font-bold text-white">
-                21 a 24 de outubro
-            </p>
-            <p
-                class="max-ml:text-base m-0 text-center text-lg font-bold text-white"
-            >
-                Estamos a preparar mais uma edição da SINF!
-            </p>
-            <a
-                href="https://2024.sinf.pt"
-                class="max-ml:text-base relative m-0 text-center text-lg font-bold text-white underline"
-            >
-                Revê a edição do último ano aqui!
-            </a>
-            <section
-                class="relative mx-[25%] flex content-center items-center justify-center border border-solid border-black p-8"
-            >
                 <p
-                    class="left-[calc(50% - 86.5px)] bg-2025-blue shadow-2023-teal absolute top-[-30px] w-max border border-solid border-black p-2.5 px-5 text-lg font-bold text-white decoration-white shadow-md"
+                    class="absolute top-full inset-x-0 mt-12 sm:mt-24 text-center font-['Inter'] text-lg font-medium tracking-wide text-white select-none"
+                    style="font-family: 'Inter', sans-serif;"
                 >
-                    Contacta-nos!
+                    Brevemente
                 </p>
                 <div
-                    id="contacts-content-desktop"
-                    class="max-ml:hidden flex w-full flex-row items-center justify-evenly gap-2.5"
+                    class="absolute top-full inset-x-0 mt-22 sm:mt-34 flex flex-row items-center justify-center space-x-3 select-none"
                 >
                     <a
-                        class="bg-2023-red flex w-fit rounded-full p-2"
+                        href="https://www.instagram.com/sinffeup/"
                         target="_blank"
-                        href="https://www.facebook.com/NIAEFEUP"
+                        rel="noopener noreferrer"
+                        class="text-white transition-opacity hover:opacity-80"
                     >
-                        <OhVueIcon
-                            name="io-logo-facebook"
-                            fill="white"
-                        ></OhVueIcon>
+                        <img
+                            class="w-4"
+                            src="images/instagram.svg"
+                            alt="Instagram"
+                        />
                     </a>
                     <a
-                        class="bg-2023-red-dark flex w-fit rounded-full p-2"
+                        href="https://www.facebook.com/sinffeup/"
                         target="_blank"
-                        href="https://www.linkedin.com/company/nifeup/mycompany/"
+                        rel="noopener noreferrer"
+                        class="text-white transition-opacity hover:opacity-80"
                     >
-                        <OhVueIcon
-                            name="io-logo-linkedin"
-                            fill="white"
-                        ></OhVueIcon>
-                    </a>
-                    <p
-                        class="text-lg font-bold text-white max-[900px]:text-base"
-                    >
-                        externas@sinf.pt
-                    </p>
-                    <a
-                        class="bg-2023-teal flex w-fit rounded-full p-2"
-                        target="_blank"
-                        href="https://www.instagram.com/niaefeup/"
-                    >
-                        <OhVueIcon
-                            name="io-logo-instagram"
-                            fill="white"
-                        ></OhVueIcon>
+                        <img
+                            class="w-4"
+                            src="images/facebook.svg"
+                            alt="Facebook"
+                        />
                     </a>
                     <a
-                        class="bg-2023-orange flex w-fit rounded-full p-2"
+                        href="https://www.linkedin.com/company/sinffeup"
                         target="_blank"
-                        href="https://twitter.com/niaefeup"
+                        rel="noopener noreferrer"
+                        class="text-white transition-opacity hover:opacity-80"
                     >
-                        <OhVueIcon
-                            name="io-logo-twitter"
-                            fill="white"
-                        ></OhVueIcon>
+                        <img
+                            class="w-4"
+                            src="images/linkedin.svg"
+                            alt="LinkedIn"
+                        />
                     </a>
                 </div>
-                <div
-                    id="contacts-content-mobile"
-                    class="max-ml:flex hidden flex-col items-center gap-2.5"
-                >
-                    <p class="max-ml:text-white text-lg font-bold text-white">
-                        externas@sinf.pt
-                    </p>
-                    <div class="grid grid-cols-2 justify-center gap-2.5">
-                        <a
-                            class="bg-2023-red flex w-fit rounded-full p-2"
-                            target="_blank"
-                            href="https://www.facebook.com/NIAEFEUP"
-                        >
-                            <OhVueIcon
-                                name="io-logo-facebook"
-                                fill="white"
-                            ></OhVueIcon>
-                        </a>
-                        <a
-                            class="bg-2023-red-dark flex w-fit rounded-full p-2"
-                            target="_blank"
-                            href="https://www.linkedin.com/company/nifeup/mycompany/"
-                        >
-                            <OhVueIcon
-                                name="io-logo-linkedin"
-                                fill="white"
-                            ></OhVueIcon>
-                        </a>
-                        <a
-                            class="bg-2023-teal flex w-fit rounded-full p-2"
-                            target="_blank"
-                            href="https://www.instagram.com/niaefeup/"
-                        >
-                            <OhVueIcon
-                                name="io-logo-instagram"
-                                fill="white"
-                            ></OhVueIcon>
-                        </a>
-                        <a
-                            class="bg-2023-orange flex w-fit rounded-full p-2"
-                            target="_blank"
-                            href="https://twitter.com/niaefeup"
-                        >
-                            <OhVueIcon
-                                name="io-logo-twitter"
-                                fill="white"
-                            ></OhVueIcon>
-                        </a>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     </main>
 </template>
 
 <style>
-#svg-1 {
-    animation-delay: -0.5s;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.maintenance-bg {
+    background-image:
+        radial-gradient(
+            ellipse 70% 20% at 58% 46%,
+            rgb(154 0 54 / 100%) 0%,
+            rgb(64 0 23 / 0%) 100%
+        ),
+        radial-gradient(
+            ellipse 70% 20% at 42% 54%,
+            rgb(106 0 255 / 85%) 0%,
+            rgb(34 1 153 / 0%) 100%
+        );
 }
 
-#svg-2 {
-    animation-delay: -1s;
-}
-
-#svg-3 {
-    animation-delay: -0.8s;
+@media (min-width: 640px) {
+    .maintenance-bg {
+        background-image:
+            radial-gradient(
+                ellipse 30% 24% at 58% 44%,
+                rgb(154 0 54 / 100%) 0%,
+                rgb(64 0 23 / 0%) 100%
+            ),
+            radial-gradient(
+                ellipse 30% 24% at 42% 58%,
+                rgb(106 0 255 / 85%) 0%,
+                rgb(34 1 153 / 0%) 100%
+            );
+    }
 }
 </style>
