@@ -4,7 +4,7 @@ import { router, useForm, usePage } from "@inertiajs/vue3";
 import ActionSection from "@/Components/ActionSection.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import CodeInput from "@/Components/CodeInput.vue";
 import { route } from "ziggy-js";
 import axios from "axios";
 
@@ -180,18 +180,15 @@ const disableTwoFactorAuthentication = () => {
                         </p>
                     </div>
 
-                    <TextInput
+                    <CodeInput
                         v-if="confirming"
                         id="code"
                         v-model="confirmationForm.code"
-                        type="text"
-                        name="code"
                         label="Code"
-                        inputmode="numeric"
-                        autofocus
-                        autocomplete="one-time-code"
+                        class="mt-4"
+                        :center="false"
                         :error-message="confirmationForm.errors.code"
-                        @keyup.enter="confirmTwoFactorAuthentication"
+                        @complete="confirmTwoFactorAuthentication"
                     />
                 </div>
 

@@ -3,7 +3,8 @@ import { useForm } from "@inertiajs/vue3";
 import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { AlertCircle, UserPlus } from "@lucide/vue";
 import { route } from "ziggy-js";
 
 const form = useForm({
@@ -23,11 +24,17 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Registar">
-        <form class="flex flex-col gap-4" @submit.prevent="submit">
+    <AuthLayout
+        title="Registar"
+        heading="Cria a tua conta"
+        subtitle="Junta-te à Semana de Informática 2026 e aproveita palestras inspiradoras, workshops práticos e oportunidades únicas de networking."
+        :icon="UserPlus"
+    >
+        <form method="POST" class="flex flex-col gap-4" @submit.prevent="submit">
             <TextInput
                 id="name"
                 v-model="form.name"
+                name="name"
                 label="Nome completo"
                 type="text"
                 required
@@ -40,6 +47,7 @@ const submit = () => {
             <TextInput
                 id="email"
                 v-model="form.email"
+                name="email"
                 label="Email"
                 type="email"
                 required
@@ -52,6 +60,7 @@ const submit = () => {
                 <TextInput
                     id="password"
                     v-model="form.password"
+                    name="password"
                     label="Password"
                     type="password"
                     required
@@ -63,6 +72,7 @@ const submit = () => {
                 <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
+                    name="password_confirmation"
                     label="Confirmar password"
                     type="password"
                     required
@@ -72,73 +82,113 @@ const submit = () => {
                 />
             </div>
 
-            <div class="space-y-2.5 pt-1">
-                <label
+            <div class="flex flex-col gap-3 pt-1">
+                <div
                     v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
-                    class="group flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-black/30 p-3 text-xs leading-relaxed text-neutral-300 shadow-(--shadow-pill-inset) backdrop-blur-sm transition-all hover:border-white/15 hover:bg-black/45 sm:text-sm"
+                    class="relative flex flex-col items-stretch self-stretch"
                 >
-                    <Checkbox
-                        id="terms"
-                        v-model:checked="form.terms"
-                        name="terms"
-                        required
-                        class="mt-0.5 shrink-0"
-                    />
+                    <label
+                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 hover:border-white/20 focus-within:border-white/20 focus-within:bg-black/65"
+                        :class="
+                            form.errors.terms
+                                ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
+                                : ''
+                        "
+                    >
+                        <Checkbox
+                            id="terms"
+                            v-model:checked="form.terms"
+                            name="terms"
+                            required
+                            class="shrink-0"
+                        />
 
-                    <span>
-                        Concordo com os
-                        <a
-                            target="_blank"
-                            :href="route('terms.show')"
-                            class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
-                            >Termos de Serviço</a
+                        <span
+                            class="text-xs leading-relaxed text-neutral-300 transition-colors group-hover:text-white sm:text-sm"
                         >
-                        e a
-                        <a
-                            target="_blank"
-                            :href="route('policy.show')"
-                            class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
-                            >Política de Privacidade</a
-                        >.
-                    </span>
-                </label>
-                <span
-                    v-if="form.errors.terms"
-                    class="ml-3 block text-xs font-medium text-red-400"
-                >
-                    {{ form.errors.terms }}
-                </span>
+                            Concordo com os
+                            <a
+                                target="_blank"
+                                :href="route('terms.show')"
+                                class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
+                                >Termos de Serviço</a
+                            >
+                            e a
+                            <a
+                                target="_blank"
+                                :href="route('policy.show')"
+                                class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
+                                >Política de Privacidade</a
+                            >.
+                        </span>
+                    </label>
 
-                <label
-                    class="group flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-black/30 p-3 text-xs leading-relaxed text-neutral-300 shadow-(--shadow-pill-inset) backdrop-blur-sm transition-all hover:border-white/15 hover:bg-black/45 sm:text-sm"
-                >
-                    <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
-                    since it makes it so that every account that exists has agreed to this -->
-                    <Checkbox
-                        id="data_sharing_agreement"
-                        v-model:checked="form.data_sharing_agreement"
-                        name="data_sharing_agreement"
-                        required
-                        class="mt-0.5 shrink-0"
-                    />
+                    <transition
+                        enter-active-class="transition ease-out duration-150"
+                        enter-from-class="opacity-0 -translate-y-1"
+                        enter-to-class="opacity-100 translate-y-0"
+                    >
+                        <div
+                            v-if="form.errors.terms"
+                            class="mt-1.5 ml-3.5 flex items-center gap-1.5 text-xs font-medium text-red-400"
+                        >
+                            <AlertCircle :size="14" class="shrink-0" />
+                            <span>{{ form.errors.terms }}</span>
+                        </div>
+                    </transition>
+                </div>
 
-                    <span>
-                        Concordo em ter as minhas informações pessoais
-                        partilhadas com as empresas que participam na SINF.
-                    </span>
-                </label>
-                <span
-                    v-if="form.errors.data_sharing_agreement"
-                    class="ml-3 block text-xs font-medium text-red-400"
-                >
-                    {{ form.errors.data_sharing_agreement }}
-                </span>
+                <div class="relative flex flex-col items-stretch self-stretch">
+                    <label
+                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 hover:border-white/20 focus-within:border-white/20 focus-within:bg-black/65"
+                        :class="
+                            form.errors.data_sharing_agreement
+                                ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
+                                : ''
+                        "
+                    >
+                        <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
+                        since it makes it so that every account that exists has agreed to this -->
+                        <Checkbox
+                            id="data_sharing_agreement"
+                            v-model:checked="form.data_sharing_agreement"
+                            name="data_sharing_agreement"
+                            required
+                            class="shrink-0"
+                        />
+
+                        <span
+                            class="text-xs leading-relaxed text-neutral-300 transition-colors group-hover:text-white sm:text-sm"
+                        >
+                            Concordo em ter as minhas informações pessoais
+                            partilhadas com as empresas que participam na SINF.
+                        </span>
+                    </label>
+
+                    <transition
+                        enter-active-class="transition ease-out duration-150"
+                        enter-from-class="opacity-0 -translate-y-1"
+                        enter-to-class="opacity-100 translate-y-0"
+                    >
+                        <div
+                            v-if="form.errors.data_sharing_agreement"
+                            class="mt-1.5 ml-3.5 flex items-center gap-1.5 text-xs font-medium text-red-400"
+                        >
+                            <AlertCircle :size="14" class="shrink-0" />
+                            <span>{{
+                                form.errors.data_sharing_agreement
+                            }}</span>
+                        </div>
+                    </transition>
+                </div>
             </div>
 
-            <PrimaryButton :disabled="form.processing" class="mt-2 w-full">
-                <span v-if="form.processing">A criar conta...</span>
-                <span v-else>Criar conta</span>
-            </PrimaryButton>
+            <div class="mt-4 flex justify-center w-full">
+                <PrimaryButton :disabled="form.processing">
+                    <span v-if="form.processing">A criar conta...</span>
+                    <span v-else>Criar conta</span>
+                </PrimaryButton>
+            </div>
         </form>
-    </CardLayout>
+    </AuthLayout>
 </template>

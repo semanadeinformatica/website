@@ -2,8 +2,9 @@
 import { computed } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { MailCheck } from "@lucide/vue";
 import { route } from "ziggy-js";
-import CardLayout from "@/Layouts/CardLayout.vue";
 
 interface Props {
     status: string;
@@ -23,27 +24,30 @@ const verificationLinkSent = computed(
 </script>
 
 <template>
-    <CardLayout
+    <AuthLayout
         title="Verificar email"
         heading="Verifica o teu email"
-        subtitle="Antes de continuar, clica no link de confirmação que enviámos para o teu email. Se não o recebeste, podemos enviar outro."
+        subtitle="Enviámos uma ligação de confirmação para o teu endereço de email. Clica nela para concluir o registo e ativar a tua conta."
+        :icon="MailCheck"
     >
         <div
             v-if="verificationLinkSent"
-            class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-center text-xs font-medium text-emerald-400"
+            class="mb-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-center text-xs font-medium text-emerald-400"
         >
             Um novo link de verificação foi enviado para o endereço de email
             associado à tua conta.
         </div>
 
-        <form class="flex flex-col gap-5" @submit.prevent="submit">
-            <PrimaryButton :disabled="form.processing" class="w-full">
-                <span v-if="form.processing">A reenviar...</span>
-                <span v-else>Reenviar email de verificação</span>
-            </PrimaryButton>
+        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
+            <div class="flex justify-center w-full">
+                <PrimaryButton :disabled="form.processing">
+                    <span v-if="form.processing">A reenviar...</span>
+                    <span v-else>Reenviar email de verificação</span>
+                </PrimaryButton>
+            </div>
 
             <div
-                class="mt-2 flex items-center justify-between border-t border-white/8 pt-4 text-xs sm:text-sm"
+                class="mt-2 flex items-center justify-between pt-2 text-xs sm:text-sm"
             >
                 <Link
                     :href="route('profile.show')"
@@ -62,5 +66,5 @@ const verificationLinkSent = computed(
                 </Link>
             </div>
         </form>
-    </CardLayout>
+    </AuthLayout>
 </template>

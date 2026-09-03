@@ -3,7 +3,8 @@ import { Link, useForm } from "@inertiajs/vue3";
 import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { LogIn } from "@lucide/vue";
 import { route } from "ziggy-js";
 
 interface Props {
@@ -33,23 +34,29 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Iniciar sessão">
+    <AuthLayout
+        title="Iniciar sessão"
+        heading="Bem-vindo de volta"
+        subtitle="Inicia sessão para acederes à tua conta, gerir a tua participação e explorar todas as atividades da SINF 2026."
+        :icon="LogIn"
+    >
         <div
             v-if="status"
-            class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-center text-xs font-medium text-emerald-400"
+            class="mb-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-center text-xs font-medium text-emerald-400"
         >
             {{ status }}
         </div>
 
-        <form class="flex flex-col gap-4" @submit.prevent="submit">
+        <form method="POST" class="flex flex-col gap-4" @submit.prevent="submit">
             <TextInput
                 id="email"
                 v-model="form.email"
+                name="email"
                 label="Email"
                 type="email"
                 required
                 autofocus
-                autocomplete="email"
+                autocomplete="username email"
                 placeholder="nome@exemplo.pt"
                 :error-message="form.errors.email"
             />
@@ -57,6 +64,7 @@ const submit = () => {
             <TextInput
                 id="password"
                 v-model="form.password"
+                name="password"
                 label="Password"
                 type="password"
                 required
@@ -69,7 +77,7 @@ const submit = () => {
                 class="flex items-center justify-between gap-2 px-1 text-xs sm:text-sm"
             >
                 <label
-                    class="group flex cursor-pointer items-center gap-2.5 text-neutral-300 select-none"
+                    class="group flex cursor-pointer items-center gap-2.5 text-neutral-400 select-none"
                 >
                     <Checkbox v-model:checked="form.remember" name="remember" />
                     <span class="transition-colors group-hover:text-white"
@@ -86,10 +94,12 @@ const submit = () => {
                 </Link>
             </div>
 
-            <PrimaryButton :disabled="form.processing" class="mt-2 w-full">
-                <span v-if="form.processing">A entrar...</span>
-                <span v-else>Entrar</span>
-            </PrimaryButton>
+            <div class="mt-4 flex justify-center w-full">
+                <PrimaryButton :disabled="form.processing">
+                    <span v-if="form.processing">A entrar...</span>
+                    <span v-else>Entrar</span>
+                </PrimaryButton>
+            </div>
         </form>
-    </CardLayout>
+    </AuthLayout>
 </template>

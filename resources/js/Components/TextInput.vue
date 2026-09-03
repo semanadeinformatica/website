@@ -3,10 +3,12 @@ import { Eye, EyeOff, AlertCircle } from "@lucide/vue";
 import { onMounted, ref, type InputHTMLAttributes, computed } from "vue";
 
 interface BaseProps {
+    name?: string;
     label?: string;
     id?: string;
     placeholder?: string;
     errorMessage?: string;
+    autocomplete?: string;
 }
 
 interface InputProps extends BaseProps {
@@ -91,6 +93,8 @@ const visible = ref(false);
                 :id="id"
                 ref="input"
                 v-model="value"
+                :name="name ?? id"
+                :autocomplete="autocomplete"
                 class="w-full cursor-pointer border-0 bg-transparent text-sm text-white shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
                 v-bind="$attrs"
                 :multiple="props.multiple"
@@ -121,6 +125,8 @@ const visible = ref(false);
                 :id="id"
                 ref="input"
                 v-model="value"
+                :name="name ?? id"
+                :autocomplete="autocomplete"
                 class="min-h-24 w-full resize-y border-0 bg-transparent text-sm text-white placeholder-neutral-500 shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
                 :placeholder="placeholder ?? ''"
                 v-bind="$attrs"
@@ -140,7 +146,9 @@ const visible = ref(false);
                 :id="id"
                 ref="input"
                 v-model="value"
+                :name="name ?? id"
                 :placeholder="placeholder ?? ''"
+                :autocomplete="autocomplete"
                 :type="type === 'password' && visible ? 'text' : type"
                 class="w-full border-0 bg-transparent text-sm text-white placeholder-neutral-500 shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
                 v-bind="$attrs"

@@ -2,7 +2,8 @@
 import { Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { KeyRound } from "@lucide/vue";
 import { route } from "ziggy-js";
 
 interface Props {
@@ -27,26 +28,29 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout
+    <AuthLayout
         title="Repor password"
-        heading="Repor a tua password"
-        subtitle="Escolhe uma nova password segura para a tua conta"
+        heading="Repor password"
+        subtitle="Escolhe uma nova password segura para garantir a proteção e acesso à tua conta."
+        :icon="KeyRound"
     >
-        <form class="flex flex-col gap-5" @submit.prevent="submit">
+        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
             <TextInput
                 id="email"
                 v-model="form.email"
+                name="email"
                 label="Email"
                 type="email"
                 required
                 autofocus
-                autocomplete="username"
+                autocomplete="username email"
                 :error-message="form.errors.email"
             />
 
             <TextInput
                 id="password"
                 v-model="form.password"
+                name="password"
                 label="Password"
                 type="password"
                 required
@@ -57,6 +61,7 @@ const submit = () => {
             <TextInput
                 id="password_confirmation"
                 v-model="form.password_confirmation"
+                name="password_confirmation"
                 label="Confirmar password"
                 type="password"
                 required
@@ -64,21 +69,21 @@ const submit = () => {
                 :error-message="form.errors.password_confirmation"
             />
 
-            <PrimaryButton :disabled="form.processing" class="mt-2 w-full">
-                <span v-if="form.processing">A repor...</span>
-                <span v-else>Repor password</span>
-            </PrimaryButton>
+            <div class="mt-2 flex justify-center w-full">
+                <PrimaryButton :disabled="form.processing">
+                    <span v-if="form.processing">A repor...</span>
+                    <span v-else>Repor password</span>
+                </PrimaryButton>
+            </div>
 
-            <div
-                class="mt-2 border-t border-white/8 pt-4 text-center text-xs text-neutral-400 sm:text-sm"
-            >
+            <div class="pt-2 text-center text-xs text-neutral-400 sm:text-sm">
                 <Link
                     :href="route('login')"
-                    class="font-semibold text-white underline underline-offset-4 transition-colors hover:text-neutral-200"
+                    class="text-neutral-300 transition-colors hover:text-white"
                 >
                     Voltar ao início de sessão
                 </Link>
             </div>
         </form>
-    </CardLayout>
+    </AuthLayout>
 </template>
