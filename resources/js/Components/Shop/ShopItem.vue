@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import { VueFinalModal } from "vue-final-modal";
-import "vue-final-modal/style.css";
+import Modal from "@/Components/UI/Modal.vue";
 import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type { BuyableProduct } from "@/Types/ShopPage";
@@ -9,7 +8,7 @@ import Card from "@/Components/UI/Card.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import { X, ShoppingBag } from "@lucide/vue";
+import { ShoppingBag } from "@lucide/vue";
 
 interface Props {
     product: BuyableProduct;
@@ -180,24 +179,10 @@ const redeemProduct = (enrollmentId: number) => {
         </template>
     </Card>
 
-    <VueFinalModal
+    <Modal
         v-model="modalOpen"
-        class="z-50 flex items-center justify-center p-4"
-        overlay-class="bg-black/80 backdrop-blur-sm"
-        content-class="
-            relative w-full max-w-lg rounded-3xl border border-white/10
-            bg-[#111215] p-6 sm:p-7 text-white
-            flex flex-col gap-6 max-h-[90vh] overflow-hidden
-        "
+        max-width="lg"
     >
-        <button
-            type="button"
-            class="pill-container absolute top-4 right-4 z-10 h-8 w-8 cursor-pointer justify-center text-neutral-400 transition-colors hover:text-white"
-            aria-label="Fechar"
-            @click="modalOpen = false"
-        >
-            <X :size="16" />
-        </button>
 
         <div
             class="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 p-3.5 pr-10 sm:p-4"
@@ -475,5 +460,5 @@ const redeemProduct = (enrollmentId: number) => {
                 }}
             </div>
         </div>
-    </VueFinalModal>
+    </Modal>
 </template>

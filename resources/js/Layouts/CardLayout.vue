@@ -22,7 +22,7 @@ withDefaults(defineProps<Props>(), {
             class="relative flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center px-4 py-12 sm:py-16"
         >
             <div
-                v-if="heading || title"
+                v-if="(heading || title) && !$slots.header"
                 class="mb-6 flex flex-col items-center text-center"
             >
                 <h1
@@ -43,7 +43,15 @@ withDefaults(defineProps<Props>(), {
                 class="w-full"
                 :class="maxWidth"
             >
+                <template v-if="$slots.header" #header>
+                    <slot name="header" />
+                </template>
+
                 <slot />
+
+                <template v-if="$slots.footer" #footer>
+                    <slot name="footer" />
+                </template>
             </Card>
         </div>
     </AppLayout>

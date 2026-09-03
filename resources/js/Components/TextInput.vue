@@ -135,13 +135,15 @@ const visible = ref(false);
 
         <div
             v-else
-            class="pill-container w-full px-4 py-2 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65"
+            class="pill-container flex w-full items-center gap-2.5 px-4 py-2 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65"
             :class="
                 errorMessage
                     ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
                     : ''
             "
         >
+            <slot name="leading" />
+
             <input
                 :id="id"
                 ref="input"

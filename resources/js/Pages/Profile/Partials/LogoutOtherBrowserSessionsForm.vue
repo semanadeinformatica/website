@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import ActionMessage from "@/Components/ActionMessage.vue";
-import ActionSection from "@/Components/ActionSection.vue";
-import DialogModal from "@/Components/DialogModal.vue";
+import Card from "@/Components/UI/Card.vue";
+import Modal from "@/Components/UI/Modal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import { Laptop, Smartphone } from "@lucide/vue";
 import { route } from "ziggy-js";
 import type Session from "@/Types/Session";
 
@@ -24,7 +24,6 @@ const form = useForm({
 
 const confirmLogout = () => {
     confirmingLogout.value = true;
-
     setTimeout(() => passwordInput.value?.focus(), 250);
 };
 
@@ -39,152 +38,118 @@ const logoutOtherBrowserSessions = () => {
 
 const closeModal = () => {
     confirmingLogout.value = false;
-
     form.reset();
 };
 </script>
 
 <template>
-    <ActionSection>
-        <template #title>
-            <span class="text-text-color">Sessões do Browser</span></template
-        >
-
-        <template #description>
-            <span class="text-text-color">
-                Gere e regista as tuas sessões ativas em outros navegadores e
-                dispositivos.
-            </span>
+    <Card as="section" :interactive="false" padding="p-6 sm:p-8">
+        <template #header>
+            <div class="space-y-1">
+                <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                    Sessões Ativas
+                </h2>
+                <p class="text-xs text-neutral-400 sm:text-sm">
+                    Gere os dispositivos e navegadores com sessão iniciada na tua conta.
+                </p>
+            </div>
         </template>
 
-        <template #content>
-            <div class="text-text-color max-w-xl text-sm">
-                Se necessário, podes terminar a sessão de todos os outros
-                navegadores em todos os teus dispositivos. Algumas das tuase
-                sessões recentes estão listadas abaixo; No entanto, esta lista
-                pode não estar completa. Se achas que a tua conta foi
-                comprometida, também deves atualizar a tua senha.
+        <div class="space-y-4">
+            <div class="text-sm text-neutral-300">
+                <p>
+                    Se suspeitares de atividade não autorizada ou se deixaste a sessão aberta num computador partilhado, podes encerrar todas as outras sessões ativas de imediato.
+                </p>
             </div>
 
-            <!-- Other Browser Sessions -->
-            <div v-if="sessions.length > 0" class="mt-5 space-y-6">
+            <div v-if="sessions.length > 0" class="space-y-3 pt-1">
                 <div
                     v-for="(session, i) in sessions"
                     :key="i"
-                    class="flex items-center"
+                    class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/3 p-3.5 sm:p-4"
                 >
-                    <div>
-                        <svg
-                            v-if="session.agent.is_desktop"
-                            class="text-text-color h-8 w-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"
-                            />
-                        </svg>
-
-                        <svg
-                            v-else
-                            class="text-text-color h-8 w-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-                            />
-                        </svg>
-                    </div>
-
-                    <div class="ml-3">
-                        <div class="text-text-color text-sm">
-                            {{
-                                session.agent.platform
-                                    ? session.agent.platform
-                                    : "Unknown"
-                            }}
-                            -
-                            {{
-                                session.agent.browser
-                                    ? session.agent.browser
-                                    : "Unknown"
-                            }}
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 ring-1 ring-white/10">
+                            <Laptop v-if="session.agent.is_desktop" :size="20" />
+                            <Smartphone v-else :size="20" />
                         </div>
 
-                        <div>
-                            <div class="text-text-color text-xs">
-                                {{ session.ip_address }},
+                        <div class="space-y-0.5">
+                            <div class="text-sm font-semibold text-white">
+                                {{ session.agent.platform || "Dispositivo desconhecido" }}
+                                <span class="text-neutral-500 font-normal">•</span>
+                                {{ session.agent.browser || "Navegador desconhecido" }}
+                            </div>
 
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-neutral-400">
+                                <span>{{ session.ip_address }}</span>
+                                <span class="text-neutral-600">•</span>
                                 <span
                                     v-if="session.is_current_device"
-                                    class="text-text-color font-semibold"
-                                    >This device</span
+                                    class="font-semibold text-emerald-400"
                                 >
-                                <span v-else
-                                    >Last active {{ session.last_active }}</span
-                                >
+                                    Este dispositivo
+                                </span>
+                                <span v-else>
+                                    Última atividade: {{ session.last_active }}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="mt-5 flex items-center">
-                <PrimaryButton @click="confirmLogout">
-                    Terminar sessão noutros navegadores
+        <template #footer>
+            <div class="flex w-full items-center justify-end gap-3">
+                <span
+                    v-show="form.recentlySuccessful"
+                    class="text-xs font-medium text-emerald-400"
+                >
+                    Sessões terminadas com sucesso.
+                </span>
+
+                <PrimaryButton type="button" @click="confirmLogout">
+                    Terminar outras sessões
                 </PrimaryButton>
-
-                <ActionMessage :on="form.recentlySuccessful" class="ml-3">
-                    Pronto.
-                </ActionMessage>
             </div>
-
-            <!-- Log Out Other Devices Confirmation Modal -->
-            <DialogModal :show="confirmingLogout" @close="closeModal">
-                <template #title>Terminar sessão noutros navegadores </template>
-
-                <template #content>
-                    Por favor, digite sua senha para confirmar que você gostaria
-                    de registrar fora de suas outras sessões de navegador em
-                    todas as suas dispositivos.
-
-                    <TextInput
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        label="Password"
-                        autocomplete="current-password"
-                        :error-message="form.errors.password"
-                        @keyup.enter="logoutOtherBrowserSessions"
-                    />
-                </template>
-
-                <template #footer>
-                    <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
-
-                    <PrimaryButton
-                        class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="logoutOtherBrowserSessions"
-                    >
-                        Terminar sessão noutros navegadores
-                    </PrimaryButton>
-                </template>
-            </DialogModal>
         </template>
-    </ActionSection>
+    </Card>
+
+    <!-- Modal for Confirming Logout -->
+    <Modal
+        v-model="confirmingLogout"
+        max-width="md"
+        title="Terminar Outras Sessões"
+        description="Por favor, confirma a tua palavra-passe para encerrar a sessão em todos os outros dispositivos."
+        @close="closeModal"
+    >
+        <div class="pt-2">
+            <TextInput
+                ref="passwordInput"
+                v-model="form.password"
+                type="password"
+                label="Palavra-passe"
+                autocomplete="current-password"
+                :error-message="form.errors.password"
+                @keyup.enter="logoutOtherBrowserSessions"
+            />
+        </div>
+
+        <template #footer>
+            <PrimaryButton color="pill" @click="closeModal">
+                Cancelar
+            </PrimaryButton>
+
+            <PrimaryButton
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+                @click="logoutOtherBrowserSessions"
+            >
+                Terminar sessões
+            </PrimaryButton>
+        </template>
+    </Modal>
 </template>
-@/Types/Session
+
+

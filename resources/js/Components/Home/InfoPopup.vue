@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { VueFinalModal } from "vue-final-modal";
-import "vue-final-modal/style.css";
+import Modal from "@/Components/UI/Modal.vue";
 import { inject, onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
 import { route } from "ziggy-js";
@@ -29,28 +28,26 @@ const enroll = () => {
 </script>
 
 <template>
-    <VueFinalModal
-        ref="modal"
+    <Modal
         v-model="options.modelValue"
-        class="flex items-center justify-center"
-        content-class="max-w-xl mx-4 p-4 bg-2025-blue border border-black border-solid flex relative justify-center items-center flex-col gap-8 rounded-lg"
-        @closed="cacheSeenInfo()"
+        max-width="xl"
+        @closed="cacheSeenInfo"
     >
         <div
-            class="flex flex-col items-center gap-6 text-center text-xl text-white"
+            class="flex flex-col items-center gap-6 text-center text-lg text-white"
         >
-            <img class="w-80 p-6" src="images/sinf logo.png" />
-            <p>
-                A <span class="text-2025-blue-dark font-bold">SINF</span> está
-                mais interactiva do que nunca!
+            <img class="w-72 p-4" src="/images/sinf logo.png" alt="SINF" />
+            <p class="font-medium">
+                A <span class="text-sinf-primary-light font-bold">SINF</span> está
+                mais interativa do que nunca!
             </p>
-            <ul class="flex flex-col items-center">
+            <ul class="flex flex-col items-center gap-2 text-sm text-neutral-300">
                 <li>
                     Participa em
                     <a
                         :href="route('program', { day: 6 })"
                         target="_blank"
-                        class="text-2025-blue-dark underline"
+                        class="text-sinf-secondary-light underline hover:text-white"
                         >Workshops e Palestras</a
                     >
                 </li>
@@ -59,7 +56,7 @@ const enroll = () => {
                     <a
                         :href="route('program', { day: 1 })"
                         target="_blank"
-                        class="text-2025-blue-dark underline"
+                        class="text-sinf-secondary-light underline hover:text-white"
                         >Bancas de Empresas</a
                     >
                 </li>
@@ -68,26 +65,28 @@ const enroll = () => {
                     <a
                         :href="route('program', { day: 3 })"
                         target="_blank"
-                        class="text-2025-blue-dark underline"
+                        class="text-sinf-secondary-light underline hover:text-white"
                         >Competições de CTF e Programação</a
                     >
                 </li>
             </ul>
-            <p>
+            <p class="text-sm text-neutral-300">
                 Ganha pontos e troca-os por prémios na
                 <a
                     :href="route('shop.show')"
                     target="_blank"
-                    class="text-2025-blue-dark underline"
+                    class="text-sinf-secondary-light underline hover:text-white"
                     >Loja</a
                 >
             </p>
             <PrimaryButton
-                text-size="text-2xl"
-                padding="sm:px-8"
+                color="gradient"
+                text-size="text-base"
+                padding="px-8 py-2.5"
                 @click="enroll"
-                >Inscrever-me</PrimaryButton
             >
+                Inscrever-me
+            </PrimaryButton>
         </div>
-    </VueFinalModal>
+    </Modal>
 </template>

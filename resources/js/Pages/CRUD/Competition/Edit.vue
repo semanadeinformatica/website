@@ -42,8 +42,19 @@ watchEffect(() => {
 </script>
 
 <template>
-    <CardLayout title="Editar Competição">
-        <form class="contents" @submit.prevent="submit">
+    <CardLayout title="Editar Competição" max-width="max-w-2xl">
+        <template #header>
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                    Editar Competição
+                </h1>
+                <p class="text-xs text-neutral-400 sm:text-sm">
+                    Atualiza as informações, regulamento e datas da competição.
+                </p>
+            </div>
+        </template>
+
+        <form id="competition-edit-form" class="flex flex-col gap-4" @submit.prevent="submit">
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -64,6 +75,62 @@ watchEffect(() => {
                 :error-message="form.errors.slug"
             />
 
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <TextInput
+                    id="theme"
+                    v-model="form.theme"
+                    label="Tema"
+                    type="text"
+                    required
+                    :error-message="form.errors.theme"
+                />
+
+                <TextInput
+                    v-model="form.edition_id"
+                    type="select"
+                    required
+                    label="Edição"
+                    :error-message="form.errors.edition_id"
+                >
+                    <option
+                        v-for="edition in $props.with.editions"
+                        :key="edition.id"
+                        :value="edition.id"
+                    >
+                        {{ edition.name }}
+                    </option>
+                </TextInput>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <TextInput
+                    id="date_start"
+                    v-model="form.date_start"
+                    label="Data de início"
+                    type="datetime-local"
+                    required
+                    :error-message="form.errors.date_start"
+                />
+
+                <TextInput
+                    id="date_end"
+                    v-model="form.date_end"
+                    label="Data de fim"
+                    type="datetime-local"
+                    required
+                    :error-message="form.errors.date_end"
+                />
+            </div>
+
+            <TextInput
+                id="registration_link"
+                v-model="form.registration_link"
+                label="Link para registo"
+                type="text"
+                required
+                :error-message="form.errors.registration_link"
+            />
+
             <TextInput
                 id="description"
                 v-model="form.description"
@@ -79,60 +146,19 @@ watchEffect(() => {
                 type="textarea"
                 :error-message="form.errors.regulation"
             />
-
-            <TextInput
-                id="theme"
-                v-model="form.theme"
-                label="Tema"
-                type="text"
-                required
-                :error-message="form.errors.theme"
-            />
-
-            <TextInput
-                id="date_start"
-                v-model="form.date_start"
-                label="Data de início"
-                type="datetime-local"
-                required
-                :error-message="form.errors.date_start"
-            />
-
-            <TextInput
-                id="date_end"
-                v-model="form.date_end"
-                label="Data de fim"
-                type="datetime-local"
-                required
-                :error-message="form.errors.date_end"
-            />
-
-            <TextInput
-                id="registration_link"
-                v-model="form.registration_link"
-                label="Link para registo"
-                type="text"
-                required
-                :error-message="form.errors.registration_link"
-            />
-
-            <TextInput
-                v-model="form.edition_id"
-                type="select"
-                required
-                label="Edição"
-                :error-message="form.errors.edition_id"
-            >
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </TextInput>
-
-            <PrimaryButton type="submit">Editar</PrimaryButton>
         </form>
+
+        <template #footer>
+            <div class="flex w-full items-center justify-end">
+                <PrimaryButton
+                    type="submit"
+                    form="competition-edit-form"
+                    :disabled="form.processing"
+                >
+                    Guardar alterações
+                </PrimaryButton>
+            </div>
+        </template>
     </CardLayout>
 </template>
+

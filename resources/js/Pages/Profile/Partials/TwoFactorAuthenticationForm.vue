@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { router, useForm, usePage } from "@inertiajs/vue3";
-import ActionSection from "@/Components/ActionSection.vue";
+import Card from "@/Components/UI/Card.vue";
+import Modal from "@/Components/UI/Modal.vue";
 import ConfirmsPassword from "@/Components/ConfirmsPassword.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CodeInput from "@/Components/CodeInput.vue";
+import { Check, Copy } from "@lucide/vue";
 import { route } from "ziggy-js";
 import axios from "axios";
 
@@ -17,27 +19,49 @@ const props = defineProps<Props>();
 const enabling = ref(false);
 const confirming = ref(false);
 const disabling = ref(false);
+const setupModalOpen = ref(false);
+const recoveryCodesModalOpen = ref(false);
 const qrCode = ref<string | null>(null);
 const setupKey = ref<string | null>(null);
 const recoveryCodes = ref<string[]>([]);
+const copiedKey = ref(false);
 
 const confirmationForm = useForm({
     code: "",
 });
 
-const twoFactorEnabled = computed(
-    () => !enabling.value && usePage().props.auth.user?.two_factor_enabled,
-);
+const isTwoFactorEnabled = computed(() => {
+    const user = usePage().props.auth.user;
+    if (!user?.two_factor_enabled) return false;
+    if (confirming.value) return false;
+    if (props.requiresConfirmation) {
+        return Boolean(user?.two_factor_confirmed_at);
+    }
+    return true;
+});
 
-watch(twoFactorEnabled, () => {
-    if (!twoFactorEnabled.value) {
+onMounted(() => {
+    const user = usePage().props.auth.user;
+    if (
+        props.requiresConfirmation &&
+        user?.two_factor_enabled &&
+        !user?.two_factor_confirmed_at
+    ) {
+        disableTwoFactorAuthentication();
+    }
+});
+
+watch(isTwoFactorEnabled, (enabled) => {
+    if (!enabled) {
         confirmationForm.reset();
         confirmationForm.clearErrors();
+        confirming.value = false;
     }
 });
 
 const enableTwoFactorAuthentication = () => {
     enabling.value = true;
+    confirming.value = props.requiresConfirmation;
 
     router.post(
         route("two-factor.enable"),
@@ -49,10 +73,11 @@ const enableTwoFactorAuthentication = () => {
                     showQrCode(),
                     showSetupKey(),
                     showRecoveryCodes(),
-                ]),
+                ]).then(() => {
+                    setupModalOpen.value = true;
+                }),
             onFinish: () => {
                 enabling.value = false;
-                confirming.value = props.requiresConfirmation;
             },
         },
     );
@@ -80,9 +105,19 @@ const confirmTwoFactorAuthentication = () => {
         preserveState: true,
         onSuccess: () => {
             confirming.value = false;
+            setupModalOpen.value = false;
             qrCode.value = null;
             setupKey.value = null;
+            showRecoveryCodes().then(() => {
+                recoveryCodesModalOpen.value = true;
+            });
         },
+    });
+};
+
+const openRecoveryCodesModal = () => {
+    showRecoveryCodes().then(() => {
+        recoveryCodesModalOpen.value = true;
     });
 };
 
@@ -100,124 +135,62 @@ const disableTwoFactorAuthentication = () => {
         onSuccess: () => {
             disabling.value = false;
             confirming.value = false;
+            setupModalOpen.value = false;
+            recoveryCodesModalOpen.value = false;
+        },
+        onError: () => {
+            disabling.value = false;
         },
     });
+};
+
+const cancelSetup = () => {
+    setupModalOpen.value = false;
+    disableTwoFactorAuthentication();
+};
+
+const copySetupKey = () => {
+    if (!setupKey.value) return;
+    navigator.clipboard.writeText(setupKey.value);
+    copiedKey.value = true;
+    setTimeout(() => {
+        copiedKey.value = false;
+    }, 2000);
 };
 </script>
 
 <template>
-    <ActionSection>
-        <template #title>
-            <span class="text-text-color"
-                >Autenticação de 2 fatores
-            </span></template
-        >
-
-        <template #description>
-            <span class="text-text-color">
-                Adiciona segurança à tua conta usando autenticação de dois
-                fatores.
-            </span>
+    <Card as="section" :interactive="false" padding="p-6 sm:p-8">
+        <template #header>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-1">
+                    <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                        Autenticação de Dois Fatores (2FA)
+                    </h2>
+                    <p class="text-xs text-neutral-400 sm:text-sm">
+                        Adiciona uma camada extra de segurança ao iniciar sessão através de um código temporário.
+                    </p>
+                </div>
+            </div>
         </template>
 
-        <template #content>
-            <h3
-                v-if="twoFactorEnabled && !confirming"
-                class="text-text-color text-lg font-medium"
-            >
-                Ativaste a autenticação de dois fatores.
-            </h3>
+        <div class="text-sm text-neutral-300 space-y-3">
+            <p v-if="isTwoFactorEnabled">
+                A tua conta está protegida com autenticação de dois fatores. Ser-te-á solicitado um código de 6 dígitos gerado pela tua aplicação de autenticação (como Google Authenticator, 1Password ou Authy) sempre que iniciares sessão.
+            </p>
+            <p v-else>
+                Com o 2FA ativado, ser-te-á pedido um código de 6 dígitos gerado pela tua aplicação de autenticação (como Google Authenticator, 1Password ou Authy) sempre que iniciares sessão.
+            </p>
+        </div>
 
-            <h3
-                v-else-if="twoFactorEnabled && confirming"
-                class="text-text-color text-lg font-medium"
-            >
-                Conclui a autenticação de dois fatores.
-            </h3>
-
-            <h3 v-else class="text-text-color text-lg font-medium">
-                Não ativaste a autenticação de dois fatores.
-            </h3>
-
-            <div class="text-text-color mt-3 max-w-xl text-sm">
-                <p>
-                    Quando a autenticação de dois fatores for ativada, ser-te-á
-                    solicitado um token aleatório e seguro durante a
-                    autenticação. Podes recuperar este token através da
-                    aplicação do Google Authenticator.
-                </p>
-            </div>
-
-            <div v-if="twoFactorEnabled">
-                <div v-if="qrCode">
-                    <div class="text-text-color mt-4 max-w-xl text-sm">
-                        <p v-if="confirming" class="font-semibold">
-                            Para terminar de ativar a autenticação de dois
-                            fatores, digitaliza o código QR a seguir usando a
-                            app de Authenticator do teu telemóvel ou insere a
-                            tecla de configuração e fornece o código OTP gerado.
-                        </p>
-
-                        <p v-else>
-                            A autenticação de dois fatores está agora ativada.
-                            Dá scan ao código QR usando a aplicação de
-                            Authenticator do teu telemóvel ou insere a chave de
-                            configuração.
-                        </p>
-                    </div>
-
-                    <div
-                        class="bg-2025-blue mt-4 inline-block p-2"
-                        v-html="qrCode"
-                    />
-
-                    <div
-                        v-if="setupKey"
-                        class="text-text-color mt-4 max-w-xl text-sm"
-                    >
-                        <p class="font-semibold">
-                            Setup Key: <span v-html="setupKey"></span>
-                        </p>
-                    </div>
-
-                    <CodeInput
-                        v-if="confirming"
-                        id="code"
-                        v-model="confirmationForm.code"
-                        label="Code"
-                        class="mt-4"
-                        :center="false"
-                        :error-message="confirmationForm.errors.code"
-                        @complete="confirmTwoFactorAuthentication"
-                    />
-                </div>
-
-                <div v-if="recoveryCodes.length > 0 && !confirming">
-                    <div class="text-text-color mt-4 max-w-xl text-sm">
-                        <p class="font-semibold">
-                            Armazena estes códigos de recuperação numa gestor de
-                            senhas seguro. Eles podem ser usados para recuperar
-                            o acesso à tua conta se o teu dispositivo de
-                            autenticação de dois fatores for perdido.
-                        </p>
-                    </div>
-
-                    <div
-                        class="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm"
-                    >
-                        <div v-for="code in recoveryCodes" :key="code">
-                            {{ code }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5">
-                <div v-if="!twoFactorEnabled">
+        <template #footer>
+            <div class="flex w-full flex-wrap items-center justify-end gap-3">
+                <!-- Turned Off (Desativada) -->
+                <div v-if="!isTwoFactorEnabled">
                     <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para ativar a autenticação de dois fatores."
-                        button="Confirmar"
+                        title="Confirmar Palavra-passe"
+                        content="Para ativar a autenticação de dois fatores, confirma a tua palavra-passe."
+                        button="Continuar"
                         @confirmed="enableTwoFactorAuthentication"
                     >
                         <PrimaryButton
@@ -225,90 +198,149 @@ const disableTwoFactorAuthentication = () => {
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling"
                         >
-                            Ativar
+                            {{ enabling ? "A iniciar..." : "Ativar 2FA" }}
                         </PrimaryButton>
                     </ConfirmsPassword>
                 </div>
 
-                <div v-else>
+                <!-- Turned On (Ativada) -->
+                <div v-else class="flex flex-wrap items-center gap-3">
                     <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para confirmar a autenticação de dois fatores."
-                        button="Confirmar"
-                        @confirmed="confirmTwoFactorAuthentication"
+                        title="Ver Códigos de Recuperação"
+                        content="Confirma a tua palavra-passe para visualizar os teus códigos de emergência."
+                        button="Mostrar"
+                        @confirmed="openRecoveryCodesModal"
+                    >
+                        <PrimaryButton type="button" color="pill">
+                            Ver códigos de recuperação
+                        </PrimaryButton>
+                    </ConfirmsPassword>
+
+                    <ConfirmsPassword
+                        title="Desativar 2FA"
+                        content="Tens a certeza que pretendes desativar o 2FA? A segurança da tua conta será reduzida."
+                        button="Desativar"
+                        @confirmed="disableTwoFactorAuthentication"
                     >
                         <PrimaryButton
-                            v-if="confirming"
                             type="button"
-                            class="mr-3"
-                            :class="{ 'opacity-25': enabling }"
-                            :disabled="enabling"
-                        >
-                            Confirm
-                        </PrimaryButton>
-                    </ConfirmsPassword>
-
-                    <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para regenerar os códigos de recuperação."
-                        button="Confirmar"
-                        @confirmed="regenerateRecoveryCodes"
-                    >
-                        <PrimaryButton
-                            v-if="recoveryCodes.length > 0 && !confirming"
-                            class="mr-3"
-                        >
-                            Regenerate Recovery Codes
-                        </PrimaryButton>
-                    </ConfirmsPassword>
-
-                    <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para mostrar os códigos de recuperação."
-                        button="Confirmar"
-                        @confirmed="showRecoveryCodes"
-                    >
-                        <PrimaryButton
-                            v-if="recoveryCodes.length === 0 && !confirming"
-                            class="mr-3"
-                        >
-                            Show Recovery Codes
-                        </PrimaryButton>
-                    </ConfirmsPassword>
-
-                    <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para desativar a autenticação de dois fatores."
-                        button="Confirmar"
-                        @confirmed="disableTwoFactorAuthentication"
-                    >
-                        <PrimaryButton
-                            v-if="confirming"
-                            :class="{ 'opacity-25': disabling }"
                             color="danger"
-                            :disabled="disabling"
-                        >
-                            Cancel
-                        </PrimaryButton>
-                    </ConfirmsPassword>
-
-                    <ConfirmsPassword
-                        title="Confirmar Password"
-                        content="Confirma a tua senha para desativar a autenticação de dois fatores."
-                        button="Confirmar"
-                        @confirmed="disableTwoFactorAuthentication"
-                    >
-                        <PrimaryButton
-                            v-if="!confirming"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
-                            color="danger"
                         >
-                            Disable
+                            {{ disabling ? "A desativar..." : "Desativar 2FA" }}
                         </PrimaryButton>
                     </ConfirmsPassword>
                 </div>
             </div>
         </template>
-    </ActionSection>
+    </Card>
+
+    <Modal
+        v-model="setupModalOpen"
+        max-width="md"
+        title="Configurar Autenticação de Dois Fatores"
+        description="Digitaliza o código QR na tua aplicação de autenticação para associar a conta."
+        :closeable="false"
+        :show-close-button="false"
+    >
+        <div class="flex flex-col items-center gap-5 py-2">
+            <div
+                v-if="qrCode"
+                class="rounded-2xl bg-white p-4 flex items-center justify-center"
+                v-html="qrCode"
+            />
+
+            <div v-if="setupKey" class="w-full space-y-1.5 text-center">
+                <span class="text-xs text-neutral-400 font-medium">Chave de configuração manual:</span>
+                <div
+                    class="group flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/50 px-3 py-2 font-mono text-xs text-white cursor-pointer hover:border-white/20 transition-colors"
+                    title="Clique para copiar"
+                    @click="copySetupKey"
+                >
+                    <span class="truncate">{{ setupKey }}</span>
+                    <Copy :size="13" class="shrink-0 text-neutral-400 group-hover:text-white" />
+                </div>
+                <span v-if="copiedKey" class="text-[11px] text-emerald-400 font-medium">Copiado para a área de transferência!</span>
+            </div>
+
+            <div class="w-full max-w-xs space-y-2 pt-1 text-center">
+                <label for="two_factor_code" class="text-xs font-semibold text-white">
+                    Código de 6 dígitos gerado pela app:
+                </label>
+                <CodeInput
+                    id="two_factor_code"
+                    v-model="confirmationForm.code"
+                    label="Código"
+                    :center="true"
+                    :error-message="confirmationForm.errors.code"
+                    @complete="confirmTwoFactorAuthentication"
+                />
+            </div>
+        </div>
+
+        <template #footer>
+            <div class="flex w-full items-center justify-between gap-3">
+                <PrimaryButton
+                    type="button"
+                    color="pill"
+                    :disabled="confirmationForm.processing"
+                    @click="cancelSetup"
+                >
+                    Cancelar
+                </PrimaryButton>
+
+                <PrimaryButton
+                    type="button"
+                    :class="{ 'opacity-25': confirmationForm.processing }"
+                    :disabled="confirmationForm.processing"
+                    @click="confirmTwoFactorAuthentication"
+                >
+                    {{ confirmationForm.processing ? "A verificar..." : "Concluir ativação" }}
+                </PrimaryButton>
+            </div>
+        </template>
+    </Modal>
+
+    <Modal
+        v-model="recoveryCodesModalOpen"
+        max-width="md"
+        title="Códigos de Recuperação"
+        description="Armazena estes códigos num local seguro. Cada código pode ser usado uma única vez se perderes o acesso ao dispositivo 2FA."
+    >
+        <div class="space-y-4 py-2">
+            <div
+                class="grid grid-cols-2 gap-2.5 rounded-2xl border border-white/10 bg-black/50 p-4 font-mono text-xs sm:text-sm text-neutral-200"
+            >
+                <div v-for="code in recoveryCodes" :key="code" class="select-all py-1 text-center">
+                    {{ code }}
+                </div>
+            </div>
+
+            <p class="text-xs text-neutral-400">
+                Dica: Podes copiar e guardar estes códigos no teu gestor de palavras-passe ou imprimi-los para um local seguro.
+            </p>
+        </div>
+
+        <template #footer>
+            <div class="flex w-full items-center justify-between gap-3">
+                <ConfirmsPassword
+                    title="Regenerar Códigos"
+                    content="Tens a certeza que desejas regenerar os teus códigos de recuperação? Todos os anteriores serão invalidados."
+                    button="Regenerar"
+                    @confirmed="regenerateRecoveryCodes"
+                >
+                    <PrimaryButton type="button" color="pill">
+                        Regenerar novos códigos
+                    </PrimaryButton>
+                </ConfirmsPassword>
+
+                <PrimaryButton type="button" @click="recoveryCodesModalOpen = false">
+                    Concluído
+                </PrimaryButton>
+            </div>
+        </template>
+    </Modal>
 </template>
+
+

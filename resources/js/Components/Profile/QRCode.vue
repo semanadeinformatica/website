@@ -3,13 +3,14 @@ import type Participant from "@/Types/Participant";
 import { router } from "@inertiajs/vue3";
 import { QrCode } from "@lucide/vue";
 import { computed, ref } from "vue";
-import { VueFinalModal } from "vue-final-modal";
-import "vue-final-modal/style.css";
+import Modal from "@/Components/UI/Modal.vue";
 import { route } from "ziggy-js";
 
-const props = defineProps<{
+interface Props {
     participant: Participant;
-}>();
+}
+
+const props = defineProps<Props>();
 
 const participant = computed(() => props.participant);
 
@@ -31,28 +32,36 @@ const showQRCode = () => {
 
 <template>
     <button
+        type="button"
         class="text-text-color flex w-fit cursor-pointer items-center justify-center rounded-full hover:opacity-80"
+        aria-label="Ver QR Code"
         @click="showQRCode"
     >
         <QrCode :size="22" />
     </button>
-    <VueFinalModal
+
+    <Modal
         v-model="modalOpen"
-        class="flex items-center justify-center"
-        content-class="max-w-xl min-w-[20em] mx-4 p-8 pt-12 gap-8 bg-white border border-black border-solid flex relative justify-center items-center flex-col"
+        max-width="md"
+        title="Código do Participante"
+        description="Apresenta este código QR ou código numérico nas bancas e eventos."
     >
-        <span v-if="loading" class="text-lg">A gerar...</span>
-        <template v-else>
-            <div v-html="participant.quest_qr_code"></div>
-            <span class="text-2023-teal-dark font-mono font-bold">
-                {{ participant.quest_code }}
-            </span>
-        </template>
-    </VueFinalModal>
+        <div class="flex flex-col items-center justify-center gap-6 py-2">
+            <span v-if="loading" class="text-sm text-neutral-400">A gerar código...</span>
+            <template v-else>
+                <div
+                    v-if="participant.quest_qr_code"
+                    class="rounded-2xl bg-white p-4 shadow-lg flex items-center justify-center"
+                    v-html="participant.quest_qr_code"
+                />
+                <div
+                    v-if="participant.quest_code"
+                    class="pill-container px-4 py-1.5 font-mono text-base font-bold text-white tracking-widest"
+                >
+                    {{ participant.quest_code }}
+                </div>
+            </template>
+        </div>
+    </Modal>
 </template>
 
-<style>
-.vfm__overlay {
-    background-color: rgba(248, 245, 231, 0.5);
-}
-</style>

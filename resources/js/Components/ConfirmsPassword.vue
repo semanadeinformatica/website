@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick } from "vue";
-import DialogModal from "./DialogModal.vue";
+import Modal from "@/Components/UI/Modal.vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import TextInput from "./TextInput.vue";
 import axios from "axios";
@@ -19,9 +19,9 @@ interface Emits {
 const emit = defineEmits<Emits>();
 
 withDefaults(defineProps<Props>(), {
-    title: "Confirmar Password",
-    content: "Para a tua segurança, confirma a tua senha para continuar.",
-    button: "Confirm",
+    title: "Confirmar Palavra-passe",
+    content: "Para a tua segurança, confirma a tua palavra-passe para continuar.",
+    button: "Confirmar",
 });
 
 const confirmingPassword = ref(false);
@@ -40,7 +40,6 @@ const startConfirmingPassword = () => {
             emit("confirmed");
         } else {
             confirmingPassword.value = true;
-
             setTimeout(() => passwordInput.value?.focus(), 250);
         }
     });
@@ -55,7 +54,6 @@ const confirmPassword = () => {
         })
         .then(() => {
             form.processing = false;
-
             closeModal();
             nextTick().then(() => emit("confirmed"));
         })
@@ -79,30 +77,31 @@ const closeModal = () => {
             <slot />
         </span>
 
-        <DialogModal :show="confirmingPassword" @close="closeModal">
-            <template #title>
-                {{ title }}
-            </template>
-
-            <template #content>
-                {{ content }}
-
+        <Modal
+            v-model="confirmingPassword"
+            max-width="md"
+            :title="title"
+            :description="content"
+            @close="closeModal"
+        >
+            <div class="pt-2">
                 <TextInput
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
-                    label="Password"
+                    label="Palavra-passe"
                     autocomplete="current-password"
                     :error-message="form.error"
                     @keyup.enter="confirmPassword"
                 />
-            </template>
+            </div>
 
             <template #footer>
-                <PrimaryButton @click="closeModal"> Cancel </PrimaryButton>
+                <PrimaryButton color="pill" @click="closeModal">
+                    Cancelar
+                </PrimaryButton>
 
                 <PrimaryButton
-                    class="ml-3"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                     @click="confirmPassword"
@@ -110,6 +109,7 @@ const closeModal = () => {
                     {{ button }}
                 </PrimaryButton>
             </template>
-        </DialogModal>
+        </Modal>
     </span>
 </template>
+
