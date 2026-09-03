@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type Department from "@/Types/Department";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     departments: Department[];
@@ -23,6 +26,15 @@ const totalMembers = computed(() =>
         0,
     ),
 );
+
+const items = computed<PillOption[]>(() => [
+    { id: "all", label: "Todos", count: totalMembers.value },
+    ...departmentsWithStaff.value.map((dept) => ({
+        id: dept.id,
+        label: dept.name,
+        count: dept.staff?.length,
+    })),
+]);
 </script>
 
 <template>
@@ -30,49 +42,14 @@ const totalMembers = computed(() =>
         v-if="departmentsWithStaff.length > 1"
         class="mb-10 flex justify-center"
     >
-        <div
-            class="pill-container max-w-full flex-wrap justify-center gap-1.5 p-1.5"
-        >
-            <button
-                type="button"
-                class="pill-item cursor-pointer gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-200 sm:text-sm"
-                :class="{ 'pill-item-active': selectedId === null }"
-                @click="emit('select', null)"
-            >
-                <span>Todos</span>
-                <span
-                    class="py-0.2 rounded-full px-1.5 text-[10px] transition-colors"
-                    :class="
-                        selectedId === null
-                            ? 'bg-white/20 text-white'
-                            : 'bg-white/8 text-neutral-400'
-                    "
-                >
-                    {{ totalMembers }}
-                </span>
-            </button>
-
-            <button
-                v-for="dept in departmentsWithStaff"
-                :key="dept.id"
-                type="button"
-                class="pill-item cursor-pointer gap-1.5 px-4 py-2 text-xs font-medium transition-all duration-200 sm:text-sm"
-                :class="{ 'pill-item-active': selectedId === dept.id }"
-                @click="emit('select', dept.id)"
-            >
-                <span>{{ dept.name }}</span>
-                <span
-                    v-if="dept.staff?.length"
-                    class="py-0.2 rounded-full px-1.5 text-[10px] transition-colors"
-                    :class="
-                        selectedId === dept.id
-                            ? 'bg-white/20 text-white'
-                            : 'bg-white/8 text-neutral-400'
-                    "
-                >
-                    {{ dept.staff.length }}
-                </span>
-            </button>
-        </div>
+        <PillSelector
+            :model-value="selectedId ?? 'all'"
+            :items="items"
+            size="md"
+            container-class="max-w-full"
+            @update:model-value="
+                (val) => emit('select', val === 'all' ? null : Number(val))
+            "
+        />
     </div>
 </template>

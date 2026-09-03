@@ -51,9 +51,7 @@ const submit = () => {
                 <span v-else>Enviar email</span>
             </PrimaryButton>
 
-            <div
-                class="pt-4 text-center text-xs text-neutral-400 sm:text-sm"
-            >
+            <div class="pt-4 text-center text-xs text-neutral-400 sm:text-sm">
                 Lembraste-te da password?
                 <Link
                     :href="route('login')"

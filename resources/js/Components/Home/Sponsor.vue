@@ -4,6 +4,9 @@ import { ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
 
+import Card from "@/Components/UI/Card.vue";
+import { X, ExternalLink } from "@lucide/vue";
+
 const options = ref({
     modelValue: false,
 });
@@ -16,9 +19,10 @@ defineProps<Props>();
 </script>
 
 <template>
-    <button
-        type="button"
-        class="group flex h-28 w-48 items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-5 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.015] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] focus:outline-none sm:h-32 sm:w-56 sm:p-6"
+    <Card
+        as="button"
+        padding="p-5 sm:p-6"
+        class="h-28 w-48 cursor-pointer items-center justify-center focus:outline-none sm:h-32 sm:w-56"
         @click="options.modelValue = true"
     >
         <img
@@ -26,7 +30,7 @@ defineProps<Props>();
             :alt="company?.name"
             class="max-h-14 max-w-[85%] object-contain opacity-85 brightness-95 transition-all duration-300 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:brightness-110 sm:max-h-16"
         />
-    </button>
+    </Card>
 
     <VueFinalModal
         v-model="options.modelValue"
@@ -44,19 +48,7 @@ defineProps<Props>();
             aria-label="Close modal"
             @click="options.modelValue = false"
         >
-            <svg
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                />
-            </svg>
+            <X :size="16" />
         </button>
 
         <img
@@ -78,19 +70,7 @@ defineProps<Props>();
                     class="pill-container pill-item gap-1.5 px-3 py-1 text-xs font-medium text-neutral-300 hover:text-white"
                 >
                     <span>Website</span>
-                    <svg
-                        class="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                    </svg>
+                    <ExternalLink :size="14" />
                 </a>
             </div>
 

@@ -5,6 +5,8 @@ import { route, type HasQueryParam } from "ziggy-js";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import type Competition from "@/Types/Competition";
 import type { User } from "@/Types/User";
+import PillSelector from "@/Components/UI/PillSelector.vue";
+import { Menu, X, ChevronRight, ArrowRight } from "@lucide/vue";
 
 interface RouteItem {
     label: string;
@@ -88,28 +90,16 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
 </script>
 
 <template>
-    <div class="pill-container md:hidden">
+    <PillSelector size="sm" :wrap="false" class="md:hidden">
         <button
             type="button"
-            class="flex h-7 w-7 items-center justify-center rounded-full text-neutral-300 transition-all hover:bg-white/8 hover:text-white focus:outline-none"
+            class="pill-item flex h-7 w-7 items-center justify-center p-0"
             aria-label="Menu"
             @click="internalOpen = !internalOpen"
         >
-            <svg
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                />
-            </svg>
+            <Menu :size="16" />
         </button>
-    </div>
+    </PillSelector>
 
     <Teleport to="body">
         <Transition
@@ -146,19 +136,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                             aria-label="Fechar menu"
                             @click="closeMenu"
                         >
-                            <svg
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            <X :size="20" />
                         </button>
                     </div>
 
@@ -181,19 +159,10 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                                         @click="closeMenu"
                                     >
                                         <span>{{ label }}</span>
-                                        <svg
-                                            class="h-4 w-4 text-neutral-500"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 5l7 7-7 7"
-                                            />
-                                        </svg>
+                                        <ChevronRight
+                                            :size="16"
+                                            class="text-neutral-500"
+                                        />
                                     </ResponsiveNavLink>
                                 </template>
 
@@ -209,19 +178,10 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                                         @click="closeMenu"
                                     >
                                         <span>{{ label }}</span>
-                                        <svg
-                                            class="h-4 w-4 text-neutral-500"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 5l7 7-7 7"
-                                            />
-                                        </svg>
+                                        <ChevronRight
+                                            :size="16"
+                                            class="text-neutral-500"
+                                        />
                                     </ResponsiveNavLink>
                                 </template>
                             </div>
@@ -247,19 +207,10 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                                         @click="closeMenu"
                                     >
                                         <span>{{ comp.name }}</span>
-                                        <svg
-                                            class="h-4 w-4 text-neutral-500"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 5l7 7-7 7"
-                                            />
-                                        </svg>
+                                        <ChevronRight
+                                            :size="16"
+                                            class="text-neutral-500"
+                                        />
                                     </ResponsiveNavLink>
                                 </template>
                             </div>
@@ -356,19 +307,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                             @click="closeMenu"
                         >
                             <span>Entrar</span>
-                            <svg
-                                class="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                />
-                            </svg>
+                            <ArrowRight :size="16" />
                         </Link>
                     </template>
                 </div>

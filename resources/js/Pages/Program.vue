@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProgramDaySelector from "@/Components/Program/ProgramDaySelector.vue";
 import ProgramDayPanel from "@/Components/Program/ProgramDayPanel.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 import type EventDay from "@/Types/EventDay";
 
 interface Props {
@@ -36,11 +37,14 @@ defineProps<Props>();
                 v-else
                 class="flex flex-col items-center justify-center py-28 text-center"
             >
-                <div class="pill-container mb-4 px-6 py-2.5">
-                    <span class="text-sm font-medium text-neutral-400">
-                        Em breve...
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'soon', label: 'Em breve...', disabled: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                    container-class="mb-4"
+                />
                 <p class="max-w-md text-sm text-neutral-400">
                     O programa da edição 2026 estará disponível brevemente.
                 </p>

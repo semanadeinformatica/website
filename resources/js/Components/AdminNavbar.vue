@@ -3,7 +3,7 @@ import NavLink from "@/Components/NavLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { route } from "ziggy-js";
-import { OhVueIcon } from "oh-vue-icons";
+import { User } from "@lucide/vue";
 
 interface Route {
     label: string;
@@ -60,9 +60,11 @@ const pageRoutes: Routes = {
                 </Dropdown>
             </template>
             <template v-else>
-                <a :href="route('login')">
-                    <OhVueIcon name="io-person" scale="1.7" fill="#025259">
-                    </OhVueIcon>
+                <a
+                    :href="route('login')"
+                    class="flex items-center p-1 text-neutral-300 hover:text-white"
+                >
+                    <User :size="24" />
                 </a>
             </template>
         </div>

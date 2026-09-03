@@ -4,6 +4,8 @@ import type Department from "@/Types/Department";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DepartmentSection from "@/Components/Team/DepartmentSection.vue";
 import DepartmentSelector from "@/Components/Team/DepartmentSelector.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
+import { ArrowUp, ArrowDown } from "@lucide/vue";
 
 interface Props {
     departments: Department[];
@@ -88,37 +90,11 @@ onBeforeUnmount(() => {
             :aria-label="
                 isAtBottom ? 'Scroll to top' : 'Scroll to next department'
             "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
             @click="handleQuickScroll"
         >
-            <svg
-                v-if="isAtBottom"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-            </svg>
-            <svg
-                v-else
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
-            </svg>
+            <ArrowUp v-if="isAtBottom" :size="16" />
+            <ArrowDown v-else :size="16" />
         </button>
 
         <div class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -142,11 +118,14 @@ onBeforeUnmount(() => {
                 v-else
                 class="flex flex-col items-center justify-center py-28 text-center"
             >
-                <div class="pill-container mb-4 px-6 py-2.5">
-                    <span class="text-sm font-medium text-neutral-400">
-                        Em breve...
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'soon', label: 'Em breve...', disabled: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                    container-class="mb-4"
+                />
                 <p class="max-w-md text-sm text-neutral-400">
                     A equipa da edição 2026 estará disponível brevemente.
                 </p>

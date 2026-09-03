@@ -57,7 +57,7 @@ const closeModal = () => {
             </div>
 
             <div class="mt-5">
-                <PrimaryButton color="blue" @click="confirmUserDeletion">
+                <PrimaryButton color="secondary" @click="confirmUserDeletion">
                     Apagar conta
                 </PrimaryButton>
             </div>
@@ -92,7 +92,7 @@ const closeModal = () => {
 
                     <PrimaryButton
                         class="ml-3"
-                        color="red"
+                        color="danger"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser"

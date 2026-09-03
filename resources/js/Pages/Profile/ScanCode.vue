@@ -5,7 +5,7 @@ import TextInput from "@/Components/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import type Quest from "@/Types/Quest";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { QrCode } from "@lucide/vue";
 import { computed, ref, watch } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
 import { route } from "ziggy-js";
@@ -79,8 +79,8 @@ watch(id, async () => {
             <ul class="flex w-fit flex-col items-center px-4 text-center">
                 <li>
                     No perfil do participante, encontrar o ícone de QR Code
-                    <span class="text-2025-blue"
-                        ><OhVueIcon name="io-qr-code" /></span
+                    <span class="text-2025-blue inline-flex items-center"
+                        ><QrCode :size="16" class="inline" /></span
                     >, clicar no ícone e dar scan ao código.
                 </li>
                 <li>

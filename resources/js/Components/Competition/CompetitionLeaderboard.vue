@@ -63,14 +63,16 @@ const props = withDefaults(defineProps<Props>(), {
                             class="pill-container gap-1 px-3 py-1 text-xs font-bold text-white shadow-none sm:text-sm"
                         >
                             <span>{{ team.points }}</span>
-                            <span class="text-[10px] font-normal text-neutral-400 sm:text-xs">pts</span>
+                            <span
+                                class="text-[10px] font-normal text-neutral-400 sm:text-xs"
+                                >pts</span
+                            >
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Empty State -->
         <div
             v-else
             class="flex flex-col items-center justify-center py-20 text-center"

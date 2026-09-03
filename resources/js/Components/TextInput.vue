@@ -1,5 +1,5 @@
-<script setup lang="ts" generic="">
-import { OhVueIcon } from "oh-vue-icons";
+<script setup lang="ts">
+import { Eye, EyeOff, AlertCircle } from "@lucide/vue";
 import { onMounted, ref, type InputHTMLAttributes, computed } from "vue";
 
 interface BaseProps {
@@ -10,8 +10,8 @@ interface BaseProps {
 }
 
 interface InputProps extends BaseProps {
-    type: InputHTMLAttributes["type"];
-    modelValue: string;
+    type?: InputHTMLAttributes["type"];
+    modelValue: string | number;
 }
 
 interface BaseSelectProps extends BaseProps {
@@ -41,7 +41,7 @@ const isSelect = (p: Props): p is SelectProps => {
 };
 
 interface Emits {
-    (event: "update:modelValue", value: string | string[]): void;
+    (event: "update:modelValue", value: string | number | string[]): void;
 }
 
 // Need to instantiate 'props' here otherwise TS would not correctly infer the types I wanted from the '$props' variable. - Nuno Pereira
@@ -154,10 +154,8 @@ const visible = ref(false);
                 :aria-label="visible ? 'Ocultar password' : 'Ver password'"
                 @click="visible = !visible"
             >
-                <OhVueIcon
-                    :name="visible ? 'io-eye-off' : 'io-eye'"
-                    class="h-4 w-4"
-                />
+                <EyeOff v-if="visible" :size="16" />
+                <Eye v-else :size="16" />
             </button>
         </div>
 
@@ -171,19 +169,7 @@ const visible = ref(false);
                 :id="`${id}-error`"
                 class="mt-1.5 ml-3.5 flex items-center gap-1.5 text-xs font-medium text-red-400"
             >
-                <svg
-                    class="h-3.5 w-3.5 shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
+                <AlertCircle :size="14" class="shrink-0" />
                 <span>{{ errorMessage }}</span>
             </div>
         </transition>

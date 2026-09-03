@@ -46,22 +46,22 @@ const zones: Zone[] = [
 const orbDefinitions = [
     {
         className:
-            "glow-orb-crimson-1 absolute h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]",
+            "glow-orb-primary-1 absolute h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]",
         maxDelay: 10,
     },
     {
         className:
-            "glow-orb-purple-1 absolute h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]",
+            "glow-orb-secondary-1 absolute h-[85vh] w-[80vw] rounded-[100%] blur-[70px] will-change-transform sm:blur-[100px]",
         maxDelay: 12,
     },
     {
         className:
-            "glow-orb-crimson-2 absolute h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]",
+            "glow-orb-primary-2 absolute h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]",
         maxDelay: 9,
     },
     {
         className:
-            "glow-orb-purple-2 absolute h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]",
+            "glow-orb-secondary-2 absolute h-[65vh] w-[60vw] rounded-[100%] blur-[60px] will-change-transform sm:blur-[90px]",
         maxDelay: 11,
     },
 ];

@@ -6,6 +6,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import InfoPopup from "@/Components/Home/InfoPopup.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
+import { ArrowUp, ArrowDown } from "@lucide/vue";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
@@ -86,37 +88,11 @@ onBeforeUnmount(() => {
             :aria-label="
                 isAtBottom ? 'Scroll to top' : 'Scroll to next section'
             "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
             @click="handleQuickScroll"
         >
-            <svg
-                v-if="isAtBottom"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-            </svg>
-            <svg
-                v-else
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
-            </svg>
+            <ArrowUp v-if="isAtBottom" :size="16" />
+            <ArrowDown v-else :size="16" />
         </button>
 
         <section
@@ -136,19 +112,17 @@ onBeforeUnmount(() => {
                 16 a 19 de novembro
             </p>
 
-            <div v-if="canEnroll" class="pill-container">
-                <button
-                    type="button"
-                    class="pill-item px-6 py-2 text-sm font-semibold sm:text-base"
-                    @click="
-                        $page.props.auth.user
-                            ? router.put(route('enroll'))
-                            : router.get(route('register'))
-                    "
-                >
-                    Inscrever-me
-                </button>
-            </div>
+            <PillSelector
+                v-if="canEnroll"
+                :items="[{ id: 'enroll', label: 'Inscrever-me', active: true }]"
+                size="md"
+                :wrap="false"
+                @select="
+                    $page.props.auth.user
+                        ? router.put(route('enroll'))
+                        : router.get(route('register'))
+                "
+            />
         </section>
 
         <section
@@ -156,11 +130,13 @@ onBeforeUnmount(() => {
             class="relative mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8"
         >
             <div class="mb-10 flex justify-center">
-                <div class="pill-container">
-                    <span class="pill-item font-semibold text-white">
-                        Sobre nós
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'aboutus', label: 'Sobre nós', active: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                />
             </div>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -187,11 +163,13 @@ onBeforeUnmount(() => {
 
         <section class="relative mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
             <div class="mb-10 flex justify-center">
-                <div class="pill-container">
-                    <span class="pill-item font-semibold text-white">
-                        Este ano temos
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'stats', label: 'Este ano temos', active: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                />
             </div>
 
             <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
@@ -263,11 +241,13 @@ onBeforeUnmount(() => {
 
         <section id="speakers" class="relative w-full overflow-hidden py-20">
             <div class="mb-10 flex justify-center px-4">
-                <div class="pill-container">
-                    <span class="pill-item font-semibold text-white">
-                        Oradores
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'speakers', label: 'Oradores', active: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                />
             </div>
 
             <template v-if="speakers.length !== 0">
@@ -276,9 +256,13 @@ onBeforeUnmount(() => {
                 </div>
             </template>
             <div v-else class="flex justify-center px-4">
-                <div class="pill-container px-6 py-3 text-sm text-neutral-400">
-                    Em breve...
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'soon', label: 'Em breve...', disabled: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                />
             </div>
         </section>
 
@@ -287,11 +271,13 @@ onBeforeUnmount(() => {
             class="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8"
         >
             <div class="mb-10 flex justify-center">
-                <div class="pill-container">
-                    <span class="pill-item font-semibold text-white">
-                        Patrocínios
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'sponsors', label: 'Patrocínios', active: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                />
             </div>
 
             <div class="space-y-12">

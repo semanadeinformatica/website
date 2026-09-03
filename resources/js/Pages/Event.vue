@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onBeforeUnmount } from "vue";
-import { router, Link, usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Event from "@/Types/Event";
 import type Enrollment from "@/Types/Enrollment";
@@ -8,6 +8,10 @@ import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import Sponsor from "@/Components/Home/Sponsor.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
+import { ExternalLink, QrCode } from "@lucide/vue";
 
 interface Props {
     event: Event;
@@ -139,6 +143,14 @@ const defaultTab = computed<EventTab>(() => {
 
 const activeTab = ref<EventTab>(defaultTab.value);
 
+const eventTabItems = computed<PillOption[]>(() => {
+    return availableTabs.value.map((tab) => ({
+        id: tab.key,
+        label: tab.label,
+        count: tab.count,
+    }));
+});
+
 const isAtBottom = ref(false);
 
 function updateScrollState() {
@@ -254,7 +266,9 @@ onBeforeUnmount(() => {
                     class="mt-2 flex w-full flex-col gap-6 rounded-3xl border border-white/8 bg-black/50 p-6 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md sm:p-8"
                 >
                     <div
-                        v-if="event.time_start || event.location || event.capacity"
+                        v-if="
+                            event.time_start || event.location || event.capacity
+                        "
                         class="flex flex-wrap items-center gap-4 text-xs text-neutral-400 sm:gap-6 sm:text-sm"
                     >
                         <div
@@ -338,7 +352,7 @@ onBeforeUnmount(() => {
 
                     <div
                         v-if="event.description_html"
-                        class="prose prose-invert max-w-none text-justify text-base leading-relaxed text-neutral-300 prose-headings:text-white prose-a:text-sinf-purple-light hover:prose-a:text-white prose-strong:text-white sm:text-lg"
+                        class="prose prose-invert prose-headings:text-white prose-a:text-sinf-secondary-light hover:prose-a:text-white prose-strong:text-white max-w-none text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
                         v-html="event.description_html"
                     />
                     <p
@@ -357,16 +371,14 @@ onBeforeUnmount(() => {
                             class="flex flex-col items-center justify-between gap-4 sm:flex-row"
                         >
                             <div class="flex items-center gap-2">
-                                <span
-                                    class="text-xs font-semibold sm:text-sm"
-                                >
+                                <span class="text-xs font-semibold sm:text-sm">
                                     Inscrição confirmada! Vemo-nos lá.
                                 </span>
                             </div>
 
                             <button
                                 type="button"
-                                class="pill-container pill-item border-red-500/20 bg-red-500/10 hover:bg-red-500/20 shrink-0 cursor-pointer px-5 py-2 text-xs font-semibold text-red-300 transition-all active:scale-95 sm:text-sm"
+                                class="pill-container pill-item shrink-0 cursor-pointer border-red-500/20 bg-red-500/10 px-5 py-2 text-xs font-semibold text-red-300 transition-all hover:bg-red-500/20 active:scale-95 sm:text-sm"
                                 @click="handleLeaveEvent"
                             >
                                 Cancelar Inscrição
@@ -385,7 +397,7 @@ onBeforeUnmount(() => {
                             </p>
                             <button
                                 type="button"
-                                class="pill-container pill-item bg-sinf-crimson/80 hover:bg-sinf-crimson shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                class="pill-container pill-item bg-sinf-primary/80 hover:bg-sinf-primary shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
                                 @click="handleEnrollSinf"
                             >
                                 Inscrever-me na SINF
@@ -406,22 +418,10 @@ onBeforeUnmount(() => {
                                 :href="event.external_url"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="pill-container pill-item bg-sinf-purple/80 hover:bg-sinf-purple shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                class="pill-container pill-item bg-sinf-secondary/80 hover:bg-sinf-secondary shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
                             >
                                 <span>Inscrever-me</span>
-                                <svg
-                                    class="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                    />
-                                </svg>
+                                <ExternalLink :size="16" />
                             </a>
                         </div>
 
@@ -444,7 +444,7 @@ onBeforeUnmount(() => {
                             </p>
                             <button
                                 type="button"
-                                class="pill-container pill-item bg-sinf-purple/80 hover:bg-sinf-purple shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                class="pill-container pill-item bg-sinf-secondary/80 hover:bg-sinf-secondary shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
                                 @click="handleJoinEvent"
                             >
                                 Inscrever-me no Evento
@@ -469,66 +469,33 @@ onBeforeUnmount(() => {
             </header>
 
             <div
-                v-if="availableTabs.length > 0 || (isAdmin(authUser) || isStaff)"
+                v-if="availableTabs.length > 0 || isAdmin(authUser) || isStaff"
                 class="flex flex-wrap items-center justify-center gap-3 sm:gap-4"
             >
-                <div
+                <PillSelector
                     v-if="availableTabs.length > 0"
-                    class="pill-container flex-wrap justify-center gap-1 p-1"
-                >
-                    <button
-                        v-for="tab in availableTabs"
-                        :key="tab.key"
-                        type="button"
-                        class="pill-item cursor-pointer gap-2 px-5 py-2 text-xs font-semibold transition-all sm:text-sm"
-                        :class="{ 'pill-item-active': activeTab === tab.key }"
-                        @click="activeTab = tab.key"
-                    >
-                        <span>{{ tab.label }}</span>
-                        <span
-                            v-if="tab.count !== undefined"
-                            class="py-0.2 rounded-full px-1.5 text-[10px] transition-colors"
-                            :class="
-                                activeTab === tab.key
-                                    ? 'bg-white/20 text-white'
-                                    : 'bg-white/8 text-neutral-400'
-                            "
-                        >
-                            {{ tab.count }}
-                        </span>
-                    </button>
-                </div>
+                    v-model="activeTab"
+                    :items="eventTabItems"
+                    size="md"
+                />
 
-                <div
+                <PillSelector
                     v-if="isAdmin(authUser) || isStaff"
-                    class="pill-container p-1"
-                >
-                    <Link
-                        :href="
-                            route('user.scan-code', {
+                    :items="[
+                        {
+                            id: 'scan-code',
+                            label: 'Digitalizar QR Code',
+                            icon: QrCode,
+                            href: route('user.scan-code', {
                                 _query: {
                                     event: event.id,
                                 },
-                            })
-                        "
-                        class="pill-item cursor-pointer gap-2 px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-white/10 sm:text-sm"
-                    >
-                        <svg
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                            />
-                        </svg>
-                        <span>Digitalizar QR Code</span>
-                    </Link>
-                </div>
+                            }),
+                        },
+                    ]"
+                    size="md"
+                    :wrap="false"
+                />
             </div>
 
             <div v-if="activeTab === 'speakers'" class="space-y-6">

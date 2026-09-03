@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
 import { router } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { QrCode } from "@lucide/vue";
 import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import "vue-final-modal/style.css";
@@ -31,10 +31,10 @@ const showQRCode = () => {
 
 <template>
     <button
-        class="text-text-color flex w-fit cursor-pointer rounded-full"
+        class="text-text-color flex w-fit cursor-pointer items-center justify-center rounded-full hover:opacity-80"
         @click="showQRCode"
     >
-        <OhVueIcon name="io-qr-code" scale="1.2"></OhVueIcon>
+        <QrCode :size="22" />
     </button>
     <VueFinalModal
         v-model="modalOpen"

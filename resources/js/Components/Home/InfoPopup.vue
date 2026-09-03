@@ -83,8 +83,6 @@ const enroll = () => {
                 >
             </p>
             <PrimaryButton
-                color="teal"
-                shadow="teal"
                 text-size="text-2xl"
                 padding="sm:px-8"
                 @click="enroll"

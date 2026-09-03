@@ -8,6 +8,11 @@ import CompetitionLeaderboard from "@/Components/Competition/CompetitionLeaderbo
 import type Competition from "@/Types/Competition";
 import type { CompetitionPrizes } from "@/Types/Competition";
 import { type User } from "@/Types/User";
+import Card from "@/Components/UI/Card.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
+import { ExternalLink } from "@lucide/vue";
 
 interface Props {
     competition: Competition;
@@ -78,25 +83,25 @@ const hasRegulation = computed(() =>
     Boolean(competition.value.regulation_html),
 );
 
-const availableTabs = computed(() => {
-    const list: { key: CompetitionTab; label: string; count?: number }[] = [];
+const availableTabs = computed<PillOption[]>(() => {
+    const list: PillOption[] = [];
     if (hasTeams.value) {
         list.push({
-            key: "teams",
+            id: "teams",
             label: "Equipas",
             count: competition.value.teams?.length,
         });
     }
     if (hasPrizes.value) {
         list.push({
-            key: "prizes",
+            id: "prizes",
             label: "Prémios",
             count: props.prizes?.length,
         });
     }
     if (hasRegulation.value) {
         list.push({
-            key: "regulation",
+            id: "regulation",
             label: "Regulamento",
         });
     }
@@ -262,7 +267,8 @@ onBeforeUnmount(() => {
                     <div class="border-t border-white/8 pt-6">
                         <div v-if="isOver" class="text-center sm:text-left">
                             <p class="text-xs text-neutral-400 sm:text-sm">
-                                Esta competição já acabou. Obrigado pela participação!
+                                Esta competição já acabou. Obrigado pela
+                                participação!
                             </p>
                         </div>
 
@@ -279,7 +285,7 @@ onBeforeUnmount(() => {
                                 </p>
                                 <button
                                     type="button"
-                                    class="pill-container pill-item bg-sinf-crimson/80 hover:bg-sinf-crimson shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                    class="pill-container pill-item bg-sinf-primary/80 hover:bg-sinf-primary shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
                                     @click="handleEnrollClick"
                                 >
                                     Inscrever-me na SINF
@@ -297,22 +303,10 @@ onBeforeUnmount(() => {
                                     :href="competition.registration_link"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="pill-container pill-item bg-sinf-purple/80 hover:bg-sinf-purple shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
+                                    class="pill-container pill-item bg-sinf-secondary/80 hover:bg-sinf-secondary shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
                                 >
                                     <span>Inscrever Equipa</span>
-                                    <svg
-                                        class="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                        />
-                                    </svg>
+                                    <ExternalLink :size="16" />
                                 </a>
                             </template>
                         </div>
@@ -321,29 +315,11 @@ onBeforeUnmount(() => {
             </header>
 
             <div v-if="availableTabs.length > 0" class="flex justify-center">
-                <div class="pill-container flex-wrap justify-center gap-1 p-1">
-                    <button
-                        v-for="tab in availableTabs"
-                        :key="tab.key"
-                        type="button"
-                        class="pill-item cursor-pointer gap-2 px-5 py-2 text-xs font-semibold transition-all sm:text-sm"
-                        :class="{ 'pill-item-active': activeTab === tab.key }"
-                        @click="activeTab = tab.key"
-                    >
-                        <span>{{ tab.label }}</span>
-                        <span
-                            v-if="tab.count !== undefined"
-                            class="py-0.2 rounded-full px-1.5 text-[10px] transition-colors"
-                            :class="
-                                activeTab === tab.key
-                                    ? 'bg-white/20 text-white'
-                                    : 'bg-white/8 text-neutral-400'
-                            "
-                        >
-                            {{ tab.count }}
-                        </span>
-                    </button>
-                </div>
+                <PillSelector
+                    v-model="activeTab"
+                    :items="availableTabs"
+                    size="md"
+                />
             </div>
 
             <div v-if="activeTab === 'teams'" class="space-y-12 sm:space-y-16">
@@ -359,14 +335,12 @@ onBeforeUnmount(() => {
             </div>
 
             <div v-else-if="activeTab === 'regulation'" class="w-full">
-                <div
-                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md sm:p-10"
-                >
+                <Card as="div" :interactive="false" padding="p-6 sm:p-10">
                     <div
-                        class="prose prose-invert prose-headings:text-white prose-p:leading-relaxed prose-a:text-sinf-purple-light hover:prose-a:text-white prose-strong:text-white max-w-none leading-relaxed wrap-break-word text-neutral-300"
+                        class="prose prose-invert prose-headings:text-white prose-p:leading-relaxed prose-a:text-sinf-secondary-light hover:prose-a:text-white prose-strong:text-white max-w-none leading-relaxed wrap-break-word text-neutral-300"
                         v-html="competition.regulation_html"
                     />
-                </div>
+                </Card>
             </div>
 
             <div

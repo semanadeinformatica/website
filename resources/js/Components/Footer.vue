@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 
 const socialLinks = [
     {
@@ -19,6 +22,17 @@ const socialLinks = [
         icon: "facebook",
     },
 ];
+
+const socialItems: PillOption[] = socialLinks.map((social) => ({
+    id: social.icon,
+    href: social.url,
+    ariaLabel: social.name,
+    image: {
+        src: `/images/${social.icon}.svg`,
+        alt: social.name,
+        class: "h-4 w-4 object-contain",
+    },
+}));
 
 const currentYear = new Date().getFullYear();
 </script>
@@ -124,23 +138,7 @@ const currentYear = new Date().getFullYear();
                 </p>
             </div>
 
-            <div class="pill-container gap-1 px-2 py-1 shadow-none">
-                <a
-                    v-for="social in socialLinks"
-                    :key="social.name"
-                    :href="social.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :aria-label="social.name"
-                    class="flex h-8 w-8 items-center justify-center rounded-full p-1.5 transition-all duration-200 hover:scale-110 hover:bg-white/10"
-                >
-                    <img
-                        :src="`/images/${social.icon}.svg`"
-                        :alt="social.name"
-                        class="h-full w-full object-contain"
-                    />
-                </a>
-            </div>
+            <PillSelector :items="socialItems" size="sm" :wrap="false" />
         </div>
     </footer>
 </template>

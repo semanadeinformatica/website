@@ -12,11 +12,13 @@
 
     --color-text-color: #ffffff;
 
-    /* 2026 Theme: Core Brand & Ambient Glow Palette */
-    --color-sinf-crimson: rgb(154, 0, 54);
-    --color-sinf-crimson-dark: rgb(64, 0, 23);
-    --color-sinf-purple: rgb(106, 0, 255);
-    --color-sinf-purple-dark: rgb(34, 1, 153);
+    /* Theme: Core Brand & Ambient Glow Palette */
+    --color-sinf-primary: rgb(154, 0, 54);
+    --color-sinf-primary-light: rgb(220, 55, 105);
+    --color-sinf-primary-dark: rgb(64, 0, 23);
+    --color-sinf-secondary: rgb(106, 0, 255);
+    --color-sinf-secondary-light: rgb(165, 100, 255);
+    --color-sinf-secondary-dark: rgb(34, 1, 153);
     --color-sinf-surface: #111215;
     --color-sinf-surface-dark: #090a0c;
 
@@ -62,10 +64,14 @@
     /* Keyframe Animations */
     --animate-2023-maintenance-jump: 2023-jump 2s
         cubic-bezier(0.46, 0.03, 0.52, 0.96) infinite;
-    --animate-float-crimson-1: float-crimson-1 10s ease-in-out infinite;
-    --animate-float-purple-1: float-purple-1 12s ease-in-out infinite;
-    --animate-float-crimson-2: float-crimson-2 9s ease-in-out infinite;
-    --animate-float-purple-2: float-purple-2 11s ease-in-out infinite;
+    --animate-float-primary-1: float-primary-1 10s ease-in-out infinite;
+    --animate-float-secondary-1: float-secondary-1 12s ease-in-out infinite;
+    --animate-float-primary-2: float-primary-2 9s ease-in-out infinite;
+    --animate-float-secondary-2: float-secondary-2 11s ease-in-out infinite;
+    --animate-float-crimson-1: var(--animate-float-primary-1);
+    --animate-float-purple-1: var(--animate-float-secondary-1);
+    --animate-float-crimson-2: var(--animate-float-primary-2);
+    --animate-float-purple-2: var(--animate-float-secondary-2);
     --animate-spin-slow: spin 25s linear infinite;
 
     --breakpoint-ml: 900px;
@@ -82,7 +88,7 @@
     }
 }
 
-@keyframes float-crimson-1 {
+@keyframes float-primary-1 {
     0%,
     100% {
         transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
@@ -98,7 +104,7 @@
     }
 }
 
-@keyframes float-purple-1 {
+@keyframes float-secondary-1 {
     0%,
     100% {
         transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
@@ -114,7 +120,7 @@
     }
 }
 
-@keyframes float-crimson-2 {
+@keyframes float-primary-2 {
     0%,
     100% {
         transform: translate3d(0, 0, 0) scale(1);
@@ -126,7 +132,7 @@
     }
 }
 
-@keyframes float-purple-2 {
+@keyframes float-secondary-2 {
     0%,
     100% {
         transform: translate3d(0, 0, 0) scale(1);
@@ -159,6 +165,8 @@
     font-size: 13px;
     font-weight: 500;
     color: #d4d4d4;
+    cursor: pointer;
+    user-select: none;
     transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
@@ -172,6 +180,12 @@
 
     &:focus {
         outline: none;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+        pointer-events: none;
     }
 }
 
@@ -191,7 +205,7 @@
     -webkit-backdrop-filter: blur(24px);
 }
 
-@utility glow-orb-crimson-1 {
+@utility glow-orb-primary-1 {
     background: radial-gradient(
         ellipse 70% 60% at 50% 50%,
         rgb(154 0 54 / 100%) 0%,
@@ -199,10 +213,10 @@
         rgb(64 0 23 / 25%) 70%,
         transparent 100%
     );
-    animation: var(--animate-float-crimson-1);
+    animation: var(--animate-float-primary-1);
 }
 
-@utility glow-orb-purple-1 {
+@utility glow-orb-secondary-1 {
     background: radial-gradient(
         ellipse 70% 60% at 50% 50%,
         rgb(106 0 255 / 95%) 0%,
@@ -210,27 +224,27 @@
         rgb(34 1 153 / 25%) 70%,
         transparent 100%
     );
-    animation: var(--animate-float-purple-1);
+    animation: var(--animate-float-secondary-1);
 }
 
-@utility glow-orb-crimson-2 {
+@utility glow-orb-primary-2 {
     background: radial-gradient(
         ellipse 80% 50% at 50% 50%,
         rgb(154 0 54 / 85%) 0%,
         rgb(64 0 23 / 35%) 50%,
         transparent 100%
     );
-    animation: var(--animate-float-crimson-2);
+    animation: var(--animate-float-primary-2);
 }
 
-@utility glow-orb-purple-2 {
+@utility glow-orb-secondary-2 {
     background: radial-gradient(
         ellipse 80% 50% at 50% 50%,
         rgb(106 0 255 / 85%) 0%,
         rgb(34 1 153 / 35%) 50%,
         transparent 100%
     );
-    animation: var(--animate-float-purple-2);
+    animation: var(--animate-float-secondary-2);
 }
 
 @layer base {

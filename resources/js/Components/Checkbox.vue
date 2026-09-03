@@ -44,6 +44,6 @@ const proxyChecked = computed({
         :name="name"
         :value="value"
         :required="required"
-        class="text-sinf-crimson checked:border-sinf-crimson checked:bg-sinf-crimson focus:ring-sinf-crimson/30 h-4.5 w-4.5 cursor-pointer rounded-md border border-white/20 bg-white/5 transition-all duration-150 hover:border-white/40 hover:bg-white/10 focus:ring-2 focus:ring-offset-0 focus:outline-hidden"
+        class="text-sinf-primary checked:border-sinf-primary checked:bg-sinf-primary focus:ring-sinf-primary/30 h-4.5 w-4.5 cursor-pointer rounded-md border border-white/20 bg-white/5 transition-all duration-150 hover:border-white/40 hover:bg-white/10 focus:ring-2 focus:ring-offset-0 focus:outline-hidden"
     />
 </template>

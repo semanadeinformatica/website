@@ -288,7 +288,7 @@ const disableTwoFactorAuthentication = () => {
                         <PrimaryButton
                             v-if="confirming"
                             :class="{ 'opacity-25': disabling }"
-                            color="red"
+                            color="danger"
                             :disabled="disabling"
                         >
                             Cancel
@@ -305,7 +305,7 @@ const disableTwoFactorAuthentication = () => {
                             v-if="!confirming"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
-                            color="red"
+                            color="danger"
                         >
                             Disable
                         </PrimaryButton>

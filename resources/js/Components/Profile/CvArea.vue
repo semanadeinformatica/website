@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type User, isCompany, isParticipant } from "@/Types/User";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { ExternalLink } from "@lucide/vue";
 import { ref } from "vue";
 import { route } from "ziggy-js";
 
@@ -126,9 +126,9 @@ const clearCVFileInput = () => {
                 target="_blank"
                 :href="item.usertype?.cv_url"
             >
-                <div class="text-2023-bg flex">
-                    <p class="mr-1">CV</p>
-                    <OhVueIcon name="io-open" scale="1.3"></OhVueIcon>
+                <div class="text-2023-bg flex items-center gap-1">
+                    <span>CV</span>
+                    <ExternalLink :size="16" />
                 </div>
             </a>
             <p v-if="isParticipant(item) && !item.usertype?.cv_path">

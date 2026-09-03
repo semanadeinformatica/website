@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
 
 interface Props {
@@ -20,24 +21,26 @@ defineProps<Props>();
                 v-if="points !== null && points !== undefined"
                 class="mb-10 flex justify-center"
             >
-                <div
-                    class="pill-container gap-2.5 px-5 py-2 text-xs text-neutral-300 shadow-none sm:text-sm"
-                >
-                    <span>O teu saldo:</span>
-                    <span
-                        class="flex items-center gap-1.5 font-bold text-white"
+                <PillSelector size="md" :wrap="false">
+                    <div
+                        class="pill-item cursor-default gap-2.5 hover:bg-transparent"
                     >
-                        <span class="text-sm font-semibold sm:text-base">{{
-                            points
-                        }}</span>
-                        <img
-                            class="h-4 w-4 object-contain"
-                            alt="SINFrão"
-                            title="SINFrão"
-                            src="/images/sinf-2026-sm.svg"
-                        />
-                    </span>
-                </div>
+                        <span>O teu saldo:</span>
+                        <span
+                            class="flex items-center gap-1.5 font-bold text-white"
+                        >
+                            <span class="text-sm font-semibold sm:text-base">{{
+                                points
+                            }}</span>
+                            <img
+                                class="h-4 w-4 object-contain"
+                                alt="SINFrão"
+                                title="SINFrão"
+                                src="/images/sinf-2026-sm.svg"
+                            />
+                        </span>
+                    </div>
+                </PillSelector>
             </div>
 
             <template v-if="products.length > 0">
@@ -59,11 +62,14 @@ defineProps<Props>();
                 v-else
                 class="flex flex-col items-center justify-center py-28 text-center"
             >
-                <div class="pill-container mb-4 px-6 py-2.5">
-                    <span class="text-sm font-medium text-neutral-400">
-                        Em breve...
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[
+                        { id: 'soon', label: 'Em breve...', disabled: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                    container-class="mb-4"
+                />
                 <p class="max-w-md text-sm text-neutral-400">
                     A loja da edição 2026 estará disponível brevemente. Fica
                     atento às novidades!

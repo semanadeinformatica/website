@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { CheckCircle, AlertTriangle, X } from "@lucide/vue";
 
 const show = ref(true);
 const style = computed(
@@ -13,8 +13,6 @@ const id = computed(() => usePage().props.jetstream.flash?.bannerId || "");
 watch(id, async () => {
     show.value = true;
 });
-
-console.log("Banner.vue");
 </script>
 
 <template>
@@ -30,15 +28,12 @@ console.log("Banner.vue");
             <div
                 class="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between gap-4 px-4 py-2"
             >
-                <OhVueIcon
-                    :name="
-                        style == 'success'
-                            ? 'io-checkmark-circle'
-                            : 'io-warning'
-                    "
-                    fill="white"
-                    class="h-8 w-8"
+                <CheckCircle
+                    v-if="style == 'success'"
+                    :size="28"
+                    class="shrink-0 text-white"
                 />
+                <AlertTriangle v-else :size="28" class="shrink-0 text-white" />
 
                 <span class="font-medium text-white">
                     {{ message }}
@@ -46,11 +41,11 @@ console.log("Banner.vue");
 
                 <button
                     type="button"
-                    class="ml-auto flex h-8 w-8 items-center justify-center"
+                    class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center text-white hover:opacity-80"
                     aria-label="Dismiss"
                     @click.prevent="show = false"
                 >
-                    <OhVueIcon name="io-close" fill="white" class="h-6 w-6" />
+                    <X :size="20" />
                 </button>
             </div>
         </div>

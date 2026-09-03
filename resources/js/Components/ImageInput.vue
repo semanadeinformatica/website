@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { OhVueIcon } from "oh-vue-icons";
+import { Image as ImageIcon } from "@lucide/vue";
 import { ref } from "vue";
 
 interface Props {
@@ -53,7 +53,7 @@ const updatePreview = () => {
             class="shadow-2023-red max-h-40 w-auto border border-black object-contain shadow-md"
         />
 
-        <OhVueIcon v-else name="io-image" class="h-20 w-20" />
+        <ImageIcon v-else :size="80" class="text-neutral-400" />
 
         <span class="sr-only">{{ label }}</span>
 

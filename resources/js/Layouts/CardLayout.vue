@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "./AppLayout.vue";
+import Card from "@/Components/UI/Card.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     title: string;
@@ -33,6 +36,21 @@ const showAuthTabs = computed(() => {
         currentRouteName.value === "register"
     );
 });
+
+const authTabs = computed<PillOption[]>(() => [
+    {
+        id: "login",
+        label: "Iniciar sessão",
+        href: route("login"),
+        active: currentRouteName.value === "login",
+    },
+    {
+        id: "register",
+        label: "Criar conta",
+        href: route("register"),
+        active: currentRouteName.value === "register",
+    },
+]);
 </script>
 
 <template>
@@ -41,26 +59,7 @@ const showAuthTabs = computed(() => {
             class="relative flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center px-4 py-12 sm:py-16"
         >
             <div v-if="showAuthTabs" class="mb-6 flex justify-center">
-                <div class="pill-container gap-1 p-1">
-                    <Link
-                        :href="route('login')"
-                        class="pill-item cursor-pointer px-6 py-2 text-xs font-medium transition-all duration-200 sm:text-sm"
-                        :class="{
-                            'pill-item-active': currentRouteName === 'login',
-                        }"
-                    >
-                        <span>Iniciar sessão</span>
-                    </Link>
-                    <Link
-                        :href="route('register')"
-                        class="pill-item cursor-pointer px-6 py-2 text-xs font-medium transition-all duration-200 sm:text-sm"
-                        :class="{
-                            'pill-item-active': currentRouteName === 'register',
-                        }"
-                    >
-                        <span>Criar conta</span>
-                    </Link>
-                </div>
+                <PillSelector :items="authTabs" size="md" :wrap="false" />
             </div>
 
             <div
@@ -78,12 +77,15 @@ const showAuthTabs = computed(() => {
                 </p>
             </div>
 
-            <div
-                class="relative flex w-full flex-col gap-6 rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 select-none hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8 md:p-10"
+            <Card
+                as="div"
+                :interactive="false"
+                padding="p-6 sm:p-8 md:p-10"
+                class="w-full"
                 :class="maxWidth"
             >
                 <slot />
-            </div>
+            </Card>
         </div>
     </AppLayout>
 </template>

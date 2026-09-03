@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { type User, isAdmin, isParticipant, isCompany } from "@/Types/User";
-import { OhVueIcon } from "oh-vue-icons";
 import "vue-final-modal/style.css";
 import { Link, usePage } from "@inertiajs/vue3";
+import { Award, Camera, Edit3 } from "@lucide/vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import { route } from "ziggy-js";
 import QRCode from "./QRCode.vue";
 
@@ -15,40 +16,14 @@ defineProps<Props>();
 
 const page = usePage();
 
-const socials = {
-    facebook: {
-        icon: "io-logo-facebook",
-        color: "white",
-    },
-    linkedin: {
-        icon: "io-logo-linkedin",
-        color: "white",
-    },
-    github: {
-        icon: "io-logo-github",
-        color: "white",
-    },
-    twitter: {
-        icon: "io-logo-twitter",
-        color: "white",
-    },
-    instagram: {
-        icon: "io-logo-instagram",
-        color: "white",
-    },
-    website: {
-        icon: "io-globe-outline",
-        color: "white",
-    },
-};
-
-const iconColor: Record<string, string> = {
-    orange: "#f29325",
-    "teal-dark": "#025259",
-    "red-dark": "#b15d5d",
-    red: "#d94f04",
-    teal: "#007172",
-};
+const socialKeys = [
+    "facebook",
+    "linkedin",
+    "github",
+    "twitter",
+    "instagram",
+    "website",
+] as const;
 
 const authUser = page.props.auth.user;
 </script>
@@ -59,35 +34,32 @@ const authUser = page.props.auth.user;
     >
         <div class="flex flex-col items-start justify-between space-y-10">
             <div>
-                <p class="font-bold">
-                    {{ user?.name }}
-                    <span v-if="isStaff" title="Staff">
-                        <OhVueIcon
-                            name="io-ribbon-outline"
-                            scale="1.4"
-                        ></OhVueIcon>
+                <p class="flex items-center gap-1.5 font-bold">
+                    <span>{{ user?.name }}</span>
+                    <span
+                        v-if="isStaff"
+                        title="Staff"
+                        class="inline-flex items-center text-amber-300"
+                    >
+                        <Award :size="18" />
                     </span>
                 </p>
                 <p>
                     {{ user?.email }}
                 </p>
             </div>
-            <div class="flex space-x-4">
-                <template v-for="(social, key) in socials" :key="key">
+            <div class="flex items-center space-x-4">
+                <template v-for="key in socialKeys" :key="key">
                     <a
                         v-if="
                             !isAdmin(user) &&
                             user?.usertype?.social_media?.[key]
                         "
-                        class="flex w-fit rounded-full"
+                        class="flex w-fit items-center rounded-full text-white hover:opacity-80"
                         target="_blank"
                         :href="user.usertype.social_media[key]"
                     >
-                        <OhVueIcon
-                            :name="social.icon"
-                            scale="1"
-                            :fill="iconColor[social.color]"
-                        ></OhVueIcon>
+                        <SocialIcon :platform="key" :size="18" />
                     </a>
                 </template>
             </div>
@@ -96,29 +68,9 @@ const authUser = page.props.auth.user;
             <Link
                 v-if="$page.props.auth.user?.id === user?.id"
                 :href="route('profile.edit')"
+                class="flex items-center p-1 text-white hover:opacity-80"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="text-text-color w-8"
-                    viewBox="0 0 512 512"
-                >
-                    <path
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="24"
-                        d="M384 224v184a40 40 0 01-40 40H104a40 40 0 01-40-40V168a40 40 0 0140-40h167.48"
-                    />
-                    <path
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="24"
-                        d="M459.94 53.25a16.06 16.06 0 00-23.22-.56L424.35 65a8 8 0 000 11.31l11.34 11.32a8 8 0 0011.34 0l12.06-12c6.1-6.09 6.67-16.01.85-22.38zM399.34 90L218.82 270.2a9 9 0 00-2.31 3.93L208.16 299a3.91 3.91 0 004.86 4.86l24.85-8.35a9 9 0 003.93-2.31L422 112.66a9 9 0 000-12.66l-9.95-10a9 9 0 00-12.71 0z"
-                    />
-                </svg>
+                <Edit3 :size="22" />
             </Link>
             <template
                 v-if="
@@ -127,12 +79,11 @@ const authUser = page.props.auth.user;
                     (isAdmin(user) || isStaff || isCompany(user))
                 "
             >
-                <!-- TODO: this does not bring problems to us because we can only see other people's profiles if we are admins or companies (under certain conditions) which already would have the scan button enabled -->
                 <Link
-                    class="flex w-fit cursor-pointer rounded-full text-white"
+                    class="flex w-fit cursor-pointer items-center rounded-full p-1 text-white hover:opacity-80"
                     :href="route('user.scan-code')"
                 >
-                    <OhVueIcon name="io-camera" scale="1"></OhVueIcon>
+                    <Camera :size="22" />
                 </Link>
             </template>
             <QRCode
@@ -143,7 +94,7 @@ const authUser = page.props.auth.user;
                     user.usertype
                 "
                 :participant="user.usertype"
-            ></QRCode>
+            />
         </div>
     </div>
 </template>

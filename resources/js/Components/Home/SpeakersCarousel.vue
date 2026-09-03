@@ -3,6 +3,10 @@ import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import "vue3-carousel/carousel.css";
 import SpeakerSlide from "./SpeakerSlide.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
+import { ChevronLeft, ChevronRight } from "@lucide/vue";
 import type { SpeakerUser, User } from "@/Types/User";
 
 interface Props {
@@ -17,6 +21,16 @@ interface CarouselInstance {
 }
 
 const carousel = ref<CarouselInstance | null>(null);
+
+const controls: PillOption[] = [
+    { id: "prev", icon: ChevronLeft, ariaLabel: "Previous speaker" },
+    { id: "next", icon: ChevronRight, ariaLabel: "Next speaker" },
+];
+
+const handleControl = (item: PillOption) => {
+    if (item.id === "prev") prev();
+    else if (item.id === "next") next();
+};
 
 const breakpoints = {
     480: {
@@ -75,50 +89,13 @@ const prev = () => {
             </Slide>
         </Carousel>
 
-        <div
-            v-if="speakers.length > 1"
-            class="mt-6 flex items-center justify-center gap-3"
-        >
-            <button
-                type="button"
-                class="pill-container h-10 w-10 justify-center text-neutral-300 transition-all hover:scale-110 hover:text-white focus:outline-none active:scale-95"
-                aria-label="Previous speaker"
-                @click="prev"
-            >
-                <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                    />
-                </svg>
-            </button>
-            <button
-                type="button"
-                class="pill-container h-10 w-10 justify-center text-neutral-300 transition-all hover:scale-110 hover:text-white focus:outline-none active:scale-95"
-                aria-label="Next speaker"
-                @click="next"
-            >
-                <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                    />
-                </svg>
-            </button>
+        <div v-if="speakers.length > 1" class="mt-6 flex justify-center">
+            <PillSelector
+                :items="controls"
+                size="sm"
+                :wrap="false"
+                @select="handleControl"
+            />
         </div>
     </div>
 </template>

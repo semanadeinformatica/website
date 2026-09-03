@@ -6,6 +6,7 @@ import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
 import ActivityTimelineItem from "./TimeLine/ActivityTimelineItem.vue";
 import TalkTimelineItem from "./TimeLine/TalkTimelineItem.vue";
 import CompetitionTimelineItem from "./TimeLine/CompetitionTimelineItem.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     day: EventDay;
@@ -119,39 +120,23 @@ const times = computed<{ start?: string; end?: string }>(() => {
 <template>
     <div class="w-full">
         <div v-if="availableTabs.length > 1" class="mb-10 flex justify-center">
-            <div class="pill-container flex-wrap justify-center gap-1.5 p-1">
-                <button
-                    v-for="tab in availableTabs"
-                    :key="tab.id"
-                    type="button"
-                    class="pill-item cursor-pointer gap-2 px-4 py-2 text-sm font-medium transition-all"
-                    :class="{ 'pill-item-active': selectedType === tab.id }"
-                    @click="selectedType = tab.id"
-                >
-                    <span>{{ tab.label }}</span>
-                    <span
-                        class="rounded-full px-1.5 py-0.5 text-[11px] transition-colors"
-                        :class="
-                            selectedType === tab.id
-                                ? 'bg-white/20 text-white'
-                                : 'bg-white/5 text-neutral-400'
-                        "
-                    >
-                        {{ tab.count }}
-                    </span>
-                </button>
-            </div>
+            <PillSelector
+                v-model="selectedType"
+                :items="availableTabs"
+                size="md"
+            />
         </div>
 
         <div
             v-if="availableTabs.length === 0"
             class="flex flex-col items-center justify-center py-20 text-center"
         >
-            <div class="pill-container mb-3 px-5 py-2">
-                <span class="text-sm font-medium text-neutral-400">
-                    Sem eventos agendados
-                </span>
-            </div>
+            <PillSelector
+                :items="[{ id: 'none', label: 'Sem eventos agendados', disabled: true }]"
+                size="sm"
+                :wrap="false"
+                container-class="mb-3"
+            />
             <p class="text-xs text-neutral-500">
                 Nenhuma atividade ou palestra disponível para este dia de
                 momento.

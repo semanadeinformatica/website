@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
 import { usePage } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { FileText } from "@lucide/vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import { route } from "ziggy-js";
 
 type Visitor = Participant & {
@@ -54,8 +55,9 @@ const user = usePage().props.user as Participant;
                         :href="visitor.social_media.linkedin"
                         target="_blank"
                         title="Linkedin"
+                        class="flex items-center text-neutral-400 hover:text-white"
                     >
-                        <OhVueIcon name="io-logo-linkedin" scale="1.3" />
+                        <SocialIcon platform="linkedin" :size="16" />
                     </a>
 
                     <a
@@ -63,8 +65,9 @@ const user = usePage().props.user as Participant;
                         :href="visitor.cv_url"
                         target="_blank"
                         title="CV"
+                        class="flex items-center text-neutral-400 hover:text-white"
                     >
-                        <OhVueIcon name="io-document-text" scale="1.3" />
+                        <FileText :size="16" />
                     </a>
                 </div>
             </div>
