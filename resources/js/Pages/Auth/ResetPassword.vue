@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useForm } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "../../Layouts/CardLayout.vue";
+import CardLayout from "@/Layouts/CardLayout.vue";
 import { route } from "ziggy-js";
 
 interface Props {
@@ -27,8 +27,12 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Repor password" heading="Repõe a tua password">
-        <form class="contents" @submit.prevent="submit">
+    <CardLayout
+        title="Repor password"
+        heading="Repor a tua password"
+        subtitle="Escolhe uma nova password segura para a tua conta"
+    >
+        <form class="flex flex-col gap-5" @submit.prevent="submit">
             <TextInput
                 id="email"
                 v-model="form.email"
@@ -60,9 +64,21 @@ const submit = () => {
                 :error-message="form.errors.password_confirmation"
             />
 
-            <PrimaryButton :disabled="form.processing">
-                Repor password
+            <PrimaryButton :disabled="form.processing" class="mt-2 w-full">
+                <span v-if="form.processing">A repor...</span>
+                <span v-else>Repor password</span>
             </PrimaryButton>
+
+            <div
+                class="mt-2 border-t border-white/8 pt-4 text-center text-xs text-neutral-400 sm:text-sm"
+            >
+                <Link
+                    :href="route('login')"
+                    class="font-semibold text-white underline underline-offset-4 transition-colors hover:text-neutral-200"
+                >
+                    Voltar ao início de sessão
+                </Link>
+            </div>
         </form>
     </CardLayout>
 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Link, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "../../Layouts/CardLayout.vue";
+import CardLayout from "@/Layouts/CardLayout.vue";
 import { route } from "ziggy-js";
 
 const form = useForm({
@@ -23,16 +23,17 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Registar" heading="Regista-te!">
-        <form class="contents" @submit.prevent="submit">
+    <CardLayout title="Registar">
+        <form class="flex flex-col gap-4" @submit.prevent="submit">
             <TextInput
                 id="name"
                 v-model="form.name"
-                label="Nome"
+                label="Nome completo"
                 type="text"
                 required
                 autofocus
                 autocomplete="name"
+                placeholder="O teu nome"
                 :error-message="form.errors.name"
             />
 
@@ -43,81 +44,100 @@ const submit = () => {
                 type="email"
                 required
                 autocomplete="email"
+                placeholder="nome@exemplo.pt"
                 :error-message="form.errors.email"
             />
 
-            <TextInput
-                id="password"
-                v-model="form.password"
-                label="Password"
-                type="password"
-                required
-                autocomplete="new-password"
-                :error-message="form.errors.password"
-            />
-
-            <TextInput
-                id="password_confirmation"
-                v-model="form.password_confirmation"
-                label="Confirmar password"
-                type="password"
-                required
-                autocomplete="new-password"
-                :error-message="form.errors.password_confirmation"
-            />
-
-            <label
-                v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
-                class="flex items-center gap-2 self-stretch"
-            >
-                <Checkbox
-                    id="terms"
-                    v-model:checked="form.terms"
-                    name="terms"
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <TextInput
+                    id="password"
+                    v-model="form.password"
+                    label="Password"
+                    type="password"
                     required
+                    autocomplete="new-password"
+                    placeholder="••••••••"
+                    :error-message="form.errors.password"
                 />
 
-                <span class="text-2023-teal"
-                    >I agree to the
-                    <a
-                        target="_blank"
-                        :href="route('terms.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
-                        >Terms of Service</a
-                    >
-                    and
-                    <a
-                        target="_blank"
-                        :href="route('policy.show')"
-                        class="rounded-md text-sm text-gray-600 underline focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
-                        >Privacy Policy</a
-                    ></span
+                <TextInput
+                    id="password_confirmation"
+                    v-model="form.password_confirmation"
+                    label="Confirmar password"
+                    type="password"
+                    required
+                    autocomplete="new-password"
+                    placeholder="••••••••"
+                    :error-message="form.errors.password_confirmation"
+                />
+            </div>
+
+            <div class="space-y-2.5 pt-1">
+                <label
+                    v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
+                    class="group flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-black/30 p-3 text-xs leading-relaxed text-neutral-300 shadow-(--shadow-pill-inset) backdrop-blur-sm transition-all hover:border-white/15 hover:bg-black/45 sm:text-sm"
                 >
-            </label>
+                    <Checkbox
+                        id="terms"
+                        v-model:checked="form.terms"
+                        name="terms"
+                        required
+                        class="mt-0.5 shrink-0"
+                    />
 
-            <label class="text-text-color flex items-center gap-2 self-stretch">
-                <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
-                since it makes it so that every account that exists has agreed to this -->
-                <Checkbox
-                    id="data_sharing_agreement"
-                    v-model:checked="form.data_sharing_agreement"
-                    name="data_sharing_agreement"
-                    required
-                />
+                    <span>
+                        Concordo com os
+                        <a
+                            target="_blank"
+                            :href="route('terms.show')"
+                            class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
+                            >Termos de Serviço</a
+                        >
+                        e a
+                        <a
+                            target="_blank"
+                            :href="route('policy.show')"
+                            class="font-medium text-white underline underline-offset-2 transition-colors hover:text-neutral-200"
+                            >Política de Privacidade</a
+                        >.
+                    </span>
+                </label>
+                <span
+                    v-if="form.errors.terms"
+                    class="ml-3 block text-xs font-medium text-red-400"
+                >
+                    {{ form.errors.terms }}
+                </span>
 
-                Concordo em ter as minhas informações pessoais partilhadas com
-                as empresas que participam na SINF.
-            </label>
+                <label
+                    class="group flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-black/30 p-3 text-xs leading-relaxed text-neutral-300 shadow-(--shadow-pill-inset) backdrop-blur-sm transition-all hover:border-white/15 hover:bg-black/45 sm:text-sm"
+                >
+                    <!-- We only need to have this checkbox marked as required for the purpose of this feature to be met,
+                    since it makes it so that every account that exists has agreed to this -->
+                    <Checkbox
+                        id="data_sharing_agreement"
+                        v-model:checked="form.data_sharing_agreement"
+                        name="data_sharing_agreement"
+                        required
+                        class="mt-0.5 shrink-0"
+                    />
 
-            <Link
-                :href="route('login')"
-                class="text-text-color font-semibold underline"
-            >
-                Já tens conta?
-            </Link>
+                    <span>
+                        Concordo em ter as minhas informações pessoais
+                        partilhadas com as empresas que participam na SINF.
+                    </span>
+                </label>
+                <span
+                    v-if="form.errors.data_sharing_agreement"
+                    class="ml-3 block text-xs font-medium text-red-400"
+                >
+                    {{ form.errors.data_sharing_agreement }}
+                </span>
+            </div>
 
-            <PrimaryButton :disabled="form.processing">
-                Criar conta
+            <PrimaryButton :disabled="form.processing" class="mt-2 w-full">
+                <span v-if="form.processing">A criar conta...</span>
+                <span v-else>Criar conta</span>
             </PrimaryButton>
         </form>
     </CardLayout>

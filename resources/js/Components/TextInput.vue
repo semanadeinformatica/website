@@ -65,75 +65,147 @@ defineExpose({ focus: () => input.value?.focus() });
 
 defineOptions({ inheritAttrs: false });
 
-const baseClass =
-    "peer border border-white bg-white rounded-md px-3 pb-2 pt-6 disabled:opacity-50 disabled:text-gray-500";
-
 const visible = ref(false);
 </script>
 
 <template>
     <div class="relative flex flex-col items-stretch self-stretch">
-        <select
-            v-if="isSelect(props)"
-            :id="id"
-            ref="input"
-            v-model="value"
-            :class="baseClass"
-            v-bind="$attrs"
-            :multiple="props.multiple"
-        >
-            <option value="" disabled selected hidden>
-                {{ placeholder ?? "-" }}
-            </option>
-            <slot />
-        </select>
-
-        <textarea
-            v-else-if="type === 'textarea'"
-            :id="id"
-            ref="input"
-            v-model="value"
-            :class="[baseClass, 'min-h-7']"
-            :placeholder="placeholder ?? ''"
-            v-bind="$attrs"
-        />
-
-        <input
-            v-else
-            :id="id"
-            ref="input"
-            v-model="value"
-            :placeholder="placeholder ?? ''"
-            :class="[baseClass, type === 'password' ? 'pr-12' : '']"
-            :type="type === 'password' && visible ? 'text' : type"
-            v-bind="$attrs"
-        />
-
         <label
             v-if="label"
             :for="id"
-            class="text-2025-blue pointer-events-none absolute top-2 left-3 text-xs font-semibold transition-all peer-not-focus:peer-placeholder-shown:top-4 peer-not-focus:peer-placeholder-shown:text-base peer-disabled:text-gray-500 peer-disabled:opacity-50"
-            :aria-describedby="`${id}-error`"
-            >{{ label }}</label
+            class="mb-1.5 ml-3.5 block text-xs font-medium text-neutral-400"
         >
+            {{ label }}
+        </label>
 
-        <button
-            v-if="type === 'password'"
-            type="button"
-            class="text-2025-blue absolute top-2 right-2 p-2 leading-4 peer-disabled:text-gray-500 peer-disabled:opacity-50"
-            @click="visible = visible!"
+        <div
+            v-if="isSelect(props)"
+            class="pill-container w-full px-4 py-2 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65"
+            :class="
+                errorMessage
+                    ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
+                    : ''
+            "
         >
-            <OhVueIcon
-                :name="visible ? 'io-eye' : 'io-eye-off'"
-                class="h-6 w-6"
+            <select
+                :id="id"
+                ref="input"
+                v-model="value"
+                class="w-full cursor-pointer border-0 bg-transparent text-sm text-white shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
+                v-bind="$attrs"
+                :multiple="props.multiple"
+            >
+                <option
+                    value=""
+                    disabled
+                    selected
+                    hidden
+                    class="bg-neutral-900 text-neutral-400"
+                >
+                    {{ placeholder ?? "-" }}
+                </option>
+                <slot />
+            </select>
+        </div>
+
+        <div
+            v-else-if="type === 'textarea'"
+            class="w-full rounded-3xl border border-white/8 bg-black/50 p-3.5 shadow-(--shadow-pill-inset) backdrop-blur-md transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65"
+            :class="
+                errorMessage
+                    ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
+                    : ''
+            "
+        >
+            <textarea
+                :id="id"
+                ref="input"
+                v-model="value"
+                class="min-h-24 w-full resize-y border-0 bg-transparent text-sm text-white placeholder-neutral-500 shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
+                :placeholder="placeholder ?? ''"
+                v-bind="$attrs"
             />
-        </button>
+        </div>
 
-        <span
-            v-show="errorMessage"
-            :id="`${id}-error`"
-            class="text-2023-red mt-2 font-semibold"
-            >{{ errorMessage }}</span
+        <div
+            v-else
+            class="pill-container w-full px-4 py-2 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65"
+            :class="
+                errorMessage
+                    ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
+                    : ''
+            "
         >
+            <input
+                :id="id"
+                ref="input"
+                v-model="value"
+                :placeholder="placeholder ?? ''"
+                :type="type === 'password' && visible ? 'text' : type"
+                class="w-full border-0 bg-transparent text-sm text-white placeholder-neutral-500 shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none"
+                v-bind="$attrs"
+            />
+
+            <button
+                v-if="type === 'password'"
+                type="button"
+                tabindex="-1"
+                class="ml-2 flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-neutral-400 transition-colors hover:bg-white/10 hover:text-white focus:outline-none"
+                :aria-label="visible ? 'Ocultar password' : 'Ver password'"
+                @click="visible = !visible"
+            >
+                <OhVueIcon
+                    :name="visible ? 'io-eye-off' : 'io-eye'"
+                    class="h-4 w-4"
+                />
+            </button>
+        </div>
+
+        <transition
+            enter-active-class="transition ease-out duration-150"
+            enter-from-class="opacity-0 -translate-y-1"
+            enter-to-class="opacity-100 translate-y-0"
+        >
+            <div
+                v-if="errorMessage"
+                :id="`${id}-error`"
+                class="mt-1.5 ml-3.5 flex items-center gap-1.5 text-xs font-medium text-red-400"
+            >
+                <svg
+                    class="h-3.5 w-3.5 shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                </svg>
+                <span>{{ errorMessage }}</span>
+            </div>
+        </transition>
     </div>
 </template>
+
+<style scoped>
+input,
+select,
+textarea {
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    --tw-ring-offset-shadow: none !important;
+}
+</style>

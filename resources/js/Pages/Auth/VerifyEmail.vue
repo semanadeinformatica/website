@@ -23,47 +23,43 @@ const verificationLinkSent = computed(
 </script>
 
 <template>
-    <CardLayout title="Verificar email">
-        <div class="mb-4 text-sm text-gray-600">
-            Before continuing, could you verify your email address by clicking
-            on the link we just emailed to you? If you didn't receive the email,
-            we will gladly send you another.
-        </div>
-
+    <CardLayout
+        title="Verificar email"
+        heading="Verifica o teu email"
+        subtitle="Antes de continuar, clica no link de confirmação que enviámos para o teu email. Se não o recebeste, podemos enviar outro."
+    >
         <div
             v-if="verificationLinkSent"
-            class="mb-4 text-sm font-medium text-green-600"
+            class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-center text-xs font-medium text-emerald-400"
         >
-            A new verification link has been sent to the email address you
-            provided in your profile settings.
+            Um novo link de verificação foi enviado para o endereço de email
+            associado à tua conta.
         </div>
 
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
+        <form class="flex flex-col gap-5" @submit.prevent="submit">
+            <PrimaryButton :disabled="form.processing" class="w-full">
+                <span v-if="form.processing">A reenviar...</span>
+                <span v-else>Reenviar email de verificação</span>
+            </PrimaryButton>
+
+            <div
+                class="mt-2 flex items-center justify-between border-t border-white/8 pt-4 text-xs sm:text-sm"
+            >
+                <Link
+                    :href="route('profile.show')"
+                    class="text-neutral-400 underline underline-offset-2 transition-colors hover:text-white"
                 >
-                    Resend Verification Email
-                </PrimaryButton>
+                    Editar Perfil
+                </Link>
 
-                <div>
-                    <Link
-                        :href="route('profile.show')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
-                    >
-                        Edit Profile</Link
-                    >
-
-                    <Link
-                        :href="route('logout')"
-                        method="post"
-                        as="button"
-                        class="ml-2 rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
-                    >
-                        Log Out
-                    </Link>
-                </div>
+                <Link
+                    :href="route('logout')"
+                    method="post"
+                    as="button"
+                    class="cursor-pointer text-red-400 underline underline-offset-2 transition-colors hover:text-red-300"
+                >
+                    Terminar Sessão
+                </Link>
             </div>
         </form>
     </CardLayout>
