@@ -107,6 +107,10 @@ const navItems = computed<PillOption[]>(() => {
                     id: comp.id,
                     label: comp.name,
                     href: route("competition.show", { competition: comp.slug }),
+                    active:
+                        isCurrentRoute("competition.show") &&
+                        (page.props.competition as Competition | undefined)
+                            ?.slug === comp.slug,
                     trailingIcon: ChevronRight,
                 })),
             },
@@ -206,9 +210,9 @@ onUnmounted(() => {
                     class="hidden md:flex"
                 >
                     <template #dropdown-edition>
-                        <div class="p-1">
+                        <div>
                             <div
-                                class="px-2.5 py-1 text-[10px] font-semibold text-neutral-500 uppercase"
+                                class="px-2.5 py-1 text-[10px] font-semibold tracking-wider text-neutral-500 uppercase"
                             >
                                 Edições Anteriores
                             </div>
@@ -222,13 +226,13 @@ onUnmounted(() => {
                                         :href="`https://${edition}.sinf.pt`"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-neutral-300 transition-colors hover:bg-white/8 hover:text-white"
+                                        class="flex items-center justify-center gap-1 rounded-xl px-2 py-1.5 text-xs font-medium text-neutral-300 transition-all duration-150 hover:bg-white/8 hover:text-white active:scale-95"
                                     >
                                         <span>{{ edition }}</span>
                                     </a>
                                     <div
                                         v-else
-                                        class="flex items-center justify-center gap-1 rounded-lg bg-white/8 px-2 py-1.5 text-xs font-semibold text-white"
+                                        class="shadow-pill-active flex items-center justify-center gap-1 rounded-xl bg-white/14 px-2 py-1.5 text-xs font-semibold text-white"
                                     >
                                         <span>{{ edition }}</span>
                                     </div>
@@ -252,11 +256,14 @@ onUnmounted(() => {
                         </div>
 
                         <div class="mt-1 space-y-0.5">
-                            <DropdownLink :href="route('profile.show')">
+                            <DropdownLink
+                                :href="route('profile.show')"
+                                :active="isCurrentRoute('profile.show')"
+                            >
                                 <span class="flex items-center gap-2.5">
                                     <UserIcon
                                         :size="16"
-                                        class="text-neutral-400"
+                                        class="text-neutral-400 transition-colors group-hover:text-white"
                                     />
                                     <span>Perfil</span>
                                 </span>
@@ -265,26 +272,27 @@ onUnmounted(() => {
                             <DropdownLink
                                 v-if="isAdmin"
                                 :href="route('admin.index')"
+                                :active="isCurrentRoute('admin.index')"
                             >
                                 <span class="flex items-center gap-2.5">
                                     <ShieldCheck
                                         :size="16"
-                                        class="text-neutral-400"
+                                        class="text-neutral-400 transition-colors group-hover:text-white"
                                     />
                                     <span>Administração</span>
                                 </span>
                             </DropdownLink>
 
-                            <div class="border-t border-white/6 pt-1">
+                            <div class="border-t border-white/8 pt-1">
                                 <button
                                     type="button"
-                                    class="group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300 focus:outline-none"
+                                    class="group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-red-400 transition-all duration-150 hover:bg-red-500/10 hover:text-red-300 focus:outline-none active:scale-[0.98]"
                                     @click="logout"
                                 >
                                     <span class="flex items-center gap-2.5">
                                         <LogOut
                                             :size="16"
-                                            class="text-red-400"
+                                            class="text-red-400 transition-colors group-hover:text-red-300"
                                         />
                                         <span>Logout</span>
                                     </span>

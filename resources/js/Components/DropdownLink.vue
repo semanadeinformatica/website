@@ -8,6 +8,7 @@ interface Props {
     method?: "get" | "post";
     only?: string[];
     danger?: boolean;
+    active?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -16,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
     method: "get",
     only: undefined,
     danger: false,
+    active: false,
 });
 
 const isExternalOrAnchor = computed(() => {
@@ -28,9 +30,13 @@ const isExternalOrAnchor = computed(() => {
 });
 
 const classes = computed(() => {
-    return props.danger || props.method === "post"
-        ? "group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300 focus:outline-none"
-        : "group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-neutral-300 transition-colors hover:bg-white/[0.08] hover:text-white focus:outline-none";
+    if (props.danger || props.method === "post") {
+        return "group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-red-400 transition-all duration-150 hover:bg-red-500/10 hover:text-red-300 active:scale-[0.98] focus:outline-none";
+    }
+    if (props.active) {
+        return "group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl bg-white/14 px-3 py-2 text-left text-xs font-semibold text-white shadow-pill-active transition-all duration-150 active:scale-[0.98] focus:outline-none";
+    }
+    return "group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium text-neutral-300 transition-all duration-150 hover:bg-white/8 hover:text-white active:scale-[0.98] focus:outline-none";
 });
 </script>
 

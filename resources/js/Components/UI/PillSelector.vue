@@ -80,6 +80,7 @@ const emit = defineEmits<Emits>();
 
 const isItemActive = (item: PillOption) => {
     if (item.active !== undefined) return item.active;
+    if (item.dropdown?.items?.some((dItem) => dItem.active)) return true;
     if (props.modelValue !== undefined) return props.modelValue === item.id;
     return false;
 };
@@ -255,7 +256,7 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                                 >
                                     <hr
                                         v-if="dItem.divider"
-                                        class="my-1 border-white/6"
+                                        class="my-1 border-white/8"
                                     />
                                     <DropdownLink
                                         v-if="dItem.href"
@@ -263,6 +264,7 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                                         :method="dItem.method"
                                         :as="dItem.as"
                                         :danger="dItem.danger"
+                                        :active="dItem.active"
                                         @click="
                                             () => {
                                                 dItem.onClick?.();
@@ -275,28 +277,34 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                                                 :is="dItem.icon"
                                                 v-if="dItem.icon"
                                                 :size="16"
-                                                class="shrink-0 text-neutral-400"
+                                                class="shrink-0 text-neutral-400 transition-colors group-hover:text-white"
                                             />
-                                            <span class="flex-1">{{
-                                                dItem.label
-                                            }}</span>
-                                            <component
-                                                :is="dItem.trailingIcon"
-                                                v-if="dItem.trailingIcon"
-                                                :size="14"
-                                                class="shrink-0 text-neutral-500 opacity-0 transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-white group-hover:opacity-100"
-                                            />
+                                            <span>{{ dItem.label }}</span>
+                                            <span
+                                                v-if="dItem.sublabel"
+                                                class="text-[11px] font-normal text-neutral-400"
+                                            >
+                                                {{ dItem.sublabel }}
+                                            </span>
                                         </span>
+                                        <component
+                                            :is="dItem.trailingIcon"
+                                            v-if="dItem.trailingIcon"
+                                            :size="14"
+                                            class="shrink-0 text-neutral-500 opacity-0 transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-white group-hover:opacity-100"
+                                        />
                                     </DropdownLink>
                                     <button
                                         v-else
                                         type="button"
-                                        class="group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium transition-colors hover:bg-white/8 hover:text-white focus:outline-none"
-                                        :class="
+                                        class="group flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium transition-all duration-150 focus:outline-none active:scale-[0.98]"
+                                        :class="[
                                             dItem.danger
                                                 ? 'text-red-400 hover:bg-red-500/10 hover:text-red-300'
-                                                : 'text-neutral-300'
-                                        "
+                                                : dItem.active
+                                                  ? 'shadow-pill-active bg-white/14 font-semibold text-white'
+                                                  : 'text-neutral-300 hover:bg-white/8 hover:text-white',
+                                        ]"
                                         @click="
                                             () => {
                                                 dItem.onClick?.();
@@ -309,11 +317,15 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                                                 :is="dItem.icon"
                                                 v-if="dItem.icon"
                                                 :size="16"
-                                                class="shrink-0 text-neutral-400"
+                                                class="shrink-0 text-neutral-400 transition-colors group-hover:text-white"
                                             />
-                                            <span class="flex-1">{{
-                                                dItem.label
-                                            }}</span>
+                                            <span>{{ dItem.label }}</span>
+                                            <span
+                                                v-if="dItem.sublabel"
+                                                class="text-[11px] font-normal text-neutral-400"
+                                            >
+                                                {{ dItem.sublabel }}
+                                            </span>
                                         </span>
                                         <component
                                             :is="dItem.trailingIcon"

@@ -47,15 +47,20 @@ const pageRoutes: Routes = {
                         />
                     </template>
                     <template #content>
-                        <DropdownLink :href="route('profile.show')">
-                            Perfil
-                        </DropdownLink>
-                        <DropdownLink :href="route('home')">
-                            Voltar ao site
-                        </DropdownLink>
-                        <DropdownLink :href="route('logout')" method="post">
-                            Logout
-                        </DropdownLink>
+                        <div class="space-y-0.5">
+                            <DropdownLink
+                                :href="route('profile.show')"
+                                :active="route().current('profile.show')"
+                            >
+                                Perfil
+                            </DropdownLink>
+                            <DropdownLink :href="route('home')">
+                                Voltar ao site
+                            </DropdownLink>
+                            <DropdownLink :href="route('logout')" method="post">
+                                Logout
+                            </DropdownLink>
+                        </div>
                     </template>
                 </Dropdown>
             </template>
