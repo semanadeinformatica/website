@@ -131,9 +131,12 @@ const authItems = computed<PillOption[]>(() => {
         return [
             {
                 id: "auth-user",
-                avatar: {
+                ariaLabel: user.value.name,
+                class: "flex h-7 w-7 items-center justify-center p-0 overflow-hidden",
+                image: {
                     src: user.value.profile_photo_url,
                     alt: user.value.name,
+                    class: "h-full w-full object-cover transition-all duration-200 hover:brightness-110",
                 },
                 dropdown: {
                     align: "right",
@@ -246,12 +249,6 @@ onUnmounted(() => {
                             <p class="truncate text-[11px] text-neutral-400">
                                 {{ user?.email }}
                             </p>
-                            <span
-                                v-if="isAdmin"
-                                class="mt-1.5 inline-block rounded-md border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-300"
-                            >
-                                Administrador
-                            </span>
                         </div>
 
                         <div class="mt-1 space-y-0.5">

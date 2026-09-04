@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type Component } from "vue";
+import type { Component } from "vue";
 import { Link } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
@@ -28,11 +28,6 @@ export interface PillDropdownConfig {
     items?: PillDropdownItem[];
 }
 
-export interface PillAvatarConfig {
-    src?: string;
-    alt?: string;
-}
-
 export interface PillImageConfig {
     src: string;
     alt?: string;
@@ -45,7 +40,6 @@ export interface PillOption {
     sublabel?: string;
     icon?: Component;
     trailingIcon?: Component;
-    avatar?: string | PillAvatarConfig;
     image?: string | PillImageConfig;
     count?: number | string;
     href?: string;
@@ -53,6 +47,8 @@ export interface PillOption {
     active?: boolean;
     ariaLabel?: string;
     dropdown?: PillDropdownConfig;
+    class?: string;
+    itemClass?: string;
 }
 
 interface Props {
@@ -101,19 +97,7 @@ const isExternalOrAnchor = (href?: string) => {
     );
 };
 
-// Helper methods for avatar and image
-const getAvatarSrc = (item: PillOption): string | undefined => {
-    if (!item.avatar) return undefined;
-    return typeof item.avatar === "string" ? item.avatar : item.avatar.src;
-};
-
-const getAvatarAlt = (item: PillOption): string => {
-    if (!item.avatar) return "";
-    return typeof item.avatar === "string"
-        ? (item.label ?? "")
-        : (item.avatar.alt ?? item.label ?? "");
-};
-
+// Helper methods for image
 const getImageSrc = (item: PillOption): string | undefined => {
     if (!item.image) return undefined;
     return typeof item.image === "string" ? item.image : item.image.src;
@@ -133,17 +117,9 @@ const getImageClass = (item: PillOption): string => {
     return "h-4 w-auto object-contain";
 };
 
-const isAvatarOnly = (item: PillOption): boolean => {
-    return Boolean(getAvatarSrc(item) && !item.label && !item.sublabel);
-};
-
 const isImageOnly = (item: PillOption): boolean => {
     return Boolean(getImageSrc(item) && !item.label && !item.sublabel);
 };
-
-const isSingleAvatarOnly = computed(() => {
-    return props.items.length === 1 && isAvatarOnly(props.items[0]);
-});
 
 const sizeClasses = {
     sm: "px-3 py-1.5 text-xs gap-1.5",
@@ -157,18 +133,6 @@ const imageOnlyPadding = {
     lg: "px-4 py-2",
 };
 
-const avatarSizes = {
-    sm: "h-7 w-7",
-    md: "h-8 w-8",
-    lg: "h-10 w-10",
-};
-
-const avatarInlineSizes = {
-    sm: "h-5 w-5",
-    md: "h-6 w-6",
-    lg: "h-7 w-7",
-};
-
 const iconSizes = {
     sm: 14,
     md: 16,
@@ -179,19 +143,10 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
     const isActive =
         activeState !== undefined ? activeState : isItemActive(item);
 
-    if (isAvatarOnly(item)) {
-        return [
-            "group inline-flex shrink-0 items-center justify-center rounded-full p-0 bg-transparent border-0 shadow-none transition-all duration-200 focus:outline-none cursor-pointer",
-            isActive ? "scale-105" : "hover:scale-105",
-            item.disabled
-                ? "cursor-not-allowed opacity-40 pointer-events-none"
-                : "",
-            props.itemClass,
-        ];
-    }
-
     let paddingAndTextClass = sizeClasses[props.size];
-    if (isImageOnly(item)) {
+    if (item.class ?? item.itemClass) {
+        paddingAndTextClass = (item.class ?? item.itemClass)!;
+    } else if (isImageOnly(item)) {
         paddingAndTextClass = imageOnlyPadding[props.size];
     }
 
@@ -210,12 +165,8 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
 <template>
     <component
         :is="as"
-        class="pill-container justify-center"
-        :class="[
-            isSingleAvatarOnly ? 'p-1' : 'p-1.5',
-            wrap ? 'flex-wrap' : 'flex-nowrap',
-            containerClass,
-        ]"
+        class="pill-container justify-center p-1.5"
+        :class="[wrap ? 'flex-wrap' : 'flex-nowrap', containerClass]"
         aria-label="Selector"
     >
         <slot name="leading" />
@@ -241,64 +192,50 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                             :active="open || isItemActive(item)"
                             :select="() => handleSelect(item)"
                         >
-                            <!-- Avatar Only -->
-                            <template v-if="isAvatarOnly(item)">
-                                <img
-                                    :src="getAvatarSrc(item)"
-                                    :alt="getAvatarAlt(item)"
-                                    :class="[
-                                        avatarSizes[size],
-                                        'shrink-0 rounded-full bg-neutral-800 object-cover transition-all duration-200',
-                                        open || isItemActive(item)
-                                            ? 'shadow-[0_0_12px_rgba(255,255,255,0.35)] ring-2 ring-white brightness-110'
-                                            : 'ring-1 ring-white/20 group-hover:ring-2 group-hover:ring-white/60 group-hover:brightness-110',
-                                    ]"
-                                />
-                            </template>
-
-                            <!-- Normal Item with/without Avatar/Icon/Label -->
-                            <template v-else>
-                                <img
-                                    v-if="getAvatarSrc(item)"
-                                    :src="getAvatarSrc(item)"
-                                    :alt="getAvatarAlt(item)"
-                                    :class="[
-                                        avatarInlineSizes[size],
-                                        'shrink-0 rounded-full object-cover ring-1 ring-white/20',
-                                    ]"
-                                />
-                                <component
-                                    :is="item.icon"
-                                    v-else-if="item.icon"
-                                    :size="iconSizes[size]"
-                                    class="shrink-0"
-                                />
-                                <span v-if="item.label">{{ item.label }}</span>
-                                <span
-                                    v-if="item.sublabel"
-                                    class="text-[11px] font-normal text-neutral-400"
-                                >
-                                    {{ item.sublabel }}
-                                </span>
-                                <span
-                                    v-if="item.count !== undefined"
-                                    class="ml-0.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-300 transition-colors"
-                                >
-                                    {{ item.count }}
-                                </span>
-                                <component
-                                    :is="item.trailingIcon"
-                                    v-if="item.trailingIcon"
-                                    :size="iconSizes[size]"
-                                    class="shrink-0"
-                                />
-                                <ChevronDown
-                                    v-else-if="item.label"
-                                    :size="size === 'sm' ? 12 : 14"
-                                    class="shrink-0 text-neutral-400 transition-transform duration-200"
-                                    :class="{ 'rotate-180 text-white': open }"
-                                />
-                            </template>
+                            <!-- Image -->
+                            <img
+                                v-if="getImageSrc(item)"
+                                :src="getImageSrc(item)"
+                                :alt="getImageAlt(item)"
+                                :class="getImageClass(item)"
+                            />
+                            <!-- Icon -->
+                            <component
+                                :is="item.icon"
+                                v-else-if="item.icon"
+                                :size="iconSizes[size]"
+                                class="shrink-0"
+                            />
+                            <span v-if="item.label">{{ item.label }}</span>
+                            <span
+                                v-if="item.sublabel"
+                                class="text-[11px] font-normal text-neutral-400"
+                            >
+                                {{ item.sublabel }}
+                            </span>
+                            <span
+                                v-if="item.count !== undefined"
+                                class="ml-0.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-300 transition-colors"
+                                :class="
+                                    open || isItemActive(item)
+                                        ? 'bg-white/20 text-white'
+                                        : 'text-neutral-400'
+                                "
+                            >
+                                {{ item.count }}
+                            </span>
+                            <component
+                                :is="item.trailingIcon"
+                                v-if="item.trailingIcon"
+                                :size="iconSizes[size]"
+                                class="shrink-0"
+                            />
+                            <ChevronDown
+                                v-else-if="item.label"
+                                :size="size === 'sm' ? 12 : 14"
+                                class="shrink-0 text-neutral-400 transition-transform duration-200"
+                                :class="{ 'rotate-180 text-white': open }"
+                            />
                         </slot>
                     </button>
                 </template>
@@ -413,29 +350,6 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                         :alt="getImageAlt(item)"
                         :class="getImageClass(item)"
                     />
-                    <!-- Avatar Only -->
-                    <img
-                        v-else-if="isAvatarOnly(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarSizes[size],
-                            'shrink-0 rounded-full bg-neutral-800 object-cover transition-all duration-200',
-                            isItemActive(item)
-                                ? 'shadow-[0_0_12px_rgba(255,255,255,0.35)] ring-2 ring-white brightness-110'
-                                : 'ring-1 ring-white/20 group-hover:ring-2 group-hover:ring-white/60 group-hover:brightness-110',
-                        ]"
-                    />
-                    <!-- Avatar with label -->
-                    <img
-                        v-else-if="getAvatarSrc(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarInlineSizes[size],
-                            'shrink-0 rounded-full object-cover ring-1 ring-white/20',
-                        ]"
-                    />
                     <!-- Icon -->
                     <component
                         :is="item.icon"
@@ -490,29 +404,6 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                         :src="getImageSrc(item)"
                         :alt="getImageAlt(item)"
                         :class="getImageClass(item)"
-                    />
-                    <!-- Avatar Only -->
-                    <img
-                        v-else-if="isAvatarOnly(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarSizes[size],
-                            'shrink-0 rounded-full bg-neutral-800 object-cover transition-all duration-200',
-                            isItemActive(item)
-                                ? 'shadow-[0_0_12px_rgba(255,255,255,0.35)] ring-2 ring-white brightness-110'
-                                : 'ring-1 ring-white/20 group-hover:ring-2 group-hover:ring-white/60 group-hover:brightness-110',
-                        ]"
-                    />
-                    <!-- Avatar with label -->
-                    <img
-                        v-else-if="getAvatarSrc(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarInlineSizes[size],
-                            'shrink-0 rounded-full object-cover ring-1 ring-white/20',
-                        ]"
                     />
                     <!-- Icon -->
                     <component
@@ -569,29 +460,6 @@ const getItemClass = (item: PillOption, activeState?: boolean) => {
                         :src="getImageSrc(item)"
                         :alt="getImageAlt(item)"
                         :class="getImageClass(item)"
-                    />
-                    <!-- Avatar Only -->
-                    <img
-                        v-else-if="isAvatarOnly(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarSizes[size],
-                            'shrink-0 rounded-full bg-neutral-800 object-cover transition-all duration-200',
-                            isItemActive(item)
-                                ? 'shadow-[0_0_12px_rgba(255,255,255,0.35)] ring-2 ring-white brightness-110'
-                                : 'ring-1 ring-white/20 group-hover:ring-2 group-hover:ring-white/60 group-hover:brightness-110',
-                        ]"
-                    />
-                    <!-- Avatar with label -->
-                    <img
-                        v-else-if="getAvatarSrc(item)"
-                        :src="getAvatarSrc(item)"
-                        :alt="getAvatarAlt(item)"
-                        :class="[
-                            avatarInlineSizes[size],
-                            'shrink-0 rounded-full object-cover ring-1 ring-white/20',
-                        ]"
                     />
                     <!-- Icon -->
                     <component
