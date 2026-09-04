@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -21,10 +21,36 @@ interface Props {
     activityCount: number;
     talkCount: number;
     standCount: number;
+    competitionCount?: number;
     canEnroll: boolean;
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    competitionCount: 0,
+});
+
+const activeStatsCount = computed(() => {
+    let count = 0;
+    if (props.days?.length) count++;
+    if (props.standCount) count++;
+    if (props.talkCount) count++;
+    if (props.activityCount) count++;
+    if (props.competitionCount) count++;
+    return count;
+});
+
+const statsGridColsClass = computed(() => {
+    if (activeStatsCount.value >= 5) {
+        return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5";
+    }
+    if (activeStatsCount.value === 4) {
+        return "grid-cols-2 md:grid-cols-4";
+    }
+    if (activeStatsCount.value === 3) {
+        return "grid-cols-1 sm:grid-cols-3";
+    }
+    return "grid-cols-2";
+});
 
 const isAtBottom = ref(false);
 
@@ -172,7 +198,16 @@ onBeforeUnmount(() => {
                 />
             </div>
 
-            <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+            <div
+                :class="[
+                    'grid gap-4 sm:gap-6',
+                    statsGridColsClass,
+                    {
+                        '[&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1':
+                            activeStatsCount % 2 !== 0,
+                    },
+                ]"
+            >
                 <div
                     v-if="days.length !== 0"
                     class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
@@ -234,6 +269,26 @@ onBeforeUnmount(() => {
                         class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
                     >
                         atividades
+                    </span>
+                </div>
+
+                <div
+                    v-if="competitionCount !== 0"
+                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
+                >
+                    <span
+                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
+                    >
+                        {{ competitionCount }}
+                    </span>
+                    <span
+                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
+                    >
+                        {{
+                            competitionCount === 1
+                                ? "competição"
+                                : "competições"
+                        }}
                     </span>
                 </div>
             </div>
