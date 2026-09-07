@@ -9,5 +9,6 @@ export interface EnrollmentWithRedeemed extends Enrollment {
 
 export type BuyableProduct = Omit<Product, "enrollments"> & {
     canBeBought?: boolean | number;
+    alreadyBought?: boolean;
     enrollments?: EnrollmentWithRedeemed[];
 };

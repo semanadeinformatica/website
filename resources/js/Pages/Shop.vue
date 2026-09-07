@@ -1,8 +1,20 @@
 <script setup lang="ts">
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
+import { type User } from "@/Types/User";
+import {
+    ShoppingBag,
+    ArrowUp,
+    ArrowRight,
+} from "@lucide/vue";
 
 interface Props {
     products: BuyableProduct[];
@@ -11,27 +23,186 @@ interface Props {
     isParticipant: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const page = usePage();
+const user = computed(() => page.props.auth?.user as User | undefined);
+
+const selectedFilter = ref<"all" | "available" | "bought" | "out-of-stock">(
+    "all",
+);
+const sortOption = ref<"price-desc" | "price-asc" | "name">("price-desc");
+
+const totalProducts = computed(() => props.products.length);
+const availableProductsCount = computed(
+    () => props.products.filter((p) => (p.stock ?? 0) > 0).length,
+);
+const outOfStockCount = computed(
+    () => props.products.filter((p) => (p.stock ?? 0) <= 0).length,
+);
+const alreadyBoughtCount = computed(
+    () => props.products.filter((p) => Boolean(p.alreadyBought)).length,
+);
+
+const filterOptions = computed<PillOption[]>(() => {
+    const options: PillOption[] = [
+        {
+            id: "all",
+            label: "Todos",
+            count: totalProducts.value,
+        },
+        {
+            id: "available",
+            label: "Disponíveis",
+            count: availableProductsCount.value,
+        },
+    ];
+
+    if (alreadyBoughtCount.value > 0) {
+        options.push({
+            id: "bought",
+            label: "Adquiridos",
+            count: alreadyBoughtCount.value,
+        });
+    }
+
+    if (outOfStockCount.value > 0) {
+        options.push({
+            id: "out-of-stock",
+            label: "Esgotados",
+            count: outOfStockCount.value,
+        });
+    }
+
+    return options;
+});
+
+const sortLabels: Record<"price-desc" | "price-asc" | "name", string> = {
+    "price-desc": "Preço: Maior primeiro",
+    "price-asc": "Preço: Menor primeiro",
+    name: "Nome (A-Z)",
+};
+
+const sortPillItems = computed<PillOption[]>(() => [
+    {
+        id: "sort",
+        label: sortLabels[sortOption.value],
+        dropdown: {
+            align: "right",
+            width: "56",
+            items: [
+                {
+                    id: "price-desc",
+                    label: "Preço: Maior primeiro",
+                    active: sortOption.value === "price-desc",
+                    onClick: () => {
+                        sortOption.value = "price-desc";
+                    },
+                },
+                {
+                    id: "price-asc",
+                    label: "Preço: Menor primeiro",
+                    active: sortOption.value === "price-asc",
+                    onClick: () => {
+                        sortOption.value = "price-asc";
+                    },
+                },
+                {
+                    id: "name",
+                    label: "Nome (A-Z)",
+                    active: sortOption.value === "name",
+                    onClick: () => {
+                        sortOption.value = "name";
+                    },
+                },
+            ],
+        },
+    },
+]);
+
+const filteredAndSortedProducts = computed(() => {
+    let result = [...props.products];
+
+    // Status filter
+    if (selectedFilter.value === "available") {
+        result = result.filter((p) => (p.stock ?? 0) > 0);
+    } else if (selectedFilter.value === "out-of-stock") {
+        result = result.filter((p) => (p.stock ?? 0) <= 0);
+    } else if (selectedFilter.value === "bought") {
+        result = result.filter((p) => Boolean(p.alreadyBought));
+    }
+
+    // Sorting
+    if (sortOption.value === "price-desc") {
+        result.sort((a, b) => b.price - a.price);
+    } else if (sortOption.value === "price-asc") {
+        result.sort((a, b) => a.price - b.price);
+    } else if (sortOption.value === "name") {
+        result.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    return result;
+});
+
+const isScrolled = ref(false);
+
+const updateScrollState = () => {
+    isScrolled.value = (window.scrollY || window.pageYOffset) > 400;
+};
+
+const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+onMounted(() => {
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", updateScrollState);
+});
 </script>
 
 <template>
     <AppLayout title="Loja">
-        <div
-            class="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
+        <!-- Floating scroll-to-top button -->
+        <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0 translate-y-2 scale-90"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-90"
         >
+            <button
+                v-if="isScrolled"
+                type="button"
+                aria-label="Voltar ao topo"
+                class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+                @click="scrollToTop"
+            >
+                <ArrowUp :size="16" />
+            </button>
+        </Transition>
+
+        <div
+            class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-6 sm:py-12 lg:px-8"
+        >
+            <!-- User Balance Pill / Enrollment CTA -->
             <div
                 v-if="points !== null && points !== undefined"
-                class="mb-10 flex justify-center"
+                class="flex justify-center"
             >
                 <PillSelector size="md" :wrap="false">
                     <div
                         class="pill-item cursor-default gap-2.5 hover:bg-transparent"
                     >
-                        <span>O teu saldo:</span>
+                        <span class="text-neutral-400">O teu saldo:</span>
                         <span
                             class="flex items-center gap-1.5 font-bold text-white"
                         >
-                            <span class="text-sm font-semibold sm:text-base">{{
+                            <span class="font-mono text-base font-bold">{{
                                 points
                             }}</span>
                             <img
@@ -45,38 +216,110 @@ defineProps<Props>();
                 </PillSelector>
             </div>
 
-            <template v-if="products.length > 0">
-                <section
-                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4"
+            <div
+                v-else-if="user && !isEnrolled"
+                class="flex justify-center"
+            >
+                <PrimaryButton
+                    padding="px-4 py-1.5"
+                    text-size="text-xs"
+                    @click="router.put(route('enroll'))"
+                >
+                    <span>Inscreve-te na SINF 2026 para ganhares SINFrões</span>
+                    <ArrowRight :size="13" class="text-amber-400" />
+                </PrimaryButton>
+            </div>
+
+            <!-- Products Section -->
+            <section class="space-y-6">
+                <!-- Filter and Sort Bar (items-start on mobile prevents stretching) -->
+                <div
+                    v-if="products.length > 0"
+                    class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                    <!-- Status Filter Pills -->
+                    <PillSelector
+                        v-model="selectedFilter"
+                        :items="filterOptions"
+                        size="sm"
+                    />
+
+                    <!-- Dropdown Sort with PillSelector -->
+                    <PillSelector
+                        :items="sortPillItems"
+                        size="sm"
+                    />
+                </div>
+
+                <!-- Products Grid -->
+                <div
+                    v-if="filteredAndSortedProducts.length > 0"
+                    class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                 >
                     <ShopItem
-                        v-for="product in products"
+                        v-for="product in filteredAndSortedProducts"
                         :key="product.id"
                         :product="product"
                         :points="points"
                         :is-participant="isParticipant"
                         :is-enrolled="isEnrolled"
                     />
-                </section>
-            </template>
+                </div>
 
-            <div
-                v-else
-                class="flex flex-col items-center justify-center py-28 text-center"
-            >
-                <PillSelector
-                    :items="[
-                        { id: 'soon', label: 'Em breve...', disabled: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                    container-class="mb-4"
-                />
-                <p class="max-w-md text-sm text-neutral-400">
-                    A loja da edição 2026 estará disponível brevemente. Fica
-                    atento às novidades!
-                </p>
-            </div>
+                <!-- Empty Filter Results -->
+                <div
+                    v-else-if="products.length > 0"
+                    class="flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/30 py-16 text-center"
+                >
+                    <ShoppingBag
+                        :size="36"
+                        class="mb-3 text-neutral-600 opacity-40"
+                    />
+                    <h3 class="text-base font-semibold text-white">
+                        Nenhum artigo encontrado
+                    </h3>
+                    <p class="mt-1 max-w-sm text-xs text-neutral-400">
+                        Não existem artigos correspondentes aos filtros selecionados.
+                    </p>
+                    <div class="mt-5">
+                        <PrimaryButton
+                            padding="px-4 py-1.5"
+                            text-size="text-xs"
+                            @click="selectedFilter = 'all'"
+                        >
+                            Limpar filtros
+                        </PrimaryButton>
+                    </div>
+                </div>
+
+                <!-- Empty Shop State (Coming soon) -->
+                <div
+                    v-else
+                    class="flex flex-col items-center justify-center py-24 text-center"
+                >
+                    <PillSelector
+                        :items="[
+                            {
+                                id: 'soon',
+                                label: 'Em breve...',
+                                disabled: true,
+                            },
+                        ]"
+                        size="sm"
+                        :wrap="false"
+                        container-class="mb-4"
+                    />
+                    <h3 class="text-lg font-bold text-white">
+                        A loja oficial da SINF 2026 estará disponível em breve
+                    </h3>
+                    <p
+                        class="mt-2 max-w-md text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                    >
+                        Estamos a preparar artigos exclusivos para esta edição.
+                        Fica atento às novidades no programa e redes sociais!
+                    </p>
+                </div>
+            </section>
         </div>
     </AppLayout>
 </template>
