@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
 
         <section
             id="aboutus"
-            class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
         >
             <div class="mb-10 flex justify-center">
                 <PillSelector
@@ -187,7 +187,9 @@ onBeforeUnmount(() => {
             </div>
         </section>
 
-        <section class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <section
+            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+        >
             <div class="mb-10 flex justify-center">
                 <PillSelector
                     :items="[
@@ -323,7 +325,7 @@ onBeforeUnmount(() => {
 
         <section
             id="sponsors"
-            class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
         >
             <div class="mb-10 flex justify-center">
                 <PillSelector

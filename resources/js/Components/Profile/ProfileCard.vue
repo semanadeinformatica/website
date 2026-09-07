@@ -60,13 +60,8 @@ const isOwnProfile = computed(() =>
 
 const userSocialMedia = computed(() => {
     if (!props.user || isAdmin(props.user)) return undefined;
-    return (
-        props.user.usertype as
-            | Company
-            | Speaker
-            | Participant
-            | undefined
-    )?.social_media;
+    return (props.user.usertype as Company | Speaker | Participant | undefined)
+        ?.social_media;
 });
 
 const hasSocialMedia = computed(() => {
@@ -101,7 +96,7 @@ const hasDefaultActions = computed(() => isOwnProfile.value);
 </script>
 
 <template>
-    <Card as="section" :interactive="false" padding="p-5 sm:p-7">
+    <Card as="section" :interactive="false" padding="p-5 sm:p-7" class="w-full">
         <div
             class="flex flex-col justify-between gap-5 sm:flex-row sm:items-center"
         >
@@ -173,7 +168,7 @@ const hasDefaultActions = computed(() => isOwnProfile.value);
                     <!-- Balance / Points (Sinfrões) -->
                     <div
                         v-if="hasPoints && isOwnProfile"
-                        class="pill-container justify-center sm:justify-start gap-2 px-3.5 py-1.5 text-xs font-medium text-neutral-300 shadow-none sm:text-sm self-stretch sm:self-auto"
+                        class="pill-container justify-center gap-2 self-stretch px-3.5 py-1.5 text-xs font-medium text-neutral-300 shadow-none sm:justify-start sm:self-auto sm:text-sm"
                         title="O teu saldo de SINFrões"
                     >
                         <span class="text-neutral-400">Saldo:</span>
@@ -189,13 +184,13 @@ const hasDefaultActions = computed(() => isOwnProfile.value);
                     <!-- Profile Actions -->
                     <div
                         v-if="hasDefaultActions && isOwnProfile"
-                        class="flex flex-wrap items-center gap-2 w-full sm:w-auto"
+                        class="flex w-full flex-wrap items-center gap-2 sm:w-auto"
                     >
                         <PrimaryButton
                             :href="route('profile.edit')"
                             color="pill"
                             padding="px-3.5 py-2 sm:px-4 sm:py-2"
-                            class="flex-1 min-w-[130px] sm:min-w-0 sm:flex-initial sm:w-auto"
+                            class="min-w-[130px] flex-1 sm:w-auto sm:min-w-0 sm:flex-initial"
                         >
                             <Edit3 :size="15" />
                             <span>Editar Perfil</span>
@@ -210,7 +205,7 @@ const hasDefaultActions = computed(() => isOwnProfile.value);
                             :href="route('user.scan-code')"
                             color="pill"
                             padding="px-3.5 py-2 sm:px-4 sm:py-2"
-                            class="flex-1 min-w-[130px] sm:min-w-0 sm:flex-initial sm:w-auto"
+                            class="min-w-[130px] flex-1 sm:w-auto sm:min-w-0 sm:flex-initial"
                         >
                             <Camera :size="15" />
                             <span>Ler QR</span>
@@ -219,7 +214,7 @@ const hasDefaultActions = computed(() => isOwnProfile.value);
                         <QRCode
                             v-if="isParticipant(user) && user?.usertype"
                             :participant="user.usertype"
-                            class="flex-1 min-w-[130px] sm:min-w-0 sm:flex-initial sm:w-auto"
+                            class="min-w-[130px] flex-1 sm:w-auto sm:min-w-0 sm:flex-initial"
                         />
                     </div>
                 </slot>

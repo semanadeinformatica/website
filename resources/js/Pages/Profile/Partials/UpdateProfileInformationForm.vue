@@ -55,7 +55,8 @@ const handlePhotoChange = (event: Event) => {
     if (!file) return;
 
     if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-        photoError.value = "Por favor seleciona uma imagem válida (JPG ou PNG).";
+        photoError.value =
+            "Por favor seleciona uma imagem válida (JPG ou PNG).";
         return;
     }
 
@@ -167,18 +168,17 @@ const sendEmailVerification = () => {
             </template>
         </ProfileCard>
 
-        <Card
-            as="section"
-            :interactive="false"
-            padding="p-6 sm:p-8"
-        >
+        <Card as="section" :interactive="false" padding="p-6 sm:p-8">
             <template #header>
                 <div class="space-y-1">
-                    <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                    <h2
+                        class="text-lg font-bold tracking-tight text-white sm:text-xl"
+                    >
                         Informações Pessoais
                     </h2>
                     <p class="text-xs text-neutral-400 sm:text-sm">
-                        Atualiza os dados da tua conta e informações de contacto.
+                        Atualiza os dados da tua conta e informações de
+                        contacto.
                     </p>
                 </div>
             </template>
@@ -232,7 +232,8 @@ const sendEmailVerification = () => {
                         v-show="verificationLinkSent"
                         class="mt-2 font-medium text-emerald-400"
                     >
-                        Um novo link de verificação foi enviado para o teu email.
+                        Um novo link de verificação foi enviado para o teu
+                        email.
                     </div>
                 </div>
 
@@ -285,7 +286,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.public_email"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="email" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="email"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -298,7 +303,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.website"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="website" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="website"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -311,7 +320,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.github"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="github" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="github"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -324,7 +337,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.linkedin"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="linkedin" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="linkedin"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -337,7 +354,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.twitter"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="twitter" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="twitter"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -350,7 +371,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.instagram"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="instagram" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="instagram"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
 
@@ -363,7 +388,11 @@ const sendEmailVerification = () => {
                                 :error-message="form.errors.facebook"
                             >
                                 <template #leading>
-                                    <SocialIcon platform="facebook" :size="16" class="shrink-0 text-neutral-400" />
+                                    <SocialIcon
+                                        platform="facebook"
+                                        :size="16"
+                                        class="shrink-0 text-neutral-400"
+                                    />
                                 </template>
                             </TextInput>
                         </div>
@@ -401,7 +430,7 @@ const sendEmailVerification = () => {
         >
             <div class="flex flex-col items-center justify-center py-2">
                 <div
-                    class="h-32 w-32 shrink-0 overflow-hidden rounded-full ring-4 ring-white/10 bg-neutral-900"
+                    class="h-32 w-32 shrink-0 overflow-hidden rounded-full bg-neutral-900 ring-4 ring-white/10"
                 >
                     <img
                         :src="photoPreview ?? user?.profile_photo_url"
@@ -427,7 +456,11 @@ const sendEmailVerification = () => {
                     @click="photoInput?.click()"
                 >
                     <Upload :size="14" />
-                    <span>{{ photoPreview ? "Escolher outro ficheiro" : "Carregar nova foto" }}</span>
+                    <span>{{
+                        photoPreview
+                            ? "Escolher outro ficheiro"
+                            : "Carregar nova foto"
+                    }}</span>
                 </PrimaryButton>
                 <span class="text-[11px] text-neutral-500">
                     Formatos aceites: JPG ou PNG (máx. 10MB)
@@ -453,7 +486,9 @@ const sendEmailVerification = () => {
                         @click="deletePhoto"
                     >
                         <Trash2 :size="13" />
-                        <span>{{ isDeletingPhoto ? "A remover..." : "Remover foto" }}</span>
+                        <span>{{
+                            isDeletingPhoto ? "A remover..." : "Remover foto"
+                        }}</span>
                     </PrimaryButton>
                     <div v-else />
 
@@ -475,7 +510,11 @@ const sendEmailVerification = () => {
                             :disabled="photoForm.processing"
                             @click="savePhoto"
                         >
-                            {{ photoForm.processing ? "A guardar..." : "Guardar fotografia" }}
+                            {{
+                                photoForm.processing
+                                    ? "A guardar..."
+                                    : "Guardar fotografia"
+                            }}
                         </PrimaryButton>
                     </div>
                 </div>

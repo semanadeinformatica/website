@@ -25,7 +25,7 @@ withDefaults(defineProps<Props>(), {
 <template>
     <component
         :is="as"
-        class="group relative flex flex-col justify-between rounded-3xl border border-white/8 bg-black/50 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none"
+        class="group relative flex w-full flex-col justify-between rounded-3xl border border-white/8 bg-black/50 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none"
         :class="[
             padding,
             interactive

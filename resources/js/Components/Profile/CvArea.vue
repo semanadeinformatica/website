@@ -37,7 +37,8 @@ const hasCV = computed(() =>
 
 const cvUrl = computed(() => {
     if (participant.value?.cv_url) return participant.value.cv_url;
-    if (participant.value?.cv_path) return `/storage/${participant.value.cv_path}`;
+    if (participant.value?.cv_path)
+        return `/storage/${participant.value.cv_path}`;
     return undefined;
 });
 

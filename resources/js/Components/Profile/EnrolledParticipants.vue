@@ -12,7 +12,9 @@ import {
 import { computed, ref } from "vue";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import PillSelector, { type PillOption } from "@/Components/UI/PillSelector.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 import { route } from "ziggy-js";
 
 type Visitor = Participant & {
@@ -167,29 +169,41 @@ const filteredVisitors = computed(() => {
                                         class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-neutral-800 ring-1 ring-white/10"
                                     >
                                         <img
-                                            v-if="visitor.user?.profile_photo_url"
-                                            :src="visitor.user.profile_photo_url"
+                                            v-if="
+                                                visitor.user?.profile_photo_url
+                                            "
+                                            :src="
+                                                visitor.user.profile_photo_url
+                                            "
                                             :alt="visitor.user.name"
                                             class="h-full w-full object-cover"
                                         />
                                         <span
                                             v-else
-                                            class="text-xs font-bold uppercase text-neutral-300"
+                                            class="text-xs font-bold text-neutral-300 uppercase"
                                         >
-                                            {{ visitor.user?.name?.charAt(0) ?? "P" }}
+                                            {{
+                                                visitor.user?.name?.charAt(0) ??
+                                                "P"
+                                            }}
                                         </span>
                                     </div>
                                     <div class="min-w-0">
                                         <a
                                             :href="
                                                 visitor.user
-                                                    ? route('user.profile', { user: visitor.user })
+                                                    ? route('user.profile', {
+                                                          user: visitor.user,
+                                                      })
                                                     : '#'
                                             "
                                             target="_blank"
                                             class="block truncate font-medium text-white transition-colors hover:text-white/80"
                                         >
-                                            {{ visitor.user?.name ?? `Participante #${visitor.id}` }}
+                                            {{
+                                                visitor.user?.name ??
+                                                `Participante #${visitor.id}`
+                                            }}
                                         </a>
                                         <p
                                             v-if="visitor.user?.email"
@@ -201,8 +215,12 @@ const filteredVisitors = computed(() => {
                                 </div>
                             </td>
 
-                            <td class="w-px py-3 pr-4 pl-3 text-right whitespace-nowrap sm:pr-5">
-                                <div class="flex items-center justify-end gap-1.5">
+                            <td
+                                class="w-px py-3 pr-4 pl-3 text-right whitespace-nowrap sm:pr-5"
+                            >
+                                <div
+                                    class="flex items-center justify-end gap-1.5"
+                                >
                                     <PrimaryButton
                                         v-if="
                                             visitor.can_see_linkedin &&
@@ -218,11 +236,16 @@ const filteredVisitors = computed(() => {
                                         title="LinkedIn"
                                         aria-label="LinkedIn"
                                     >
-                                        <SocialIcon platform="linkedin" :size="15" />
+                                        <SocialIcon
+                                            platform="linkedin"
+                                            :size="15"
+                                        />
                                     </PrimaryButton>
 
                                     <PrimaryButton
-                                        v-if="visitor.can_see_cv && visitor.cv_url"
+                                        v-if="
+                                            visitor.can_see_cv && visitor.cv_url
+                                        "
                                         :href="visitor.cv_url"
                                         external
                                         target="_blank"
@@ -238,7 +261,11 @@ const filteredVisitors = computed(() => {
 
                                     <PrimaryButton
                                         v-if="visitor.user"
-                                        :href="route('user.profile', { user: visitor.user })"
+                                        :href="
+                                            route('user.profile', {
+                                                user: visitor.user,
+                                            })
+                                        "
                                         color="pill"
                                         padding="p-2"
                                         class="shrink-0"
@@ -262,12 +289,17 @@ const filteredVisitors = computed(() => {
             <p class="text-sm text-neutral-400">
                 Nenhum participante encontrado
                 <span v-if="searchQuery"> para "{{ searchQuery }}"</span>
-                <span v-if="filterType !== 'all'"> com o filtro selecionado</span>.
+                <span v-if="filterType !== 'all'">
+                    com o filtro selecionado</span
+                >.
             </p>
             <button
                 type="button"
-                class="mt-2 text-xs text-sinf-primary hover:underline"
-                @click="searchQuery = ''; filterType = 'all'"
+                class="text-sinf-primary mt-2 text-xs hover:underline"
+                @click="
+                    searchQuery = '';
+                    filterType = 'all';
+                "
             >
                 Limpar filtros
             </button>
@@ -276,7 +308,7 @@ const filteredVisitors = computed(() => {
 
     <div
         v-else
-        class="flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 py-16 px-6 text-center shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md"
+        class="flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 px-6 py-16 text-center shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md"
     >
         <div
             class="mb-4 flex h-14 w-14 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-neutral-400"
@@ -287,7 +319,8 @@ const filteredVisitors = computed(() => {
             Ainda sem visitas registadas
         </h3>
         <p class="mt-1 max-w-sm text-xs text-neutral-400 sm:text-sm">
-            Os participantes que visitarem e fizerem check-in na vossa banca aparecerão aqui.
+            Os participantes que visitarem e fizerem check-in na vossa banca
+            aparecerão aqui.
         </p>
     </div>
 </template>

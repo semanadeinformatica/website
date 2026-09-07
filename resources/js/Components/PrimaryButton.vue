@@ -34,11 +34,7 @@ const buttonRef = ref<HTMLButtonElement | HTMLAnchorElement | null>(null);
 
 const isFullWidth = computed(() => {
     const cls = String(attrs.class ?? "");
-    return (
-        props.fullWidth ||
-        cls.includes("w-full") ||
-        cls.includes("flex-1")
-    );
+    return props.fullWidth || cls.includes("w-full") || cls.includes("flex-1");
 });
 
 const innerWidthClass = computed(() => {
