@@ -30,7 +30,11 @@ const submit = () => {
         subtitle="Esta é uma área segura da aplicação. Por favor, confirma a tua password antes de continuar."
         :icon="Lock"
     >
-        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-5"
+            @submit.prevent="submit"
+        >
             <!-- Hidden username field for password manager credential pairing -->
             <input
                 type="text"
@@ -55,7 +59,7 @@ const submit = () => {
                 :error-message="form.errors.password"
             />
 
-            <div class="mt-2 flex justify-center w-full">
+            <div class="mt-2 flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A confirmar...</span>
                     <span v-else>Confirmar</span>

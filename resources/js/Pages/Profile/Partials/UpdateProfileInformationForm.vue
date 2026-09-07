@@ -6,6 +6,7 @@ import Card from "@/Components/UI/Card.vue";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import { Camera, Upload, Trash2, AlertCircle } from "@lucide/vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import ProfileCard from "@/Components/Profile/ProfileCard.vue";
 import TextInput from "@/Components/TextInput.vue";
 import {
     type User,
@@ -41,8 +42,8 @@ const isDeletingPhoto = ref(false);
 
 const photoForm = useForm({
     _method: "PUT",
-    name: user?.name ?? "",
-    email: user?.email ?? "",
+    name: user ? user.name : "",
+    email: user ? user.email : "",
     photo: null as File | null,
 });
 
@@ -88,8 +89,7 @@ const closePhotoModal = () => {
 
 const savePhoto = () => {
     if (!photoForm.photo) return;
-    photoForm.name = user?.name ?? "";
-    photoForm.email = user?.email ?? "";
+
     photoForm.post(route("user-profile-information.update"), {
         errorBag: "updateProfileInformation",
         preserveScroll: true,
@@ -108,9 +108,11 @@ const deletePhoto = () => {
     isDeletingPhoto.value = true;
     router.delete(route("current-user-photo.destroy"), {
         preserveScroll: true,
+        onSuccess: () => {
+            closePhotoModal();
+        },
         onFinish: () => {
             isDeletingPhoto.value = false;
-            closePhotoModal();
         },
     });
 };
@@ -150,58 +152,20 @@ const sendEmailVerification = () => {
 
 <template>
     <div class="space-y-6">
-        <Card
-            as="section"
-            :interactive="false"
-            padding="p-6 sm:p-7"
-        >
-            <div
-                class="flex flex-col sm:flex-row sm:items-center justify-between gap-5"
-            >
-                <div class="flex items-center gap-4 sm:gap-5">
-                    <div
-                        class="h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-white/10 bg-neutral-900 sm:h-22 sm:w-22"
-                    >
-                        <img
-                            :src="user?.profile_photo_url"
-                            :alt="user?.name"
-                            class="h-full w-full object-cover"
-                        />
-                    </div>
-
-                    <div class="min-w-0 space-y-1">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <h3
-                                class="truncate text-lg font-bold text-white sm:text-xl"
-                            >
-                                {{ user?.name }}
-                            </h3>
-                            <span
-                                v-if="userTypeLabel"
-                                class="pill-container px-2.5 py-0.5 text-[11px] font-medium text-neutral-300"
-                            >
-                                {{ userTypeLabel }}
-                            </span>
-                        </div>
-                        <p class="truncate text-xs text-neutral-400 sm:text-sm">
-                            {{ user?.email }}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex items-center sm:self-center">
-                    <PrimaryButton
-                        type="button"
-                        color="pill"
-                        padding="px-4 py-2"
-                        @click="photoModalOpen = true"
-                    >
-                        <Camera :size="15" />
-                        <span>Alterar fotografia</span>
-                    </PrimaryButton>
-                </div>
-            </div>
-        </Card>
+        <ProfileCard :user="user" :show-social-media="false">
+            <template #actions>
+                <PrimaryButton
+                    type="button"
+                    color="pill"
+                    padding="px-3.5 py-2 sm:px-4 sm:py-2"
+                    class="w-full sm:w-auto"
+                    @click="photoModalOpen = true"
+                >
+                    <Camera :size="15" />
+                    <span>Alterar fotografia</span>
+                </PrimaryButton>
+            </template>
+        </ProfileCard>
 
         <Card
             as="section"
@@ -519,4 +483,3 @@ const sendEmailVerification = () => {
         </Modal>
     </div>
 </template>
-

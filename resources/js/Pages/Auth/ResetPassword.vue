@@ -34,7 +34,11 @@ const submit = () => {
         subtitle="Escolhe uma nova password segura para garantir a proteção e acesso à tua conta."
         :icon="KeyRound"
     >
-        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-5"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="email"
                 v-model="form.email"
@@ -69,7 +73,7 @@ const submit = () => {
                 :error-message="form.errors.password_confirmation"
             />
 
-            <div class="mt-2 flex justify-center w-full">
+            <div class="mt-2 flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A repor...</span>
                     <span v-else>Repor password</span>

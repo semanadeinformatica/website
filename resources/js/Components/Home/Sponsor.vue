@@ -30,10 +30,7 @@ defineProps<Props>();
         />
     </Card>
 
-    <Modal
-        v-model="options.modelValue"
-        max-width="lg"
-    >
+    <Modal v-model="options.modelValue" max-width="lg">
         <div class="flex flex-col items-center gap-6">
             <img
                 :src="company?.profile_photo_url"
@@ -67,4 +64,3 @@ defineProps<Props>();
         </div>
     </Modal>
 </template>
-

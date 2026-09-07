@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs, type ButtonHTMLAttributes } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 interface Props {
+    href?: string;
+    external?: boolean;
     type?: ButtonHTMLAttributes["type"];
     color?: "pill" | "primary" | "secondary" | "gradient" | "danger";
     textSize?: string;
@@ -17,6 +20,8 @@ defineOptions({
 const attrs = useAttrs();
 
 const props = withDefaults(defineProps<Props>(), {
+    href: undefined,
+    external: false,
     type: "submit",
     color: "pill",
     textSize: "text-xs sm:text-sm",
@@ -25,13 +30,24 @@ const props = withDefaults(defineProps<Props>(), {
     fullWidth: false,
 });
 
-const buttonRef = ref<HTMLButtonElement | null>(null);
+const buttonRef = ref<HTMLButtonElement | HTMLAnchorElement | null>(null);
 
 const isFullWidth = computed(() => {
+    const cls = String(attrs.class ?? "");
     return (
         props.fullWidth ||
-        Boolean(attrs.class && String(attrs.class).includes("w-full"))
+        cls.includes("w-full") ||
+        cls.includes("flex-1")
     );
+});
+
+const innerWidthClass = computed(() => {
+    if (!isFullWidth.value) return "";
+    const cls = String(attrs.class ?? "");
+    if (cls.includes("sm:w-auto") || cls.includes("sm:flex-initial")) {
+        return "w-full sm:w-auto";
+    }
+    return "w-full";
 });
 
 const onContainerClick = (event: MouseEvent) => {
@@ -66,20 +82,22 @@ const buttonColor: Record<string, string> = {
         ]"
         @click="onContainerClick"
     >
-        <button
+        <component
+            :is="href ? (external ? 'a' : Link) : 'button'"
             ref="buttonRef"
             v-bind="{ ...attrs, class: undefined }"
-            :type="type"
-            :disabled="disabled"
+            :href="href"
+            :type="href ? undefined : type"
+            :disabled="href ? undefined : disabled"
             class="pill-item cursor-pointer justify-center gap-2 font-medium transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
             :class="[
-                isFullWidth ? 'w-full' : '',
+                innerWidthClass,
                 buttonColor[color] ?? buttonColor.pill,
                 textSize,
                 padding,
             ]"
         >
             <slot />
-        </button>
+        </component>
     </div>
 </template>

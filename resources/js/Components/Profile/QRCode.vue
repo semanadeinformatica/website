@@ -4,6 +4,7 @@ import { router } from "@inertiajs/vue3";
 import { QrCode } from "@lucide/vue";
 import { computed, ref } from "vue";
 import Modal from "@/Components/UI/Modal.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { route } from "ziggy-js";
 
 interface Props {
@@ -31,14 +32,17 @@ const showQRCode = () => {
 </script>
 
 <template>
-    <button
+    <PrimaryButton
+        v-bind="$attrs"
         type="button"
-        class="text-text-color flex w-fit cursor-pointer items-center justify-center rounded-full hover:opacity-80"
+        color="pill"
+        padding="px-3.5 py-2 sm:px-4 sm:py-2"
         aria-label="Ver QR Code"
         @click="showQRCode"
     >
-        <QrCode :size="22" />
-    </button>
+        <QrCode :size="15" />
+        <span>QR Code</span>
+    </PrimaryButton>
 
     <Modal
         v-model="modalOpen"
@@ -47,21 +51,26 @@ const showQRCode = () => {
         description="Apresenta este código QR ou código numérico nas bancas e eventos."
     >
         <div class="flex flex-col items-center justify-center gap-6 py-2">
-            <span v-if="loading" class="text-sm text-neutral-400">A gerar código...</span>
+            <span v-if="loading" class="text-sm text-neutral-400"
+                >A gerar código...</span
+            >
             <template v-else>
                 <div
                     v-if="participant.quest_qr_code"
-                    class="rounded-2xl bg-white p-4 shadow-lg flex items-center justify-center"
+                    class="flex items-center justify-center rounded-2xl bg-white p-4"
                     v-html="participant.quest_qr_code"
                 />
                 <div
                     v-if="participant.quest_code"
-                    class="pill-container px-4 py-1.5 font-mono text-base font-bold text-white tracking-widest"
+                    class="flex flex-col items-center gap-1 text-center"
                 >
-                    {{ participant.quest_code }}
+                    <code
+                        class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-mono text-xl font-bold tracking-widest text-white"
+                    >
+                        {{ participant.quest_code }}
+                    </code>
                 </div>
             </template>
         </div>
     </Modal>
 </template>
-

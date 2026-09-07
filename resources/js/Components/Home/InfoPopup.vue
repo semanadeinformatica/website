@@ -28,20 +28,19 @@ const enroll = () => {
 </script>
 
 <template>
-    <Modal
-        v-model="options.modelValue"
-        max-width="xl"
-        @closed="cacheSeenInfo"
-    >
+    <Modal v-model="options.modelValue" max-width="xl" @closed="cacheSeenInfo">
         <div
             class="flex flex-col items-center gap-6 text-center text-lg text-white"
         >
             <img class="w-72 p-4" src="/images/sinf logo.png" alt="SINF" />
             <p class="font-medium">
-                A <span class="text-sinf-primary-light font-bold">SINF</span> está
+                A
+                <span class="text-sinf-primary-light font-bold">SINF</span> está
                 mais interativa do que nunca!
             </p>
-            <ul class="flex flex-col items-center gap-2 text-sm text-neutral-300">
+            <ul
+                class="flex flex-col items-center gap-2 text-sm text-neutral-300"
+            >
                 <li>
                     Participa em
                     <a

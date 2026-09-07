@@ -48,7 +48,11 @@ const submit = () => {
         "
         :icon="!recovery ? Smartphone : KeyRound"
     >
-        <form method="POST" class="flex flex-col gap-6" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-6"
+            @submit.prevent="submit"
+        >
             <CodeInput
                 v-if="!recovery"
                 id="code"
@@ -74,7 +78,7 @@ const submit = () => {
                 :error-message="form.errors.recovery_code"
             />
 
-            <div v-if="recovery" class="flex justify-center w-full">
+            <div v-if="recovery" class="flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A verificar...</span>
                     <span v-else>Entrar</span>

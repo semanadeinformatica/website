@@ -179,11 +179,7 @@ const redeemProduct = (enrollmentId: number) => {
         </template>
     </Card>
 
-    <Modal
-        v-model="modalOpen"
-        max-width="lg"
-    >
-
+    <Modal v-model="modalOpen" max-width="lg">
         <div
             class="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 p-3.5 pr-10 sm:p-4"
         >

@@ -20,7 +20,8 @@ const emit = defineEmits<Emits>();
 
 withDefaults(defineProps<Props>(), {
     title: "Confirmar Palavra-passe",
-    content: "Para a tua segurança, confirma a tua palavra-passe para continuar.",
+    content:
+        "Para a tua segurança, confirma a tua palavra-passe para continuar.",
     button: "Confirmar",
 });
 
@@ -112,4 +113,3 @@ const closeModal = () => {
         </Modal>
     </span>
 </template>
-

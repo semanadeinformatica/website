@@ -39,11 +39,14 @@ const updatePassword = () => {
     <Card as="section" :interactive="false" padding="p-6 sm:p-8">
         <template #header>
             <div class="space-y-1">
-                <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                <h2
+                    class="text-lg font-bold tracking-tight text-white sm:text-xl"
+                >
                     Palavra-passe
                 </h2>
                 <p class="text-xs text-neutral-400 sm:text-sm">
-                    Garante que a tua conta usa uma palavra-passe forte e segura para proteger os teus dados.
+                    Garante que a tua conta usa uma palavra-passe forte e segura
+                    para proteger os teus dados.
                 </p>
             </div>
         </template>
@@ -106,4 +109,3 @@ const updatePassword = () => {
         </template>
     </Card>
 </template>
-

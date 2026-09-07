@@ -35,7 +35,11 @@ const submit = () => {
             {{ status }}
         </div>
 
-        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-5"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="email"
                 v-model="form.email"
@@ -49,7 +53,7 @@ const submit = () => {
                 :error-message="form.errors.email"
             />
 
-            <div class="mt-2 flex justify-center w-full">
+            <div class="mt-2 flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A enviar link...</span>
                     <span v-else>Enviar email</span>

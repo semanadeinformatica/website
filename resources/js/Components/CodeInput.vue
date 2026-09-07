@@ -173,7 +173,7 @@ defineExpose({ focus });
             <template v-for="(_, index) in length" :key="index">
                 <span
                     v-if="index === Math.floor(length / 2)"
-                    class="select-none px-0.5 font-mono text-lg text-neutral-500"
+                    class="px-0.5 font-mono text-lg text-neutral-500 select-none"
                 >
                     –
                 </span>
@@ -188,7 +188,7 @@ defineExpose({ focus });
                     :maxlength="index === 0 ? 16 : 1"
                     :disabled="disabled"
                     :autocomplete="index === 0 ? 'one-time-code' : 'off'"
-                    class="h-12 w-10 select-all rounded-2xl border bg-black/50 text-center font-mono text-xl font-bold text-white shadow-(--shadow-pill-inset) backdrop-blur-md transition-all duration-200 focus:bg-black/70 focus:outline-none sm:h-14 sm:w-12 sm:text-2xl"
+                    class="h-12 w-10 rounded-2xl border bg-black/50 text-center font-mono text-xl font-bold text-white shadow-(--shadow-pill-inset) backdrop-blur-md transition-all duration-200 select-all focus:bg-black/70 focus:outline-none sm:h-14 sm:w-12 sm:text-2xl"
                     :class="[
                         errorMessage
                             ? 'border-red-500/50 text-red-300 focus:border-red-500/80 focus:ring-1 focus:ring-red-500/30'

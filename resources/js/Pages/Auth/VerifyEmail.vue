@@ -38,8 +38,12 @@ const verificationLinkSent = computed(
             associado à tua conta.
         </div>
 
-        <form method="POST" class="flex flex-col gap-5" @submit.prevent="submit">
-            <div class="flex justify-center w-full">
+        <form
+            method="POST"
+            class="flex flex-col gap-5"
+            @submit.prevent="submit"
+        >
+            <div class="flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A reenviar...</span>
                     <span v-else>Reenviar email de verificação</span>

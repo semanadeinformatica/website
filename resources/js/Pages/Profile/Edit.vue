@@ -8,7 +8,9 @@ import LogoutOtherBrowserSessionsForm from "@/Pages/Profile/Partials/LogoutOther
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
-import PillSelector, { type PillOption } from "@/Components/UI/PillSelector.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 import { User, ShieldCheck, Settings, ArrowLeft } from "@lucide/vue";
 import type Session from "@/Types/Session";
 
@@ -86,11 +88,7 @@ watch(activeTab, (newTab) => {
     <AppLayout title="Definições de Perfil">
         <div class="relative mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <div class="mb-8 flex justify-center sm:mb-10">
-                <PillSelector
-                    v-model="activeTab"
-                    :items="tabs"
-                    size="md"
-                >
+                <PillSelector v-model="activeTab" :items="tabs" size="md">
                     <template #leading>
                         <Link
                             :href="route('profile.show')"
@@ -116,7 +114,9 @@ watch(activeTab, (newTab) => {
                 />
 
                 <TwoFactorAuthenticationForm
-                    v-if="$page.props.jetstream.canManageTwoFactorAuthentication"
+                    v-if="
+                        $page.props.jetstream.canManageTwoFactorAuthentication
+                    "
                     :requires-confirmation="confirmsTwoFactorAuthentication"
                 />
             </div>

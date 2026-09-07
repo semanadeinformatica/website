@@ -39,11 +39,14 @@ const closeModal = () => {
     <Card as="section" :interactive="false" padding="p-6 sm:p-8">
         <template #header>
             <div class="space-y-1">
-                <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                <h2
+                    class="text-lg font-bold tracking-tight text-white sm:text-xl"
+                >
                     Apagar Conta
                 </h2>
                 <p class="text-xs text-neutral-400 sm:text-sm">
-                    Remove permanentemente a tua conta e todos os dados associados.
+                    Remove permanentemente a tua conta e todos os dados
+                    associados.
                 </p>
             </div>
         </template>
@@ -51,7 +54,10 @@ const closeModal = () => {
         <div class="space-y-4">
             <div class="text-sm text-neutral-300">
                 <p>
-                    Depois de apagada, a tua conta não poderá ser recuperada. Todos os bilhetes adquiridos, pontuações de atividades, submissões e histórico de eventos serão apagados permanentemente.
+                    Depois de apagada, a tua conta não poderá ser recuperada.
+                    Todos os bilhetes adquiridos, pontuações de atividades,
+                    submissões e histórico de eventos serão apagados
+                    permanentemente.
                 </p>
             </div>
         </div>
@@ -74,10 +80,14 @@ const closeModal = () => {
         @close="closeModal"
     >
         <div class="space-y-4 pt-1">
-            <div class="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-xs text-red-300">
+            <div
+                class="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-xs text-red-300"
+            >
                 <AlertTriangle :size="18" class="shrink-0 text-red-400" />
                 <p>
-                    Tens a certeza absoluta de que pretendes prosseguir? Por motivos de segurança, introduz a tua palavra-passe para confirmar.
+                    Tens a certeza absoluta de que pretendes prosseguir? Por
+                    motivos de segurança, introduz a tua palavra-passe para
+                    confirmar.
                 </p>
             </div>
 
@@ -108,5 +118,3 @@ const closeModal = () => {
         </template>
     </Modal>
 </template>
-
-

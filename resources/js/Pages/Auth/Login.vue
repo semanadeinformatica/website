@@ -47,7 +47,11 @@ const submit = () => {
             {{ status }}
         </div>
 
-        <form method="POST" class="flex flex-col gap-4" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-4"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="email"
                 v-model="form.email"
@@ -94,7 +98,7 @@ const submit = () => {
                 </Link>
             </div>
 
-            <div class="mt-4 flex justify-center w-full">
+            <div class="mt-4 flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A entrar...</span>
                     <span v-else>Entrar</span>

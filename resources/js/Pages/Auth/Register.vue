@@ -30,7 +30,11 @@ const submit = () => {
         subtitle="Junta-te à Semana de Informática 2026 e aproveita palestras inspiradoras, workshops práticos e oportunidades únicas de networking."
         :icon="UserPlus"
     >
-        <form method="POST" class="flex flex-col gap-4" @submit.prevent="submit">
+        <form
+            method="POST"
+            class="flex flex-col gap-4"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -88,7 +92,7 @@ const submit = () => {
                     class="relative flex flex-col items-stretch self-stretch"
                 >
                     <label
-                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 hover:border-white/20 focus-within:border-white/20 focus-within:bg-black/65"
+                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65 hover:border-white/20"
                         :class="
                             form.errors.terms
                                 ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
@@ -140,7 +144,7 @@ const submit = () => {
 
                 <div class="relative flex flex-col items-stretch self-stretch">
                     <label
-                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 hover:border-white/20 focus-within:border-white/20 focus-within:bg-black/65"
+                        class="pill-container group flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 transition-all duration-200 focus-within:border-white/20 focus-within:bg-black/65 hover:border-white/20"
                         :class="
                             form.errors.data_sharing_agreement
                                 ? 'border-red-500/50 focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30'
@@ -183,7 +187,7 @@ const submit = () => {
                 </div>
             </div>
 
-            <div class="mt-4 flex justify-center w-full">
+            <div class="mt-4 flex w-full justify-center">
                 <PrimaryButton :disabled="form.processing">
                     <span v-if="form.processing">A criar conta...</span>
                     <span v-else>Criar conta</span>

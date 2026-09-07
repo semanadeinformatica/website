@@ -46,11 +46,14 @@ const closeModal = () => {
     <Card as="section" :interactive="false" padding="p-6 sm:p-8">
         <template #header>
             <div class="space-y-1">
-                <h2 class="text-lg font-bold tracking-tight text-white sm:text-xl">
+                <h2
+                    class="text-lg font-bold tracking-tight text-white sm:text-xl"
+                >
                     Sessões Ativas
                 </h2>
                 <p class="text-xs text-neutral-400 sm:text-sm">
-                    Gere os dispositivos e navegadores com sessão iniciada na tua conta.
+                    Gere os dispositivos e navegadores com sessão iniciada na
+                    tua conta.
                 </p>
             </div>
         </template>
@@ -58,7 +61,9 @@ const closeModal = () => {
         <div class="space-y-4">
             <div class="text-sm text-neutral-300">
                 <p>
-                    Se suspeitares de atividade não autorizada ou se deixaste a sessão aberta num computador partilhado, podes encerrar todas as outras sessões ativas de imediato.
+                    Se suspeitares de atividade não autorizada ou se deixaste a
+                    sessão aberta num computador partilhado, podes encerrar
+                    todas as outras sessões ativas de imediato.
                 </p>
             </div>
 
@@ -69,19 +74,34 @@ const closeModal = () => {
                     class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/3 p-3.5 sm:p-4"
                 >
                     <div class="flex items-center gap-3.5">
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 ring-1 ring-white/10">
-                            <Laptop v-if="session.agent.is_desktop" :size="20" />
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 ring-1 ring-white/10"
+                        >
+                            <Laptop
+                                v-if="session.agent.is_desktop"
+                                :size="20"
+                            />
                             <Smartphone v-else :size="20" />
                         </div>
 
                         <div class="space-y-0.5">
                             <div class="text-sm font-semibold text-white">
-                                {{ session.agent.platform || "Dispositivo desconhecido" }}
-                                <span class="text-neutral-500 font-normal">•</span>
-                                {{ session.agent.browser || "Navegador desconhecido" }}
+                                {{
+                                    session.agent.platform ||
+                                    "Dispositivo desconhecido"
+                                }}
+                                <span class="font-normal text-neutral-500"
+                                    >•</span
+                                >
+                                {{
+                                    session.agent.browser ||
+                                    "Navegador desconhecido"
+                                }}
                             </div>
 
-                            <div class="flex flex-wrap items-center gap-2 text-xs text-neutral-400">
+                            <div
+                                class="flex flex-wrap items-center gap-2 text-xs text-neutral-400"
+                            >
                                 <span>{{ session.ip_address }}</span>
                                 <span class="text-neutral-600">•</span>
                                 <span
@@ -151,5 +171,3 @@ const closeModal = () => {
         </template>
     </Modal>
 </template>
-
-

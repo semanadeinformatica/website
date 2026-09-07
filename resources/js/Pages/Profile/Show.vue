@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProfilePicture from "@/Components/Profile/ProfilePicture.vue";
-import InfoCard from "@/Components/Profile/InfoCard.vue";
+import ProfileCard from "@/Components/Profile/ProfileCard.vue";
 import CvArea from "@/Components/Profile/CvArea.vue";
 import InteractionArea from "@/Components/Profile/InteractionArea.vue";
+import type Event from "@/Types/Event";
 import type Slot from "@/Types/Slot";
-import { h } from "vue";
+import { h, computed } from "vue";
 import TicketWrapper from "@/Components/Profile/TicketWrapper.vue";
 import StickerWrapper from "@/Components/Profile/StickerWrapper.vue";
 import type Session from "@/Types/Session";
@@ -20,76 +20,65 @@ interface Props {
     tickets: Event[];
     slots: Slot[];
     sessions: Session[];
-    user: User; // The user to render, can be the logged in user or another user
+    user: User;
     isStaff: boolean;
     canViewCV: boolean;
     canViewAll: boolean;
     points?: number;
 }
 
-const { user, canViewAll } = defineProps<Props>();
+const props = defineProps<Props>();
 const page = usePage();
 
-const authUser = page.props.auth.user;
+const authUser = computed(() => page.props.auth.user as User | undefined);
 
-const buttons: Tabs =
-    isParticipant(user) && !isCompany(page.props.auth.user)
-        ? {
-              ticket: {
-                  label: "Bilhetes",
-                  component: h(TicketWrapper),
-              },
-              sticker: {
-                  label: "Conquistas",
-                  component: h(StickerWrapper),
-              },
-          }
-        : isCompany(user)
-          ? {
-                visitHistory: {
-                    label: "Visitas",
-                    component: h(EnrolledParticipants),
-                },
-            }
-          : {};
+const buttons = computed<Tabs>(() => {
+    const list: Tabs = {};
 
-if (canViewAll && authUser && authUser.id === user.id) {
-    buttons["allParticipants"] = {
-        label: "Todos",
-        component: h(AllParticipants),
-    };
-}
+    if (isParticipant(props.user) && !isCompany(authUser.value)) {
+        list.ticket = {
+            label: "Bilhetes",
+            component: h(TicketWrapper),
+        };
+        list.sticker = {
+            label: "Conquistas",
+            component: h(StickerWrapper),
+        };
+    } else if (isCompany(props.user)) {
+        list.visitHistory = {
+            label: "Visitas",
+            component: h(EnrolledParticipants),
+        };
+    }
+
+    if (
+        props.canViewAll &&
+        authUser.value &&
+        authUser.value.id === props.user.id
+    ) {
+        list.allParticipants = {
+            label: "Todos",
+            component: h(AllParticipants),
+        };
+    }
+
+    return list;
+});
 </script>
 
 <template>
     <AppLayout title="Perfil">
-        <div class="flex flex-col items-center sm:pt-0">
-            <div
-                class="relative mx-6 flex min-h-screen w-full flex-col items-center p-6 md:max-w-[60vw]"
-            >
-                <div
-                    class="flex w-full justify-between max-md:flex-col max-md:space-y-8"
-                >
-                    <ProfilePicture :item="user" />
-                    <InfoCard :user="user" :is-staff="isStaff" />
-                </div>
-                <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
-                <p
-                    v-if="
-                        points !== null && authUser && authUser.id === user.id
-                    "
-                    class="text-text-color text-center text-xl font-bold"
-                >
-                    Tens {{ points }}
-                    <img
-                        class="inline w-5 align-text-top"
-                        alt="SINFrão"
-                        title="SINFrão"
-                        src="/images/cy-sinf-small.svg"
-                    />
-                </p>
-                <InteractionArea :buttons="buttons"> </InteractionArea>
-            </div>
+        <div
+            class="relative mx-auto max-w-5xl space-y-8 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+        >
+            <!-- Profile Hero Card -->
+            <ProfileCard :user="user" :is-staff="isStaff" :points="points" />
+
+            <!-- CV Upload / Preview Area -->
+            <CvArea v-if="canViewCV && isParticipant(user)" :item="user" />
+
+            <!-- Tabs Section (Bilhetes / Conquistas / Visitas) -->
+            <InteractionArea :buttons="buttons" />
         </div>
     </AppLayout>
 </template>

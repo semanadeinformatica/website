@@ -45,7 +45,9 @@ watchEffect(() => {
     <CardLayout title="Editar Competição" max-width="max-w-2xl">
         <template #header>
             <div class="space-y-1">
-                <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                <h1
+                    class="text-xl font-bold tracking-tight text-white sm:text-2xl"
+                >
                     Editar Competição
                 </h1>
                 <p class="text-xs text-neutral-400 sm:text-sm">
@@ -54,7 +56,11 @@ watchEffect(() => {
             </div>
         </template>
 
-        <form id="competition-edit-form" class="flex flex-col gap-4" @submit.prevent="submit">
+        <form
+            id="competition-edit-form"
+            class="flex flex-col gap-4"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -161,4 +167,3 @@ watchEffect(() => {
         </template>
     </CardLayout>
 </template>
-

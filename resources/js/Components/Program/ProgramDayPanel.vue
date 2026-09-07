@@ -132,7 +132,13 @@ const times = computed<{ start?: string; end?: string }>(() => {
             class="flex flex-col items-center justify-center py-20 text-center"
         >
             <PillSelector
-                :items="[{ id: 'none', label: 'Sem eventos agendados', disabled: true }]"
+                :items="[
+                    {
+                        id: 'none',
+                        label: 'Sem eventos agendados',
+                        disabled: true,
+                    },
+                ]"
                 size="sm"
                 :wrap="false"
                 container-class="mb-3"
