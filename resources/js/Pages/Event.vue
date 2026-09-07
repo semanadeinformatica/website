@@ -8,10 +8,12 @@ import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import Sponsor from "@/Components/Home/Sponsor.vue";
+import Card from "@/Components/UI/Card.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import { ExternalLink, QrCode } from "@lucide/vue";
+import { ArrowUp, ArrowDown, QrCode } from "@lucide/vue";
 
 interface Props {
     event: Event;
@@ -33,54 +35,117 @@ const event = computed(() => props.event);
 const speakers = computed(() => event.value.users?.filter(isSpeaker) ?? []);
 const companies = computed(() => event.value.users?.filter(isCompany) ?? []);
 
-const formatDateTime = (
-    dayDate?: string | Date,
-    startStr?: string,
-    endStr?: string,
-): string => {
-    let datePart = "";
-    if (dayDate) {
-        try {
-            const d = dayDate instanceof Date ? dayDate : new Date(dayDate);
-            datePart = d.toLocaleDateString("pt-PT", {
-                day: "numeric",
+const formatMilestoneDate = (dayDate?: string | Date, timeStr?: string) => {
+    if (!dayDate || !timeStr) return null;
+    try {
+        const d = dayDate instanceof Date ? dayDate : new Date(dayDate);
+        if (isNaN(d.getTime())) return null;
+        const day = d.getDate();
+        const m = d
+            .toLocaleDateString("pt-PT", {
                 month: "short",
                 timeZone: "Europe/Lisbon",
-            });
-        } catch {
-            datePart = String(dayDate);
-        }
-    }
+            })
+            .replace(".", "");
+        const month = m.charAt(0).toUpperCase() + m.slice(1);
 
-    const formatTimeOnly = (t?: string): string => {
-        if (!t) return "";
-        const isoString = t.includes("T") ? t : `1970-01-01T${t}.000000Z`;
-        try {
-            const d = new Date(isoString);
-            return d.toLocaleTimeString("pt-PT", {
-                hour: "2-digit",
-                minute: "2-digit",
-                timeZone: "Europe/Lisbon",
-            });
-        } catch {
-            return t.slice(0, 5);
-        }
-    };
+        const isoTime = timeStr.includes("T")
+            ? timeStr
+            : `1970-01-01T${timeStr}.000000Z`;
+        const timeObj = new Date(isoTime);
+        const time = isNaN(timeObj.getTime())
+            ? timeStr.slice(0, 5)
+            : timeObj.toLocaleTimeString("pt-PT", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: "Europe/Lisbon",
+              });
 
-    const startTime = formatTimeOnly(startStr);
-    const endTime = formatTimeOnly(endStr);
-
-    if (datePart && startTime && endTime) {
-        return `${datePart}, ${startTime} - ${endTime}`;
+        return {
+            dateText: `${day} ${month}`,
+            timeText: time,
+        };
+    } catch {
+        return null;
     }
-    if (datePart && startTime) {
-        return `${datePart}, ${startTime}`;
-    }
-    if (startTime && endTime) {
-        return `${startTime} - ${endTime}`;
-    }
-    return datePart || startTime || "";
 };
+
+const formattedSchedule = computed(() => {
+    const start = formatMilestoneDate(
+        props.event.event_day?.date,
+        props.event.time_start,
+    );
+    const end = formatMilestoneDate(
+        props.event.event_day?.date,
+        props.event.time_end,
+    );
+
+    if (!start) return "";
+    if (!end) return `${start.dateText}, ${start.timeText}`;
+    return `${start.dateText}, ${start.timeText} — ${end.timeText}`;
+});
+
+const eventCategoryLabel = computed(() => {
+    const typeName = props.event.type?.name?.toLowerCase();
+    if (typeName === "talk" || typeName === "palestra") return "Palestra";
+    if (typeName === "workshop") return "Workshop";
+    if (typeName === "pitch") return "Pitch";
+    if (typeName) {
+        return typeName.charAt(0).toUpperCase() + typeName.slice(1);
+    }
+    return "Atividade";
+});
+
+const eventTypeColorClass = computed(() => {
+    const typeName = props.event.type?.name?.toLowerCase();
+    if (typeName === "talk" || typeName === "palestra") return "text-sky-400";
+    if (typeName === "workshop") return "text-purple-400";
+    return "text-amber-400";
+});
+
+const isEventFull = computed(() => {
+    return Boolean(
+        props.event.capacity &&
+        props.enrollmentCount >= props.event.capacity &&
+        !props.hasJoined,
+    );
+});
+
+const cardTitle = computed(() => {
+    if (props.hasJoined) return "Inscrição Confirmada";
+    if (isEventFull.value) return "Vagas Esgotadas";
+    if (!props.isEnrolled) return "Participa no Evento";
+    if (
+        props.canJoin &&
+        (props.event.external_url || props.event.enroll_in_site)
+    ) {
+        return "Inscrições Abertas";
+    }
+    return "Entrada Livre";
+});
+
+const cardDescription = computed(() => {
+    if (props.hasJoined) {
+        return "O teu lugar neste evento está garantido. Vemo-nos lá!";
+    }
+    if (isEventFull.value) {
+        return "Este evento atingiu a lotação máxima disponível.";
+    }
+    if (!props.isEnrolled) {
+        return "A participação é gratuita para todos os inscritos na SINF 2026. Inscreve-te na conferência para teres acesso.";
+    }
+    if (props.canJoin && props.event.external_url) {
+        return "As inscrições para este evento são realizadas através do formulário oficial.";
+    }
+    if (props.canJoin && props.event.enroll_in_site) {
+        if (props.event.capacity) {
+            const remaining = props.event.capacity - props.enrollmentCount;
+            return `Ainda restam ${remaining} ${remaining === 1 ? "vaga disponível" : "vagas disponíveis"}. Garante o teu lugar.`;
+        }
+        return "As inscrições estão abertas para participantes da SINF 2026.";
+    }
+    return "Esta sessão tem acesso livre para todos os participantes inscritos na SINF 2026. Basta compareceres no local.";
+});
 
 const handleJoinEvent = () => {
     router.put(route("event.join", { event: event.value.id }));
@@ -151,6 +216,19 @@ const eventTabItems = computed<PillOption[]>(() => {
     }));
 });
 
+const scanCodeTabItems = computed<PillOption[]>(() => [
+    {
+        id: "scan-code",
+        label: "Digitalizar QR Code",
+        icon: QrCode,
+        href: route("user.scan-code", {
+            _query: {
+                event: event.value.id,
+            },
+        }),
+    },
+]);
+
 const isAtBottom = ref(false);
 
 function updateScrollState() {
@@ -211,259 +289,161 @@ onBeforeUnmount(() => {
             :aria-label="
                 isAtBottom ? 'Scroll to top' : 'Scroll to next section'
             "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
+            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
             @click="handleQuickScroll"
         >
-            <svg
-                v-if="isAtBottom"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-            </svg>
-            <svg
-                v-else
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
-            </svg>
+            <ArrowUp v-if="isAtBottom" :size="16" />
+            <ArrowDown v-else :size="16" />
         </button>
 
         <div
-            class="relative mx-auto w-full max-w-7xl space-y-12 px-4 py-16 sm:space-y-16 sm:px-6 lg:px-8"
+            class="relative mx-auto w-full max-w-7xl space-y-12 px-4 pt-4 pb-12 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"
         >
-            <header class="flex flex-col items-center gap-6 text-center">
-                <div class="space-y-3">
-                    <h1
-                        class="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
-                    >
-                        {{ event.name }}
-                    </h1>
-                    <p
-                        v-if="event.topic"
-                        class="text-base font-medium text-neutral-300 sm:text-lg md:text-xl"
-                    >
-                        {{ event.topic }}
-                    </p>
-                </div>
-
+            <header class="relative overflow-hidden pt-2 pb-6 sm:pt-4 sm:pb-10">
                 <div
-                    class="mt-2 flex w-full flex-col gap-6 rounded-3xl border border-white/8 bg-black/50 p-6 text-left shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md sm:p-8"
+                    class="relative grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12"
                 >
                     <div
-                        v-if="
-                            event.time_start || event.location || event.capacity
-                        "
-                        class="flex flex-wrap items-center gap-4 text-xs text-neutral-400 sm:gap-6 sm:text-sm"
+                        class="flex flex-col items-start text-left lg:col-span-7 xl:col-span-8"
                     >
                         <div
-                            v-if="event.time_start"
-                            class="flex items-center gap-2"
+                            class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs font-semibold tracking-wider uppercase"
                         >
-                            <svg
-                                class="h-4 w-4 text-neutral-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                            <span :class="eventTypeColorClass">{{
+                                eventCategoryLabel
+                            }}</span>
+
+                            <template v-if="formattedSchedule">
+                                <span class="text-neutral-600">·</span>
+                                <span class="text-neutral-300">
+                                    {{ formattedSchedule }}
+                                </span>
+                            </template>
+
+                            <template v-if="event.location">
+                                <span class="text-neutral-600">·</span>
+                                <span class="text-neutral-400">
+                                    {{ event.location }}
+                                </span>
+                            </template>
+                        </div>
+
+                        <h1
+                            class="mt-4 text-3xl leading-[1.1] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+                        >
+                            {{ event.name }}
+                        </h1>
+
+                        <div
+                            v-if="event.topic"
+                            class="relative mt-4 flex items-start gap-3"
+                        >
+                            <p
+                                class="text-base leading-snug font-medium text-neutral-200 sm:text-lg lg:text-xl"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                            <span class="font-medium text-neutral-300">
-                                {{
-                                    formatDateTime(
-                                        event.event_day?.date,
-                                        event.time_start,
-                                        event.time_end,
-                                    )
-                                }}
-                            </span>
+                                {{ event.topic }}
+                            </p>
                         </div>
 
                         <div
-                            v-if="event.location"
-                            class="flex items-center gap-2"
+                            v-if="event.description_html"
+                            class="prose prose-invert prose-headings:text-white prose-p:leading-relaxed prose-a:text-sinf-secondary-light hover:prose-a:text-white prose-strong:text-white mt-6 max-w-2xl text-left text-sm leading-relaxed font-normal text-neutral-400 sm:text-base"
+                            v-html="event.description_html"
+                        />
+                        <p
+                            v-else-if="event.description"
+                            class="mt-6 max-w-2xl text-left text-sm leading-relaxed font-normal text-neutral-400 sm:text-base"
                         >
-                            <svg
-                                class="h-4 w-4 text-neutral-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                                />
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                            </svg>
-                            <span class="font-medium text-neutral-300">
-                                {{ event.location }}
-                            </span>
-                        </div>
-
-                        <div
-                            v-if="event.capacity"
-                            class="flex items-center gap-2"
-                        >
-                            <svg
-                                class="h-4 w-4 text-neutral-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                            </svg>
-                            <span class="font-medium text-neutral-300">
-                                {{ event.capacity }} vagas
-                            </span>
-                        </div>
+                            {{ event.description }}
+                        </p>
                     </div>
 
-                    <div
-                        v-if="event.description_html"
-                        class="prose prose-invert prose-headings:text-white prose-a:text-sinf-secondary-light hover:prose-a:text-white prose-strong:text-white max-w-none text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
-                        v-html="event.description_html"
-                    />
-                    <p
-                        v-else-if="event.description"
-                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
-                    >
-                        {{ event.description }}
-                    </p>
-
-                    <div
-                        v-if="isParticipant"
-                        class="border-t border-white/8 pt-6"
-                    >
-                        <div
-                            v-if="hasJoined"
-                            class="flex flex-col items-center justify-between gap-4 sm:flex-row"
+                    <div class="relative w-full lg:col-span-5 xl:col-span-4">
+                        <Card
+                            as="div"
+                            :interactive="false"
+                            padding="p-6 sm:p-7"
+                            class="w-full"
                         >
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold sm:text-sm">
-                                    Inscrição confirmada! Vemo-nos lá.
-                                </span>
+                            <h2
+                                class="text-xl font-bold tracking-tight text-white sm:text-2xl"
+                            >
+                                {{ cardTitle }}
+                            </h2>
+
+                            <p
+                                class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                            >
+                                {{ cardDescription }}
+                            </p>
+
+                            <div class="mt-6">
+                                <PrimaryButton
+                                    v-if="hasJoined"
+                                    color="danger"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                    @click="handleLeaveEvent"
+                                >
+                                    <span>Cancelar Inscrição</span>
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    v-else-if="isEventFull"
+                                    disabled
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                >
+                                    <span>Vagas Esgotadas</span>
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    v-else-if="!isEnrolled"
+                                    type="button"
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                    @click="handleEnrollSinf"
+                                >
+                                    <span>Inscrever-me na SINF</span>
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    v-else-if="canJoin && event.external_url"
+                                    :href="event.external_url"
+                                    external
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                >
+                                    <span>Inscrever-me</span>
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    v-else-if="canJoin && event.enroll_in_site"
+                                    type="button"
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                    @click="handleJoinEvent"
+                                >
+                                    <span>Inscrever-me no Evento</span>
+                                </PrimaryButton>
+
+                                <PrimaryButton
+                                    v-else-if="isEnrolled"
+                                    disabled
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                >
+                                    <span>Acesso Garantido</span>
+                                </PrimaryButton>
                             </div>
-
-                            <button
-                                type="button"
-                                class="pill-container pill-item shrink-0 cursor-pointer border-red-500/20 bg-red-500/10 px-5 py-2 text-xs font-semibold text-red-300 transition-all hover:bg-red-500/20 active:scale-95 sm:text-sm"
-                                @click="handleLeaveEvent"
-                            >
-                                Cancelar Inscrição
-                            </button>
-                        </div>
-
-                        <div
-                            v-else-if="!isEnrolled"
-                            class="flex flex-col items-center justify-between gap-4 sm:flex-row"
-                        >
-                            <p
-                                class="text-center text-xs text-neutral-400 sm:text-left sm:text-sm"
-                            >
-                                Precisas de estar inscrito na SINF 2026 para
-                                participar.
-                            </p>
-                            <button
-                                type="button"
-                                class="pill-container pill-item bg-sinf-primary/80 hover:bg-sinf-primary shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
-                                @click="handleEnrollSinf"
-                            >
-                                Inscrever-me na SINF
-                            </button>
-                        </div>
-
-                        <div
-                            v-else-if="canJoin && event.external_url"
-                            class="flex flex-col items-center justify-between gap-4 sm:flex-row"
-                        >
-                            <p
-                                class="text-center text-xs text-neutral-400 sm:text-left sm:text-sm"
-                            >
-                                As inscrições são realizadas através do
-                                formulário oficial.
-                            </p>
-                            <a
-                                :href="event.external_url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="pill-container pill-item bg-sinf-secondary/80 hover:bg-sinf-secondary shrink-0 cursor-pointer gap-2 px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
-                            >
-                                <span>Inscrever-me</span>
-                                <ExternalLink :size="16" />
-                            </a>
-                        </div>
-
-                        <div
-                            v-else-if="canJoin && event.enroll_in_site"
-                            class="flex flex-col items-center justify-between gap-4 sm:flex-row"
-                        >
-                            <p
-                                class="text-center text-xs text-neutral-400 sm:text-left sm:text-sm"
-                            >
-                                <span v-if="event.capacity">
-                                    Ainda restam
-                                    {{ event.capacity - enrollmentCount }} vagas
-                                    disponíveis.
-                                </span>
-                                <span v-else>
-                                    As inscrições estão abertas para
-                                    participantes da SINF 2026.
-                                </span>
-                            </p>
-                            <button
-                                type="button"
-                                class="pill-container pill-item bg-sinf-secondary/80 hover:bg-sinf-secondary shrink-0 cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:text-sm"
-                                @click="handleJoinEvent"
-                            >
-                                Inscrever-me no Evento
-                            </button>
-                        </div>
-
-                        <div
-                            v-else-if="
-                                event.capacity &&
-                                enrollmentCount >= event.capacity
-                            "
-                            class="text-center sm:text-left"
-                        >
-                            <p
-                                class="text-xs font-semibold text-red-400 sm:text-sm"
-                            >
-                                Este evento está atualmente esgotado.
-                            </p>
-                        </div>
+                        </Card>
                     </div>
                 </div>
             </header>
@@ -481,24 +461,21 @@ onBeforeUnmount(() => {
 
                 <PillSelector
                     v-if="isAdmin(authUser) || isStaff"
-                    :items="[
-                        {
-                            id: 'scan-code',
-                            label: 'Digitalizar QR Code',
-                            icon: QrCode,
-                            href: route('user.scan-code', {
-                                _query: {
-                                    event: event.id,
-                                },
-                            }),
-                        },
-                    ]"
+                    :items="scanCodeTabItems"
                     size="md"
                     :wrap="false"
                 />
             </div>
 
-            <div v-if="activeTab === 'speakers'" class="space-y-6">
+            <div
+                v-if="activeTab === 'speakers'"
+                class="w-full"
+                :class="[
+                    speakers.length === 1
+                        ? 'mx-auto max-w-3xl'
+                        : 'grid grid-cols-1 gap-6 lg:grid-cols-2',
+                ]"
+            >
                 <SpeakerInfo
                     v-for="speaker in speakers"
                     :key="speaker.id"
@@ -565,23 +542,21 @@ onBeforeUnmount(() => {
                                 </div>
                             </div>
 
-                            <div class="shrink-0">
-                                <span
-                                    class="pill-container border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 shadow-none"
-                                >
-                                    Inscrito
-                                </span>
-                            </div>
+                            <span
+                                class="shrink-0 text-xs font-medium text-neutral-500"
+                            >
+                                Inscrito
+                            </span>
                         </div>
                     </div>
                 </div>
 
                 <div
                     v-else
-                    class="flex flex-col items-center justify-center py-16 text-center"
+                    class="flex flex-col items-center justify-center py-12 text-center"
                 >
-                    <p class="text-xs text-neutral-500 sm:text-sm">
-                        Ainda nenhum participante se inscreveu neste evento.
+                    <p class="text-sm text-neutral-400">
+                        Ainda não existem participantes inscritos neste evento.
                     </p>
                 </div>
             </div>

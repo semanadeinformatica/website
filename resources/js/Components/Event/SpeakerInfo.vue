@@ -73,36 +73,79 @@ const socialLinks = computed(() => {
 
     return entries;
 });
+
+const displayName = computed(() => {
+    return user.value.usertype?.display_name ?? user.value.name;
+});
 </script>
 
 <template>
     <Card
         as="article"
-        padding="p-6 sm:p-8"
-        class="md:flex-row md:items-start md:gap-8"
+        layout="horizontal"
+        :image-src="
+            user.profile_photo_url && !imageError
+                ? user.profile_photo_url
+                : undefined
+        "
+        :image-alt="displayName"
+        padding="p-6 sm:p-7"
     >
-        <div class="flex shrink-0 flex-col items-center gap-4">
+        <template v-if="!user.profile_photo_url || imageError" #image>
             <div
-                class="relative h-32 w-32 overflow-hidden rounded-2xl bg-neutral-900 ring-1 ring-white/10 sm:h-40 sm:w-40"
+                class="flex h-full w-full items-center justify-center bg-neutral-900 text-2xl font-bold text-neutral-400 sm:text-3xl"
             >
-                <img
-                    v-if="user.profile_photo_url && !imageError"
-                    :src="user.profile_photo_url"
-                    :alt="user.usertype?.display_name ?? user.name"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    @error="imageError = true"
-                />
-                <div
-                    v-else
-                    class="flex h-full w-full items-center justify-center bg-neutral-900 text-2xl font-bold text-neutral-400 sm:text-3xl"
-                >
-                    {{ (user.usertype?.display_name ?? user.name).charAt(0) }}
-                </div>
+                {{ displayName.charAt(0) }}
             </div>
+        </template>
+
+        <template #header>
+            <h3 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                {{ displayName }}
+            </h3>
 
             <div
-                v-if="socialLinks.length > 0"
-                class="flex flex-wrap items-center justify-center gap-1.5"
+                v-if="user.usertype?.title || user.usertype?.organization"
+                class="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-xs font-medium text-neutral-400 sm:justify-start sm:text-sm"
+            >
+                <span v-if="user.usertype?.title" class="text-neutral-300">
+                    {{ user.usertype.title }}
+                </span>
+                <span
+                    v-if="user.usertype?.title && user.usertype?.organization"
+                    class="text-neutral-600"
+                >
+                    ·
+                </span>
+                <span
+                    v-if="user.usertype?.organization"
+                    class="text-neutral-400"
+                >
+                    {{ user.usertype.organization }}
+                </span>
+            </div>
+        </template>
+
+        <template
+            v-if="user.usertype?.description_html || user.usertype?.description"
+            #default
+        >
+            <div
+                v-if="user.usertype?.description_html"
+                class="prose prose-invert prose-p:leading-relaxed prose-sm max-w-none text-left text-xs leading-relaxed text-neutral-300 sm:text-sm"
+                v-html="user.usertype?.description_html"
+            />
+            <p
+                v-else-if="user.usertype?.description"
+                class="text-left text-xs leading-relaxed text-neutral-300 sm:text-sm"
+            >
+                {{ user.usertype.description }}
+            </p>
+        </template>
+
+        <template v-if="socialLinks.length > 0" #footer>
+            <div
+                class="flex flex-wrap items-center justify-center gap-1.5 sm:justify-start"
             >
                 <a
                     v-for="item in socialLinks"
@@ -110,48 +153,12 @@ const socialLinks = computed(() => {
                     :href="item.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 transition-all hover:bg-white/10 hover:text-white"
+                    class="flex h-7 w-7 items-center justify-center rounded-xl bg-white/4 text-neutral-400 ring-1 ring-white/6 transition-all duration-200 hover:bg-white/10 hover:text-white hover:ring-white/15"
                     :aria-label="item.label"
                 >
-                    <SocialIcon :platform="item.platform" :size="16" />
+                    <SocialIcon :platform="item.platform" :size="15" />
                 </a>
             </div>
-        </div>
-
-        <div class="flex min-w-0 flex-1 flex-col text-center md:text-left">
-            <div class="space-y-1">
-                <h3
-                    class="text-xl font-bold tracking-tight text-white sm:text-2xl"
-                >
-                    {{ user.usertype?.display_name ?? user.name }}
-                </h3>
-                <p
-                    v-if="user.usertype?.title || user.usertype?.organization"
-                    class="text-xs font-medium text-neutral-400 sm:text-sm"
-                >
-                    <span v-if="user.usertype?.title">{{
-                        user.usertype.title
-                    }}</span>
-                    <span
-                        v-if="
-                            user.usertype?.title && user.usertype?.organization
-                        "
-                    >
-                        ·
-                    </span>
-                    <span
-                        v-if="user.usertype?.organization"
-                        class="text-neutral-300"
-                        >{{ user.usertype.organization }}</span
-                    >
-                </p>
-            </div>
-
-            <div
-                v-if="user.usertype?.description_html"
-                class="prose prose-invert mt-4 max-w-none text-justify text-xs leading-relaxed text-neutral-300 sm:text-sm"
-                v-html="user.usertype?.description_html"
-            />
-        </div>
+        </template>
     </Card>
 </template>

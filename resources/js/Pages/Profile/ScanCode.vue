@@ -313,11 +313,6 @@ onMounted(() => {
                             class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3.5"
                         >
                             <div class="flex items-center gap-3 truncate">
-                                <div
-                                    class="bg-sinf-primary/30 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-white"
-                                >
-                                    <Check :size="16" />
-                                </div>
                                 <div class="truncate">
                                     <p
                                         class="truncate text-sm font-semibold text-white"
@@ -332,11 +327,6 @@ onMounted(() => {
                                     </span>
                                 </div>
                             </div>
-                            <span
-                                class="shrink-0 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300"
-                            >
-                                Selecionada
-                            </span>
                         </div>
                     </div>
 
