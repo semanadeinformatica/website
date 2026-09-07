@@ -5,9 +5,12 @@ import PillSelector from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     department: Department;
+    showHeader?: boolean;
 }
 
-defineProps<Props>();
+withDefaults(defineProps<Props>(), {
+    showHeader: true,
+});
 </script>
 
 <template>
@@ -16,7 +19,10 @@ defineProps<Props>();
         :id="`dept-${department.id}`"
         class="w-full"
     >
-        <div class="mb-8 flex items-center justify-center">
+        <div
+            v-if="showHeader"
+            class="mb-4 flex items-center justify-center sm:justify-start sm:mb-6"
+        >
             <PillSelector
                 :items="[
                     {
@@ -31,7 +37,7 @@ defineProps<Props>();
         </div>
 
         <div
-            class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4"
+            class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3"
         >
             <TeamMember
                 v-for="staff in department.staff"

@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import type Department from "@/Types/Department";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DepartmentSection from "@/Components/Team/DepartmentSection.vue";
-import DepartmentSelector from "@/Components/Team/DepartmentSelector.vue";
+import DepartmentSidebar from "@/Components/Team/DepartmentSidebar.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import { ArrowUp, ArrowDown } from "@lucide/vue";
 
@@ -30,6 +30,13 @@ const displayedDepartments = computed(() => {
         (d) => d.id === selectedDepartmentId.value,
     );
 });
+
+function handleSelectDepartment(id: number | null) {
+    selectedDepartmentId.value = id;
+    if (window.scrollY > 200) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
 
 function updateScrollState() {
     const scrollY = window.scrollY || window.pageYOffset;
@@ -98,21 +105,31 @@ onBeforeUnmount(() => {
         </button>
 
         <div
-            class="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
+            class="relative mx-auto w-full max-w-7xl px-4 pt-0 pb-12 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"
         >
             <template v-if="hasStaff">
-                <DepartmentSelector
-                    :departments="departments"
-                    :selected-id="selectedDepartmentId"
-                    @select="selectedDepartmentId = $event"
-                />
+                <div class="lg:flex lg:items-start lg:gap-8 xl:gap-12">
+                    <aside
+                        class="w-full lg:sticky lg:top-24 lg:w-64 lg:shrink-0 xl:w-72"
+                    >
+                        <DepartmentSidebar
+                            :departments="departments"
+                            :selected-id="selectedDepartmentId"
+                            @select="handleSelectDepartment"
+                        />
+                    </aside>
 
-                <div class="space-y-16 sm:space-y-20">
-                    <DepartmentSection
-                        v-for="department in displayedDepartments"
-                        :key="department.id"
-                        :department="department"
-                    />
+                    <!-- Right Column: Team Members -->
+                    <div class="min-w-0 flex-1">
+                        <div class="space-y-12 sm:space-y-16">
+                            <DepartmentSection
+                                v-for="department in displayedDepartments"
+                                :key="department.id"
+                                :department="department"
+                                :show-header="selectedDepartmentId === null"
+                            />
+                        </div>
+                    </div>
                 </div>
             </template>
 

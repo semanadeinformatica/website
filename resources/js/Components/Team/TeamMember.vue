@@ -86,13 +86,14 @@ const socialLinks = computed(() => {
     <Card
         :image-src="photoUrl && !imageError ? photoUrl : undefined"
         :image-alt="name"
+        layout="responsive"
         class="h-full w-full"
     >
         <template v-if="!photoUrl || imageError" #image>
             <div
                 class="flex h-full w-full items-center justify-center bg-neutral-900 text-neutral-600"
             >
-                <Users class="h-12 w-12 opacity-40" />
+                <Users class="h-8 w-8 opacity-40 sm:h-12 sm:w-12" />
             </div>
         </template>
 
@@ -102,8 +103,8 @@ const socialLinks = computed(() => {
             >
                 {{ name }}
             </h4>
-            <p class="mt-1 line-clamp-1 text-xs text-neutral-400">
-                <span v-if="isCoordinator" class="font-medium text-neutral-400">
+            <p class="mt-0.5 line-clamp-1 text-xs text-neutral-400 sm:mt-1">
+                <span v-if="isCoordinator" class="font-medium text-neutral-300">
                     Coordenador(a)
                 </span>
                 <span v-else class="text-neutral-400"> Membro da Equipa </span>
@@ -113,7 +114,7 @@ const socialLinks = computed(() => {
         <template #footer>
             <div
                 v-if="socialLinks.length > 0"
-                class="flex flex-wrap items-center gap-1.5"
+                class="flex flex-wrap items-center gap-1 sm:gap-1.5"
             >
                 <a
                     v-for="item in socialLinks"
@@ -124,7 +125,7 @@ const socialLinks = computed(() => {
                     class="flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 transition-all hover:bg-white/10 hover:text-white"
                     :aria-label="item.label"
                 >
-                    <SocialIcon :platform="item.platform" :size="16" />
+                    <SocialIcon :platform="item.platform" :size="15" />
                 </a>
             </div>
             <div v-else class="text-[11px] text-neutral-600">SINF</div>

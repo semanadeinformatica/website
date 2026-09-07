@@ -37,7 +37,7 @@ const pageRoutes: Routes = {
     team: { label: "Equipa" },
 };
 
-const editions = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
+const editions = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
 const currentEdition = 2026;
 
 const page = usePage();
