@@ -6,7 +6,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import type Competition from "@/Types/Competition";
 import type { User } from "@/Types/User";
 import PillSelector from "@/Components/UI/PillSelector.vue";
-import { Menu, X, ChevronRight, ArrowRight } from "@lucide/vue";
+import { Menu, X, ChevronRight, ChevronDown, ArrowRight } from "@lucide/vue";
 
 interface RouteItem {
     label: string;
@@ -34,6 +34,7 @@ const emit = defineEmits<{
 }>();
 
 const internalOpen = ref(props.modelValue ?? false);
+const editionsOpen = ref(false);
 
 watch(
     () => props.modelValue,
@@ -46,6 +47,9 @@ watch(
 
 watch(internalOpen, (val) => {
     emit("update:modelValue", val);
+    if (!val) {
+        editionsOpen.value = false;
+    }
     if (typeof document !== "undefined") {
         document.body.classList.toggle("overflow-hidden", val);
     }
@@ -217,12 +221,22 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                         </div>
 
                         <div>
-                            <div
-                                class="px-2 pb-2 text-[11px] font-semibold tracking-wider text-neutral-500 uppercase"
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-2 py-1 text-[11px] font-semibold tracking-wider text-neutral-500 uppercase transition-colors hover:text-neutral-300 focus:outline-none"
+                                @click="editionsOpen = !editionsOpen"
                             >
-                                Edições Anteriores
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
+                                <span>Edições Anteriores</span>
+                                <ChevronDown
+                                    :size="14"
+                                    class="transition-transform duration-200"
+                                    :class="{ 'rotate-180': editionsOpen }"
+                                />
+                            </button>
+                            <div
+                                v-if="editionsOpen"
+                                class="mt-2 grid grid-cols-3 gap-2"
+                            >
                                 <template
                                     v-for="edition in options.editions"
                                     :key="`mobile-edition-${edition}`"
