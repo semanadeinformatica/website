@@ -119,8 +119,7 @@ const onCameraOn = (capabilities: MediaTrackCapabilities) => {
     isCameraReady.value = true;
     cameraError.value = "";
     hasTorch.value = Boolean(
-        "torch" in capabilities &&
-            (capabilities as { torch?: boolean }).torch,
+        "torch" in capabilities && (capabilities as { torch?: boolean }).torch,
     );
 };
 
@@ -265,7 +264,7 @@ onMounted(() => {
 <template>
     <AppLayout title="Ler QR Code">
         <div
-            class="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8 sm:px-6 lg:px-8"
+            class="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-8 sm:px-6 lg:px-8"
         >
             <div class="mb-8 flex justify-center sm:mb-10">
                 <PillSelector size="md">
@@ -315,7 +314,7 @@ onMounted(() => {
                         >
                             <div class="flex items-center gap-3 truncate">
                                 <div
-                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sinf-primary/30 text-white"
+                                    class="bg-sinf-primary/30 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-white"
                                 >
                                     <Check :size="16" />
                                 </div>
@@ -401,7 +400,7 @@ onMounted(() => {
                                 class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/95 p-4 text-center"
                             >
                                 <div
-                                    class="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-sinf-primary-light"
+                                    class="border-t-sinf-primary-light h-8 w-8 animate-spin rounded-full border-2 border-white/20"
                                 />
                                 <p class="text-xs text-neutral-300">
                                     A inicializar câmara...
@@ -463,7 +462,7 @@ onMounted(() => {
                                 <!-- Scanning Laser Line (clean, no shadow) -->
                                 <div
                                     v-if="!isPaused"
-                                    class="laser-line pointer-events-none absolute inset-x-8 h-0.5 bg-gradient-to-r from-transparent via-sinf-primary-light to-transparent"
+                                    class="laser-line via-sinf-primary-light pointer-events-none absolute inset-x-8 h-0.5 bg-gradient-to-r from-transparent to-transparent"
                                 />
                             </div>
 
@@ -486,7 +485,7 @@ onMounted(() => {
                                         v-if="scanStatus === 'processing'"
                                     >
                                         <div
-                                            class="h-10 w-10 animate-spin rounded-full border-3 border-white/20 border-t-sinf-primary-light"
+                                            class="border-t-sinf-primary-light h-10 w-10 animate-spin rounded-full border-3 border-white/20"
                                         />
                                         <p
                                             class="text-sm font-semibold text-white"
@@ -616,7 +615,9 @@ onMounted(() => {
                         <button
                             type="button"
                             class="pill-container cursor-pointer gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-300 transition-all hover:border-white/20 hover:text-white active:scale-95"
-                            :title="isPaused ? 'Retomar câmara' : 'Pausar câmara'"
+                            :title="
+                                isPaused ? 'Retomar câmara' : 'Pausar câmara'
+                            "
                             @click="togglePause"
                         >
                             <Play v-if="isPaused" :size="14" />
@@ -635,7 +636,7 @@ onMounted(() => {
                             <input
                                 v-model="autoContinue"
                                 type="checkbox"
-                                class="h-3.5 w-3.5 rounded border-white/20 bg-black/40 text-sinf-primary focus:ring-0 focus:ring-offset-0"
+                                class="text-sinf-primary h-3.5 w-3.5 rounded border-white/20 bg-black/40 focus:ring-0 focus:ring-offset-0"
                             />
                             <span>Avançar automaticamente após validação</span>
                         </label>
@@ -660,10 +661,8 @@ onMounted(() => {
                         </div>
 
                         <div
-                            v-if="
-                                scanStatus === 'success'
-                            "
-                            class="rounded-2xl p-3.5 text-xs sm:text-sm border border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                            v-if="scanStatus === 'success'"
+                            class="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-300 sm:text-sm"
                         >
                             <div class="flex items-center gap-2 font-medium">
                                 <CheckCircle2
@@ -705,7 +704,7 @@ onMounted(() => {
                         class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5"
                     >
                         <div
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sinf-primary/30 text-xs font-bold text-white"
+                            class="bg-sinf-primary/30 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                         >
                             1
                         </div>
@@ -725,7 +724,7 @@ onMounted(() => {
                         class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5"
                     >
                         <div
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sinf-primary/30 text-xs font-bold text-white"
+                            class="bg-sinf-primary/30 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                         >
                             2
                         </div>
@@ -746,7 +745,7 @@ onMounted(() => {
                         class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5"
                     >
                         <div
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sinf-primary/30 text-xs font-bold text-white"
+                            class="bg-sinf-primary/30 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                         >
                             3
                         </div>

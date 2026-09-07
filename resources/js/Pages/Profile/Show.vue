@@ -69,7 +69,7 @@ const buttons = computed<Tabs>(() => {
 <template>
     <AppLayout title="Perfil">
         <div
-            class="relative mx-auto max-w-5xl space-y-8 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+            class="relative mx-auto max-w-7xl space-y-8 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
         >
             <!-- Profile Hero Card -->
             <ProfileCard :user="user" :is-staff="isStaff" :points="points" />

@@ -38,7 +38,9 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <footer class="relative mt-auto overflow-hidden px-4 pt-16 pb-12 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8">
+    <footer
+        class="relative mt-auto overflow-hidden px-4 pt-16 pb-12 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8"
+    >
         <div
             class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
             aria-hidden="true"
@@ -112,7 +114,7 @@ const currentYear = new Date().getFullYear();
         </div>
 
         <div
-            class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-8 md:flex-row"
+            class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 md:flex-row"
         >
             <div class="flex flex-col items-center gap-3 md:items-start">
                 <Link
@@ -133,8 +135,8 @@ const currentYear = new Date().getFullYear();
                         rel="noopener noreferrer"
                         class="font-semibold text-white transition-colors"
                     >
-                        NIAEFEUP
-                    </a>. Todos os direitos reservados.
+                        NIAEFEUP </a
+                    >. Todos os direitos reservados.
                 </p>
             </div>
 

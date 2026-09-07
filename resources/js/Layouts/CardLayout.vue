@@ -21,7 +21,7 @@ withDefaults(defineProps<Props>(), {
         <div
             class="relative flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
         >
-            <div class="mx-auto flex w-full max-w-5xl flex-col items-center">
+            <div class="mx-auto flex w-full max-w-7xl flex-col items-center">
                 <div
                     v-if="(heading || title) && !$slots.header"
                     class="mb-6 flex flex-col items-center text-center"

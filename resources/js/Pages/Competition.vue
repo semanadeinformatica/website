@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
         </button>
 
         <div
-            class="relative mx-auto max-w-5xl space-y-12 px-4 py-16 sm:space-y-16 sm:px-6 lg:px-8"
+            class="relative mx-auto max-w-7xl space-y-12 px-4 py-16 sm:space-y-16 sm:px-6 lg:px-8"
         >
             <header class="flex flex-col items-center gap-6 text-center">
                 <div class="space-y-3">
