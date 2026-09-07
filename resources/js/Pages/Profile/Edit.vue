@@ -86,7 +86,7 @@ watch(activeTab, (newTab) => {
 
 <template>
     <AppLayout title="Definições de Perfil">
-        <div class="relative mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="relative mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
             <div class="mb-8 flex justify-center sm:mb-10">
                 <PillSelector v-model="activeTab" :items="tabs" size="md">
                     <template #leading>

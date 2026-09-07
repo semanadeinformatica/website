@@ -57,10 +57,10 @@ const authTabs = computed<PillOption[]>(() => [
 <template>
     <AppLayout :title="title">
         <div
-            class="relative flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12 sm:px-6 lg:px-12 lg:py-16"
+            class="relative flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
         >
             <div
-                class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24"
+                class="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-20"
             >
                 <div
                     class="flex flex-col items-center text-center lg:items-start lg:text-left"

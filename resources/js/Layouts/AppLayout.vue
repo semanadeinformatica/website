@@ -2,7 +2,6 @@
 import { Head } from "@inertiajs/vue3";
 import Navbar from "@/Components/Navbar.vue";
 import Footer from "@/Components/Footer.vue";
-
 import GlowingOrbs from "@/Components/GlowingOrbs.vue";
 
 interface Props {
@@ -13,16 +12,18 @@ defineProps<Props>();
 </script>
 
 <template>
-    <div class="relative min-h-screen bg-olive-950 text-white">
+    <div class="relative flex min-h-screen flex-col bg-olive-950 text-white">
         <Head :title="title" />
 
         <GlowingOrbs />
 
-        <main class="relative z-10 min-h-screen">
+        <div class="relative z-10 flex min-h-screen flex-1 flex-col">
             <Navbar />
             <!-- <Banner /> -->
-            <slot />
-            <Footer class="relative z-10" />
-        </main>
+            <main class="flex flex-1 flex-col">
+                <slot />
+            </main>
+            <Footer class="relative z-10 mt-auto" />
+        </div>
     </div>
 </template>
