@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Paginated from "@/Types/Paginated";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -16,24 +16,27 @@ defineProps<Props>();
 </script>
 
 <template>
-    <CRUDLayout
-        title="Event Types"
+    <CRUDView
+        title="Tipos de Evento"
+        view="EventType"
         :items="items"
         name="eventTypes"
         :is-searchable="isSearchable"
     >
-        <template #heading>Event Types</template>
+        <template #heading>Tipos de Evento</template>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Tipo</Header>
+                <Header sort-by="name">Tipo / Categoria</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row :item="item" name="eventTypes">
-                <Cell>{{ item.name }} </Cell>
+                <Cell class="font-medium text-white capitalize">
+                    {{ item.name }}
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

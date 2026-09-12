@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Paginated from "@/Types/Paginated";
 import type Sponsor from "@/Types/Sponsor";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -42,41 +42,48 @@ const tiers = computed<Record<number, string>>(() =>
     Object.fromEntries(
         props.with.tiers.map((tier) => [
             tier.id,
-            `${editions.value[tier.edition_id]} - ${tier.name}`,
+            `${editions.value[tier.edition_id] ?? ""} - ${tier.name}`,
         ]),
     ),
 );
 </script>
 
 <template>
-    <CRUDLayout
-        title="Sponsor"
+    <CRUDView
+        title="Patrocinadores"
+        view="Sponsor"
         :items="items"
         name="sponsors"
         :is-searchable="isSearchable"
     >
-        <template #heading>Patrocínios</template>
+        <template #heading>Patrocinadores</template>
 
         <template #header>
             <HeaderRow>
-                <Header filter-by="edition_id" :filter-values="editions"
-                    >Edição</Header
-                >
-                <Header filter-by="company_id" :filter-values="companies"
-                    >Empresa</Header
-                >
-                <Header filter-by="tier" :filter-values="tiers"
-                    >Tipo de patrocínio</Header
-                >
+                <Header filter-by="edition_id" :filter-values="editions">
+                    Edição
+                </Header>
+                <Header filter-by="company_id" :filter-values="companies">
+                    Empresa
+                </Header>
+                <Header filter-by="tier" :filter-values="tiers">
+                    Nível de Patrocínio
+                </Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="sponsors" :item="item">
-                <Cell>{{ editions[item.edition_id] }}</Cell>
-                <Cell>{{ companies[item.company_id] }}</Cell>
-                <Cell>{{ tiers[item.sponsor_tier_id] }}</Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.edition_id] ?? "-" }}
+                </Cell>
+                <Cell class="font-medium text-white">
+                    {{ companies[item.company_id] ?? `Empresa #${item.company_id}` }}
+                </Cell>
+                <Cell class="text-xs text-neutral-300">
+                    {{ tiers[item.sponsor_tier_id] ?? "-" }}
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

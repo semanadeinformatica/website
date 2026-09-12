@@ -47,6 +47,7 @@ const messages = {
             company: "Empresa | Empresas",
             competition: "Competição | Competições",
             competitionTeam: "Equipa de Competição | Equipas de Competição",
+            competitionPrize: "Prémio de Competição | Prémios de Competição",
             compettionPrize: "Prémio de Competição | Prémios de Competição",
             department: "Departamento | Departamentos",
             edition: "Edição | Edições",

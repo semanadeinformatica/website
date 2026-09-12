@@ -19,33 +19,41 @@ watch(id, async () => {
     <div>
         <div
             v-if="show && message"
-            class="border-b-2 border-black"
+            class="border-b backdrop-blur-md transition-all"
             :class="{
-                'bg-2023-teal-dark': style == 'success',
-                'bg-2023-red-dark': style == 'danger',
+                'border-emerald-500/30 bg-emerald-950/80 text-emerald-200':
+                    style == 'success',
+                'border-red-500/30 bg-red-950/80 text-red-200':
+                    style == 'danger',
             }"
         >
             <div
-                class="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between gap-4 px-4 py-2"
+                class="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between gap-4 px-4 py-2.5"
             >
-                <CheckCircle
-                    v-if="style == 'success'"
-                    :size="28"
-                    class="shrink-0 text-white"
-                />
-                <AlertTriangle v-else :size="28" class="shrink-0 text-white" />
+                <div class="flex items-center gap-3">
+                    <CheckCircle
+                        v-if="style == 'success'"
+                        :size="20"
+                        class="shrink-0 text-emerald-400"
+                    />
+                    <AlertTriangle
+                        v-else
+                        :size="20"
+                        class="shrink-0 text-red-400"
+                    />
 
-                <span class="font-medium text-white">
-                    {{ message }}
-                </span>
+                    <span class="text-sm font-medium">
+                        {{ message }}
+                    </span>
+                </div>
 
                 <button
                     type="button"
-                    class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center text-white hover:opacity-80 focus-visible:ring-2 focus-visible:ring-white/20"
+                    class="pill-container ml-auto flex h-7 w-7 cursor-pointer items-center justify-center text-neutral-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/20"
                     aria-label="Dismiss"
                     @click.prevent="show = false"
                 >
-                    <X :size="20" />
+                    <X :size="14" />
                 </button>
             </div>
         </div>

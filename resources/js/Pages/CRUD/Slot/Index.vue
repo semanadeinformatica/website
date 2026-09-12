@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Paginated from "@/Types/Paginated";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -25,35 +25,47 @@ const quests = computed<number[]>(() =>
 </script>
 
 <template>
-    <CRUDLayout
-        title="Slots"
+    <CRUDView
+        title="Encaixes de Tarefas"
+        view="Slot"
         :items="items"
         name="slots"
         :is-searchable="isSearchable"
     >
-        <template #heading
-            ><span class="italic">Slots</span> de tarefas</template
-        >
+        <template #heading>Encaixes de Tarefas (Slots)</template>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Nome</Header>
-                <Header sort-by="total_quests">Número mínimo de tarefas</Header>
-                <Header sort-by="points">Pontos</Header>
-                <Header>Tarefas</Header>
+                <Header sort-by="name">Nome do Encaixe</Header>
+                <Header sort-by="total_quests">Mínimo de Tarefas</Header>
+                <Header sort-by="points">Pontuação</Header>
+                <Header>Tarefas Associadas</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row :item="item" name="slots">
-                <Cell>{{ item.name }}</Cell>
-                <Cell>{{ item.total_quests }}</Cell>
-                <Cell>{{ item.points }}</Cell>
-                <Cell>{{
-                    item.quests?.filter((q: Quest) => quests.includes(q.id))
-                        .length ?? "N/A"
-                }}</Cell>
+                <Cell class="font-medium text-white">{{ item.name }}</Cell>
+                <Cell>
+                    <span class="font-mono text-xs text-neutral-300">
+                        {{ item.total_quests }}
+                    </span>
+                </Cell>
+                <Cell>
+                    <span class="font-mono text-xs font-semibold text-neutral-200">
+                        {{ item.points }}
+                    </span>
+                    <span class="ml-1 text-xs text-neutral-500">pts</span>
+                </Cell>
+                <Cell>
+                    <span class="font-mono text-xs text-neutral-400">
+                        {{
+                            item.quests?.filter((q: Quest) => quests.includes(q.id))
+                                .length ?? 0
+                        }}
+                    </span>
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
@@ -31,27 +30,33 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Associar membro a equipa">
-        <form class="contents" @submit.prevent="submit">
-            <ImageInput
-                id="image"
-                v-model="form.image"
-                label="Imagem da equipa"
-                class="self-stretch"
-                :error-message="form.errors.image"
-            />
+    <CRUDModal
+        title="Criar Equipa"
+        name="competitionTeams"
+        :processing="form.processing"
+        max-width="lg"
+        @submit="submit"
+    >
+        <ImageInput
+            id="image"
+            v-model="form.image"
+            label="Imagem da equipa"
+            class="self-stretch"
+            :error-message="form.errors.image"
+        />
 
-            <TextInput
-                id="name"
-                v-model="form.name"
-                label="Nome"
-                type="text"
-                required
-                autofocus
-                autocomplete="name"
-                :error-message="form.errors.name"
-            />
+        <TextInput
+            id="name"
+            v-model="form.name"
+            label="Nome da equipa"
+            type="text"
+            required
+            autofocus
+            autocomplete="name"
+            :error-message="form.errors.name"
+        />
 
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
                 id="points"
                 v-model="form.points"
@@ -75,25 +80,23 @@ const submit = () => {
                     {{ competition.name }}
                 </option>
             </TextInput>
+        </div>
 
-            <TextInput
-                id="members[]"
-                v-model="form.members"
-                type="select"
-                label="Membros"
-                multiple
-                :error-message="form.errors.members"
+        <TextInput
+            id="members[]"
+            v-model="form.members"
+            type="select"
+            label="Membros da Equipa"
+            multiple
+            :error-message="form.errors.members"
+        >
+            <option
+                v-for="participant in $props.with.participants"
+                :key="participant.id"
+                :value="participant.id"
             >
-                <option
-                    v-for="participant in $props.with.participants"
-                    :key="participant.id"
-                    :value="participant.id"
-                >
-                    {{ participant.user?.name ?? participant.id }}
-                </option>
-            </TextInput>
-
-            <PrimaryButton type="submit">Criar</PrimaryButton>
-        </form>
-    </CardLayout>
+                {{ participant.user?.name ?? participant.id }}
+            </option>
+        </TextInput>
+    </CRUDModal>
 </template>

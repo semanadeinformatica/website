@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import TextInput from "@/Components/Form/TextInput.vue";
@@ -22,19 +21,21 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Editar Tipo de Evento">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                id="name"
-                v-model="form.name"
-                label="Nome"
-                type="text"
-                required
-                autofocus
-                :error-message="form.errors.name"
-            />
-
-            <PrimaryButton type="submit">Editar</PrimaryButton>
-        </form>
-    </CardLayout>
+    <CRUDModal
+        title="Editar Tipo de Evento"
+        name="eventTypes"
+        :processing="form.processing"
+        max-width="md"
+        @submit="submit"
+    >
+        <TextInput
+            id="name"
+            v-model="form.name"
+            label="Nome do Tipo de Evento"
+            type="text"
+            required
+            autofocus
+            :error-message="form.errors.name"
+        />
+    </CRUDModal>
 </template>

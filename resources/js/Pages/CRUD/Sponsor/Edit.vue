@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import type Company from "@/Types/Company";
 import type Edition from "@/Types/Edition";
 import type Sponsor from "@/Types/Sponsor";
@@ -32,57 +31,59 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Editar Patrocínio">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                v-model="form.edition_id"
-                type="select"
-                required
-                label="Edição"
-                :error-message="form.errors.edition_id"
+    <CRUDModal
+        title="Editar Patrocínio"
+        name="sponsors"
+        :processing="form.processing"
+        max-width="md"
+        @submit="submit"
+    >
+        <TextInput
+            v-model="form.edition_id"
+            type="select"
+            required
+            label="Edição"
+            :error-message="form.errors.edition_id"
+        >
+            <option
+                v-for="edition in $props.with.editions"
+                :key="edition.id"
+                :value="edition.id"
             >
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </TextInput>
+                {{ edition.name }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                v-model="form.company_id"
-                type="select"
-                required
-                label="Empresa"
-                :error-message="form.errors.company_id"
+        <TextInput
+            v-model="form.company_id"
+            type="select"
+            required
+            label="Empresa"
+            :error-message="form.errors.company_id"
+        >
+            <option
+                v-for="company in $props.with.companies"
+                :key="company.id"
+                :value="company.id"
             >
-                <option
-                    v-for="company in $props.with.companies"
-                    :key="company.id"
-                    :value="company.id"
-                >
-                    {{ company.user?.name }}
-                </option>
-            </TextInput>
+                {{ company.user?.name }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                v-model="form.sponsor_tier_id"
-                type="select"
-                required
-                label="Tipo de patrocínio"
-                :error-message="form.errors.sponsor_tier_id"
+        <TextInput
+            v-model="form.sponsor_tier_id"
+            type="select"
+            required
+            label="Tipo de patrocínio"
+            :error-message="form.errors.sponsor_tier_id"
+        >
+            <option
+                v-for="tier in $props.with.tiers"
+                :key="tier.id"
+                :value="tier.id"
             >
-                <option
-                    v-for="tier in $props.with.tiers"
-                    :key="tier.id"
-                    :value="tier.id"
-                >
-                    {{ tier.name }}
-                </option>
-            </TextInput>
-
-            <PrimaryButton type="submit">Atribuir</PrimaryButton>
-        </form>
-    </CardLayout>
+                {{ tier.name }}
+            </option>
+        </TextInput>
+    </CRUDModal>
 </template>

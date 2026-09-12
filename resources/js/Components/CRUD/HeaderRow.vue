@@ -3,9 +3,9 @@ import Header from "./Header.vue";
 </script>
 
 <template>
-    <tr class="bg-2023-teal-dark border border-black text-white">
-        <Header sort-by="id">ID</Header>
+    <tr class="border-b border-white/10 bg-white/[0.03]">
+        <Header sort-by="id" class="w-16">ID</Header>
         <slot></slot>
-        <Header>Ações</Header>
+        <Header class="w-32 text-right">Ações</Header>
     </tr>
 </template>
