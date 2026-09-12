@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Link, useForm } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import { KeyRound } from "@lucide/vue";
 import { route } from "ziggy-js";

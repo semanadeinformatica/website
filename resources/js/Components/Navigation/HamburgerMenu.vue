@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, onUnmounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { route, type HasQueryParam } from "ziggy-js";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import ResponsiveNavLink from "@/Components/Navigation/ResponsiveNavLink.vue";
 import type Competition from "@/Types/Competition";
 import type { User } from "@/Types/User";
 import PillSelector from "@/Components/UI/PillSelector.vue";
@@ -97,7 +97,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
     <PillSelector size="sm" :wrap="false" class="md:hidden">
         <button
             type="button"
-            class="pill-item flex h-7 w-7 items-center justify-center p-0"
+            class="pill-item flex h-7 w-7 items-center justify-center p-0 focus-visible:ring-2 focus-visible:ring-white/20"
             aria-label="Menu"
             @click="internalOpen = !internalOpen"
         >
@@ -136,7 +136,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
 
                         <button
                             type="button"
-                            class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/8 bg-white/4 text-neutral-300 transition-colors hover:bg-white/8 hover:text-white focus:outline-none"
+                            class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/8 bg-white/4 text-neutral-300 transition-colors hover:bg-white/8 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                             aria-label="Fechar menu"
                             @click="closeMenu"
                         >

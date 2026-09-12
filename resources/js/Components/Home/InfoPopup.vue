@@ -4,7 +4,7 @@ import { inject, onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
 import { route } from "ziggy-js";
 import { router } from "@inertiajs/vue3";
-import PrimaryButton from "../PrimaryButton.vue";
+import PrimaryButton from "../UI/PrimaryButton.vue";
 
 const options = ref({
     modelValue: false,

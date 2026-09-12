@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import { Link } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
+import Dropdown from "@/Components/UI/Dropdown.vue";
+import DropdownLink from "@/Components/UI/DropdownLink.vue";
 import { ChevronDown } from "@lucide/vue";
 
 export interface PillDropdownItem {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm } from "@inertiajs/vue3";
-import Checkbox from "@/Components/Checkbox.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import { AlertCircle, UserPlus } from "@lucide/vue";
 import { route } from "ziggy-js";

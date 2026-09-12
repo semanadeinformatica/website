@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ImageInput from "@/Components/ImageInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import ImageInput from "@/Components/Form/ImageInput.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";

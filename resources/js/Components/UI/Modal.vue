@@ -89,7 +89,7 @@ const handleClose = () => {
         <button
             v-if="closeable && showCloseButton"
             type="button"
-            class="pill-container absolute top-4 right-4 z-20 h-8 w-8 cursor-pointer justify-center text-neutral-400 transition-colors hover:text-white"
+            class="pill-container absolute top-4 right-4 z-20 h-8 w-8 cursor-pointer justify-center text-neutral-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/20"
             aria-label="Fechar"
             @click="handleClose"
         >

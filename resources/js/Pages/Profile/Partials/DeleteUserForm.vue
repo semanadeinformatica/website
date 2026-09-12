@@ -3,10 +3,10 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import Card from "@/Components/UI/Card.vue";
 import Modal from "@/Components/UI/Modal.vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import { AlertTriangle } from "@lucide/vue";
 import { route } from "ziggy-js";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref<HTMLInputElement | null>(null);

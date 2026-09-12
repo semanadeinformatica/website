@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 
 interface Props {
     item: EventDay;

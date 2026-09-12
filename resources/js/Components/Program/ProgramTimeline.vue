@@ -6,7 +6,7 @@ import type EventDay from "@/Types/EventDay";
 import { isSpeaker, type SpeakerUser } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
-import StandDisplay from "@/Components/Program/TimeLine/StandDisplay.vue";
+import StandDisplay from "@/Components/Program/StandDisplay.vue";
 import { ArrowRight } from "@lucide/vue";
 
 interface Props {

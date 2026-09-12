@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import GlowingOrbs from "@/Components/GlowingOrbs.vue";
+import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
 </script>
 
 <template>

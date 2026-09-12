@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";

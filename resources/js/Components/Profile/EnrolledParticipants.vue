@@ -11,7 +11,7 @@ import {
 } from "@lucide/vue";
 import { computed, ref } from "vue";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
@@ -136,7 +136,8 @@ const filteredVisitors = computed(() => {
                 <button
                     v-if="searchQuery"
                     type="button"
-                    class="absolute top-1/2 right-2.5 -translate-y-1/2 text-neutral-400 hover:text-white"
+                    aria-label="Limpar pesquisa"
+                    class="absolute top-1/2 right-2.5 -translate-y-1/2 text-neutral-400 hover:text-white focus-visible:ring-2 focus-visible:ring-white/20"
                     @click="searchQuery = ''"
                 >
                     <X :size="14" />

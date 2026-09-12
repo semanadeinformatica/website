@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -9,11 +9,11 @@ import type Competition from "@/Types/Competition";
 import type { CompetitionPrizes } from "@/Types/Competition";
 import { type User } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import { ExternalLink, ArrowRight, ArrowUp, ArrowDown } from "@lucide/vue";
 
 interface Props {
     competition: Competition;
@@ -126,79 +126,16 @@ const defaultTab = computed<CompetitionTab>(() => {
 });
 
 const activeTab = ref<CompetitionTab>(defaultTab.value);
-
-const isAtBottom = ref(false);
-
-function updateScrollState() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    isAtBottom.value = scrollY + windowHeight >= documentHeight - 60;
-}
-
-function handleQuickScroll() {
-    if (isAtBottom.value) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
-
-    const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("section"),
-    );
-    if (!sections.length) return;
-
-    const currentY = window.scrollY || window.pageYOffset;
-    const navOffset = 70;
-
-    const nextSection = sections.find((section) => {
-        const top = section.getBoundingClientRect().top + currentY;
-        return top > currentY + navOffset + 20;
-    });
-
-    if (nextSection) {
-        const targetY =
-            nextSection.getBoundingClientRect().top + currentY - navOffset;
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-    } else {
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-        });
-    }
-}
-
-onMounted(() => {
-    updateScrollState();
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState, { passive: true });
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("scroll", updateScrollState);
-    window.removeEventListener("resize", updateScrollState);
-});
 </script>
 
 <template>
     <AppLayout :title="competition.name">
-        <button
-            type="button"
-            :aria-label="
-                isAtBottom ? 'Scroll to top' : 'Scroll to next section'
-            "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
-            @click="handleQuickScroll"
-        >
-            <ArrowUp v-if="isAtBottom" :size="16" />
-            <ArrowDown v-else :size="16" />
-        </button>
+        <QuickScroll mode="sections" />
 
         <div
             class="relative mx-auto w-full max-w-7xl space-y-12 px-4 pt-4 pb-12 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"
         >
             <header class="relative overflow-hidden pt-2 pb-6 sm:pt-4 sm:pb-10">
-
                 <div
                     class="relative grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12"
                 >
@@ -283,8 +220,9 @@ onBeforeUnmount(() => {
                                 <template
                                     v-else-if="competition.registration_link"
                                 >
-                                    As inscrições de equipas estão abertas. Junta
-                                    os teus colegas e submete a tua inscrição.
+                                    As inscrições de equipas estão abertas.
+                                    Junta os teus colegas e submete a tua
+                                    inscrição.
                                 </template>
                                 <template v-else>
                                     As inscrições de equipas para este desafio

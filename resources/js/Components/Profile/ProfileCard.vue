@@ -4,7 +4,7 @@ import { usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import Card from "@/Components/UI/Card.vue";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import ProfilePicture from "./ProfilePicture.vue";
 import QRCode from "./QRCode.vue";
 import {

@@ -38,5 +38,3 @@ const pageRoutes = {
         </div>
     </AdminLayout>
 </template>
-
-<style></style>

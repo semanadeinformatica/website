@@ -8,8 +8,8 @@ import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
 import Card from "@/Components/UI/Card.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import type Quest from "@/Types/Quest";
 import { QrcodeStream } from "vue-qrcode-reader";
 import {
@@ -25,8 +25,6 @@ import {
     CheckCircle2,
     AlertCircle,
     RotateCcw,
-    Sparkles,
-    Check,
 } from "@lucide/vue";
 
 interface Props {
@@ -58,10 +56,6 @@ const selectedQuestId = ref<string>(
     props.selectedQuest?.id?.toString() ||
         (props.quests.length === 1 ? props.quests[0]?.id?.toString() : "") ||
         (props.quests.length > 0 ? props.quests[0]?.id?.toString() : ""),
-);
-
-const currentSelectedQuest = computed(() =>
-    props.quests.find((q) => q.id.toString() === selectedQuestId.value),
 );
 
 // Form

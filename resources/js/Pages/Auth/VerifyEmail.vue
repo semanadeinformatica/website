@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import { MailCheck } from "@lucide/vue";
 import { route } from "ziggy-js";

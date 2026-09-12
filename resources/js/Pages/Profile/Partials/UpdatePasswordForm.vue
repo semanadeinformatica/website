@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import Card from "@/Components/UI/Card.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import { route } from "ziggy-js";
 
 const passwordInput = ref<HTMLInputElement | null>(null);

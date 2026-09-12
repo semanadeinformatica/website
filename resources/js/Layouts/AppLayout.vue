@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import Navbar from "@/Components/Navbar.vue";
-import Footer from "@/Components/Footer.vue";
-import GlowingOrbs from "@/Components/GlowingOrbs.vue";
+import Navbar from "@/Components/Navigation/Navbar.vue";
+import Footer from "@/Components/Navigation/Footer.vue";
+import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
 
 interface Props {
     title: string;

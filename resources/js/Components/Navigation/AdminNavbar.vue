@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavLink from "@/Components/NavLink.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
+import NavLink from "@/Components/Navigation/NavLink.vue";
+import Dropdown from "@/Components/UI/Dropdown.vue";
+import DropdownLink from "@/Components/UI/DropdownLink.vue";
 import { route } from "ziggy-js";
 import { User } from "@lucide/vue";
 

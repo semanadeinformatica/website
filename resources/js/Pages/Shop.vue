@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -7,14 +7,11 @@ import ShopItem from "@/Components/Shop/ShopItem.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
 import { type User } from "@/Types/User";
-import {
-    ShoppingBag,
-    ArrowUp,
-    ArrowRight,
-} from "@lucide/vue";
+import { ShoppingBag, ArrowRight } from "@lucide/vue";
 
 interface Props {
     products: BuyableProduct[];
@@ -143,48 +140,11 @@ const filteredAndSortedProducts = computed(() => {
 
     return result;
 });
-
-const isScrolled = ref(false);
-
-const updateScrollState = () => {
-    isScrolled.value = (window.scrollY || window.pageYOffset) > 400;
-};
-
-const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
-
-onMounted(() => {
-    updateScrollState();
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("scroll", updateScrollState);
-});
 </script>
 
 <template>
     <AppLayout title="Loja">
-        <!-- Floating scroll-to-top button -->
-        <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="opacity-0 translate-y-2 scale-90"
-            enter-to-class="opacity-100 translate-y-0 scale-100"
-            leave-active-class="transition duration-150 ease-in"
-            leave-from-class="opacity-100 translate-y-0 scale-100"
-            leave-to-class="opacity-0 translate-y-2 scale-90"
-        >
-            <button
-                v-if="isScrolled"
-                type="button"
-                aria-label="Voltar ao topo"
-                class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
-                @click="scrollToTop"
-            >
-                <ArrowUp :size="16" />
-            </button>
-        </Transition>
+        <QuickScroll mode="top" />
 
         <div
             class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-6 sm:py-12 lg:px-8"
@@ -216,10 +176,7 @@ onBeforeUnmount(() => {
                 </PillSelector>
             </div>
 
-            <div
-                v-else-if="user && !isEnrolled"
-                class="flex justify-center"
-            >
+            <div v-else-if="user && !isEnrolled" class="flex justify-center">
                 <PrimaryButton
                     padding="px-4 py-1.5"
                     text-size="text-xs"
@@ -245,10 +202,7 @@ onBeforeUnmount(() => {
                     />
 
                     <!-- Dropdown Sort with PillSelector -->
-                    <PillSelector
-                        :items="sortPillItems"
-                        size="sm"
-                    />
+                    <PillSelector :items="sortPillItems" size="sm" />
                 </div>
 
                 <!-- Products Grid -->
@@ -279,7 +233,8 @@ onBeforeUnmount(() => {
                         Nenhum artigo encontrado
                     </h3>
                     <p class="mt-1 max-w-sm text-xs text-neutral-400">
-                        Não existem artigos correspondentes aos filtros selecionados.
+                        Não existem artigos correspondentes aos filtros
+                        selecionados.
                     </p>
                     <div class="mt-5">
                         <PrimaryButton

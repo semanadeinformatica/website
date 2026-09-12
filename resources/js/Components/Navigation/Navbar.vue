@@ -4,8 +4,8 @@ import { usePage, router } from "@inertiajs/vue3";
 import { route, type HasQueryParam } from "ziggy-js";
 import { isAdmin as checkIsAdmin, type User } from "@/Types/User";
 import type Competition from "@/Types/Competition";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import HamburgerMenu from "@/Components/HamburgerMenu.vue";
+import DropdownLink from "@/Components/UI/DropdownLink.vue";
+import HamburgerMenu from "@/Components/Navigation/HamburgerMenu.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";

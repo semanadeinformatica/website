@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed } from "vue";
 import type Department from "@/Types/Department";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DepartmentSection from "@/Components/Team/DepartmentSection.vue";
 import DepartmentSidebar from "@/Components/Team/DepartmentSidebar.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
-import { ArrowUp, ArrowDown } from "@lucide/vue";
+import QuickScroll from "@/Components/UI/QuickScroll.vue";
 
 interface Props {
     departments: Department[];
@@ -14,7 +14,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const selectedDepartmentId = ref<number | null>(null);
-const isAtBottom = ref(false);
 
 const departmentsWithStaff = computed(() =>
     props.departments.filter((d) => (d.staff?.length ?? 0) > 0),
@@ -37,72 +36,14 @@ function handleSelectDepartment(id: number | null) {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 }
-
-function updateScrollState() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    isAtBottom.value = scrollY + windowHeight >= documentHeight - 60;
-}
-
-function handleQuickScroll() {
-    if (isAtBottom.value) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
-
-    const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("section"),
-    );
-    if (!sections.length) return;
-
-    const currentY = window.scrollY || window.pageYOffset;
-    const navOffset = 70;
-
-    const nextSection = sections.find((section) => {
-        const top = section.getBoundingClientRect().top + currentY;
-        return top > currentY + navOffset + 20;
-    });
-
-    if (nextSection) {
-        const targetY =
-            nextSection.getBoundingClientRect().top + currentY - navOffset;
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-    } else {
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-        });
-    }
-}
-
-onMounted(() => {
-    updateScrollState();
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState, { passive: true });
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("scroll", updateScrollState);
-    window.removeEventListener("resize", updateScrollState);
-});
 </script>
 
 <template>
     <AppLayout title="Equipa">
-        <button
+        <QuickScroll
             v-if="hasStaff && displayedDepartments.length > 1"
-            type="button"
-            :aria-label="
-                isAtBottom ? 'Scroll to top' : 'Scroll to next department'
-            "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
-            @click="handleQuickScroll"
-        >
-            <ArrowUp v-if="isAtBottom" :size="16" />
-            <ArrowDown v-else :size="16" />
-        </button>
+            mode="sections"
+        />
 
         <div
             class="relative mx-auto w-full max-w-7xl px-4 pt-0 pb-12 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"

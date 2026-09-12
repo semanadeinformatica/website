@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import type Competition from "@/Types/Competition";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import ImageInput from "@/Components/ImageInput.vue";
+import ImageInput from "@/Components/Form/ImageInput.vue";
 import type Participant from "@/Types/Participant";
 import type { CompetitionPrizes } from "@/Types/Competition";
 

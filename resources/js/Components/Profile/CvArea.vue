@@ -11,7 +11,7 @@ import {
 } from "@lucide/vue";
 import { ref, computed } from "vue";
 import { route } from "ziggy-js";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 
 interface Props {
     item: User | undefined;

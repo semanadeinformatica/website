@@ -2,13 +2,13 @@
 import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import Checkbox from "@/Components/Checkbox.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import { computed } from "vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 
 interface Props {
     with: {

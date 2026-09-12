@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import CardLayout from "@/Layouts/CardLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Enrollment from "@/Types/Enrollment";

@@ -21,7 +21,7 @@ withDefaults(defineProps<Props>(), {
     >
         <div
             v-if="showHeader"
-            class="mb-4 flex items-center justify-center sm:justify-start sm:mb-6"
+            class="mb-4 flex items-center justify-center sm:mb-6 sm:justify-start"
         >
             <PillSelector
                 :items="[

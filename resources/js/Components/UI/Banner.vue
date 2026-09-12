@@ -41,7 +41,7 @@ watch(id, async () => {
 
                 <button
                     type="button"
-                    class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center text-white hover:opacity-80"
+                    class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center text-white hover:opacity-80 focus-visible:ring-2 focus-visible:ring-white/20"
                     aria-label="Dismiss"
                     @click.prevent="show = false"
                 >

@@ -4,7 +4,7 @@ import { router } from "@inertiajs/vue3";
 import { QrCode } from "@lucide/vue";
 import { computed, ref } from "vue";
 import Modal from "@/Components/UI/Modal.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import { route } from "ziggy-js";
 
 interface Props {

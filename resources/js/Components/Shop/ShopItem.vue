@@ -9,7 +9,7 @@ import Card from "@/Components/UI/Card.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import { ShoppingBag, Check, Search, Package, Sparkles } from "@lucide/vue";
 
 interface Props {

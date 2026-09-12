@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -7,7 +7,7 @@ import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
 import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
 import InfoPopup from "@/Components/Home/InfoPopup.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
-import { ArrowUp, ArrowDown } from "@lucide/vue";
+import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
@@ -51,75 +51,13 @@ const statsGridColsClass = computed(() => {
     }
     return "grid-cols-2";
 });
-
-const isAtBottom = ref(false);
-
-function updateScrollState() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    isAtBottom.value = scrollY + windowHeight >= documentHeight - 60;
-}
-
-function handleQuickScroll() {
-    if (isAtBottom.value) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
-
-    const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("section"),
-    );
-    if (!sections.length) return;
-
-    const currentY = window.scrollY || window.pageYOffset;
-    const navOffset = 70;
-
-    const nextSection = sections.find((section) => {
-        const top = section.getBoundingClientRect().top + currentY;
-        return top > currentY + navOffset + 20;
-    });
-
-    if (nextSection) {
-        const targetY =
-            nextSection.getBoundingClientRect().top + currentY - navOffset;
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-    } else {
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-        });
-    }
-}
-
-onMounted(() => {
-    updateScrollState();
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState, { passive: true });
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("scroll", updateScrollState);
-    window.removeEventListener("resize", updateScrollState);
-});
 </script>
 
 <template>
     <AppLayout title="Home">
         <InfoPopup v-if="$page.props.auth.user && canEnroll" />
 
-        <button
-            type="button"
-            :aria-label="
-                isAtBottom ? 'Scroll to top' : 'Scroll to next section'
-            "
-            class="pill-container fixed right-6 bottom-6 z-40 h-11 w-11 cursor-pointer justify-center text-neutral-300 shadow-none transition-all duration-200 hover:scale-110 hover:border-white/25 hover:text-white focus:outline-none active:scale-95 sm:right-8 sm:bottom-8 sm:h-12 sm:w-12"
-            @click="handleQuickScroll"
-        >
-            <ArrowUp v-if="isAtBottom" :size="16" />
-            <ArrowDown v-else :size="16" />
-        </button>
+        <QuickScroll mode="sections" />
 
         <section
             class="relative flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center gap-8 px-4 py-16 text-center"

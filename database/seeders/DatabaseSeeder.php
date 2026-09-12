@@ -683,7 +683,26 @@ class DatabaseSeeder extends Seeder
         });
 
         $this->command->info('Creating slots and quests');
-        $slots = Slot::factory(15)->create();
+        $slotsData = [
+            ['name' => 'Primeiro Passo', 'total_quests' => 1, 'points' => 10],
+            ['name' => 'Madrugador', 'total_quests' => 2, 'points' => 15],
+            ['name' => 'Veterano da SINF', 'total_quests' => 2, 'points' => 20],
+            ['name' => 'Espreita a Agenda', 'total_quests' => 2, 'points' => 12],
+            ['name' => 'Explorador de Bancas', 'total_quests' => 3, 'points' => 25],
+            ['name' => 'Aficionado de Palestras', 'total_quests' => 3, 'points' => 20],
+            ['name' => 'Mestre do Networking', 'total_quests' => 3, 'points' => 25],
+            ['name' => 'Colecionador de QR Codes', 'total_quests' => 4, 'points' => 30],
+            ['name' => 'Caçador de Tarefas', 'total_quests' => 4, 'points' => 30],
+            ['name' => 'Veterano de Workshops', 'total_quests' => 4, 'points' => 35],
+            ['name' => 'Maratonista SINF', 'total_quests' => 5, 'points' => 40],
+            ['name' => 'Lenda da SINF', 'total_quests' => 6, 'points' => 50],
+        ];
+
+        $slots = collect($slotsData)->map(fn (array $slot) => Slot::create([
+            'name' => $slot['name'],
+            'total_quests' => $slot['total_quests'],
+            'points' => $slot['points'],
+        ]));
 
         $standQuests = $stands->unique('sponsor_id')->map(function ($stand) use ($edition, $slots) {
             $sponsorName = $stand->sponsor?->company?->user?->name ?? 'Empresa';
@@ -729,6 +748,15 @@ class DatabaseSeeder extends Seeder
             $enrollment->events()->attach($events->random(rand(2, 5)));
             $enrollment->quests()->attach($allQuests->random(rand(3, 8)));
             $enrollment->products()->attach($products->random(rand(1, 3)));
+
+            // The product attach above already deducted its price from the
+            // balance via a DB trigger, but quest/slot unlocks grant too few
+            // points organically, leaving most balances negative. Set an
+            // explicit, varied positive balance so the shop is actually usable
+            // and so both the "can afford" and "insufficient funds" states
+            // are easy to demo.
+            $enrollment->points = rand(5, 150);
+            $enrollment->save();
         });
 
         $this->command->info('Seeding finished successfully!');

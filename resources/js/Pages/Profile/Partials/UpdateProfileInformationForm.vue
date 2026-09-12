@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { Link, router, useForm } from "@inertiajs/vue3";
 import Modal from "@/Components/UI/Modal.vue";
 import Card from "@/Components/UI/Card.vue";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import { Camera, Upload, Trash2, AlertCircle } from "@lucide/vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import ProfileCard from "@/Components/Profile/ProfileCard.vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import {
     type User,
     isCompany as checkIsCompany,
@@ -25,13 +25,6 @@ const { user } = defineProps<Props>();
 const isCompany = checkIsCompany(user);
 const isSpeaker = checkIsSpeaker(user);
 const isAdmin = checkIsAdmin(user);
-
-const userTypeLabel = computed(() => {
-    if (isAdmin) return "Administrador";
-    if (isSpeaker) return "Orador";
-    if (isCompany) return "Empresa";
-    return "Participante";
-});
 
 // Profile Photo Editing State & Modal
 const photoModalOpen = ref(false);

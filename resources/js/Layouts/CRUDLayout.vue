@@ -1,13 +1,13 @@
 <script setup lang="ts" generic="T extends Model">
 import Table from "@/Components/CRUD/Table.vue";
-import PaginationLinks from "@/Components/PaginationLinks.vue";
+import PaginationLinks from "@/Components/UI/PaginationLinks.vue";
 import type Model from "@/Types/Model";
 import type Paginated from "@/Types/Paginated";
 import AdminLayout from "./AdminLayout.vue";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import TextInput from "@/Components/TextInput.vue";
-import useSearch from "@/composables/useSearch";
+import TextInput from "@/Components/Form/TextInput.vue";
+import useSearch from "@/Composables/useSearch";
 
 defineProps<{
     items: Paginated<T>;

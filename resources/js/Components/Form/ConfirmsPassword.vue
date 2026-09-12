@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick } from "vue";
 import Modal from "@/Components/UI/Modal.vue";
-import PrimaryButton from "./PrimaryButton.vue";
+import PrimaryButton from "../UI/PrimaryButton.vue";
 import TextInput from "./TextInput.vue";
 import axios from "axios";
 import { route } from "ziggy-js";
 
 interface Props {
-    title: string;
-    content: string;
-    button: string;
+    title?: string;
+    content?: string;
+    button?: string;
 }
 
 interface Emits {
