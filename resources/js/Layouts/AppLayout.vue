@@ -3,6 +3,7 @@ import { Head } from "@inertiajs/vue3";
 import Navbar from "@/Components/Navigation/Navbar.vue";
 import Footer from "@/Components/Navigation/Footer.vue";
 import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
+import Banner from "@/Components/UI/Banner.vue";
 
 interface Props {
     title: string;
@@ -21,7 +22,7 @@ defineProps<Props>();
 
         <div class="relative z-10 flex min-h-screen flex-1 flex-col">
             <Navbar />
-            <!-- <Banner /> -->
+            <Banner />
             <main class="flex flex-1 flex-col">
                 <slot />
             </main>
