@@ -1,91 +1,137 @@
 <script setup lang="ts">
 import Modal from "@/Components/UI/Modal.vue";
 import { inject, onMounted, ref } from "vue";
-import VueCookies from "vue-cookies";
+import type { VueCookies } from "vue-cookies";
 import { route } from "ziggy-js";
-import { router } from "@inertiajs/vue3";
-import PrimaryButton from "../UI/PrimaryButton.vue";
+import { router, Link } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import {
+    Calendar,
+    Briefcase,
+    Trophy,
+    ShoppingBag,
+    ArrowRight,
+    Sparkles,
+} from "@lucide/vue";
 
-const options = ref({
-    modelValue: false,
-});
+const isOpen = ref(false);
 
-const $cookies = inject<typeof VueCookies.VueCookies>("$cookies");
+const $cookies = inject<VueCookies>("$cookies");
 
 onMounted(() => {
-    options.value.modelValue = $cookies?.get("seenInfo") === null;
+    isOpen.value = $cookies?.get("seenInfo") === null;
 });
 
 const cacheSeenInfo = () => {
     $cookies?.set("seenInfo", true);
-    options.value.modelValue = false;
+    isOpen.value = false;
 };
 
 const enroll = () => {
     $cookies?.set("seenInfo", true);
+    isOpen.value = false;
     router.put(route("enroll"));
 };
 </script>
 
 <template>
-    <Modal v-model="options.modelValue" max-width="xl" @closed="cacheSeenInfo">
-        <div
-            class="flex flex-col items-center gap-6 text-center text-lg text-white"
-        >
-            <img class="w-72 p-4" src="/images/sinf logo.png" alt="SINF" />
-            <p class="font-medium">
-                A
-                <span class="text-sinf-primary-light font-bold">SINF</span> está
-                mais interativa do que nunca!
+    <Modal v-model="isOpen" max-width="lg" @closed="cacheSeenInfo">
+        <div class="flex flex-col">
+            <img
+                class="h-12 w-auto select-none sm:h-14 self-start"
+                src="/images/sinf-2026-sm.svg"
+                alt="SINF 2026 Logo"
+            />
+
+            <h2 class="mt-6 text-xl font-black tracking-tight text-white sm:text-2xl">
+                A SINF está mais interativa do que nunca!
+            </h2>
+            <p class="mt-2 max-w-md text-xs leading-relaxed text-neutral-400 sm:text-sm">
+                Participa nas atividades da conferência, interage com empresas parceiras e ganha SINFrões para trocares por prémios.
             </p>
-            <ul
-                class="flex flex-col items-center gap-2 text-sm text-neutral-300"
-            >
-                <li>
-                    Participa em
-                    <a
-                        :href="route('program', { day: 6 })"
-                        target="_blank"
-                        class="text-sinf-secondary-light underline hover:text-white"
-                        >Workshops e Palestras</a
-                    >
-                </li>
-                <li>
-                    Visita
-                    <a
-                        :href="route('program', { day: 1 })"
-                        target="_blank"
-                        class="text-sinf-secondary-light underline hover:text-white"
-                        >Bancas de Empresas</a
-                    >
-                </li>
-                <li>
-                    Compete nas
-                    <a
-                        :href="route('program', { day: 3 })"
-                        target="_blank"
-                        class="text-sinf-secondary-light underline hover:text-white"
-                        >Competições de CTF e Programação</a
-                    >
-                </li>
-            </ul>
-            <p class="text-sm text-neutral-300">
-                Ganha pontos e troca-os por prémios na
-                <a
-                    :href="route('shop.show')"
-                    target="_blank"
-                    class="text-sinf-secondary-light underline hover:text-white"
-                    >Loja</a
+
+            <div class="mt-6 grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2 text-left">
+                <Link
+                    :href="route('program')"
+                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
+                    @click="cacheSeenInfo"
                 >
-            </p>
-            <PrimaryButton
-                color="gradient"
-                text-size="text-base"
-                padding="px-8 py-2.5"
-                @click="enroll"
-            >
-                Inscrever-me
-            </PrimaryButton>
+                    <div class="min-w-0 flex-1">
+                        <h4 class="text-xs font-bold text-white transition-colors group-hover:text-purple-300">
+                            Palestras e Workshops
+                        </h4>
+                        <p class="mt-0.5 text-[11px] leading-snug text-neutral-400">
+                            Aprende com especialistas da indústria.
+                        </p>
+                    </div>
+                </Link>
+
+                <Link
+                    :href="route('program')"
+                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
+                    @click="cacheSeenInfo"
+                >
+                    <div class="min-w-0 flex-1">
+                        <h4 class="text-xs font-bold text-white transition-colors group-hover:text-amber-300">
+                            Bancas de Empresas
+                        </h4>
+                        <p class="mt-0.5 text-[11px] leading-snug text-neutral-400">
+                            Conhece oportunidades de estágio e carreira.
+                        </p>
+                    </div>
+                </Link>
+
+                <div
+                    class="flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5"
+                >
+                    <div class="min-w-0 flex-1">
+                        <h4 class="text-xs font-bold text-white">
+                            Competições
+                        </h4>
+                        <p class="mt-0.5 text-[11px] leading-snug text-neutral-400">
+                            Desafia-te em programação e CTF.
+                        </p>
+                    </div>
+                </div>
+
+                <Link
+                    :href="route('shop.show')"
+                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
+                    @click="cacheSeenInfo"
+                >
+                    <div class="min-w-0 flex-1">
+                        <h4 class="text-xs font-bold text-white transition-colors group-hover:text-rose-300">
+                            Loja SINF
+                        </h4>
+                        <p class="mt-0.5 text-[11px] leading-snug text-neutral-400">
+                            Troca SINFrões por merchandising e prémios.
+                        </p>
+                    </div>
+                </Link>
+            </div>
+
+            <div class="mt-6 flex w-full flex-col sm:flex-row items-center justify-center gap-3">
+                <PrimaryButton
+                    color="pill"
+                    padding="px-5 py-2.5"
+                    text-size="text-xs sm:text-sm"
+                    class="w-full sm:w-auto"
+                    @click="cacheSeenInfo"
+                >
+                    Explorar
+                </PrimaryButton>
+
+                <PrimaryButton
+                    color="pill"
+                    padding="px-6 py-2.5"
+                    text-size="text-xs sm:text-sm"
+                    class="w-full sm:w-auto"
+                    @click="enroll"
+                >
+                    <span>Inscrever-me na SINF</span>
+                    <ArrowRight :size="14" />
+                </PrimaryButton>
+            </div>
         </div>
     </Modal>
 </template>

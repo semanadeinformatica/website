@@ -745,17 +745,18 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <PrimaryButton
-                            type="button"
-                            color="pill"
-                            full-width
-                            @click="showInstructionsModal = false"
-                        >
-                            Entendido
-                        </PrimaryButton>
-                    </div>
                 </div>
+
+                <template #footer>
+                    <PrimaryButton
+                        type="button"
+                        color="primary"
+                        full-width
+                        @click="showInstructionsModal = false"
+                    >
+                        Entendido
+                    </PrimaryButton>
+                </template>
             </Modal>
         </div>
     </AppLayout>

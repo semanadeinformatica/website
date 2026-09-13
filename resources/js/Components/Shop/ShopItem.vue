@@ -520,6 +520,7 @@ const redeemProduct = (enrollmentId: number) => {
                     </span>
                     <PrimaryButton
                         v-else
+                        color="primary"
                         padding="px-3.5 py-1"
                         text-size="text-[11px] font-semibold"
                         :disabled="isRedeemingId === enrollment.id"
@@ -563,6 +564,7 @@ const redeemProduct = (enrollmentId: number) => {
                 <template v-if="activeTab === 'buy' && user && isEnrolled">
                     <PrimaryButton
                         v-if="!isAlreadyBought && !isOutOfStock"
+                        color="primary"
                         padding="px-5 py-1.5"
                         text-size="text-xs"
                         :disabled="!hasEnoughPoints || isBuying"

@@ -115,7 +115,7 @@ const form = useForm({
     _method: "PUT",
     name: user ? user.name : "",
     email: user ? user.email : "",
-    type: (user?.usertype_type.split("\\").pop() ?? "").toLowerCase() as
+    type: (user?.usertype_type.split("\\\\").pop() ?? "").toLowerCase() as
         "participant" | "company" | "speaker" | "admin",
     title: isSpeaker ? (user?.usertype?.title ?? "") : "",
     description:
@@ -498,7 +498,7 @@ const sendEmailVerification = () => {
                         <PrimaryButton
                             v-if="photoPreview"
                             type="button"
-                            color="pill"
+                            color="primary"
                             padding="px-4 py-1.5"
                             :disabled="photoForm.processing"
                             @click="savePhoto"

@@ -294,16 +294,19 @@ const filteredVisitors = computed(() => {
                     com o filtro selecionado</span
                 >.
             </p>
-            <button
+            <PrimaryButton
                 type="button"
-                class="text-sinf-primary mt-2 text-xs hover:underline"
+                color="pill"
+                padding="px-4 py-1.5"
+                text-size="text-xs"
+                class="mt-3"
                 @click="
                     searchQuery = '';
                     filterType = 'all';
                 "
             >
                 Limpar filtros
-            </button>
+            </PrimaryButton>
         </div>
     </div>
 

@@ -54,7 +54,7 @@ const showQRCode = () => {
             <span v-if="loading" class="text-sm text-neutral-400"
                 >A gerar código...</span
             >
-            <template v-else>
+            <template v-else-if="participant.quest_qr_code || participant.quest_code">
                 <div
                     v-if="participant.quest_qr_code"
                     class="flex items-center justify-center rounded-2xl bg-white p-4"
@@ -71,6 +71,22 @@ const showQRCode = () => {
                     </code>
                 </div>
             </template>
+            <div v-else class="py-4 text-center text-sm text-neutral-400">
+                Não foi possível carregar o código. Tenta novamente mais tarde.
+            </div>
         </div>
+
+        <template #footer>
+            <div class="flex w-full justify-end">
+                <PrimaryButton
+                    color="pill"
+                    padding="px-5 py-1.5"
+                    text-size="text-xs"
+                    @click="modalOpen = false"
+                >
+                    Fechar
+                </PrimaryButton>
+            </div>
+        </template>
     </Modal>
 </template>

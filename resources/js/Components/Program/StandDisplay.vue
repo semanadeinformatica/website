@@ -3,6 +3,7 @@ import type Stand from "@/Types/Stand";
 import Sponsor from "@/Components/Home/Sponsor.vue";
 import type { CompanyUser } from "@/Types/User";
 import type SponsorTier from "@/Types/SponsorTier";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 import { computed } from "vue";
 
 interface Props {
@@ -43,7 +44,7 @@ const standsPerTier = computed(() => {
 </script>
 
 <template>
-    <div class="space-y-12 py-4">
+    <div v-if="standsPerTier.size > 0" class="space-y-12 py-4">
         <template v-for="[tierId, tierStands] in standsPerTier" :key="tierId">
             <section v-if="tierStands.length > 0" class="w-full">
                 <div class="mb-6 flex items-center justify-center">
@@ -70,5 +71,20 @@ const standsPerTier = computed(() => {
                 </div>
             </section>
         </template>
+    </div>
+
+    <div
+        v-else
+        class="flex flex-col items-center justify-center py-16 text-center"
+    >
+        <PillSelector
+            :items="[{ id: 'soon', label: 'Em breve...', disabled: true }]"
+            size="sm"
+            :wrap="false"
+            container-class="mb-3"
+        />
+        <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
+            As bancas de empresas para esta edição serão anunciadas brevemente.
+        </p>
     </div>
 </template>

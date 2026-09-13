@@ -14,7 +14,7 @@ import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
-import { QrCode } from "@lucide/vue";
+import { QrCode, Users } from "@lucide/vue";
 
 interface Props {
     event: Event;
@@ -492,10 +492,14 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
 
                 <div
                     v-else
-                    class="flex flex-col items-center justify-center py-12 text-center"
+                    class="flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 py-16 text-center"
                 >
-                    <p class="text-sm text-neutral-400">
-                        Ainda não existem participantes inscritos neste evento.
+                    <Users :size="36" class="mb-3 text-neutral-600 opacity-40" />
+                    <h3 class="text-base font-semibold text-white">
+                        Sem participantes inscritos
+                    </h3>
+                    <p class="mt-1 max-w-sm text-xs text-neutral-400">
+                        Ainda não existem participantes inscritos nesta sessão.
                     </p>
                 </div>
             </div>

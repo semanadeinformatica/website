@@ -314,6 +314,7 @@ const copySetupKey = () => {
 
                 <PrimaryButton
                     type="button"
+                    color="primary"
                     :class="{ 'opacity-25': confirmationForm.processing }"
                     :disabled="confirmationForm.processing"
                     @click="confirmTwoFactorAuthentication"
@@ -368,6 +369,7 @@ const copySetupKey = () => {
 
                 <PrimaryButton
                     type="button"
+                    color="primary"
                     @click="recoveryCodesModalOpen = false"
                 >
                     Concluído

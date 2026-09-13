@@ -307,12 +307,15 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                 v-if="availableTabs.length === 0"
                 class="flex flex-col items-center justify-center py-20 text-center"
             >
-                <div class="pill-container mb-4 px-6 py-2.5">
-                    <span class="text-xs text-neutral-400 sm:text-sm">
-                        Não há informações adicionais disponíveis para esta
-                        competição.
-                    </span>
-                </div>
+                <PillSelector
+                    :items="[{ id: 'info', label: 'Em breve...', disabled: true }]"
+                    size="sm"
+                    :wrap="false"
+                    container-class="mb-3"
+                />
+                <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
+                    Não há informações adicionais disponíveis para esta competição de momento.
+                </p>
             </div>
         </div>
     </AppLayout>

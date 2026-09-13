@@ -12,7 +12,7 @@ defineProps<Props>();
 </script>
 
 <template>
-    <div class="relative flex min-h-screen flex-col bg-olive-950 text-white">
+    <div class="relative flex min-h-screen flex-col bg-sinf-surface-dark text-white">
         <Head :title="title" />
 
         <GlowingOrbs />

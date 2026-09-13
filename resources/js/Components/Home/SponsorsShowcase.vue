@@ -260,11 +260,11 @@ const marqueeRow2 = computed(() => {
         </template>
 
         <div v-else class="flex justify-center py-10">
-            <div
-                class="pill-container px-6 py-2.5 font-mono text-xs text-neutral-400"
-            >
-                Em breve...
-            </div>
+            <PillSelector
+                :items="[{ id: 'soon', label: 'Em breve...', disabled: true }]"
+                size="sm"
+                :wrap="false"
+            />
         </div>
 
         <Modal :show="isModalOpen" max-width="md" @close="closeSponsorModal">
@@ -294,23 +294,27 @@ const marqueeRow2 = computed(() => {
                         </div>
                     </div>
 
+                    <div
+                        v-if="selectedSponsor.company?.description_html"
+                        class="prose prose-invert prose-sm max-h-60 w-full overflow-y-auto px-2 text-justify leading-relaxed text-neutral-300"
+                        v-html="selectedSponsor.company.description_html"
+                    />
                     <p
-                        v-if="selectedSponsor.company?.description"
+                        v-else-if="selectedSponsor.company?.description"
                         class="mt-2 text-sm leading-relaxed text-neutral-300"
                     >
                         {{ selectedSponsor.company.description }}
                     </p>
 
                     <div
-                        v-if="selectedSponsor.company?.user?.usertype"
+                        v-if="selectedSponsor.company?.social_media?.website"
                         class="mt-4 flex justify-center border-t border-white/10 pt-4 w-full"
                     >
                         <a
                             :href="
-                                selectedSponsor.company.user.usertype.toString()
-                                    .startsWith('http')
-                                    ? selectedSponsor.company.user.usertype.toString()
-                                    : `https://${selectedSponsor.company.user.usertype}`
+                                selectedSponsor.company.social_media.website.startsWith('http')
+                                    ? selectedSponsor.company.social_media.website
+                                    : `https://${selectedSponsor.company.social_media.website}`
                             "
                             target="_blank"
                             rel="noopener noreferrer"

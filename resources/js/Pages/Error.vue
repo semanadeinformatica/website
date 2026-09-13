@@ -37,7 +37,7 @@ const messages = computed(
 <template>
     <Head :title="props.status.toString()" />
 
-    <div class="relative min-h-screen bg-olive-950 text-white">
+    <div class="relative min-h-screen bg-[#0d0e12] text-white">
         <GlowingOrbs />
 
         <main

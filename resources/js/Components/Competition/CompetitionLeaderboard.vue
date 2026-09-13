@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type CompetitionTeam from "@/Types/CompetitionTeam";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     teams?: CompetitionTeam[];
@@ -77,12 +78,13 @@ const props = withDefaults(defineProps<Props>(), {
             v-else
             class="flex flex-col items-center justify-center py-20 text-center"
         >
-            <div class="pill-container mb-3 px-5 py-2">
-                <span class="text-sm font-medium text-neutral-400">
-                    Sem equipas registadas
-                </span>
-            </div>
-            <p class="text-xs text-neutral-500">
+            <PillSelector
+                :items="[{ id: 'empty', label: 'Sem equipas registadas', disabled: true }]"
+                size="sm"
+                :wrap="false"
+                container-class="mb-3"
+            />
+            <p class="text-xs text-neutral-400 sm:text-sm">
                 Ainda não existem equipas registadas nesta competição.
             </p>
         </div>
