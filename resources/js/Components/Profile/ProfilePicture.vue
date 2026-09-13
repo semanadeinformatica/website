@@ -1,83 +1,46 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import type { User } from "@/Types/User";
-import { useForm } from "@inertiajs/vue3";
-import { route } from "ziggy-js";
 
 interface Props {
     item: User | undefined;
+    size?: "sm" | "md" | "lg";
 }
 
-const props = defineProps<Props>();
-
-const form = useForm({
-    _method: "PUT",
-    name: props.item?.name,
-    email: props.item?.email,
-    photo: null as File | null,
+withDefaults(defineProps<Props>(), {
+    size: "lg",
 });
-
-const photoInput = ref<HTMLInputElement | null>(null);
-
-const selectNewPhoto = () => {
-    photoInput.value?.click();
-};
-
-const uploadNewPhoto = () => {
-    const photo = photoInput.value?.files?.[0];
-    if (photo) {
-        form.photo = photoInput.value?.files?.[0] ?? null;
-        form.post(route("user-profile-information.update"), {
-            errorBag: "updateProfileInformation",
-            preserveScroll: true,
-            onSuccess: () => clearPhotoFileInput,
-        });
-    }
-};
-
-const clearPhotoFileInput = () => {
-    if (photoInput.value?.value) {
-        photoInput.value.value = "";
-    }
-};
 </script>
 
 <template>
-    <div class="flex items-end justify-center max-md:mb-6">
+    <div class="relative shrink-0 select-none">
         <div
-            class="h-48 w-48 overflow-hidden rounded-full border-4 border-solid border-white max-md:ml-6"
+            class="overflow-hidden rounded-full bg-neutral-900 ring-2 ring-white/10 transition-all duration-300"
+            :class="{
+                'h-18 w-18 sm:h-22 sm:w-22': size === 'sm',
+                'h-24 w-24 sm:h-28 sm:w-28': size === 'md',
+                'h-28 w-28 sm:h-32 sm:w-32': size === 'lg',
+            }"
         >
             <img
-                :src="item?.profile_photo_url"
-                :alt="item?.name"
+                v-if="item?.profile_photo_url"
+                :src="item.profile_photo_url"
+                :alt="item.name"
                 class="h-full w-full object-cover"
             />
-        </div>
-        <input
-            ref="photoInput"
-            type="file"
-            class="hidden"
-            accept="image/*"
-            @change="uploadNewPhoto"
-        />
-        <button
-            v-if="$page.props.auth.user?.id == item?.id"
-            @click.prevent="selectNewPhoto"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 text-white"
-                viewBox="0 0 512 512"
+            <div
+                v-else
+                class="flex h-full w-full items-center justify-center bg-neutral-800 text-neutral-300"
             >
-                <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="48"
-                    d="M56 262 v150 h400 M456 262 v150 M256 312 v-250 l-80 80 M256 62 l80 80"
-                />
-            </svg>
-        </button>
+                <span
+                    class="font-bold uppercase"
+                    :class="{
+                        'text-xl sm:text-2xl': size === 'sm',
+                        'text-2xl sm:text-3xl': size === 'md' || size === 'lg',
+                    }"
+                >
+                    {{ item?.name?.charAt(0) ?? "U" }}
+                </span>
+            </div>
+        </div>
     </div>
 </template>

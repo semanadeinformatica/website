@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import type Participant from "@/Types/Participant";
 import { router } from "@inertiajs/vue3";
-import { OhVueIcon } from "oh-vue-icons";
+import { QrCode } from "@lucide/vue";
 import { computed, ref } from "vue";
-import { VueFinalModal } from "vue-final-modal";
-import "vue-final-modal/style.css";
+import Modal from "@/Components/UI/Modal.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import { route } from "ziggy-js";
 
-const props = defineProps<{
+interface Props {
     participant: Participant;
-}>();
+}
+
+const props = defineProps<Props>();
 
 const participant = computed(() => props.participant);
 
@@ -30,29 +32,63 @@ const showQRCode = () => {
 </script>
 
 <template>
-    <button
-        class="text-text-color flex w-fit cursor-pointer rounded-full"
+    <PrimaryButton
+        v-bind="$attrs"
+        type="button"
+        color="pill"
+        padding="px-3.5 py-2 sm:px-4 sm:py-2"
+        aria-label="Ver QR Code"
         @click="showQRCode"
     >
-        <OhVueIcon name="io-qr-code" scale="1.2"></OhVueIcon>
-    </button>
-    <VueFinalModal
-        v-model="modalOpen"
-        class="flex items-center justify-center"
-        content-class="max-w-xl min-w-[20em] mx-4 p-8 pt-12 gap-8 bg-white border border-black border-solid flex relative justify-center items-center flex-col"
-    >
-        <span v-if="loading" class="text-lg">A gerar...</span>
-        <template v-else>
-            <div v-html="participant.quest_qr_code"></div>
-            <span class="text-2023-teal-dark font-mono font-bold">
-                {{ participant.quest_code }}
-            </span>
-        </template>
-    </VueFinalModal>
-</template>
+        <QrCode :size="15" />
+        <span>QR Code</span>
+    </PrimaryButton>
 
-<style>
-.vfm__overlay {
-    background-color: rgba(248, 245, 231, 0.5);
-}
-</style>
+    <Modal
+        v-model="modalOpen"
+        max-width="md"
+        title="Código do Participante"
+        description="Apresenta este código QR ou código numérico nas bancas e eventos."
+    >
+        <div class="flex flex-col items-center justify-center gap-6 py-2">
+            <span v-if="loading" class="text-sm text-neutral-400"
+                >A gerar código...</span
+            >
+            <template
+                v-else-if="participant.quest_qr_code || participant.quest_code"
+            >
+                <div
+                    v-if="participant.quest_qr_code"
+                    class="flex items-center justify-center rounded-2xl bg-white p-4"
+                    v-html="participant.quest_qr_code"
+                />
+                <div
+                    v-if="participant.quest_code"
+                    class="flex flex-col items-center gap-1 text-center"
+                >
+                    <code
+                        class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-mono text-xl font-bold tracking-widest text-white"
+                    >
+                        {{ participant.quest_code }}
+                    </code>
+                </div>
+            </template>
+            <div v-else class="py-4 text-center text-sm text-neutral-400">
+                Não foi possível carregar o código. Tenta novamente mais tarde.
+            </div>
+        </div>
+
+        <template #footer>
+            <div class="flex w-full justify-end">
+                <PrimaryButton
+                    color="pill"
+                    padding="px-5 py-1.5"
+                    text-size="text-xs"
+                    @click="modalOpen = false"
+                >
+                    Fechar
+                </PrimaryButton>
+            </div>
+        </template>
+    </Modal>
+</template>

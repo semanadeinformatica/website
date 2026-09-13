@@ -1,8 +1,22 @@
 const messages = {
     en: {
         homePage: {
-            aboutUsText1: "Buh",
-            aboutUsText2: "Bimb",
+            aboutUsTitle: "Made by students, for students.",
+            aboutUsDescription:
+                "SINF is the annual tech conference organized by NIAEFEUP for students at the Faculty of Engineering of the University of Porto (FEUP). Across four days, we bring invited speakers, hands-on workshops with real-world tools, and tech companies looking for talent.",
+            pillar1Title: "Talks & Keynotes",
+            pillar1Desc:
+                "Guest speakers sharing real-world software engineering experiences, architectures, and lessons learned.",
+            pillar2Title: "Hands-on Workshops",
+            pillar2Desc:
+                "Practical sessions exploring tools, frameworks, and technologies beyond the academic syllabus.",
+            pillar3Title: "Companies & Stands",
+            pillar3Desc:
+                "Informal hallway chats with engineering teams actively recruiting interns and junior developers.",
+            aboutUsText1:
+                "SINF is the annual tech conference organized by NIAEFEUP for students at the Faculty of Engineering of the University of Porto (FEUP).",
+            aboutUsText2:
+                "Across four days, we bring invited speakers, hands-on workshops with real-world tools, and tech companies looking for talent.",
         },
         general: {
             to: "to",
@@ -34,10 +48,22 @@ const messages = {
     },
     pt: {
         homePage: {
+            aboutUsTitle: "Feita por estudantes, para estudantes.",
+            aboutUsDescription:
+                "A SINF é a conferência anual organizada pelo NIAEFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto. Durante quatro dias, trazemos oradores convidados, workshops práticos com ferramentas do mundo real e bancas de empresas à procura de talento.",
+            pillar1Title: "Palestras & Keynotes",
+            pillar1Desc:
+                "Oradores convidados a partilhar experiências reais de engenharia, arquiteturas e desafios da indústria.",
+            pillar2Title: "Workshops Práticos",
+            pillar2Desc:
+                "Sessões práticas para experimentar tecnologias, linguagens e ferramentas fora do plano curricular.",
+            pillar3Title: "Empresas & Bancas",
+            pillar3Desc:
+                "Contacto direto e informal nos corredores da faculdade com empresas a recrutar estagiários e juniores.",
             aboutUsText1:
-                "A Semana de Informática (SINF), organizada pelo Núcleo de Informática da Associação de Estudantes da Faculdade de Engenharia da Universidade do Porto (NIAEFEUP), foi criada com o intuito de permitir aos participantes desenvolver as suas capacidades nas diversas áreas da Informática, promovendo a sua interação com o mundo empresarial através de eventos sociais.",
+                "A SINF é a conferência anual organizada pelo NIAEFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto.",
             aboutUsText2:
-                "A edição de 2025 decorre entre os dias 21 e 23 de outubro. Os participantes têm a seu dispor palestras e workshops onde entrarão em contacto com diversas tecnologias e conceitos que não intervêm no percurso académico, focando-se portanto nas skills técnicas, assim como um pitch, sessões de entrevistas e visitas a empresas, fomentando o seu contacto com empresas de topo a nível nacional e internacional, podendo desenvolver as suas soft skills.",
+                "Durante quatro dias, trazemos oradores convidados, workshops práticos com ferramentas do mundo real e bancas de empresas à procura de talento.",
         },
         general: {
             to: "a",
@@ -47,6 +73,7 @@ const messages = {
             company: "Empresa | Empresas",
             competition: "Competição | Competições",
             competitionTeam: "Equipa de Competição | Equipas de Competição",
+            competitionPrize: "Prémio de Competição | Prémios de Competição",
             compettionPrize: "Prémio de Competição | Prémios de Competição",
             department: "Departamento | Departamentos",
             edition: "Edição | Edições",

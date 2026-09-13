@@ -6,22 +6,11 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createVfm } from "vue-final-modal";
 import VueCookies from "vue-cookies";
 import { ZiggyVue } from "ziggy-js";
-import { addIcons } from "oh-vue-icons";
 import { createI18n } from "vue-i18n";
 import messages from "./messages";
-
-const vfm = createVfm();
-
-import * as IoIcons from "oh-vue-icons/icons/io";
 import { VueQrcodeReader } from "vue-qrcode-reader";
 
-const Io = Object.values({ ...IoIcons });
-addIcons(
-    ...Io.map((i) => ({
-        ...i,
-        raw: i.raw.replace('stroke="#000"', 'stroke="currentColor"'),
-    })),
-);
+const vfm = createVfm();
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

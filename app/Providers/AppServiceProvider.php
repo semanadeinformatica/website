@@ -73,6 +73,11 @@ class AppServiceProvider extends ServiceProvider
             )
         ));
 
+        Gate::define('leave', fn (User $user, Event $event) => (
+            $user->isParticipant() &&
+            $event->enrollments()->where('participant_id', $user->usertype_id)->exists()
+        ));
+
         Gate::define('give', fn (User $user, Quest $quest, Enrollment $enrollment) => (
             $enrollment->quests()->where('quest_id', $quest->id)->doesntExist() &&
             (

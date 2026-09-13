@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Quest from "@/Types/Quest";
 import type Paginated from "@/Types/Paginated";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -27,28 +27,31 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout
-        title="Quest"
+    <CRUDView
+        title="Tarefas"
+        view="Quest"
         :items="items"
         name="quests"
         :is-searchable="isSearchable"
     >
-        <template #heading>Quests</template>
+        <template #heading>Tarefas & Missões</template>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Nome</Header>
-                <Header filter-by="edition_id" :filter-values="editions"
-                    >Edição</Header
-                >
+                <Header sort-by="name">Nome da Tarefa</Header>
+                <Header filter-by="edition_id" :filter-values="editions">
+                    Edição
+                </Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row :item="item" name="quests">
-                <Cell>{{ item.name }}</Cell>
-                <Cell>{{ editions[item.edition_id] }}</Cell>
+                <Cell class="font-medium text-white">{{ item.name }}</Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.edition_id] ?? "-" }}
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

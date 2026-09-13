@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { SpeakerUser } from "@/Types/User";
 import { computed } from "vue";
-import { OhVueIcon } from "oh-vue-icons";
+import Card from "@/Components/UI/Card.vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
 
 interface Props {
     speaker: SpeakerUser;
@@ -15,71 +16,69 @@ const socialMedia = computed(() => {
         Object.entries(speaker.value.usertype?.social_media ?? {}).filter(
             ([key, value]) =>
                 ["github", "linkedin", "website"].includes(key) &&
-                value != null,
+                value != null &&
+                value !== "",
         ),
     ) as Record<"github" | "linkedin" | "website", string>;
 });
 
-const socialIcon: Record<string, string> = {
-    github: "io-logo-github",
-    linkedin: "io-logo-linkedin",
-    website: "io-globe",
-};
-
-const speakerName = (name: string) => {
-    const nameArray = name.split(" ");
-    return `${nameArray[0]} ${nameArray[nameArray.length - 1]}`;
-};
+const displayName = computed(() => {
+    if (speaker.value.usertype?.display_name) {
+        return speaker.value.usertype.display_name;
+    }
+    return speaker.value.name;
+});
 </script>
 
 <template>
-    <div class="flex flex-col items-center transition-all duration-500">
-        <div
-            class="relative flex aspect-square w-40 items-center justify-center overflow-hidden rounded-full sm:w-48 md:w-56 lg:w-64"
-        >
-            <img
-                :src="speaker.profile_photo_url"
-                class="h-full w-full object-cover"
-                alt=""
-            />
-            <div
-                v-if="Object.keys(socialMedia).length > 0"
-                class="socials absolute -bottom-32 flex w-full flex-row items-center justify-center pt-1 pb-10 transition-all"
+    <Card
+        :image-src="speaker.profile_photo_url"
+        :image-alt="displayName"
+        class="h-full w-full"
+    >
+        <template #header>
+            <h4
+                class="truncate text-base font-bold tracking-tight text-white transition-colors group-hover:text-neutral-200"
             >
-                <a
-                    v-for="(social, key, idx) in socialMedia"
-                    :key="idx"
-                    :href="social"
-                    target="_blank"
+                {{ displayName }}
+            </h4>
+            <p
+                class="mt-1 line-clamp-2 min-h-9 text-xs leading-relaxed font-light text-neutral-400"
+            >
+                <span v-if="speaker.usertype?.title">
+                    {{ speaker.usertype.title }}
+                </span>
+                <span
+                    v-if="
+                        speaker.usertype?.title &&
+                        speaker.usertype?.organization
+                    "
+                    class="mx-1 text-neutral-600"
+                    >•</span
                 >
-                    <OhVueIcon
-                        :fill="'#FFFFFF'"
-                        :stroke="'#1A74C2'"
-                        :name="socialIcon[key]"
-                        scale="1.4"
-                    />
+                <span
+                    v-if="speaker.usertype?.organization"
+                    class="font-medium text-neutral-300"
+                >
+                    {{ speaker.usertype.organization }}
+                </span>
+            </p>
+        </template>
+
+        <template v-if="Object.keys(socialMedia).length > 0" #footer>
+            <div class="flex items-center gap-2">
+                <a
+                    v-for="(url, platform) in socialMedia"
+                    :key="platform"
+                    :href="url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 transition-all hover:bg-white/10 hover:text-white"
+                    :aria-label="platform"
+                >
+                    <SocialIcon :platform="platform" :size="16" />
                 </a>
             </div>
-        </div>
-
-        <p class="max-w-52 py-4 text-center text-lg wrap-break-word text-white">
-            {{ speaker.usertype?.display_name ?? speakerName(speaker.name) }}
-        </p>
-    </div>
+        </template>
+    </Card>
 </template>
-
-<style>
-.carousel__viewport {
-    overflow: hidden !important;
-}
-
-.carousel__slide {
-    display: flex;
-    justify-content: center;
-}
-
-.carousel__slide--active .rounded-full {
-    transform: scale(1.1);
-    transform-origin: center;
-}
-</style>

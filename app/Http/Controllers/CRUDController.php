@@ -71,65 +71,97 @@ abstract class CRUDController extends Controller
      */
     protected $load = [];
 
-    public function index(Request $request)
+    /**
+     * Common method to get paginated items, filters, search and relations.
+     *
+     * @return array<string, mixed>
+     */
+    protected function getIndexData(Request $request): array
     {
         $isSearchable = in_array(Searchable::class, class_uses($this->model));
 
         $search = $request->query('query');
-        if ($isSearchable && $search !== null) {
-            $query = $this->model::search($search)->query(fn (Builder $query) => $query->with($this->load));
+        $sortBy = $request->query('sort_by', 'id');
+        $sortDir = strtolower($request->query('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $modelInstance = new $this->model;
+        $table = $modelInstance->getTable();
+        $schema = $modelInstance->getConnection()->getSchemaBuilder();
+
+        $applySortAndFilters = function (Builder $query) use ($table, $schema, $sortBy, $sortDir, $request) {
+            $reserved = ['page', 'query', 'sort_by', 'sort_dir', 'filter_by', 'filter_val'];
+            foreach ($request->query() as $key => $value) {
+                if (!in_array($key, $reserved) && $value !== null && $value !== '') {
+                    if ($schema->hasColumn($table, $key)) {
+                        $query->where($table . '.' . $key, $value);
+                    }
+                }
+            }
+
+            if ($request->filled('filter_by') && $request->has('filter_val') && $request->get('filter_val') !== '') {
+                $filterCol = $request->query('filter_by');
+                if ($schema->hasColumn($table, $filterCol)) {
+                    $query->where($table . '.' . $filterCol, $request->query('filter_val'));
+                }
+            }
+
+            if ($schema->hasColumn($table, $sortBy)) {
+                $query->orderBy($table . '.' . $sortBy, $sortDir);
+            } else {
+                $query->orderBy($table . '.id', 'asc');
+            }
+        };
+
+        if ($isSearchable && $search !== null && trim($search) !== '') {
+            $query = $this->model::search($search)->query(function (Builder $query) use ($applySortAndFilters) {
+                $query->with($this->load);
+                $applySortAndFilters($query);
+            });
         } else {
-            $query = $this->model::with($this->load)->orderBy('id');
+            $query = $this->model::with($this->load);
+            $applySortAndFilters($query);
         }
 
-        $filteredQuery = collect($request->query())
-            ->intersectByKeys(['sort_by' => '', 'sort_dir' => '', 'query' => '', 'filter_by' => '']);
-        $items = $query->paginate()->appends($filteredQuery->toArray());
+        $items = $query->paginate()->appends($request->query());
 
-        $with = $this->with();
-
-        Log::info('Displaying all {model} records with query: {search}', ['model' => $this->model, 'search' => $search ?? 'none']);
-
-        return Inertia::render("CRUD/{$this->view}/Index", [
+        return [
             'items' => $items,
-            'with' => $with,
+            'with' => $this->with(),
             'isSearchable' => $isSearchable,
-        ]);
+            'view' => $this->view,
+        ];
     }
 
-    public function show($id)
+    public function index(Request $request)
     {
+        $data = $this->getIndexData($request);
+
+        Log::info('Displaying all {model} records with query: {search}', ['model' => $this->model, 'search' => $request->query('query') ?? 'none']);
+
+        return Inertia::render("CRUD/{$this->view}/Index", $data);
+    }
+
+    public function show(Request $request, $id)
+    {
+        return $this->edit($request, $id);
+    }
+
+    public function create(Request $request)
+    {
+        $data = $this->getIndexData($request);
+        $data['modal'] = 'create';
+
+        return Inertia::render("CRUD/{$this->view}/Index", $data);
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $data = $this->getIndexData($request);
         $item = $this->model::find($id);
+        $data['modal'] = 'edit';
+        $data['item'] = $item ? $item->load($this->load) : null;
 
-        $with = $this->with();
-
-        Log::info('Displaying {model} record with id: {id}', ['model' => $this->model, 'id' => $id]);
-
-        return Inertia::render("CRUD/$this->view/Show", [
-            'item' => $item,
-            'with' => $with,
-        ]);
-    }
-
-    public function create()
-    {
-        $with = $this->with();
-
-        return Inertia::render("CRUD/$this->view/Create", [
-            'with' => $with,
-        ]);
-    }
-
-    public function edit($id)
-    {
-        $item = $this->model::find($id);
-
-        $with = $this->with();
-
-        return Inertia::render("CRUD/$this->view/Edit", [
-            'item' => $item->load($this->load),
-            'with' => $with,
-        ]);
+        return Inertia::render("CRUD/{$this->view}/Index", $data);
     }
 
     /**
@@ -147,13 +179,11 @@ abstract class CRUDController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validate($this->storeRules());
 
         $newValues = $this->created($validated);
 
         if ($newValues !== null) {
-
             Log::info('Creating new {model} record with values: {values}', ['model' => $this->model, 'values' => Json::encode($newValues, true)]);
 
             $this->model::create($newValues);
@@ -185,7 +215,6 @@ abstract class CRUDController extends Controller
         $newValues = $this->updated($model, $validated);
 
         if ($newValues !== null) {
-
             Log::info('Updating {model} record with id {id} with values: {values}', ['model' => $this->model, 'id' => $model->id, 'values' => Json::encode($newValues, true)]);
 
             $model->update($newValues);
@@ -211,7 +240,6 @@ abstract class CRUDController extends Controller
         $model = $this->model::find($id);
 
         if ($this->destroyed($model->toArray())) {
-
             Log::alert('Deleting {model} record with id {id}', ['model' => $this->model, 'id' => $model->id]);
 
             $model->delete();

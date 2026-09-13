@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Card from "@/Components/UI/Card.vue";
 
 interface Props {
     terms: string;
@@ -9,16 +10,29 @@ defineProps<Props>();
 </script>
 
 <template>
-    <Head title="Terms of Service" />
+    <AppLayout title="Termos de Utilização">
+        <div
+            class="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+        >
+            <div class="mb-8 text-center sm:mb-10">
+                <h1
+                    class="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl"
+                >
+                    Termos de Utilização
+                </h1>
+            </div>
 
-    <div class="font-sans text-gray-900 antialiased dark:text-gray-100">
-        <div class="bg-gray-100 pt-4 dark:bg-gray-900">
-            <div class="flex min-h-screen flex-col items-center pt-6 sm:pt-0">
+            <Card
+                as="div"
+                :interactive="false"
+                padding="p-6 sm:p-10"
+                class="w-full"
+            >
                 <div
-                    class="prose dark:prose-invert mt-6 w-full overflow-hidden bg-white p-6 shadow-md sm:max-w-2xl sm:rounded-lg dark:bg-gray-800"
+                    class="prose prose-invert max-w-none text-neutral-300"
                     v-html="terms"
                 />
-            </div>
+            </Card>
         </div>
-    </div>
+    </AppLayout>
 </template>
