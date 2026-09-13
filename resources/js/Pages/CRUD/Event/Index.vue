@@ -85,7 +85,9 @@ const formatTime = (time?: string) => {
                     </span>
                 </Cell>
                 <Cell>
-                    <span class="block max-w-44 truncate text-xs text-neutral-400">
+                    <span
+                        class="block max-w-44 truncate text-xs text-neutral-400"
+                    >
                         {{ event_days[item.event_day_id] ?? "-" }}
                     </span>
                 </Cell>
@@ -113,14 +115,18 @@ const formatTime = (time?: string) => {
                         v-if="item.enroll_in_site"
                         class="inline-flex items-center text-xs font-medium text-emerald-400"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400"
+                        />
                         Sim
                     </span>
                     <span
                         v-else
                         class="inline-flex items-center text-xs text-neutral-500"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600"
+                        />
                         Não
                     </span>
                 </Cell>

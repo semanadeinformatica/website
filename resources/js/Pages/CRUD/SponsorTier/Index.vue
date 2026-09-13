@@ -71,14 +71,18 @@ const editions = computed<Record<number, string>>(() =>
                         v-if="item.canSeeCV"
                         class="inline-flex items-center text-xs font-medium text-emerald-400"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400"
+                        />
                         Sim
                     </span>
                     <span
                         v-else
                         class="inline-flex items-center text-xs text-neutral-500"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600"
+                        />
                         Não
                     </span>
                 </Cell>
@@ -87,14 +91,18 @@ const editions = computed<Record<number, string>>(() =>
                         v-if="item.canSeeLinkedin"
                         class="inline-flex items-center text-xs font-medium text-emerald-400"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400"
+                        />
                         Sim
                     </span>
                     <span
                         v-else
                         class="inline-flex items-center text-xs text-neutral-500"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600"
+                        />
                         Não
                     </span>
                 </Cell>
@@ -103,14 +111,18 @@ const editions = computed<Record<number, string>>(() =>
                         v-if="item.canSeeAll"
                         class="inline-flex items-center text-xs font-medium text-emerald-400"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400"
+                        />
                         Sim
                     </span>
                     <span
                         v-else
                         class="inline-flex items-center text-xs text-neutral-500"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600"
+                        />
                         Não
                     </span>
                 </Cell>

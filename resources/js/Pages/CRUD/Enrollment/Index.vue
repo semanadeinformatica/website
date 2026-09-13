@@ -49,7 +49,10 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header filter-by="participant_id" :filter-values="participants">
+                <Header
+                    filter-by="participant_id"
+                    :filter-values="participants"
+                >
                     Participante
                 </Header>
                 <Header filter-by="edition_id" :filter-values="editions">
@@ -62,13 +65,18 @@ const editions = computed<Record<number, string>>(() =>
         <template #row="{ item }">
             <Row :item="item" name="enrollments">
                 <Cell class="font-medium text-white">
-                    {{ participants[item.participant_id] ?? `Participante #${item.participant_id}` }}
+                    {{
+                        participants[item.participant_id] ??
+                        `Participante #${item.participant_id}`
+                    }}
                 </Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ editions[item.edition_id] ?? "-" }}
                 </Cell>
                 <Cell>
-                    <span class="font-mono text-xs font-semibold text-neutral-200">
+                    <span
+                        class="font-mono text-xs font-semibold text-neutral-200"
+                    >
                         {{ item.points }}
                     </span>
                     <span class="ml-1 text-xs text-neutral-500">pts</span>

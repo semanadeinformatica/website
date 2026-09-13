@@ -494,7 +494,10 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                     v-else
                     class="flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 py-16 text-center"
                 >
-                    <Users :size="36" class="mb-3 text-neutral-600 opacity-40" />
+                    <Users
+                        :size="36"
+                        class="mb-3 text-neutral-600 opacity-40"
+                    />
                     <h3 class="text-base font-semibold text-white">
                         Sem participantes inscritos
                     </h3>

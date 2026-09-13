@@ -79,7 +79,11 @@ export function useSectionScroll(
     function onWheel(e: WheelEvent) {
         // Allow modal or dropdown contents to scroll normally
         const target = e.target as HTMLElement | null;
-        if (target?.closest('[role="dialog"], [aria-modal="true"], .modal-content, textarea')) {
+        if (
+            target?.closest(
+                '[role="dialog"], [aria-modal="true"], .modal-content, textarea',
+            )
+        ) {
             return;
         }
 

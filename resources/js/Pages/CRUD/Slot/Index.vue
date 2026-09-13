@@ -52,7 +52,9 @@ const quests = computed<number[]>(() =>
                     </span>
                 </Cell>
                 <Cell>
-                    <span class="font-mono text-xs font-semibold text-neutral-200">
+                    <span
+                        class="font-mono text-xs font-semibold text-neutral-200"
+                    >
                         {{ item.points }}
                     </span>
                     <span class="ml-1 text-xs text-neutral-500">pts</span>
@@ -60,8 +62,9 @@ const quests = computed<number[]>(() =>
                 <Cell>
                     <span class="font-mono text-xs text-neutral-400">
                         {{
-                            item.quests?.filter((q: Quest) => quests.includes(q.id))
-                                .length ?? 0
+                            item.quests?.filter((q: Quest) =>
+                                quests.includes(q.id),
+                            ).length ?? 0
                         }}
                     </span>
                 </Cell>

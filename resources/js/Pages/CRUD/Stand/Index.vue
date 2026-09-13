@@ -64,7 +64,10 @@ const sponsors = computed<Record<number, string>>(() =>
         <template #row="{ item }">
             <Row name="stands" :item="item">
                 <Cell class="font-medium text-white">
-                    {{ sponsors[item.sponsor_id] ?? `Empresa #${item.sponsor_id}` }}
+                    {{
+                        sponsors[item.sponsor_id] ??
+                        `Empresa #${item.sponsor_id}`
+                    }}
                 </Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ eventDays[item.event_day_id] ?? "-" }}

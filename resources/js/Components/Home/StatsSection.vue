@@ -71,16 +71,8 @@ function triggerAnimation() {
         1200,
         (v) => (displayedDays.value = v),
     );
-    animateNumber(
-        props.standCount,
-        1400,
-        (v) => (displayedStands.value = v),
-    );
-    animateNumber(
-        props.talkCount,
-        1300,
-        (v) => (displayedTalks.value = v),
-    );
+    animateNumber(props.standCount, 1400, (v) => (displayedStands.value = v));
+    animateNumber(props.talkCount, 1300, (v) => (displayedTalks.value = v));
     animateNumber(
         props.activityCount,
         1300,
@@ -150,10 +142,7 @@ const statsList = computed(() => {
 </script>
 
 <template>
-    <div
-        ref="targetRef"
-        class="relative mx-auto w-full max-w-6xl"
-    >
+    <div ref="targetRef" class="relative mx-auto w-full max-w-6xl">
         <div
             class="mb-8 max-w-3xl transition-all duration-700 ease-in-out sm:mb-10"
             :class="[
@@ -162,16 +151,14 @@ const statsList = computed(() => {
                     : 'translate-y-12 opacity-0',
             ]"
         >
-            <h2
-                class="text-3xl tracking-tight text-white sm:text-5xl"
-            >
+            <h2 class="text-3xl tracking-tight text-white sm:text-5xl">
                 A dimensão da edição
                 <span class="font-black">2026</span>
             </h2>
         </div>
 
         <div
-            class="grid grid-cols-2 gap-6 border-t border-white/10 pt-6 transition-all duration-700 ease-in-out delay-150 sm:grid-cols-3 sm:pt-8 lg:grid-cols-5 lg:gap-8"
+            class="grid grid-cols-2 gap-6 border-t border-white/10 pt-6 transition-all delay-150 duration-700 ease-in-out sm:grid-cols-3 sm:pt-8 lg:grid-cols-5 lg:gap-8"
             :class="[
                 isVisible
                     ? 'border-white/10 opacity-100'
@@ -185,8 +172,8 @@ const statsList = computed(() => {
                 :style="{ transitionDelay: `${200 + idx * 100}ms` }"
                 :class="[
                     isVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-12 opacity-0 scale-95',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-12 scale-95 opacity-0',
                 ]"
             >
                 <div class="flex items-baseline">

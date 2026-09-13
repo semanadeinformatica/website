@@ -78,7 +78,10 @@ const tiers = computed<Record<number, string>>(() =>
                     {{ editions[item.edition_id] ?? "-" }}
                 </Cell>
                 <Cell class="font-medium text-white">
-                    {{ companies[item.company_id] ?? `Empresa #${item.company_id}` }}
+                    {{
+                        companies[item.company_id] ??
+                        `Empresa #${item.company_id}`
+                    }}
                 </Cell>
                 <Cell class="text-xs text-neutral-300">
                     {{ tiers[item.sponsor_tier_id] ?? "-" }}

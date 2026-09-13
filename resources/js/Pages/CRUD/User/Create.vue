@@ -124,7 +124,7 @@ const submit = () => {
             class="group rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-white/20"
         >
             <summary
-                class="cursor-pointer font-mono text-xs font-semibold uppercase tracking-wider text-neutral-400 transition-colors group-open:text-white"
+                class="cursor-pointer font-mono text-xs font-semibold tracking-wider text-neutral-400 uppercase transition-colors group-open:text-white"
             >
                 Redes sociais & Contactos públicos
             </summary>

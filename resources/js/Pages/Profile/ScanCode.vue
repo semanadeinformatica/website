@@ -744,7 +744,6 @@ onMounted(() => {
                             </p>
                         </div>
                     </div>
-
                 </div>
 
                 <template #footer>

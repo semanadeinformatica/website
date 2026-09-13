@@ -54,7 +54,9 @@ const showQRCode = () => {
             <span v-if="loading" class="text-sm text-neutral-400"
                 >A gerar código...</span
             >
-            <template v-else-if="participant.quest_qr_code || participant.quest_code">
+            <template
+                v-else-if="participant.quest_qr_code || participant.quest_code"
+            >
                 <div
                     v-if="participant.quest_qr_code"
                     class="flex items-center justify-center rounded-2xl bg-white p-4"

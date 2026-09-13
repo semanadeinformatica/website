@@ -51,7 +51,10 @@ const allSponsorsWithTier = computed(() => {
 // Top tier (e.g. Platinum/Main) partners to feature prominently
 const topTier = computed(() => {
     if (!props.sponsorTiers || props.sponsorTiers.length === 0) return null;
-    return props.sponsorTiers.find((t) => t.sponsors && t.sponsors.length > 0) || null;
+    return (
+        props.sponsorTiers.find((t) => t.sponsors && t.sponsors.length > 0) ||
+        null
+    );
 });
 
 const topTierName = computed(() => topTier.value?.name || "Main Partners");
@@ -98,32 +101,34 @@ const marqueeRow2 = computed(() => {
     >
         <div class="mb-6 flex flex-col items-center text-center sm:mb-8">
             <h2
-                class="mt-4 text-3xl tracking-tight text-white transition-all duration-700 ease-in-out delay-100 sm:text-5xl lg:text-6xl"
+                class="mt-4 text-3xl tracking-tight text-white transition-all delay-100 duration-700 ease-in-out sm:text-5xl lg:text-6xl"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-12 opacity-0',
                 ]"
             >
-                Empresas que tornam a SINF <span class="font-black">possível</span>
+                Empresas que tornam a SINF
+                <span class="font-black">possível</span>
             </h2>
 
             <p
-                class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 transition-all duration-700 ease-in-out delay-200 sm:text-base"
+                class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 transition-all delay-200 duration-700 ease-in-out sm:text-base"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-10 opacity-0',
                 ]"
             >
-                Equipas e organizações que marcam presença na FEUP para partilhar conhecimento técnico e recrutar talento universitário.
+                Equipas e organizações que marcam presença na FEUP para
+                partilhar conhecimento técnico e recrutar talento universitário.
             </p>
         </div>
 
         <template v-if="allSponsorsWithTier.length > 0">
             <div v-if="topTierSponsors.length > 0" class="mb-6 sm:mb-8">
                 <div
-                    class="mb-3 flex items-center justify-center transition-all duration-700 ease-in-out delay-250"
+                    class="mb-3 flex items-center justify-center transition-all delay-250 duration-700 ease-in-out"
                     :class="[
                         isVisible
                             ? 'translate-y-0 opacity-100'
@@ -140,25 +145,30 @@ const marqueeRow2 = computed(() => {
                 </div>
 
                 <div
-                    class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6"
+                    class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4"
                 >
                     <Card
                         v-for="(item, idx) in topTierSponsors.slice(0, 4)"
                         :key="`featured-${item.sponsor.id}`"
                         as="button"
                         padding="p-4 sm:p-5"
-                        class="flex h-28 cursor-pointer items-center justify-center focus:outline-none transition-all duration-700 ease-in-out sm:h-32"
+                        class="flex h-28 cursor-pointer items-center justify-center transition-all duration-700 ease-in-out focus:outline-none sm:h-32"
                         :style="{ transitionDelay: `${300 + idx * 100}ms` }"
                         :class="[
                             isVisible
-                                ? 'translate-y-0 opacity-100 scale-100'
-                                : 'translate-y-12 opacity-0 scale-95',
+                                ? 'translate-y-0 scale-100 opacity-100'
+                                : 'translate-y-12 scale-95 opacity-0',
                         ]"
                         @click="openSponsorModal(item.sponsor, item.tier)"
                     >
-                        <div class="flex h-14 w-full items-center justify-center p-1 sm:h-16">
+                        <div
+                            class="flex h-14 w-full items-center justify-center p-1 sm:h-16"
+                        >
                             <img
-                                :src="item.sponsor.company?.user?.profile_photo_url"
+                                :src="
+                                    item.sponsor.company?.user
+                                        ?.profile_photo_url
+                                "
                                 :alt="item.sponsor.company?.user?.name"
                                 class="max-h-full max-w-[85%] object-contain opacity-90 brightness-95 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100 group-hover:brightness-110"
                                 loading="lazy"
@@ -170,7 +180,7 @@ const marqueeRow2 = computed(() => {
 
             <div
                 v-if="marqueeRow1.length > 0"
-                class="marquee-mask relative w-full space-y-3 overflow-hidden py-1 transition-all duration-700 ease-in-out delay-500"
+                class="marquee-mask relative w-full space-y-3 overflow-hidden py-1 transition-all delay-500 duration-700 ease-in-out"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -188,9 +198,12 @@ const marqueeRow2 = computed(() => {
                             @click="openSponsorModal(item.sponsor, item.tier)"
                         >
                             <img
-                                :src="item.sponsor.company?.user?.profile_photo_url"
+                                :src="
+                                    item.sponsor.company?.user
+                                        ?.profile_photo_url
+                                "
                                 :alt="item.sponsor.company?.user?.name"
-                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 sm:max-h-10"
+                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-10"
                                 loading="lazy"
                             />
                         </Card>
@@ -208,9 +221,12 @@ const marqueeRow2 = computed(() => {
                             @click="openSponsorModal(item.sponsor, item.tier)"
                         >
                             <img
-                                :src="item.sponsor.company?.user?.profile_photo_url"
+                                :src="
+                                    item.sponsor.company?.user
+                                        ?.profile_photo_url
+                                "
                                 :alt="item.sponsor.company?.user?.name"
-                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 sm:max-h-10"
+                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-10"
                                 loading="lazy"
                             />
                         </Card>
@@ -228,9 +244,12 @@ const marqueeRow2 = computed(() => {
                             @click="openSponsorModal(item.sponsor, item.tier)"
                         >
                             <img
-                                :src="item.sponsor.company?.user?.profile_photo_url"
+                                :src="
+                                    item.sponsor.company?.user
+                                        ?.profile_photo_url
+                                "
                                 :alt="item.sponsor.company?.user?.name"
-                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 sm:max-h-10"
+                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-10"
                                 loading="lazy"
                             />
                         </Card>
@@ -248,9 +267,12 @@ const marqueeRow2 = computed(() => {
                             @click="openSponsorModal(item.sponsor, item.tier)"
                         >
                             <img
-                                :src="item.sponsor.company?.user?.profile_photo_url"
+                                :src="
+                                    item.sponsor.company?.user
+                                        ?.profile_photo_url
+                                "
                                 :alt="item.sponsor.company?.user?.name"
-                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 sm:max-h-10"
+                                class="max-h-8 max-w-[85%] object-contain opacity-75 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-10"
                                 loading="lazy"
                             />
                         </Card>
@@ -283,12 +305,19 @@ const marqueeRow2 = computed(() => {
                 </div>
 
                 <div class="flex w-full flex-col items-center gap-3">
-                    <div class="flex flex-wrap items-center justify-center gap-3">
+                    <div
+                        class="flex flex-wrap items-center justify-center gap-3"
+                    >
                         <h3 class="text-2xl font-bold text-white">
                             {{ selectedSponsor.company?.user?.name }}
                         </h3>
-                        <div v-if="selectedTier" class="pill-container px-3 py-1 shadow-none">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-neutral-300">
+                        <div
+                            v-if="selectedTier"
+                            class="pill-container px-3 py-1 shadow-none"
+                        >
+                            <span
+                                class="text-xs font-semibold tracking-wider text-neutral-300 uppercase"
+                            >
                                 {{ selectedTier.name }} Partner
                             </span>
                         </div>
@@ -308,12 +337,15 @@ const marqueeRow2 = computed(() => {
 
                     <div
                         v-if="selectedSponsor.company?.social_media?.website"
-                        class="mt-4 flex justify-center border-t border-white/10 pt-4 w-full"
+                        class="mt-4 flex w-full justify-center border-t border-white/10 pt-4"
                     >
                         <a
                             :href="
-                                selectedSponsor.company.social_media.website.startsWith('http')
-                                    ? selectedSponsor.company.social_media.website
+                                selectedSponsor.company.social_media.website.startsWith(
+                                    'http',
+                                )
+                                    ? selectedSponsor.company.social_media
+                                          .website
                                     : `https://${selectedSponsor.company.social_media.website}`
                             "
                             target="_blank"

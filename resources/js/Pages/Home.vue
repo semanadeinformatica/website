@@ -50,14 +50,14 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
         <section
             id="hero"
             ref="heroRef"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center gap-8 px-4 text-center overflow-hidden pt-16"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center gap-8 overflow-hidden px-4 pt-16 text-center"
         >
             <div
                 class="relative transition-all duration-700 ease-in-out"
                 :class="[
                     isHeroVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-12 opacity-0 scale-95',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-12 scale-95 opacity-0',
                 ]"
             >
                 <img
@@ -68,7 +68,7 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
             </div>
 
             <p
-                class="text-lg font-medium text-neutral-300 transition-all duration-700 ease-in-out delay-150 sm:text-xl md:text-2xl"
+                class="text-lg font-medium text-neutral-300 transition-all delay-150 duration-700 ease-in-out sm:text-xl md:text-2xl"
                 :class="[
                     isHeroVisible
                         ? 'translate-y-0 opacity-100'
@@ -80,15 +80,17 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
 
             <div
                 v-if="canEnroll"
-                class="transition-all duration-700 ease-in-out delay-300"
+                class="transition-all delay-300 duration-700 ease-in-out"
                 :class="[
                     isHeroVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-10 opacity-0 scale-95',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-10 scale-95 opacity-0',
                 ]"
             >
                 <PillSelector
-                    :items="[{ id: 'enroll', label: 'Inscrever-me', active: true }]"
+                    :items="[
+                        { id: 'enroll', label: 'Inscrever-me', active: true },
+                    ]"
                     size="md"
                     :wrap="false"
                     @select="
@@ -102,14 +104,14 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
 
         <section
             id="aboutus"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
         >
             <AboutUsSection />
         </section>
 
         <section
             id="stats"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
         >
             <StatsSection
                 :days="days"
@@ -122,21 +124,21 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
 
         <section
             id="speakers"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden"
         >
             <SpeakersVerticalColumns :speakers="speakers" />
         </section>
 
         <section
             id="sponsors"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden"
         >
             <SponsorsShowcase :sponsor-tiers="sponsorTiers" />
         </section>
 
         <section
             id="cta"
-            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
         >
             <EventCtaSection :can-enroll="canEnroll" />
         </section>

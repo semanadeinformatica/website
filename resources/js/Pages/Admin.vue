@@ -23,7 +23,6 @@ import {
     Briefcase,
     UserCog,
     ArrowUpRight,
-    ExternalLink,
     Plus,
 } from "@lucide/vue";
 
@@ -66,47 +65,103 @@ const sections: Section[] = [
         title: "Programa & Eventos",
         items: [
             { route: "admin.editions.index", name: "Edições", icon: Calendar },
-            { route: "admin.eventDays.index", name: "Dias de Evento", icon: CalendarDays },
-            { route: "admin.events.index", name: "Eventos & Sessões", icon: Presentation },
-            { route: "admin.eventTypes.index", name: "Tipos de Evento", icon: Tag },
-            { route: "admin.slots.index", name: "Encaixes (Slots)", icon: Clock },
+            {
+                route: "admin.eventDays.index",
+                name: "Dias de Evento",
+                icon: CalendarDays,
+            },
+            {
+                route: "admin.events.index",
+                name: "Eventos & Sessões",
+                icon: Presentation,
+            },
+            {
+                route: "admin.eventTypes.index",
+                name: "Tipos de Evento",
+                icon: Tag,
+            },
+            {
+                route: "admin.slots.index",
+                name: "Encaixes (Slots)",
+                icon: Clock,
+            },
         ],
     },
     {
         title: "Participantes & Inscrições",
         items: [
             { route: "admin.users.index", name: "Utilizadores", icon: Users },
-            { route: "admin.enrollments.index", name: "Inscrições", icon: UserCheck },
+            {
+                route: "admin.enrollments.index",
+                name: "Inscrições",
+                icon: UserCheck,
+            },
         ],
     },
     {
         title: "Competições",
         items: [
-            { route: "admin.competitions.index", name: "Competições", icon: Trophy },
-            { route: "admin.competitionTeams.index", name: "Equipas", icon: Users2 },
-            { route: "admin.competitionPrizes.index", name: "Prémios", icon: Award },
+            {
+                route: "admin.competitions.index",
+                name: "Competições",
+                icon: Trophy,
+            },
+            {
+                route: "admin.competitionTeams.index",
+                name: "Equipas",
+                icon: Users2,
+            },
+            {
+                route: "admin.competitionPrizes.index",
+                name: "Prémios",
+                icon: Award,
+            },
         ],
     },
     {
         title: "Empresas & Patrocínios",
         items: [
-            { route: "admin.sponsors.index", name: "Patrocinadores", icon: Building2 },
-            { route: "admin.sponsorTiers.index", name: "Níveis de Patrocínio", icon: Crown },
+            {
+                route: "admin.sponsors.index",
+                name: "Patrocinadores",
+                icon: Building2,
+            },
+            {
+                route: "admin.sponsorTiers.index",
+                name: "Níveis de Patrocínio",
+                icon: Crown,
+            },
             { route: "admin.stands.index", name: "Bancas", icon: Store },
         ],
     },
     {
         title: "Loja & Gamificação",
         items: [
-            { route: "admin.products.index", name: "Produtos da Loja", icon: ShoppingBag },
-            { route: "admin.quests.index", name: "Tarefas & Missões", icon: CheckSquare },
+            {
+                route: "admin.products.index",
+                name: "Produtos da Loja",
+                icon: ShoppingBag,
+            },
+            {
+                route: "admin.quests.index",
+                name: "Tarefas & Missões",
+                icon: CheckSquare,
+            },
         ],
     },
     {
         title: "Organização",
         items: [
-            { route: "admin.departments.index", name: "Departamentos", icon: Briefcase },
-            { route: "admin.staff.index", name: "Equipa & Staff", icon: UserCog },
+            {
+                route: "admin.departments.index",
+                name: "Departamentos",
+                icon: Briefcase,
+            },
+            {
+                route: "admin.staff.index",
+                name: "Equipa & Staff",
+                icon: UserCog,
+            },
         ],
     },
 ];
@@ -118,9 +173,11 @@ const sections: Section[] = [
             <div
                 class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
             >
-                    <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                        {{ currentEdition?.name ?? "Edição Atual" }}
-                    </h1>
+                <h1
+                    class="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+                >
+                    {{ currentEdition?.name ?? "Edição Atual" }}
+                </h1>
 
                 <div class="flex flex-wrap items-center gap-2.5">
                     <PrimaryButton
@@ -212,7 +269,9 @@ const sections: Section[] = [
             <div class="space-y-6">
                 <h2 class="text-lg font-bold text-white">Acessos Rápidos</h2>
 
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div
+                    class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+                >
                     <div
                         v-for="section in sections"
                         :key="section.title"

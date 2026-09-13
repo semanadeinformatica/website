@@ -79,7 +79,13 @@ const props = withDefaults(defineProps<Props>(), {
             class="flex flex-col items-center justify-center py-20 text-center"
         >
             <PillSelector
-                :items="[{ id: 'empty', label: 'Sem equipas registadas', disabled: true }]"
+                :items="[
+                    {
+                        id: 'empty',
+                        label: 'Sem equipas registadas',
+                        disabled: true,
+                    },
+                ]"
                 size="sm"
                 :wrap="false"
                 container-class="mb-3"

@@ -99,7 +99,7 @@ const visible = ref(false);
                 v-model="value"
                 :name="name ?? id"
                 :autocomplete="autocomplete"
-                class="[&>option:checked]:bg-white/20 w-full cursor-pointer border-0 bg-transparent text-sm text-white shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none [&>option]:bg-[#121319] [&>option]:px-3 [&>option]:py-2.5 [&>option]:text-white [&>option:checked]:text-white"
+                class="w-full cursor-pointer border-0 bg-transparent text-sm text-white shadow-none outline-none focus:border-transparent focus:shadow-none focus:ring-0 focus:outline-none [&>option]:bg-[#121319] [&>option]:px-3 [&>option]:py-2.5 [&>option]:text-white [&>option:checked]:bg-white/20 [&>option:checked]:text-white"
                 :class="[
                     props.multiple
                         ? 'min-h-36 rounded-xl p-2 text-xs leading-relaxed'

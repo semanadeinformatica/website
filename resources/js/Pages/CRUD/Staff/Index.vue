@@ -54,7 +54,10 @@ const participants = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header filter-by="participant_id" :filter-values="participants">
+                <Header
+                    filter-by="participant_id"
+                    :filter-values="participants"
+                >
                     Membro
                 </Header>
                 <Header filter-by="department_id" :filter-values="departments">
@@ -72,7 +75,10 @@ const participants = computed<Record<number, string>>(() =>
         <template #row="{ item }">
             <Row name="staff" :item="item">
                 <Cell class="font-medium text-white">
-                    {{ participants[item.participant_id] ?? `Membro #${item.participant_id}` }}
+                    {{
+                        participants[item.participant_id] ??
+                        `Membro #${item.participant_id}`
+                    }}
                 </Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ departments[item.department_id] ?? "-" }}
@@ -82,14 +88,18 @@ const participants = computed<Record<number, string>>(() =>
                         v-if="item.coordinator"
                         class="inline-flex items-center text-xs font-medium text-emerald-400"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400"
+                        />
                         Sim
                     </span>
                     <span
                         v-else
                         class="inline-flex items-center text-xs text-neutral-500"
                     >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600" />
+                        <span
+                            class="mr-1.5 h-1.5 w-1.5 rounded-full bg-neutral-600"
+                        />
                         Não
                     </span>
                 </Cell>

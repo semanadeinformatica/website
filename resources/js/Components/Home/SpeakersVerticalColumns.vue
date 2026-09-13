@@ -149,10 +149,10 @@ const columns = computed(() => {
 <template>
     <div
         ref="targetRef"
-        class="relative h-screen min-h-dvh max-h-dvh w-full overflow-hidden"
+        class="relative h-screen max-h-dvh min-h-dvh w-full overflow-hidden"
     >
         <div
-            class="pointer-events-none absolute top-16 inset-x-0 z-30 flex flex-col items-center justify-center px-4 text-center sm:top-20 lg:top-20"
+            class="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center justify-center px-4 text-center sm:top-20 lg:top-20"
         >
             <h2
                 class="text-2xl font-black tracking-tight text-white drop-shadow-md transition-all duration-700 ease-in-out sm:text-4xl lg:text-5xl"
@@ -166,24 +166,23 @@ const columns = computed(() => {
             </h2>
 
             <p
-                class="mt-1.5 max-w-xs text-xs text-neutral-400 transition-all duration-700 ease-in-out delay-150 sm:max-w-md sm:text-sm md:max-w-lg md:text-base"
+                class="mt-1.5 max-w-xs text-xs text-neutral-400 transition-all delay-150 duration-700 ease-in-out sm:max-w-md sm:text-sm md:max-w-lg md:text-base"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
                         : 'translate-y-10 opacity-0',
                 ]"
             >
-                Descobre as ideias, experiências e tendências que estão a moldar o futuro da tecnologia.
+                Descobre as ideias, experiências e tendências que estão a moldar
+                o futuro da tecnologia.
             </p>
         </div>
 
         <template v-if="speakers.length !== 0">
             <div
-                class="speaker-wall-container relative h-full w-full overflow-hidden transition-all duration-1000 ease-in-out delay-150"
+                class="speaker-wall-container relative h-full w-full overflow-hidden transition-all delay-150 duration-1000 ease-in-out"
                 :class="[
-                    isVisible
-                        ? 'opacity-100 scale-100'
-                        : 'opacity-0 scale-95',
+                    isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0',
                 ]"
             >
                 <div
@@ -217,7 +216,9 @@ const columns = computed(() => {
                                     >
                                         <img
                                             :src="speaker.profile_photo_url"
-                                            :alt="getSpeakerDisplayName(speaker)"
+                                            :alt="
+                                                getSpeakerDisplayName(speaker)
+                                            "
                                             class="h-full w-full object-cover grayscale filter transition-all duration-300 group-hover:grayscale-0"
                                             loading="lazy"
                                         />
@@ -261,7 +262,9 @@ const columns = computed(() => {
                                     >
                                         <img
                                             :src="speaker.profile_photo_url"
-                                            :alt="getSpeakerDisplayName(speaker)"
+                                            :alt="
+                                                getSpeakerDisplayName(speaker)
+                                            "
                                             class="h-full w-full object-cover grayscale filter transition-all duration-300 group-hover:grayscale-0"
                                             loading="lazy"
                                         />
@@ -305,7 +308,7 @@ const columns = computed(() => {
                     <img
                         :src="selectedSpeaker.profile_photo_url"
                         :alt="getSpeakerDisplayName(selectedSpeaker)"
-                        class="h-16 w-16 rounded-xl object-cover ring-2 ring-sinf-primary/50 sm:h-24 sm:w-24 sm:rounded-2xl"
+                        class="ring-sinf-primary/50 h-16 w-16 rounded-xl object-cover ring-2 sm:h-24 sm:w-24 sm:rounded-2xl"
                     />
                     <div class="flex-1">
                         <h3 class="text-lg font-black text-white sm:text-2xl">
@@ -313,7 +316,7 @@ const columns = computed(() => {
                         </h3>
                         <p
                             v-if="getSpeakerTitle(selectedSpeaker)"
-                            class="text-xs font-medium text-sinf-primary sm:text-sm"
+                            class="text-sinf-primary text-xs font-medium sm:text-sm"
                         >
                             {{ getSpeakerTitle(selectedSpeaker) }}
                             <span
@@ -324,9 +327,7 @@ const columns = computed(() => {
                             </span>
                         </p>
                         <p
-                            v-else-if="
-                                getSpeakerOrganization(selectedSpeaker)
-                            "
+                            v-else-if="getSpeakerOrganization(selectedSpeaker)"
                             class="text-xs font-medium text-neutral-400 sm:text-sm"
                         >
                             {{ getSpeakerOrganization(selectedSpeaker) }}
@@ -343,7 +344,7 @@ const columns = computed(() => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 :aria-label="`${getSpeakerDisplayName(selectedSpeaker)} - ${link.label}`"
-                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-neutral-400 transition-all hover:border-sinf-primary/60 hover:bg-sinf-primary/20 hover:text-white sm:h-9 sm:w-9"
+                                class="hover:border-sinf-primary/60 hover:bg-sinf-primary/20 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-neutral-400 transition-all hover:text-white sm:h-9 sm:w-9"
                             >
                                 <SocialIcon
                                     :platform="link.platform"

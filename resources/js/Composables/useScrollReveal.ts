@@ -11,11 +11,7 @@ interface ScrollRevealOptions {
  * Supports repeatable triggering on enter/exit with once: false.
  */
 export function useScrollReveal(options: ScrollRevealOptions = {}) {
-    const {
-        threshold = 0.15,
-        rootMargin = "0px",
-        once = false,
-    } = options;
+    const { threshold = 0.15, rootMargin = "0px", once = false } = options;
     const targetRef = ref<HTMLElement | null>(null);
     const isVisible = ref(false);
     let observer: IntersectionObserver | null = null;

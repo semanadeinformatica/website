@@ -58,7 +58,9 @@ const editions = computed<Record<number, string>>(() =>
                     {{ item.members?.length ?? 0 }}
                 </Cell>
                 <Cell>
-                    <span class="font-mono text-xs font-semibold text-neutral-200">
+                    <span
+                        class="font-mono text-xs font-semibold text-neutral-200"
+                    >
                         {{ item.points }}
                     </span>
                     <span class="ml-1 text-xs text-neutral-500">pts</span>

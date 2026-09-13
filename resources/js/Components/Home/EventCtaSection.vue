@@ -35,7 +35,7 @@ const { targetRef, isVisible } = useScrollReveal({
                 Junta-te a nós na SINF 2026
             </h2>
             <p
-                class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 transition-all duration-700 ease-in-out delay-150 sm:text-base"
+                class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 transition-all delay-150 duration-700 ease-in-out sm:text-base"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -49,7 +49,7 @@ const { targetRef, isVisible } = useScrollReveal({
         </div>
 
         <div
-            class="grid grid-cols-1 gap-6 border-t border-white/10 pt-8 transition-all duration-700 ease-in-out delay-250 md:grid-cols-3 md:gap-6 lg:gap-8"
+            class="grid grid-cols-1 gap-6 border-t border-white/10 pt-8 transition-all delay-250 duration-700 ease-in-out md:grid-cols-3 md:gap-6 lg:gap-8"
             :class="[
                 isVisible
                     ? 'border-white/10 opacity-100'
@@ -59,19 +59,22 @@ const { targetRef, isVisible } = useScrollReveal({
             <Card
                 padding="p-6 sm:p-7"
                 :interactive="false"
-                class="flex flex-col justify-between transition-all duration-700 ease-in-out delay-300"
+                class="flex flex-col justify-between transition-all delay-300 duration-700 ease-in-out"
                 :class="[
                     isVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-14 opacity-0 scale-[0.96]',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-14 scale-[0.96] opacity-0',
                 ]"
             >
                 <div>
                     <h3 class="text-lg font-bold text-white sm:text-xl">
                         Garante o teu lugar
                     </h3>
-                    <p class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm">
-                        Acesso total às palestras no anfiteatro, sessões de networking com empresas e kit de boas-vindas do evento.
+                    <p
+                        class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                    >
+                        Acesso total às palestras no anfiteatro, sessões de
+                        networking com empresas e kit de boas-vindas do evento.
                     </p>
                 </div>
 
@@ -104,19 +107,23 @@ const { targetRef, isVisible } = useScrollReveal({
             <Card
                 padding="p-6 sm:p-7"
                 :interactive="false"
-                class="flex flex-col justify-between transition-all duration-700 ease-in-out delay-450"
+                class="flex flex-col justify-between transition-all delay-450 duration-700 ease-in-out"
                 :class="[
                     isVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-14 opacity-0 scale-[0.96]',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-14 scale-[0.96] opacity-0',
                 ]"
             >
                 <div>
                     <h3 class="text-lg font-bold text-white sm:text-xl">
                         Explora o programa
                     </h3>
-                    <p class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm">
-                        Consulta os horários das palestras técnicas, temas das intervenções e oradores convidados para cada um dos dias.
+                    <p
+                        class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                    >
+                        Consulta os horários das palestras técnicas, temas das
+                        intervenções e oradores convidados para cada um dos
+                        dias.
                     </p>
                 </div>
 
@@ -137,19 +144,22 @@ const { targetRef, isVisible } = useScrollReveal({
             <Card
                 padding="p-6 sm:p-7"
                 :interactive="false"
-                class="flex flex-col justify-between transition-all duration-700 ease-in-out delay-600"
+                class="flex flex-col justify-between transition-all delay-600 duration-700 ease-in-out"
                 :class="[
                     isVisible
-                        ? 'translate-y-0 opacity-100 scale-100'
-                        : 'translate-y-14 opacity-0 scale-[0.96]',
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-14 scale-[0.96] opacity-0',
                 ]"
             >
                 <div>
                     <h3 class="text-lg font-bold text-white sm:text-xl">
                         Feito por estudantes
                     </h3>
-                    <p class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm">
-                        Uma iniciativa 100% pensada e executada por alunos da FEUP. Descobre quem está por trás desta edição da SINF.
+                    <p
+                        class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                    >
+                        Uma iniciativa 100% pensada e executada por alunos da
+                        FEUP. Descobre quem está por trás desta edição da SINF.
                     </p>
                 </div>
 

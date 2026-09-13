@@ -308,13 +308,16 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                 class="flex flex-col items-center justify-center py-20 text-center"
             >
                 <PillSelector
-                    :items="[{ id: 'info', label: 'Em breve...', disabled: true }]"
+                    :items="[
+                        { id: 'info', label: 'Em breve...', disabled: true },
+                    ]"
                     size="sm"
                     :wrap="false"
                     container-class="mb-3"
                 />
                 <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
-                    Não há informações adicionais disponíveis para esta competição de momento.
+                    Não há informações adicionais disponíveis para esta
+                    competição de momento.
                 </p>
             </div>
         </div>

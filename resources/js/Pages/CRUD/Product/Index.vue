@@ -51,7 +51,9 @@ const editions = computed<Record<number, string>>(() =>
             <Row :item="item" name="products">
                 <Cell class="font-medium text-white">{{ item.name }}</Cell>
                 <Cell>
-                    <span class="font-mono text-xs font-semibold text-neutral-200">
+                    <span
+                        class="font-mono text-xs font-semibold text-neutral-200"
+                    >
                         {{ item.price }}
                     </span>
                     <span class="ml-1 text-xs text-neutral-500">pts</span>
@@ -63,12 +65,9 @@ const editions = computed<Record<number, string>>(() =>
                     >
                         Esgotado (0 un.)
                     </span>
-                    <span
-                        v-else
-                        class="font-mono text-xs text-neutral-300"
-                    >
+                    <span v-else class="font-mono text-xs text-neutral-300">
                         {{ item.stock }}
-                        <span class="text-neutral-500 font-sans">un.</span>
+                        <span class="font-sans text-neutral-500">un.</span>
                     </span>
                 </Cell>
                 <Cell class="text-xs text-neutral-400">

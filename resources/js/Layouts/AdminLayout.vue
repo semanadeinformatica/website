@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { provide, ref } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import AdminSidebar from "@/Components/Navigation/AdminSidebar.vue";
 import Banner from "@/Components/UI/Banner.vue";
-import { route } from "ziggy-js";
-import { Menu, ExternalLink } from "@lucide/vue";
+import { Menu } from "@lucide/vue";
 
 defineProps<{
     title: string;
@@ -17,7 +16,7 @@ provide("adminSidebarOpen", sidebarOpen);
 
 <template>
     <div
-        class="selection:bg-white/20 relative flex h-screen w-screen overflow-hidden bg-[#090a0c] font-sans text-neutral-200 antialiased selection:text-white"
+        class="relative flex h-screen w-screen overflow-hidden bg-[#090a0c] font-sans text-neutral-200 antialiased selection:bg-white/20 selection:text-white"
     >
         <Head :title="title" />
 

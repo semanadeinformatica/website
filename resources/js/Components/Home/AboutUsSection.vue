@@ -16,7 +16,7 @@ const { targetRef, isVisible } = useScrollReveal({
             class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-12"
         >
             <div
-                class="self-center lg:col-span-6 xl:col-span-7 transition-all duration-700 ease-in-out"
+                class="self-center transition-all duration-700 ease-in-out lg:col-span-6 xl:col-span-7"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -32,7 +32,7 @@ const { targetRef, isVisible } = useScrollReveal({
             </div>
 
             <div
-                class="text-base leading-relaxed text-neutral-300 transition-all duration-700 ease-in-out delay-150 sm:text-lg lg:col-span-6 lg:pt-6 xl:col-span-5"
+                class="text-base leading-relaxed text-neutral-300 transition-all delay-150 duration-700 ease-in-out sm:text-lg lg:col-span-6 lg:pt-6 xl:col-span-5"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -46,7 +46,7 @@ const { targetRef, isVisible } = useScrollReveal({
         </div>
 
         <div
-            class="mt-8 grid grid-cols-1 gap-6 border-t border-white/10 pt-6 transition-all duration-700 ease-in-out delay-250 sm:mt-10 sm:pt-8 md:grid-cols-3 md:gap-8 lg:gap-12"
+            class="mt-8 grid grid-cols-1 gap-6 border-t border-white/10 pt-6 transition-all delay-250 duration-700 ease-in-out sm:mt-10 sm:pt-8 md:grid-cols-3 md:gap-8 lg:gap-12"
             :class="[
                 isVisible
                     ? 'border-white/10 opacity-100'
@@ -54,7 +54,7 @@ const { targetRef, isVisible } = useScrollReveal({
             ]"
         >
             <div
-                class="space-y-1.5 transition-all duration-700 ease-in-out delay-300"
+                class="space-y-1.5 transition-all delay-300 duration-700 ease-in-out"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -70,7 +70,7 @@ const { targetRef, isVisible } = useScrollReveal({
             </div>
 
             <div
-                class="space-y-1.5 transition-all duration-700 ease-in-out delay-400"
+                class="space-y-1.5 transition-all delay-400 duration-700 ease-in-out"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'
@@ -86,7 +86,7 @@ const { targetRef, isVisible } = useScrollReveal({
             </div>
 
             <div
-                class="space-y-1.5 transition-all duration-700 ease-in-out delay-500"
+                class="space-y-1.5 transition-all delay-500 duration-700 ease-in-out"
                 :class="[
                     isVisible
                         ? 'translate-y-0 opacity-100'

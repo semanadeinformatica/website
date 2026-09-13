@@ -10,7 +10,9 @@ import SocialIcon from "@/Components/UI/SocialIcon.vue";
     <div class="relative min-h-screen bg-[#0d0e12] text-white">
         <GlowingOrbs />
 
-        <main class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16">
+        <main
+            class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16"
+        >
             <div class="flex flex-col items-center text-center">
                 <img
                     id="svg-logo"
@@ -19,11 +21,15 @@ import SocialIcon from "@/Components/UI/SocialIcon.vue";
                     alt="SINF 2026 logo"
                 />
 
-                <p class="mt-8 text-lg font-medium tracking-wide text-neutral-300 select-none sm:text-xl">
+                <p
+                    class="mt-8 text-lg font-medium tracking-wide text-neutral-300 select-none sm:text-xl"
+                >
                     Brevemente
                 </p>
 
-                <div class="mt-8 flex items-center justify-center gap-4 select-none">
+                <div
+                    class="mt-8 flex items-center justify-center gap-4 select-none"
+                >
                     <a
                         href="https://www.instagram.com/sinffeup/"
                         target="_blank"
