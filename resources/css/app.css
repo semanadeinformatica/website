@@ -223,3 +223,18 @@ textarea:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s !important;
     caret-color: #ffffff !important;
 }
+
+@utility landing-section {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+html.landing-snap {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+html.landing-snap footer {
+    scroll-snap-align: end;
+    scroll-snap-stop: always;
+}

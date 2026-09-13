@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SpeakersCarousel from "@/Components/Home/SpeakersCarousel.vue";
-import SponsorBanner from "@/Components/Home/SponsorBanner.vue";
-import InfoPopup from "@/Components/Home/InfoPopup.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
+import InfoPopup from "@/Components/Home/InfoPopup.vue";
+import AboutUsSection from "@/Components/Home/AboutUsSection.vue";
+import StatsSection from "@/Components/Home/StatsSection.vue";
+import SpeakersVerticalColumns from "@/Components/Home/SpeakersVerticalColumns.vue";
+import SponsorsShowcase from "@/Components/Home/SponsorsShowcase.vue";
+import EventCtaSection from "@/Components/Home/EventCtaSection.vue";
+import { useSectionScroll } from "@/Composables/useSectionScroll";
+import { useScrollReveal } from "@/Composables/useScrollReveal";
 import type Edition from "@/Types/Edition";
 import type EventDay from "@/Types/EventDay";
 import type { User } from "@/Types/User";
@@ -25,31 +29,15 @@ interface Props {
     canEnroll: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     competitionCount: 0,
 });
 
-const activeStatsCount = computed(() => {
-    let count = 0;
-    if (props.days?.length) count++;
-    if (props.standCount) count++;
-    if (props.talkCount) count++;
-    if (props.activityCount) count++;
-    if (props.competitionCount) count++;
-    return count;
-});
+useSectionScroll();
 
-const statsGridColsClass = computed(() => {
-    if (activeStatsCount.value >= 5) {
-        return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5";
-    }
-    if (activeStatsCount.value === 4) {
-        return "grid-cols-2 md:grid-cols-4";
-    }
-    if (activeStatsCount.value === 3) {
-        return "grid-cols-1 sm:grid-cols-3";
-    }
-    return "grid-cols-2";
+const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
+    threshold: 0.1,
+    once: false,
 });
 </script>
 
@@ -60,9 +48,18 @@ const statsGridColsClass = computed(() => {
         <QuickScroll mode="sections" />
 
         <section
-            class="relative flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center gap-8 px-4 py-16 text-center"
+            id="hero"
+            ref="heroRef"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center gap-8 px-4 text-center overflow-hidden pt-16"
         >
-            <div class="relative">
+            <div
+                class="relative transition-all duration-700 ease-in-out"
+                :class="[
+                    isHeroVisible
+                        ? 'translate-y-0 opacity-100 scale-100'
+                        : 'translate-y-12 opacity-0 scale-95',
+                ]"
+            >
                 <img
                     class="h-16 w-auto max-w-[85vw] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300 hover:brightness-110 sm:h-24 md:h-32"
                     src="/images/sinf2026.svg"
@@ -71,220 +68,77 @@ const statsGridColsClass = computed(() => {
             </div>
 
             <p
-                class="text-lg font-medium text-neutral-300 sm:text-xl md:text-2xl"
+                class="text-lg font-medium text-neutral-300 transition-all duration-700 ease-in-out delay-150 sm:text-xl md:text-2xl"
+                :class="[
+                    isHeroVisible
+                        ? 'translate-y-0 opacity-100'
+                        : 'translate-y-10 opacity-0',
+                ]"
             >
                 16 a 19 de novembro
             </p>
 
-            <PillSelector
+            <div
                 v-if="canEnroll"
-                :items="[{ id: 'enroll', label: 'Inscrever-me', active: true }]"
-                size="md"
-                :wrap="false"
-                @select="
-                    $page.props.auth.user
-                        ? router.put(route('enroll'))
-                        : router.get(route('register'))
-                "
-            />
+                class="transition-all duration-700 ease-in-out delay-300"
+                :class="[
+                    isHeroVisible
+                        ? 'translate-y-0 opacity-100 scale-100'
+                        : 'translate-y-10 opacity-0 scale-95',
+                ]"
+            >
+                <PillSelector
+                    :items="[{ id: 'enroll', label: 'Inscrever-me', active: true }]"
+                    size="md"
+                    :wrap="false"
+                    @select="
+                        $page.props.auth.user
+                            ? router.put(route('enroll'))
+                            : router.get(route('register'))
+                    "
+                />
+            </div>
         </section>
 
         <section
             id="aboutus"
-            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
         >
-            <div class="mb-10 flex justify-center">
-                <PillSelector
-                    :items="[
-                        { id: 'aboutus', label: 'Sobre nós', active: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                />
-            </div>
-
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div
-                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.01] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <p
-                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
-                    >
-                        {{ $t("homePage.aboutUsText1") }}
-                    </p>
-                </div>
-                <div
-                    class="rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.01] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <p
-                        class="text-justify text-base leading-relaxed text-neutral-300 sm:text-lg"
-                    >
-                        {{ $t("homePage.aboutUsText2") }}
-                    </p>
-                </div>
-            </div>
+            <AboutUsSection />
         </section>
 
         <section
-            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+            id="stats"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
         >
-            <div class="mb-10 flex justify-center">
-                <PillSelector
-                    :items="[
-                        { id: 'stats', label: 'Este ano temos', active: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                />
-            </div>
-
-            <div
-                :class="[
-                    'grid gap-4 sm:gap-6',
-                    statsGridColsClass,
-                    {
-                        '[&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1':
-                            activeStatsCount % 2 !== 0,
-                    },
-                ]"
-            >
-                <div
-                    v-if="days.length !== 0"
-                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <span
-                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
-                    >
-                        {{ days.length }}
-                    </span>
-                    <span
-                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
-                    >
-                        dias
-                    </span>
-                </div>
-
-                <div
-                    v-if="standCount !== 0"
-                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <span
-                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
-                    >
-                        {{ standCount }}
-                    </span>
-                    <span
-                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
-                    >
-                        bancas
-                    </span>
-                </div>
-
-                <div
-                    v-if="talkCount !== 0"
-                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <span
-                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
-                    >
-                        {{ talkCount }}
-                    </span>
-                    <span
-                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
-                    >
-                        palestras
-                    </span>
-                </div>
-
-                <div
-                    v-if="activityCount !== 0"
-                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <span
-                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
-                    >
-                        {{ activityCount }}
-                    </span>
-                    <span
-                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
-                    >
-                        atividades
-                    </span>
-                </div>
-
-                <div
-                    v-if="competitionCount !== 0"
-                    class="group flex flex-col items-center justify-center rounded-3xl border border-white/8 bg-black/50 p-6 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 ease-out select-none hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)] sm:p-8"
-                >
-                    <span
-                        class="text-3xl font-bold text-white transition-colors group-hover:text-neutral-100 sm:text-4xl"
-                    >
-                        {{ competitionCount }}
-                    </span>
-                    <span
-                        class="mt-2 font-mono text-xs font-medium tracking-wider text-neutral-400 uppercase transition-colors group-hover:text-neutral-300"
-                    >
-                        {{
-                            competitionCount === 1
-                                ? "competição"
-                                : "competições"
-                        }}
-                    </span>
-                </div>
-            </div>
+            <StatsSection
+                :days="days"
+                :stand-count="standCount"
+                :talk-count="talkCount"
+                :activity-count="activityCount"
+                :competition-count="competitionCount"
+            />
         </section>
 
-        <section id="speakers" class="relative w-full overflow-hidden py-20">
-            <div class="mb-10 flex justify-center px-4">
-                <PillSelector
-                    :items="[
-                        { id: 'speakers', label: 'Oradores', active: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                />
-            </div>
-
-            <template v-if="speakers.length !== 0">
-                <div class="w-full px-2 sm:px-4 md:px-6">
-                    <SpeakersCarousel :speakers="speakers" />
-                </div>
-            </template>
-            <div v-else class="flex justify-center px-4">
-                <PillSelector
-                    :items="[
-                        { id: 'soon', label: 'Em breve...', disabled: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                />
-            </div>
+        <section
+            id="speakers"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden"
+        >
+            <SpeakersVerticalColumns :speakers="speakers" />
         </section>
 
         <section
             id="sponsors"
-            class="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden"
         >
-            <div class="mb-10 flex justify-center">
-                <PillSelector
-                    :items="[
-                        { id: 'sponsors', label: 'Patrocínios', active: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                />
-            </div>
+            <SponsorsShowcase :sponsor-tiers="sponsorTiers" />
+        </section>
 
-            <div class="space-y-12">
-                <SponsorBanner
-                    v-for="(tier, idx) in sponsorTiers"
-                    :key="tier.id"
-                    :title="tier.name"
-                    :sponsors="tier.sponsors ?? []"
-                    :color="tier.color"
-                    :idx="idx"
-                />
-            </div>
+        <section
+            id="cta"
+            class="landing-section relative flex h-screen min-h-dvh max-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+        >
+            <EventCtaSection :can-enroll="canEnroll" />
         </section>
     </AppLayout>
 </template>

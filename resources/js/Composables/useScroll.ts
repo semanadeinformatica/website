@@ -2,8 +2,6 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 export type QuickScrollMode = "sections" | "top";
 
-const NAV_OFFSET = 70;
-
 export function useScroll(mode: QuickScrollMode = "top") {
     const isAtBottom = ref(false);
     const isScrolled = ref(false);
@@ -31,22 +29,23 @@ export function useScroll(mode: QuickScrollMode = "top") {
         );
         if (!sections.length) return false;
 
-        const currentY = window.scrollY || window.pageYOffset;
+        const viewportCenter = window.innerHeight / 2;
 
         const nextSection = sections.find((section) => {
-            const top = section.getBoundingClientRect().top + currentY;
-            return top > currentY + NAV_OFFSET + 20;
+            const rect = section.getBoundingClientRect();
+            const sectionCenter = rect.top + rect.height / 2;
+            return sectionCenter > viewportCenter + 60;
         });
 
         if (nextSection) {
-            const targetY =
-                nextSection.getBoundingClientRect().top + currentY - NAV_OFFSET;
-            window.scrollTo({ top: targetY, behavior: "smooth" });
+            nextSection.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
-            window.scrollTo({
-                top: document.documentElement.scrollHeight,
-                behavior: "smooth",
-            });
+            const first = sections[0];
+            if (first) {
+                first.scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                scrollToTop();
+            }
         }
         return true;
     }
