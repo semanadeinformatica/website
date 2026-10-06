@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import Checkbox from "@/Components/Checkbox.vue";
 
 interface Props {
     with: {
@@ -18,7 +17,7 @@ defineProps<Props>();
 const form = useForm({
     edition_id: "",
     name: "",
-    color: "",
+    color: "#6366f1",
     rank: "0",
     canSeeCV: false,
     canSeeLinkedin: false,
@@ -31,35 +30,41 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Atribuir Patrocínio">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                v-model="form.edition_id"
-                type="select"
-                required
-                autofocus
-                label="Edição"
-                :error-message="form.errors.edition_id"
+    <CRUDModal
+        title="Criar Nível de Patrocínio"
+        name="sponsorTiers"
+        :processing="form.processing"
+        max-width="lg"
+        @submit="submit"
+    >
+        <TextInput
+            v-model="form.edition_id"
+            type="select"
+            required
+            autofocus
+            label="Edição"
+            :error-message="form.errors.edition_id"
+        >
+            <option
+                v-for="edition in $props.with.editions"
+                :key="edition.id"
+                :value="edition.id"
             >
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </TextInput>
+                {{ edition.name }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                id="name"
-                v-model="form.name"
-                label="Nome"
-                type="text"
-                required
-                autocomplete="name"
-                :error-message="form.errors.name"
-            />
+        <TextInput
+            id="name"
+            v-model="form.name"
+            label="Nome do Nível"
+            type="text"
+            required
+            autocomplete="name"
+            :error-message="form.errors.name"
+        />
 
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
                 id="color"
                 v-model="form.color"
@@ -72,46 +77,43 @@ const submit = () => {
             <TextInput
                 id="rank"
                 v-model="form.rank"
-                label="Posição"
+                label="Posição (Ordem)"
                 type="number"
                 required
                 :error-message="form.errors.rank"
             />
+        </div>
 
-            <label for="canSeeCV" class="flex flex-row items-center gap-6">
-                Consegue ver os CVs dos participantes?
-                <Checkbox
-                    id="canSeeCV"
-                    v-model="form.canSeeCV"
-                    :checked="false"
-                    value="false"
-                />
-            </label>
-
-            <label
-                for="canSeeLinkedin"
-                class="flex flex-row items-center gap-6"
+        <div class="flex flex-col gap-2.5 pt-1">
+            <div
+                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
             >
-                Consegue ver o LinkedIn dos participantes?
+                <span class="text-xs font-medium text-neutral-300">
+                    Consegue ver os CVs dos participantes?
+                </span>
+                <Checkbox id="canSeeCV" v-model:checked="form.canSeeCV" />
+            </div>
+
+            <div
+                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+            >
+                <span class="text-xs font-medium text-neutral-300">
+                    Consegue ver o LinkedIn dos participantes?
+                </span>
                 <Checkbox
                     id="canSeeLinkedin"
-                    v-model="form.canSeeLinkedin"
-                    :checked="false"
-                    value="false"
+                    v-model:checked="form.canSeeLinkedin"
                 />
-            </label>
+            </div>
 
-            <label for="canSeeAll" class="flex flex-row items-center gap-6">
-                Consegue ver todos os participantes (ou só quem visita a banca)?
-                <Checkbox
-                    id="canSeeAll"
-                    v-model="form.canSeeAll"
-                    :checked="false"
-                    value="false"
-                />
-            </label>
-
-            <PrimaryButton type="submit">Atribuir</PrimaryButton>
-        </form>
-    </CardLayout>
+            <div
+                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+            >
+                <span class="text-xs font-medium text-neutral-300">
+                    Consegue ver todos os participantes?
+                </span>
+                <Checkbox id="canSeeAll" v-model:checked="form.canSeeAll" />
+            </div>
+        </div>
+    </CRUDModal>
 </template>

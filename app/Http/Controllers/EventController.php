@@ -6,7 +6,6 @@ use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EventController extends Controller
@@ -40,7 +39,7 @@ class EventController extends Controller
         }
 
         return Inertia::render('Event', [
-            'event' => $event->load(['users', 'event_day']),
+            'event' => $event->load(['users', 'event_day', 'type']),
             'enrollments' => $enrollments,
             'enrollmentCount' => $enrollmentCount,
             'isParticipant' => $isParticipant,
@@ -56,79 +55,50 @@ class EventController extends Controller
      */
     public function join(Request $request, Event $event)
     {
-
-        $edition = $request->input('edition');
-
-        if ($edition === null) {
-            return response('No edition found', 500);
-        }
-
-        /** @var User|null */
+        /** @var User */
         $user = $request->user();
 
         if ($user === null) {
-            return redirect()->back()->dangerBanner('Inicia sessão para fazer esta ação');
+            return redirect()->route('login');
         }
 
-        if ($user->cannot('join', $event)) {
-            Log::alert('User {user} attempted to join event "{event}" but was denied', [
-                'user' => $user->name,
-                'event' => $event->name,
-            ]);
+        if ($user->can('join', $event)) {
+            $editionId = $request->input('edition')?->id ?? $event->event_day?->edition_id;
+            $enrollment = $editionId
+                ? $user->usertype->enrollments()->where('edition_id', $editionId)->first()
+                : $user->usertype->enrollments()->latest()->first();
 
-            return redirect()->back()->dangerBanner('Não podes inscrever-te neste evento');
+            if ($enrollment) {
+                $enrollment->events()->syncWithoutDetaching([$event->id]);
+            }
         }
 
-        $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
-
-        if ($currentEnrollment === null) {
-            Log::alert('User {user} attempted to join event "{event}" while not enrolled in the current edition', [
-                'user' => $user->name,
-                'event' => $event->name,
-            ]);
-
-            return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
-        }
-
-        $currentEnrollment->events()->attach($event);
-        Log::info('User {user} joined event {event}', [
-            'user' => $user->name,
-            'event' => $event->name,
-        ]);
-
-        return redirect()->route('profile.show')->banner('Inscrição realizada com sucesso!');
+        return redirect()->back();
     }
 
     /**
-     * The current user wants to leave the given event if enrolled.
+     * The current user wants to leave the given event.
      */
     public function leave(Request $request, Event $event)
     {
+        /** @var User */
         $user = $request->user();
 
-        $edition = $request->input('edition');
-
-        if ($edition === null) {
-            return response('No edition found', 500);
+        if ($user === null) {
+            return redirect()->route('login');
         }
 
-        $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first(); // we can safely get only the first one because there should only be one.
+        if ($user->can('leave', $event)) {
+            $editionId = $request->input('edition')?->id ?? $event->event_day?->edition_id;
+            $enrollment = $editionId
+                ? $user->usertype->enrollments()->where('edition_id', $editionId)->first()
+                : $user->usertype->enrollments()->latest()->first();
 
-        if ($currentEnrollment === null) {
-            Log::alert('User {user} attempted to leave event "{event}" while not enrolled in the current edition', [
-                'user' => $user->name,
-                'event' => $event->name,
-            ]);
-
-            return redirect()->route('home')->dangerBanner('Não estás inscrito nesta edição!');
+            if ($enrollment) {
+                $enrollment->events()->detach($event->id);
+            }
         }
 
-        $currentEnrollment->events()->detach($event);
-        Log::info('User {user} left event "{event}"', [
-            'user' => $user->name,
-            'event' => $event->name,
-        ]);
-
-        return redirect()->route('profile.show')->banner('Inscrição cancelada com sucesso!');
+        return redirect()->back();
     }
 }

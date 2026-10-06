@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { CompanyUser } from "@/Types/User";
-import { OhVueIcon } from "oh-vue-icons";
 import { ref } from "vue";
-import { VueFinalModal } from "vue-final-modal";
-import "vue-final-modal/style.css";
+import Modal from "@/Components/UI/Modal.vue";
+import Card from "@/Components/UI/Card.vue";
+import { ExternalLink } from "@lucide/vue";
 
 const options = ref({
     modelValue: false,
@@ -17,60 +17,50 @@ defineProps<Props>();
 </script>
 
 <template>
-    <!-- Sponsor logo thumbnail -->
-    <img
-        v-bind="$attrs"
-        class="col-span-2 h-full w-full cursor-pointer object-contain p-10 transition-transform duration-200 hover:scale-105"
-        :src="company?.profile_photo_url"
-        :alt="company?.name"
+    <Card
+        as="button"
+        padding="p-5 sm:p-6"
+        class="h-28 w-48 cursor-pointer items-center justify-center focus:outline-none sm:h-32 sm:w-56"
         @click="options.modelValue = true"
-    />
-
-    <!-- Modal -->
-    <VueFinalModal
-        v-model="options.modelValue"
-        class="flex items-center justify-center"
-        overlay-class="bg-[rgba(0,0,0,0.7)]! backdrop-blur-xs"
-        content-class="
-      max-w-xl min-w-[20em] mx-4 p-8 gap-7
-      rounded-2xl bg-2025-blue text-white
-      border-0 ring-1 ring-white/10 shadow-none bg-clip-padding outline-hidden
-      flex flex-col items-center justify-center
-    "
     >
-        <!-- Company logo-->
         <img
             :src="company?.profile_photo_url"
             :alt="company?.name"
-            class="mx-auto block h-auto max-w-[18em] object-contain p-3"
+            class="max-h-14 max-w-[85%] object-contain opacity-85 brightness-95 transition-all duration-300 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:brightness-110 sm:max-h-16"
         />
+    </Card>
 
-        <!-- Text content -->
-        <div
-            class="flex w-full max-w-prose flex-col items-center gap-4 text-center"
-        >
-            <a
-                v-if="company?.usertype?.social_media?.website"
-                class="text-2xl font-bold underline decoration-white transition hover:text-gray-200"
-                :href="company.usertype.social_media.website"
-                target="_blank"
-            >
-                {{ company.name }}
-                <OhVueIcon
-                    class="mb-[2px] ml-1"
-                    name="io-open"
-                    fill="white"
-                    scale="1.1"
+    <Modal v-model="options.modelValue" max-width="lg">
+        <div class="flex flex-col items-center gap-6">
+            <img
+                :src="company?.profile_photo_url"
+                :alt="company?.name"
+                class="mt-2 h-16 max-w-[70%] object-contain"
+            />
+
+            <div class="flex w-full flex-col items-center gap-4 text-center">
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <h3 class="text-xl font-bold text-white">
+                        {{ company?.name }}
+                    </h3>
+                    <a
+                        v-if="company?.usertype?.social_media?.website"
+                        :href="company.usertype.social_media.website"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="pill-container pill-item gap-1.5 px-3 py-1 text-xs font-medium text-neutral-300 hover:text-white"
+                    >
+                        <span>Website</span>
+                        <ExternalLink :size="14" />
+                    </a>
+                </div>
+
+                <div
+                    v-if="company?.usertype?.description_html"
+                    class="prose prose-invert prose-sm max-h-72 w-full overflow-y-auto px-2 text-justify leading-relaxed text-neutral-300"
+                    v-html="company?.usertype?.description_html"
                 />
-            </a>
-            <span v-else class="text-2xl font-bold underline decoration-white">
-                {{ company?.name }}
-            </span>
-
-            <div
-                class="prose prose-invert text-justify leading-relaxed wrap-break-word max-md:max-h-96 max-md:overflow-y-auto"
-                v-html="company?.usertype?.description_html"
-            ></div>
+            </div>
         </div>
-    </VueFinalModal>
+    </Modal>
 </template>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
@@ -29,7 +30,6 @@ use App\Http\Controllers\StandCRUDController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCRUDController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,9 +103,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/sponsorTiers' => SponsorTierCRUDController::class,
                 ]);
 
-                Route::name('index')->get('/', function () {
-                    return Inertia::render('Admin');
-                });
+                Route::name('index')->get('/', AdminDashboardController::class);
             });
 
         Route::prefix('user')->group(function () {

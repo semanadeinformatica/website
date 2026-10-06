@@ -1,72 +1,134 @@
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import type Staff from "@/Types/Staff";
-import { OhVueIcon } from "oh-vue-icons";
-import { computed } from "vue";
+import Card from "@/Components/UI/Card.vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
+import { Users } from "@lucide/vue";
 
-const socialIcon: Record<string, string> = {
-    github: "io-logo-github",
-    linkedin: "io-logo-linkedin",
-    website: "io-globe",
-};
-
-const bgColor: Record<string, string> = {
-    orange: "bg-2023-orange",
-    "teal-dark": "bg-2023-teal-dark",
-    "red-dark": "bg-2023-red-dark",
-    red: "bg-2023-red",
-    teal: "bg-2023-teal",
-};
-
-const props = defineProps<{
-    color: string;
+interface Props {
     staff: Staff;
-}>();
+}
+
+const props = defineProps<Props>();
+
+const imageError = ref(false);
 
 const staff = computed(() => props.staff);
-const color = computed(() => props.color);
+const user = computed(() => staff.value.participant?.user);
+const name = computed(() => user.value?.name ?? "Membro da Equipa");
+const photoUrl = computed(() => user.value?.profile_photo_url);
+const isCoordinator = computed(() => Boolean(staff.value.coordinator));
 
-const socialMedia = computed(() => {
-    return Object.fromEntries(
-        Object.entries(staff.value.participant?.social_media ?? {}).filter(
-            ([key, value]) =>
-                ["github", "linkedin", "website"].includes(key) &&
-                value != null,
-        ),
-    ) as Record<"github" | "linkedin" | "website", string>;
+const rawSocialMedia = computed(() => {
+    const p = staff.value.participant as
+        | (typeof staff.value.participant & {
+              socialMedia?: Record<string, string | null | undefined>;
+          })
+        | undefined;
+    return p?.social_media ?? p?.socialMedia ?? {};
+});
+
+const formatSocialUrl = (platform: string, val: string): string => {
+    const trimmed = val.trim();
+    if (!trimmed) return "";
+    if (platform === "email") {
+        return trimmed.startsWith("mailto:") ? trimmed : `mailto:${trimmed}`;
+    }
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+        return trimmed;
+    }
+    if (platform === "github") {
+        return `https://github.com/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "linkedin") {
+        return `https://linkedin.com/in/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "instagram") {
+        return `https://instagram.com/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "twitter") {
+        return `https://x.com/${trimmed.replace(/^@/, "")}`;
+    }
+    return `https://${trimmed}`;
+};
+
+const socialLinks = computed(() => {
+    const supported = [
+        "github",
+        "linkedin",
+        "website",
+        "instagram",
+        "twitter",
+        "email",
+    ] as const;
+
+    const links: { platform: string; url: string; label: string }[] = [];
+
+    for (const platform of supported) {
+        const val = rawSocialMedia.value[platform];
+        if (typeof val === "string" && val.trim() !== "") {
+            links.push({
+                platform,
+                url: formatSocialUrl(platform, val),
+                label:
+                    platform === "email"
+                        ? "Email"
+                        : platform.charAt(0).toUpperCase() + platform.slice(1),
+            });
+        }
+    }
+
+    return links;
 });
 </script>
 
 <template>
-    <div
-        class="group relative flex w-fit flex-col items-center overflow-hidden rounded-full"
+    <Card
+        :image-src="photoUrl && !imageError ? photoUrl : undefined"
+        :image-alt="name"
+        layout="responsive"
+        class="h-full w-full"
     >
-        <img
-            :src="staff.participant?.user?.profile_photo_url"
-            :alt="`${staff.participant?.user?.name}'s image`"
-            class="h-40 w-40 rounded-full object-cover shadow transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:brightness-95"
-        />
-        <div
-            v-if="Object.keys(socialMedia).length > 0"
-            class="absolute -bottom-32 flex w-full flex-row items-center justify-center pt-1 pb-10 transition-all group-hover:-bottom-7"
-            :class="bgColor[color]"
-        >
-            <a
-                v-for="(social, key, idx) in socialMedia"
-                :key="idx"
-                :href="social"
-                target="_blank"
+        <template v-if="!photoUrl || imageError" #image>
+            <div
+                class="flex h-full w-full items-center justify-center bg-neutral-900 text-neutral-600"
             >
-                <OhVueIcon
-                    fill="white"
-                    :name="socialIcon[key]"
-                    scale="1.4"
-                ></OhVueIcon>
-            </a>
-        </div>
-    </div>
-    <p class="text-text-color max-w-[13em] text-center font-bold">
-        {{ staff.participant?.user?.name }}
-    </p>
-</template>
+                <Users class="h-8 w-8 opacity-40 sm:h-12 sm:w-12" />
+            </div>
+        </template>
 
-<style></style>
+        <template #header>
+            <h4
+                class="truncate text-base font-bold tracking-tight text-white transition-colors group-hover:text-neutral-200"
+            >
+                {{ name }}
+            </h4>
+            <p class="mt-0.5 line-clamp-1 text-xs text-neutral-400 sm:mt-1">
+                <span v-if="isCoordinator" class="font-medium text-neutral-300">
+                    Coordenador(a)
+                </span>
+                <span v-else class="text-neutral-400"> Membro da Equipa </span>
+            </p>
+        </template>
+
+        <template #footer>
+            <div
+                v-if="socialLinks.length > 0"
+                class="flex flex-wrap items-center gap-1 sm:gap-1.5"
+            >
+                <a
+                    v-for="item in socialLinks"
+                    :key="item.platform"
+                    :href="item.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 transition-all hover:bg-white/10 hover:text-white"
+                    :aria-label="item.label"
+                >
+                    <SocialIcon :platform="item.platform" :size="15" />
+                </a>
+            </div>
+            <div v-else class="text-[11px] text-neutral-600">SINF</div>
+        </template>
+    </Card>
+</template>

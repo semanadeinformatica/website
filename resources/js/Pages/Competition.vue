@@ -1,188 +1,325 @@
 <script setup lang="ts">
-import Podium from "@/Components/Podium.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import type Competition from "@/Types/Competition";
-import { router } from "@inertiajs/vue3";
-// import { computed } from "vue";
+import { computed, ref } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import { isAdmin } from "@/Types/User";
-import { computed } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Podium from "@/Components/Competition/Podium.vue";
+import CompetitionLeaderboard from "@/Components/Competition/CompetitionLeaderboard.vue";
+import type Competition from "@/Types/Competition";
 import type { CompetitionPrizes } from "@/Types/Competition";
+import { type User } from "@/Types/User";
+import Card from "@/Components/UI/Card.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import QuickScroll from "@/Components/UI/QuickScroll.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 
 interface Props {
     competition: Competition;
     isParticipant: boolean;
     isEnrolled: boolean;
     isOver: boolean;
-    prizes: CompetitionPrizes[];
+    prizes?: CompetitionPrizes[];
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    prizes: () => [],
+});
+
+const page = usePage();
+const user = computed(() => page.props.auth?.user as User | undefined);
+
 const competition = computed(() => props.competition);
 const leaderboard = computed(() => competition.value.teams?.slice(0, 3) ?? []);
 
-const formattedDate = (
-    startDate: string,
-    separator: string,
-    endDate: string,
-) => {
-    const startDateArray = startDate.split(" ");
-    const endDateArray = endDate.split(" ");
-
-    let pointer = 0;
-
-    while (startDateArray[pointer] === endDateArray[pointer]) pointer++;
-
-    endDate = endDateArray.slice(pointer).join(" ");
-
-    return `${startDate} ${separator} ${endDate}`;
+const formatMilestoneDate = (dateStr?: string) => {
+    if (!dateStr) return null;
+    try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return null;
+        const day = d.getDate();
+        const m = d
+            .toLocaleDateString("pt-PT", {
+                month: "short",
+                timeZone: "Europe/Lisbon",
+            })
+            .replace(".", "");
+        const month = m.charAt(0).toUpperCase() + m.slice(1);
+        const time = d.toLocaleTimeString("pt-PT", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Lisbon",
+        });
+        return {
+            dateText: `${day} ${month}`,
+            timeText: time,
+        };
+    } catch {
+        return null;
+    }
 };
+
+const startDateInfo = computed(() =>
+    formatMilestoneDate(props.competition.date_start),
+);
+const endDateInfo = computed(() =>
+    formatMilestoneDate(props.competition.date_end),
+);
+
+const formattedSchedule = computed(() => {
+    if (!startDateInfo.value || !endDateInfo.value) return "";
+    const start = startDateInfo.value;
+    const end = endDateInfo.value;
+
+    if (start.dateText === end.dateText) {
+        return `${start.dateText}, ${start.timeText} — ${end.timeText}`;
+    }
+    return `${start.dateText}, ${start.timeText} — ${end.dateText}, ${end.timeText}`;
+});
+
+const handleEnrollClick = () => {
+    if (user.value) {
+        router.put(route("enroll"));
+    } else {
+        router.get(route("register"));
+    }
+};
+
+type CompetitionTab = "teams" | "prizes" | "regulation";
+
+const hasTeams = computed(() => (competition.value.teams?.length ?? 0) > 0);
+const hasPrizes = computed(() => (props.prizes?.length ?? 0) > 0);
+const hasRegulation = computed(() =>
+    Boolean(competition.value.regulation_html),
+);
+
+const availableTabs = computed<PillOption[]>(() => {
+    const list: PillOption[] = [];
+    if (hasTeams.value) {
+        list.push({
+            id: "teams",
+            label: "Equipas",
+            count: competition.value.teams?.length,
+        });
+    }
+    if (hasPrizes.value) {
+        list.push({
+            id: "prizes",
+            label: "Prémios",
+            count: props.prizes?.length,
+        });
+    }
+    if (hasRegulation.value) {
+        list.push({
+            id: "regulation",
+            label: "Regulamento",
+        });
+    }
+    return list;
+});
+
+const defaultTab = computed<CompetitionTab>(() => {
+    if (hasTeams.value) return "teams";
+    if (hasPrizes.value) return "prizes";
+    return "regulation";
+});
+
+const activeTab = ref<CompetitionTab>(defaultTab.value);
 </script>
 
 <template>
-    <AppLayout title="Competição">
-        <header class="flex flex-col items-center gap-4 p-4 text-center">
-            <h2
-                class="bg-2025-blue w-fit rounded-lg p-3 text-center text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
-            >
-                {{ competition.name }}
-            </h2>
-            <span
-                class="text-text-color inline-flex w-3/4 justify-center pt-4 text-xl font-bold"
-                >{{ competition.theme }}</span
-            >
-            <span
-                class="text-text-color inline-flex justify-center text-xl font-bold"
-                >{{
-                    formattedDate(
-                        $d(new Date(competition.date_start), "fullTime"),
-                        "-",
-                        $d(new Date(competition.date_end), "fullTime"),
-                    )
-                }}
-            </span>
-        </header>
+    <AppLayout :title="competition.name">
+        <QuickScroll mode="sections" />
 
-        <section
-            v-if="competition.description && competition.description !== ''"
-            class="justitfy-center flex w-full flex-col items-center gap-4 p-4"
+        <div
+            class="relative mx-auto w-full max-w-7xl space-y-12 px-4 pt-4 pb-12 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"
         >
-            <h2
-                class="bg-2025-blue-dark w-fit rounded-md p-2 px-5 text-3xl font-bold text-white"
-            >
-                Descrição
-            </h2>
-
-            <p class="text-white">{{ competition.description }}</p>
-        </section>
-
-        <Podium :leaderboard="leaderboard" :prizes="prizes" />
-
-        <!-- RULES -->
-        <section class="relative mt-4 border-8 border-white/5 text-justify">
-            <h2
-                class="bg-2025-blue-dark absolute -top-9 left-1/2 -translate-x-1/2 transform rounded-lg p-3 text-2xl font-bold text-white xl:text-3xl 2xl:text-4xl"
-            >
-                Regulamento
-            </h2>
-            <div
-                class="prose prose-lg max-w-none p-20 wrap-break-word text-white max-lg:pb-10 lg:columns-2"
-                v-html="competition.regulation_html"
-            ></div>
-        </section>
-
-        <template v-if="isOver">
-            <section
-                class="relative flex flex-col content-center items-center justify-center gap-4 py-24"
-            >
-                <template v-if="competition.teams && competition.teams.length">
-                    <p class="text-text-color text-center text-2xl font-bold">
-                        A competição já acabou, vê aqui quem participou
-                    </p>
-                    <span class="text-text-color text-2xl font-bold">
-                        Equipas: {{ competition.teams?.length }}
-                    </span>
+            <header class="relative overflow-hidden pt-2 pb-6 sm:pt-4 sm:pb-10">
+                <div
+                    class="relative grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12"
+                >
                     <div
-                        class="flex w-4/5 flex-col rounded-lg border border-8 border-white/5 md:w-1/2"
+                        class="flex flex-col items-start text-left lg:col-span-7 xl:col-span-8"
                     >
                         <div
-                            v-for="team in competition.teams ?? []"
-                            :key="team.id"
-                            class="even:bg-2025-blue/20 inline-flex w-full justify-between gap-1 p-4 text-lg"
+                            class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs font-semibold tracking-wider uppercase"
                         >
-                            <img
-                                :src="
-                                    team.image_competition_team_url
-                                        ? team.image_competition_team_url
-                                        : `https://ui-avatars.com/api/?size=512&name=${team.name
-                                              .split(' ')
-                                              .map((t) => t[0])
-                                              .join(
-                                                  '+',
-                                              )}&color=ffffff&background=3a9699`
-                                "
-                                class="h-16 w-16 self-center rounded-full border-2 border-white/5"
-                                :alt="`Image for team ${team.name}`"
-                            />
-                            <div
-                                class="text-text-color flex flex-col items-end self-center"
-                            >
-                                <span class="text-end">{{ team.name }}</span>
-                                <span>{{ team.points }} pontos</span>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <p v-else class="text-2023-teal text-lg font-bold">
-                    A competição acabou mas não houve equipas inscritas desta
-                    vez.
-                </p>
-            </section>
-        </template>
-        <template v-else-if="!isAdmin($page.props.auth.user)">
-            <!-- PARTICIPATE -->
-            <section
-                v-if="!isEnrolled"
-                class="relative flex flex-col content-center items-center justify-center py-24"
-            >
-                <span class="text-2xl font-bold text-white">
-                    Ainda não estás inscrito na SINF
-                </span>
-                <div
-                    class="mx-10 flex h-full flex-1 flex-col items-center p-3 text-center text-3xl font-bold text-white sm:p-12"
-                >
-                    <PrimaryButton
-                        color="orange"
-                        shadow="teal"
-                        text-size="sm:text-4xl"
-                        padding="sm:px-8"
-                        @click="
-                            $page.props.auth.user
-                                ? router.put(route('enroll'))
-                                : router.get(route('register'))
-                        "
-                        >Inscreve-te</PrimaryButton
-                    >
-                </div>
-            </section>
-            <section
-                v-else-if="isEnrolled && isParticipant"
-                class="relative flex content-center items-center justify-center py-24"
-            >
-                <h1
-                    class="text-text-color absolute top-4 m-4 flex justify-center p-3 text-4xl font-black"
-                >
-                    Vamos a isto?
-                </h1>
+                            <span class="text-amber-400">Competição</span>
 
-                <a
-                    :href="competition.registration_link"
-                    class="bg-2025-blue relative mt-5 content-center justify-center border border-black px-8 py-2 text-center text-2xl font-semibold text-white shadow-black/80 transition-shadow hover:shadow-md active:shadow-none"
-                >
-                    Participar!
-                </a>
-            </section>
-        </template>
+                            <template v-if="formattedSchedule">
+                                <span class="text-neutral-600">·</span>
+                                <span class="text-neutral-300">
+                                    {{ formattedSchedule }}
+                                </span>
+                            </template>
+
+                            <template v-if="isOver">
+                                <span class="text-neutral-600">·</span>
+                                <span class="text-neutral-500">Terminada</span>
+                            </template>
+                        </div>
+
+                        <h1
+                            class="mt-4 text-3xl leading-[1.1] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+                        >
+                            {{ competition.name }}
+                        </h1>
+
+                        <div
+                            v-if="competition.theme"
+                            class="relative mt-4 flex items-start gap-3"
+                        >
+                            <p
+                                class="text-base leading-snug font-medium text-neutral-200 sm:text-lg lg:text-xl"
+                            >
+                                {{ competition.theme }}
+                            </p>
+                        </div>
+
+                        <p
+                            v-if="competition.description"
+                            class="mt-6 max-w-2xl text-left text-sm leading-relaxed font-normal text-neutral-400 sm:text-base"
+                        >
+                            {{ competition.description }}
+                        </p>
+                    </div>
+
+                    <div class="relative w-full lg:col-span-5 xl:col-span-4">
+                        <Card
+                            as="div"
+                            :interactive="false"
+                            padding="p-6 sm:p-7"
+                            class="w-full"
+                        >
+                            <h2
+                                class="text-xl font-bold tracking-tight text-white sm:text-2xl"
+                            >
+                                {{
+                                    isOver
+                                        ? "Competição Concluída"
+                                        : isEnrolled &&
+                                            competition.registration_link
+                                          ? "Regista a tua Equipa"
+                                          : "Participa na Competição"
+                                }}
+                            </h2>
+
+                            <p
+                                class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                            >
+                                <template v-if="isOver">
+                                    Esta competição já terminou. Podes consultar
+                                    a classificação e regulamento abaixo.
+                                </template>
+                                <template v-else-if="!isEnrolled">
+                                    A participação é gratuita para todos os
+                                    inscritos na SINF 2026. Inscreve-te na
+                                    conferência para poder concorrer.
+                                </template>
+                                <template
+                                    v-else-if="competition.registration_link"
+                                >
+                                    As inscrições de equipas estão abertas.
+                                    Junta os teus colegas e submete a tua
+                                    inscrição.
+                                </template>
+                                <template v-else>
+                                    As inscrições de equipas para este desafio
+                                    abrem muito em breve. Fica atento!
+                                </template>
+                            </p>
+
+                            <div class="mt-6">
+                                <PrimaryButton
+                                    v-if="isOver"
+                                    disabled
+                                    color="pill"
+                                    class="w-full"
+                                    padding="px-6 py-2.5"
+                                >
+                                    Inscrições Encerradas
+                                </PrimaryButton>
+
+                                <template v-else>
+                                    <PrimaryButton
+                                        v-if="!isEnrolled"
+                                        type="button"
+                                        color="pill"
+                                        class="w-full"
+                                        padding="px-6 py-2.5"
+                                        @click="handleEnrollClick"
+                                    >
+                                        <span>Inscrever-me na SINF</span>
+                                    </PrimaryButton>
+
+                                    <PrimaryButton
+                                        v-else-if="
+                                            competition.registration_link
+                                        "
+                                        :href="competition.registration_link"
+                                        external
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        color="pill"
+                                        class="w-full"
+                                        padding="px-6 py-2.5"
+                                    >
+                                        <span>Inscrever Equipa</span>
+                                    </PrimaryButton>
+                                </template>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            </header>
+
+            <div v-if="availableTabs.length > 0" class="flex justify-center">
+                <PillSelector
+                    v-model="activeTab"
+                    :items="availableTabs"
+                    size="md"
+                />
+            </div>
+
+            <div v-if="activeTab === 'teams'" class="space-y-12 sm:space-y-16">
+                <div v-if="isOver && leaderboard.length >= 3" class="space-y-4">
+                    <Podium mode="winners" :leaderboard="leaderboard" />
+                </div>
+
+                <CompetitionLeaderboard :teams="competition.teams ?? []" />
+            </div>
+
+            <div v-else-if="activeTab === 'prizes'" class="space-y-8">
+                <Podium mode="prizes" :prizes="prizes" />
+            </div>
+
+            <div v-else-if="activeTab === 'regulation'" class="w-full">
+                <Card as="div" :interactive="false" padding="p-6 sm:p-10">
+                    <div
+                        class="prose prose-invert prose-headings:text-white prose-p:leading-relaxed prose-a:text-sinf-secondary-light hover:prose-a:text-white prose-strong:text-white max-w-none leading-relaxed wrap-break-word text-neutral-300"
+                        v-html="competition.regulation_html"
+                    />
+                </Card>
+            </div>
+
+            <div
+                v-if="availableTabs.length === 0"
+                class="flex flex-col items-center justify-center py-20 text-center"
+            >
+                <PillSelector
+                    :items="[
+                        { id: 'info', label: 'Em breve...', disabled: true },
+                    ]"
+                    size="sm"
+                    :wrap="false"
+                    container-class="mb-3"
+                />
+                <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
+                    Não há informações adicionais disponíveis para esta
+                    competição de momento.
+                </p>
+            </div>
+        </div>
     </AppLayout>
 </template>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type Event from "@/Types/Event";
 import Ticket from "./Ticket.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
+import { Link } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
 
 type EventTicket = Event & {
     joined: boolean;
@@ -33,22 +36,38 @@ const getTicketState = (t: EventTicket): "used" | "acquired" | "available" => {
             />
         </clipPath>
     </svg>
-    <p
+
+    <div
         v-if="($page.props.tickets as EventTicket[]).length === 0"
-        class="text-text-color flex w-full flex-auto items-center justify-center pt-8 text-center text-2xl font-bold"
+        class="flex flex-col items-center justify-center py-20 text-center"
     >
-        Ainda não há eventos marcados. Verifica mais tarde!
-    </p>
+        <PillSelector
+            :items="[{ id: 'empty', label: 'Sem bilhetes', disabled: true }]"
+            size="sm"
+            :wrap="false"
+            container-class="mb-4"
+        />
+        <p class="max-w-md text-sm text-neutral-400">
+            Ainda não estás inscrito em nenhum evento. Consulta o
+            <Link
+                :href="route('program')"
+                class="font-medium text-white underline transition-colors hover:text-neutral-200"
+            >
+                programa
+            </Link>
+            para garantires o teu lugar!
+        </p>
+    </div>
+
     <div
         v-else
-        class="grid w-full items-center justify-center gap-10 self-center pt-8"
-        style="grid-template-columns: repeat(auto-fill, 350px)"
+        class="flex w-full flex-wrap items-center justify-center gap-6 pt-4 sm:gap-8"
     >
         <Ticket
             v-for="item in $page.props.tickets as EventTicket[]"
             :key="item.id"
             :state="getTicketState(item)"
             :event="item"
-        ></Ticket>
+        />
     </div>
 </template>

@@ -3,7 +3,7 @@ import type Enrollment from "@/Types/Enrollment";
 import type Paginated from "@/Types/Paginated";
 import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -38,8 +38,9 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout
-        title="Enrollment"
+    <CRUDView
+        title="Inscrições"
+        view="Enrollment"
         :items="items"
         name="enrollments"
         :is-searchable="isSearchable"
@@ -48,22 +49,39 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header filter-by="participant_id" :filter-values="participants"
-                    >Nome do Estudante</Header
+                <Header
+                    filter-by="participant_id"
+                    :filter-values="participants"
                 >
-                <Header filter-by="edition_id" :filter-values="editions"
-                    >Nome da Edição</Header
-                >
+                    Participante
+                </Header>
+                <Header filter-by="edition_id" :filter-values="editions">
+                    Edição
+                </Header>
                 <Header sort-by="points">Pontos</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row :item="item" name="enrollments">
-                <Cell>{{ participants[item.participant_id] }}</Cell>
-                <Cell>{{ editions[item.edition_id] }}</Cell>
-                <Cell>{{ item.points }}</Cell>
+                <Cell class="font-medium text-white">
+                    {{
+                        participants[item.participant_id] ??
+                        `Participante #${item.participant_id}`
+                    }}
+                </Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.edition_id] ?? "-" }}
+                </Cell>
+                <Cell>
+                    <span
+                        class="font-mono text-xs font-semibold text-neutral-200"
+                    >
+                        {{ item.points }}
+                    </span>
+                    <span class="ml-1 text-xs text-neutral-500">pts</span>
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

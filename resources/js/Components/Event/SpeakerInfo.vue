@@ -1,120 +1,164 @@
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import type { SpeakerUser } from "@/Types/User";
-import { OhVueIcon } from "oh-vue-icons";
+import Card from "@/Components/UI/Card.vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
 
 interface Props {
     user: SpeakerUser;
-    reverse?: number;
-    color: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+const user = computed(() => props.user);
+const imageError = ref(false);
 
-const socials = {
-    facebook: {
-        icon: "io-logo-facebook",
-    },
-    linkedin: {
-        icon: "io-logo-linkedin",
-    },
-    github: {
-        icon: "io-logo-github",
-    },
-    twitter: {
-        icon: "io-logo-twitter",
-    },
-    instagram: {
-        icon: "io-logo-instagram",
-    },
-    website: {
-        icon: "io-logo-globe",
-    },
+const rawSocialMedia = computed<Record<string, unknown>>(() => {
+    return (user.value.usertype?.social_media ?? {}) as Record<string, unknown>;
+});
+
+const formatSocialUrl = (platform: string, val: string): string => {
+    const trimmed = val.trim();
+    if (!trimmed) return "";
+    if (platform === "email") {
+        return trimmed.startsWith("mailto:") ? trimmed : `mailto:${trimmed}`;
+    }
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+        return trimmed;
+    }
+    if (platform === "github") {
+        return `https://github.com/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "linkedin") {
+        return `https://linkedin.com/in/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "instagram") {
+        return `https://instagram.com/${trimmed.replace(/^@/, "")}`;
+    }
+    if (platform === "twitter") {
+        return `https://x.com/${trimmed.replace(/^@/, "")}`;
+    }
+    return `https://${trimmed}`;
 };
 
-const textColor: Record<string, string> = {
-    orange: "text-2023-orange",
-    "teal-dark": "text-2023-teal-dark",
-    "red-dark": "text-2023-red-dark",
-    red: "text-2023-red",
-    teal: "text-2023-teal",
-    white: "text-white",
-};
+const socialLinks = computed(() => {
+    const supported = [
+        "github",
+        "linkedin",
+        "website",
+        "instagram",
+        "twitter",
+        "email",
+    ] as const;
+    const entries: {
+        platform: (typeof supported)[number];
+        url: string;
+        label: string;
+    }[] = [];
 
-const shadowColor: Record<string, string> = {
-    orange: "shadow-black/80",
-    "teal-dark": "shadow-2023-teal-dark",
-    "red-dark": "shadow-2023-red-dark",
-    red: "shadow-2023-red",
-    teal: "shadow-2023-teal",
-};
+    for (const key of supported) {
+        const val = rawSocialMedia.value[key];
+        if (typeof val === "string" && val.trim().length > 0) {
+            entries.push({
+                platform: key,
+                url: formatSocialUrl(key, val),
+                label:
+                    key === "email"
+                        ? "Email"
+                        : key === "website"
+                          ? "Website"
+                          : key.charAt(0).toUpperCase() + key.slice(1),
+            });
+        }
+    }
+
+    return entries;
+});
+
+const displayName = computed(() => {
+    return user.value.usertype?.display_name ?? user.value.name;
+});
 </script>
 
 <template>
-    <div
-        class="flex w-fit flex-row flex-wrap gap-8"
-        :class="reverse ? 'flex-row-reverse self-end' : ''"
+    <Card
+        as="article"
+        layout="horizontal"
+        :image-src="
+            user.profile_photo_url && !imageError
+                ? user.profile_photo_url
+                : undefined
+        "
+        :image-alt="displayName"
+        padding="p-6 sm:p-7"
     >
-        <div
-            class="group relative flex flex-col items-center overflow-hidden rounded-full"
-        >
-            <img
-                class="h-52 w-52 object-cover shadow transition-all duration-300 ease-in-out group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:brightness-95"
-                :src="user.profile_photo_url"
-                :alt="
-                    user.usertype?.display_name ?? user.name + ' profile photo'
-                "
-            />
+        <template v-if="!user.profile_photo_url || imageError" #image>
             <div
-                v-if="Object.keys(user.usertype?.social_media ?? {}).length > 0"
-                class="absolute -bottom-32 flex w-full flex-row items-center justify-center pt-1 pb-10 transition-all duration-300 ease-in-out group-hover:-bottom-7"
-                :class="shadowColor[color]"
+                class="flex h-full w-full items-center justify-center bg-neutral-900 text-2xl font-bold text-neutral-400 sm:text-3xl"
             >
-                <template v-for="(social, key) in socials" :key="key">
-                    <a
-                        v-if="user.usertype?.social_media?.[key]"
-                        :href="String(user.usertype?.social_media?.[key])"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="mx-2"
-                    >
-                        <OhVueIcon
-                            :name="social.icon"
-                            fill="white"
-                            scale="1.4"
-                        />
-                    </a>
-                </template>
+                {{ displayName.charAt(0) }}
             </div>
-        </div>
-        <div
-            class="flex flex-col justify-center gap-10"
-            :class="textColor[color]"
-        >
-            <div
-                class="flex w-fit flex-row justify-center gap-6"
-                :class="reverse ? 'flex-row-reverse self-end' : ''"
-            >
-                <div
-                    :class="reverse ? 'flex flex-col items-end text-right' : ''"
-                >
-                    <h2 class="text-3xl font-bold uppercase">
-                        {{ user.usertype?.display_name ?? user.name }}
-                    </h2>
-                    <h3 class="text-xl font-bold">
-                        {{ user.usertype?.title }}
-                    </h3>
-                    <h3 class="text-xl font-bold">
-                        {{ user.usertype?.organization }}
-                    </h3>
-                </div>
-            </div>
-            <div
-                class="prose col-span-2 row-start-2 max-w-4xl wrap-break-word text-inherit"
-                :class="reverse ? 'text-right' : ''"
-                v-html="user.usertype?.description_html"
-            ></div>
-        </div>
-    </div>
-</template>
+        </template>
 
-<style></style>
+        <template #header>
+            <h3 class="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                {{ displayName }}
+            </h3>
+
+            <div
+                v-if="user.usertype?.title || user.usertype?.organization"
+                class="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-xs font-medium text-neutral-400 sm:justify-start sm:text-sm"
+            >
+                <span v-if="user.usertype?.title" class="text-neutral-300">
+                    {{ user.usertype.title }}
+                </span>
+                <span
+                    v-if="user.usertype?.title && user.usertype?.organization"
+                    class="text-neutral-600"
+                >
+                    ·
+                </span>
+                <span
+                    v-if="user.usertype?.organization"
+                    class="text-neutral-400"
+                >
+                    {{ user.usertype.organization }}
+                </span>
+            </div>
+        </template>
+
+        <template
+            v-if="user.usertype?.description_html || user.usertype?.description"
+            #default
+        >
+            <div
+                v-if="user.usertype?.description_html"
+                class="prose prose-invert prose-p:leading-relaxed prose-sm max-w-none text-left text-xs leading-relaxed text-neutral-300 sm:text-sm"
+                v-html="user.usertype?.description_html"
+            />
+            <p
+                v-else-if="user.usertype?.description"
+                class="text-left text-xs leading-relaxed text-neutral-300 sm:text-sm"
+            >
+                {{ user.usertype.description }}
+            </p>
+        </template>
+
+        <template v-if="socialLinks.length > 0" #footer>
+            <div
+                class="flex flex-wrap items-center justify-center gap-1.5 sm:justify-start"
+            >
+                <a
+                    v-for="item in socialLinks"
+                    :key="item.platform"
+                    :href="item.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex h-7 w-7 items-center justify-center rounded-xl bg-white/4 text-neutral-400 ring-1 ring-white/6 transition-all duration-200 hover:bg-white/10 hover:text-white hover:ring-white/15"
+                    :aria-label="item.label"
+                >
+                    <SocialIcon :platform="item.platform" :size="15" />
+                </a>
+            </div>
+        </template>
+    </Card>
+</template>

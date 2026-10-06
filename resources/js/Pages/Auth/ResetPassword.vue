@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useForm } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "../../Layouts/CardLayout.vue";
+import { Link, useForm } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { KeyRound } from "@lucide/vue";
 import { route } from "ziggy-js";
 
 interface Props {
@@ -27,22 +28,33 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Repor password" heading="Repõe a tua password">
-        <form class="contents" @submit.prevent="submit">
+    <AuthLayout
+        title="Repor password"
+        heading="Repor password"
+        subtitle="Escolhe uma nova password segura para garantir a proteção e acesso à tua conta."
+        :icon="KeyRound"
+    >
+        <form
+            method="POST"
+            class="flex flex-col gap-5"
+            @submit.prevent="submit"
+        >
             <TextInput
                 id="email"
                 v-model="form.email"
+                name="email"
                 label="Email"
                 type="email"
                 required
                 autofocus
-                autocomplete="username"
+                autocomplete="username email"
                 :error-message="form.errors.email"
             />
 
             <TextInput
                 id="password"
                 v-model="form.password"
+                name="password"
                 label="Password"
                 type="password"
                 required
@@ -53,6 +65,7 @@ const submit = () => {
             <TextInput
                 id="password_confirmation"
                 v-model="form.password_confirmation"
+                name="password_confirmation"
                 label="Confirmar password"
                 type="password"
                 required
@@ -60,9 +73,21 @@ const submit = () => {
                 :error-message="form.errors.password_confirmation"
             />
 
-            <PrimaryButton :disabled="form.processing">
-                Repor password
-            </PrimaryButton>
+            <div class="mt-2 flex w-full justify-center">
+                <PrimaryButton :disabled="form.processing">
+                    <span v-if="form.processing">A repor...</span>
+                    <span v-else>Repor password</span>
+                </PrimaryButton>
+            </div>
+
+            <div class="pt-2 text-center text-xs text-neutral-400 sm:text-sm">
+                <Link
+                    :href="route('login')"
+                    class="text-neutral-300 transition-colors hover:text-white"
+                >
+                    Voltar ao início de sessão
+                </Link>
+            </div>
         </form>
-    </CardLayout>
+    </AuthLayout>
 </template>
