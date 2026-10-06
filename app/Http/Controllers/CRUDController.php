@@ -91,9 +91,9 @@ abstract class CRUDController extends Controller
         $applySortAndFilters = function (Builder $query) use ($table, $schema, $sortBy, $sortDir, $request) {
             $reserved = ['page', 'query', 'sort_by', 'sort_dir', 'filter_by', 'filter_val'];
             foreach ($request->query() as $key => $value) {
-                if (!in_array($key, $reserved) && $value !== null && $value !== '') {
+                if (! in_array($key, $reserved) && $value !== null && $value !== '') {
                     if ($schema->hasColumn($table, $key)) {
-                        $query->where($table . '.' . $key, $value);
+                        $query->where($table.'.'.$key, $value);
                     }
                 }
             }
@@ -101,14 +101,14 @@ abstract class CRUDController extends Controller
             if ($request->filled('filter_by') && $request->has('filter_val') && $request->get('filter_val') !== '') {
                 $filterCol = $request->query('filter_by');
                 if ($schema->hasColumn($table, $filterCol)) {
-                    $query->where($table . '.' . $filterCol, $request->query('filter_val'));
+                    $query->where($table.'.'.$filterCol, $request->query('filter_val'));
                 }
             }
 
             if ($schema->hasColumn($table, $sortBy)) {
-                $query->orderBy($table . '.' . $sortBy, $sortDir);
+                $query->orderBy($table.'.'.$sortBy, $sortDir);
             } else {
-                $query->orderBy($table . '.id', 'asc');
+                $query->orderBy($table.'.id', 'asc');
             }
         };
 
