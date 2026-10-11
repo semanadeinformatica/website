@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import ImageInput from "@/Components/ImageInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import ImageInput from "@/Components/Form/ImageInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import {
     type User,
     isCompany as checkIsCompany,
@@ -49,17 +48,23 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Editar utilizador">
-        <form class="contents" @submit.prevent="submit">
-            <ImageInput
-                id="photo"
-                v-model="form.photo"
-                :initial-preview="user.profile_photo_url"
-                label="Foto de perfil"
-                class="self-stretch"
-                :error-message="form.errors.photo"
-            />
+    <CRUDModal
+        title="Editar utilizador"
+        name="users"
+        :processing="form.processing"
+        max-width="2xl"
+        @submit="submit"
+    >
+        <ImageInput
+            id="photo"
+            v-model="form.photo"
+            :initial-preview="user.profile_photo_url"
+            label="Foto de perfil"
+            class="self-stretch"
+            :error-message="form.errors.photo"
+        />
 
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
                 id="name"
                 v-model="form.name"
@@ -80,32 +85,34 @@ const submit = () => {
                 autocomplete="email"
                 :error-message="form.errors.email"
             />
+        </div>
 
-            <TextInput
-                v-model="form.type"
-                type="select"
-                label="Tipo de utilizador"
-                required
-                disabled
-                :error-message="form.errors.type"
-            >
-                <option value="participant">Participante</option>
-                <option value="company">Empresa</option>
-                <option value="speaker">Orador</option>
-                <option value="admin">Administrador</option>
-            </TextInput>
+        <TextInput
+            v-model="form.type"
+            type="select"
+            label="Tipo de utilizador"
+            required
+            :error-message="form.errors.type"
+        >
+            <option value="participant">Participante</option>
+            <option value="company">Empresa</option>
+            <option value="speaker">Orador</option>
+            <option value="admin">Administrador</option>
+        </TextInput>
 
+        <div
+            v-if="form.type === 'speaker'"
+            class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
             <TextInput
-                v-if="form.type === 'speaker'"
                 id="title"
                 v-model="form.title"
-                label="Título"
+                label="Título / Cargo"
                 type="text"
                 :error-message="form.errors.title"
             />
 
             <TextInput
-                v-if="form.type === 'speaker'"
                 id="displayName"
                 v-model="form.display_name"
                 label="Nome a apresentar"
@@ -114,87 +121,93 @@ const submit = () => {
             />
 
             <TextInput
-                v-if="form.type === 'company' || form.type === 'speaker'"
-                id="description"
-                v-model="form.description"
-                label="Descrição"
-                type="textarea"
-                :error-message="form.errors.description"
-            />
-
-            <TextInput
-                v-if="form.type === 'speaker'"
                 id="organization"
                 v-model="form.organization"
-                label="Organização"
+                label="Organização / Empresa"
                 type="text"
+                class="sm:col-span-2"
                 :error-message="form.errors.organization"
             />
+        </div>
 
-            <details v-if="form.type !== 'admin'" class="self-stretch">
-                <summary>Redes sociais</summary>
+        <TextInput
+            v-if="form.type === 'company' || form.type === 'speaker'"
+            id="description"
+            v-model="form.description"
+            label="Descrição / Biografia"
+            type="textarea"
+            :error-message="form.errors.description"
+        />
 
-                <div class="mt-4 flex flex-col gap-4">
-                    <TextInput
-                        id="public_email"
-                        v-model="form.public_email"
-                        label="Public Email"
-                        type="email"
-                        autocomplete="email"
-                        :error-message="form.errors.public_email"
-                    />
+        <details
+            v-if="form.type && form.type !== 'admin'"
+            class="group rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-white/20"
+        >
+            <summary
+                class="cursor-pointer font-mono text-xs font-semibold tracking-wider text-neutral-400 uppercase transition-colors group-open:text-white"
+            >
+                Redes sociais & Contactos públicos
+            </summary>
 
-                    <TextInput
-                        id="facebook"
-                        v-model="form.facebook"
-                        label="Facebook"
-                        type="url"
-                        :error-message="form.errors.facebook"
-                    />
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <TextInput
+                    id="public_email"
+                    v-model="form.public_email"
+                    label="Email Público"
+                    type="email"
+                    autocomplete="email"
+                    :error-message="form.errors.public_email"
+                />
 
-                    <TextInput
-                        id="github"
-                        v-model="form.github"
-                        label="GitHub"
-                        type="url"
-                        :error-message="form.errors.github"
-                    />
+                <TextInput
+                    id="website"
+                    v-model="form.website"
+                    label="Website"
+                    type="url"
+                    :error-message="form.errors.website"
+                />
 
-                    <TextInput
-                        id="instagram"
-                        v-model="form.instagram"
-                        label="Instagram"
-                        type="url"
-                        :error-message="form.errors.instagram"
-                    />
+                <TextInput
+                    id="linkedin"
+                    v-model="form.linkedin"
+                    label="LinkedIn"
+                    type="url"
+                    :error-message="form.errors.linkedin"
+                />
 
-                    <TextInput
-                        id="linkedin"
-                        v-model="form.linkedin"
-                        label="Linkedin"
-                        type="url"
-                        :error-message="form.errors.linkedin"
-                    />
+                <TextInput
+                    id="github"
+                    v-model="form.github"
+                    label="GitHub"
+                    type="url"
+                    :error-message="form.errors.github"
+                />
 
-                    <TextInput
-                        id="twitter"
-                        v-model="form.twitter"
-                        label="Twitter"
-                        type="url"
-                        :error-message="form.errors.twitter"
-                    />
+                <TextInput
+                    id="instagram"
+                    v-model="form.instagram"
+                    label="Instagram"
+                    type="url"
+                    :error-message="form.errors.instagram"
+                />
 
-                    <TextInput
-                        id="website"
-                        v-model="form.website"
-                        label="Website"
-                        type="url"
-                        :error-message="form.errors.website"
-                    />
-                </div>
-            </details>
+                <TextInput
+                    id="facebook"
+                    v-model="form.facebook"
+                    label="Facebook"
+                    type="url"
+                    :error-message="form.errors.facebook"
+                />
 
-            <PrimaryButton type="submit">Editar</PrimaryButton>
-        </form>
-    </CardLayout>
+                <TextInput
+                    id="twitter"
+                    v-model="form.twitter"
+                    label="Twitter / X"
+                    type="url"
+                    class="sm:col-span-2"
+                    :error-message="form.errors.twitter"
+                />
+            </div>
+        </details>
+    </CRUDModal>
 </template>

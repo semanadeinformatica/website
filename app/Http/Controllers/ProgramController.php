@@ -36,6 +36,7 @@ class ProgramController extends Controller
 
             if ($totalDays === 0) {
                 return Inertia::render('Program', [
+                    'days' => fn () => [],
                     'eventDay' => fn () => null,
                     'queryDay' => fn () => 0,
                     'totalDays' => fn () => 0,
@@ -55,6 +56,7 @@ class ProgramController extends Controller
         $eventDay?->competitions;
 
         return Inertia::render('Program', [
+            'days' => fn () => $edition->event_days()->orderBy('date', 'ASC')->get(['id', 'date', 'theme']),
             'eventDay' => fn () => $eventDay?->load([
                 'stands' => [
                     'sponsor' => [

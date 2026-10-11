@@ -3,13 +3,12 @@ import type Participant from "@/Types/Participant";
 import type Staff from "@/Types/Staff";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
-import Checkbox from "@/Components/Checkbox.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import { computed } from "vue";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 
 interface Props {
     item: Staff;
@@ -40,47 +39,52 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Editar Staff">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                v-model="form.department_id"
-                type="select"
-                required
-                label="Departamento"
-                :error-message="form.errors.department_id"
+    <CRUDModal
+        title="Editar Membro de Equipa"
+        name="staff"
+        :processing="form.processing"
+        max-width="md"
+        @submit="submit"
+    >
+        <TextInput
+            v-model="form.department_id"
+            type="select"
+            required
+            label="Departamento"
+            :error-message="form.errors.department_id"
+        >
+            <option
+                v-for="department in $props.with.departments"
+                :key="department.id"
+                :value="department.id"
             >
-                <option
-                    v-for="department in $props.with.departments"
-                    :key="department.id"
-                    :value="department.id"
-                >
-                    {{ department.name }}
-                    - {{ editions[department.edition_id] }}
-                </option>
-            </TextInput>
+                {{ department.name }} - {{ editions[department.edition_id] }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                v-model="form.participant_id"
-                type="select"
-                required
-                label="Participante"
-                :error-message="form.errors.participant_id"
+        <TextInput
+            v-model="form.participant_id"
+            type="select"
+            required
+            label="Participante"
+            :error-message="form.errors.participant_id"
+        >
+            <option
+                v-for="participant in $props.with.participants"
+                :key="participant.id"
+                :value="participant.id"
             >
-                <option
-                    v-for="participant in $props.with.participants"
-                    :key="participant.id"
-                    :value="participant.id"
-                >
-                    {{ participant.user?.name }} - {{ participant.user?.id }}
-                </option>
-            </TextInput>
+                {{ participant.user?.name ?? `Membro #${participant.id}` }}
+            </option>
+        </TextInput>
 
-            <label for="coordinator" class="flex flex-row items-center gap-6">
-                Coordenador
-                <Checkbox id="coordinator" v-model:checked="form.coordinator" />
-            </label>
-
-            <PrimaryButton type="submit">Editar</PrimaryButton>
-        </form>
-    </CardLayout>
+        <div
+            class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+        >
+            <span class="text-xs font-medium text-neutral-300">
+                Coordenador do Departamento?
+            </span>
+            <Checkbox id="coordinator" v-model:checked="form.coordinator" />
+        </div>
+    </CRUDModal>
 </template>

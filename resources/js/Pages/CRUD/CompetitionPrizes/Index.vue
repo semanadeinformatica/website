@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type Paginated from "@/Types/Paginated";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -36,31 +36,55 @@ const competitionNames = computed<Record<number, string>>(() =>
         ]),
     ),
 );
+
+const formatPlace = (place: number | string) => {
+    return `${place}º Lugar`;
+};
 </script>
 
 <template>
-    <CRUDLayout
-        title="Competition Prizes"
+    <CRUDView
+        title="Prémios da Competição"
+        view="CompetitionPrizes"
         :items="items"
         name="competitionPrizes"
         :is-searchable="isSearchable"
     >
-        <template #heading>Prémios na Competição de Programação</template>
+        <template #heading>Prémios da Competição</template>
 
         <template #header>
             <HeaderRow>
                 <Header>Edição</Header>
-                <Header sort-by="place">Lugar</Header>
+                <Header sort-by="place">Classificação</Header>
                 <Header>Competição</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="competitionPrizes" :item="item">
-                <Cell>{{ editions[item.competition_id] }}</Cell>
-                <Cell>{{ item.place }}</Cell>
-                <Cell>{{ competitionNames[item.competition_id] }}</Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.competition_id] ?? "-" }}
+                </Cell>
+                <Cell>
+                    <span
+                        class="text-xs font-semibold"
+                        :class="
+                            item.place === 1
+                                ? 'text-amber-400'
+                                : item.place === 2
+                                  ? 'text-slate-300'
+                                  : item.place === 3
+                                    ? 'text-amber-600'
+                                    : 'text-neutral-300'
+                        "
+                    >
+                        {{ formatPlace(item.place) }}
+                    </span>
+                </Cell>
+                <Cell class="font-medium text-white">
+                    {{ competitionNames[item.competition_id] ?? "-" }}
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

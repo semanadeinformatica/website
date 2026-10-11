@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import type Slot from "@/Types/Slot";
 import Sticker from "./Sticker.vue";
+import PillSelector from "@/Components/UI/PillSelector.vue";
 </script>
 
 <template>
-    <p
+    <div
         v-if="($page.props.slots as Slot[]).length === 0"
-        class="text-text-color flex w-full flex-auto items-center justify-center pt-8 text-center text-2xl font-bold"
+        class="flex flex-col items-center justify-center py-20 text-center"
     >
-        Ainda não há conquistas para completares. Fica de olho nesta secção!
-    </p>
+        <PillSelector
+            :items="[{ id: 'empty', label: 'Sem conquistas', disabled: true }]"
+            size="sm"
+            :wrap="false"
+            container-class="mb-4"
+        />
+        <p class="max-w-md text-sm text-neutral-400">
+            Ainda não há conquistas para completares. Fica de olho nas
+            atividades e bancas da SINF!
+        </p>
+    </div>
     <div
         v-else
-        class="flex w-full flex-row flex-wrap items-center justify-center gap-8 place-self-center self-center pt-8"
+        class="flex w-full flex-row flex-wrap items-stretch justify-center gap-6 pt-4 sm:gap-8"
     >
         <Sticker
             v-for="item in $page.props.slots as Slot[]"

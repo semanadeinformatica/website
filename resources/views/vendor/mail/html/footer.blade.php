@@ -1,8 +1,8 @@
 <tr>
     <td>
-        <table class="max-w-xl text-center" align="center" role="presentation">
+        <table class="max-w-xl text-center" align="center" role="presentation" style="max-width: 580px; margin: 0 auto;">
             <tr>
-                <td class="p-8 text-2023-teal font-bold text-md" align="center">
+                <td style="padding: 24px 16px; font-size: 12px; color: #71717a; text-align: center;" align="center">
                     {{ Illuminate\Mail\Markdown::parse($slot) }}
                 </td>
             </tr>

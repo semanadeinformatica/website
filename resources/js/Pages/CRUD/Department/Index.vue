@@ -2,7 +2,7 @@
 import type Paginated from "@/Types/Paginated";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
-import CRUDLayout from "@/Layouts/CRUDLayout.vue";
+import CRUDView from "@/Components/CRUD/CRUDView.vue";
 import HeaderRow from "@/Components/CRUD/HeaderRow.vue";
 import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
@@ -27,8 +27,9 @@ const editions = computed<Record<number, string>>(() =>
 </script>
 
 <template>
-    <CRUDLayout
-        title="Departments"
+    <CRUDView
+        title="Departamentos"
+        view="Department"
         :items="items"
         name="departments"
         :is-searchable="isSearchable"
@@ -37,20 +38,24 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header sort-by="name">Nome</Header>
-                <Header filter-by="edition_id" :filter-values="editions"
-                    >Edição</Header
-                >
+                <Header sort-by="name">Nome do Departamento</Header>
+                <Header filter-by="edition_id" :filter-values="editions">
+                    Edição
+                </Header>
                 <Header sort-by="priority">Prioridade</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="departments" :item="item">
-                <Cell>{{ item.name }}</Cell>
-                <Cell>{{ editions[item.edition_id] }}</Cell>
-                <Cell>{{ item.priority }}</Cell>
+                <Cell class="font-medium text-white">{{ item.name }}</Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.edition_id] ?? "-" }}
+                </Cell>
+                <Cell class="font-mono text-xs text-neutral-300">
+                    {{ item.priority }}
+                </Cell>
             </Row>
         </template>
-    </CRUDLayout>
+    </CRUDView>
 </template>

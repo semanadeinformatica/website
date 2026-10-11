@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref, watch, type UnwrapRef, onMounted, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import { type Tabs } from "@/Types/ProfilePage";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
+import { Ticket, Award, UserCheck, Users } from "@lucide/vue";
 
 type Props = {
     buttons: Tabs;
@@ -10,65 +14,58 @@ const props = defineProps<Props>();
 
 const buttons = computed(() => props.buttons);
 
-const selected = ref<HTMLElement | null>(null);
+const buttonKeys = computed(() => Object.keys(buttons.value));
 
-const firstType = Object.keys(buttons.value)[0];
+const selectedType = ref<string>(buttonKeys.value[0] ?? "");
 
-const selectedType = ref<keyof typeof buttons.value>(firstType);
+watch(
+    buttonKeys,
+    (keys) => {
+        if (!keys.includes(selectedType.value) && keys.length > 0) {
+            selectedType.value = keys[0];
+        }
+    },
+    { immediate: true },
+);
 
-watch(selected, (newValue, oldValue) => {
-    oldValue?.classList.toggle("selected");
-    newValue?.classList.toggle("selected");
+const tabOptions = computed<PillOption[]>(() => {
+    return Object.entries(buttons.value).map(([id, item]) => {
+        let icon = undefined;
+        if (id === "ticket") icon = Ticket;
+        else if (id === "sticker") icon = Award;
+        else if (id === "visitHistory") icon = UserCheck;
+        else if (id === "allParticipants") icon = Users;
 
-    selectedType.value =
-        (newValue?.dataset.type as UnwrapRef<typeof selectedType>) ?? firstType;
+        return {
+            id,
+            label: item.label,
+            icon,
+        };
+    });
 });
 
 const view = computed(() => {
     return buttons.value[selectedType.value]?.component;
 });
-
-const toggle = ({ target }: MouseEvent) => {
-    selected.value = target as HTMLElement;
-};
-
-onMounted(() => {
-    selected.value = document.querySelector<HTMLElement>(
-        "#tab-picker > button:first-of-type",
-    );
-
-    if (selected.value)
-        selectedType.value =
-            (selected.value.dataset.type as UnwrapRef<typeof selectedType>) ??
-            firstType;
-});
 </script>
 
 <template>
-    <section class="flex h-full w-full flex-1 flex-col pt-10">
-        <div
-            id="tab-picker"
-            class="text-2025-blue-dark flex flex-row justify-center gap-4 pt-5 font-bold"
-        >
-            <button
-                v-for="(button, id) in buttons"
-                :key="id"
-                class="text- transition"
-                :data-type="id"
-                @click="toggle"
-            >
-                {{ button.label }}
-            </button>
+    <section
+        v-if="tabOptions.length > 0"
+        class="flex w-full flex-1 flex-col pt-4"
+    >
+        <div v-if="tabOptions.length > 1" class="mb-8 flex justify-center">
+            <PillSelector
+                v-model="selectedType"
+                :items="tabOptions"
+                size="md"
+            />
         </div>
-        <KeepAlive>
-            <component :is="view"></component>
-        </KeepAlive>
+
+        <div class="w-full">
+            <KeepAlive>
+                <component :is="view" :key="selectedType" />
+            </KeepAlive>
+        </div>
     </section>
 </template>
-
-<style scoped>
-.selected {
-    color: rgb(255, 255, 255);
-    text-decoration: underline;
-}
-</style>

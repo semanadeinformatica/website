@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
 import { route } from "ziggy-js";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 
 interface Props {
     with: {
@@ -35,44 +34,46 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Novo Dia">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                v-model="form.edition_id"
-                type="select"
-                required
-                label="Edição"
-                :error-message="form.errors.edition_id"
+    <CRUDModal
+        title="Criar Dia de Evento"
+        name="eventDays"
+        :processing="form.processing"
+        max-width="md"
+        @submit="submit"
+    >
+        <TextInput
+            v-model="form.edition_id"
+            type="select"
+            required
+            label="Edição"
+            :error-message="form.errors.edition_id"
+        >
+            <option
+                v-for="edition in $props.with.editions"
+                :key="edition.id"
+                :value="edition.id"
             >
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </TextInput>
+                {{ edition.name }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                id="theme"
-                v-model="form.theme"
-                label="Tema"
-                type="text"
-                required
-                autofocus
-                :error-message="form.errors.theme"
-            />
+        <TextInput
+            id="theme"
+            v-model="form.theme"
+            label="Tema"
+            type="text"
+            required
+            autofocus
+            :error-message="form.errors.theme"
+        />
 
-            <TextInput
-                id="date"
-                v-model="form.date"
-                label="Data"
-                type="date"
-                required
-                :error-message="form.errors.date"
-            />
-
-            <PrimaryButton type="submit">Criar</PrimaryButton>
-        </form>
-    </CardLayout>
+        <TextInput
+            id="date"
+            v-model="form.date"
+            label="Data"
+            type="date"
+            required
+            :error-message="form.errors.date"
+        />
+    </CRUDModal>
 </template>

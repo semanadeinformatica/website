@@ -17,6 +17,7 @@ class ShopController extends Controller
     {
         $edition = $request->input('edition');
         $user = $request->user();
+        $boughtProductIds = [];
 
         if ($user && $user->isParticipant()) {
             $isParticipant = $user->isParticipant();
@@ -25,13 +26,18 @@ class ShopController extends Controller
             // This makes one less query to the DB ☝️🤓
             $isEnrolled = $enrollment !== null;
             $points = $enrollment?->points;
+
+            if ($enrollment) {
+                $boughtProductIds = $enrollment->products()->pluck('products.id')->all();
+            }
         }
 
         if ($edition === null) {
             return response('No edition found', 500);
         }
 
-        $products = $edition->products()->reorder('price', 'desc')->get()->each(function (Product $product) use ($user) {
+        $products = $edition->products()->reorder('price', 'desc')->get()->each(function (Product $product) use ($user, $boughtProductIds) {
+            $product->alreadyBought = in_array($product->id, $boughtProductIds);
             $product->canBeBought =
                 $product->stock <= 0
                     ? false

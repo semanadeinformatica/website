@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import CardLayout from "@/Layouts/CardLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
 import { useForm } from "@inertiajs/vue3";
@@ -28,45 +27,45 @@ const submit = () => {
 </script>
 
 <template>
-    <CardLayout title="Editar Departamento">
-        <form class="contents" @submit.prevent="submit">
-            <TextInput
-                id="name"
-                v-model="form.name"
-                label="Nome"
-                type="text"
-                required
-                autofocus
-                autocomplete="name"
-                :error-message="form.errors.name"
+    <CRUDModal
+        title="Editar Departamento"
+        name="departments"
+        :processing="form.processing"
+        max-width="md"
+        @submit="submit"
+    >
+        <TextInput
+            id="name"
+            v-model="form.name"
+            label="Nome"
+            type="text"
+            required
+            autofocus
+            autocomplete="name"
+            :error-message="form.errors.name"
+        />
+
+        <TextInput
+            v-model="form.edition_id"
+            type="select"
+            required
+            label="Edição"
+            :error-message="form.errors.edition_id"
+        >
+            <option
+                v-for="edition in $props.with.editions"
+                :key="edition.id"
+                :value="edition.id"
             >
-            </TextInput>
+                {{ edition.name }}
+            </option>
+        </TextInput>
 
-            <TextInput
-                v-model="form.edition_id"
-                type="select"
-                required
-                label="Edição"
-                :error-message="form.errors.edition_id"
-            >
-                <option
-                    v-for="edition in $props.with.editions"
-                    :key="edition.id"
-                    :value="edition.id"
-                >
-                    {{ edition.name }}
-                </option>
-            </TextInput>
-
-            <TextInput
-                v-model="form.priority"
-                type="number"
-                label="Prioridade"
-                class="self-stretch"
-                :error-message="form.errors.priority"
-            />
-
-            <PrimaryButton type="submit">Editar</PrimaryButton>
-        </form>
-    </CardLayout>
+        <TextInput
+            v-model="form.priority"
+            type="number"
+            label="Prioridade"
+            :error-message="form.errors.priority"
+        />
+    </CRUDModal>
 </template>

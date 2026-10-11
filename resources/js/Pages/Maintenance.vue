@@ -1,102 +1,64 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
+import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
+import SocialIcon from "@/Components/UI/SocialIcon.vue";
 </script>
 
 <template>
-    <Head title="semana de informática 2026" />
-    <!-- TODO: localization -->
-    <main class="maintenance-bg min-h-screen bg-black">
-        <div
-            class="flex min-h-screen flex-col content-center items-center justify-evenly"
+    <Head title="Semana de Informática 2026" />
+
+    <div class="relative min-h-screen bg-[#0d0e12] text-white">
+        <GlowingOrbs />
+
+        <main
+            class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16"
         >
-            <div class="relative flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <img
                     id="svg-logo"
-                    class="w-96 p-4 select-none"
-                    src="images/sinf2026.svg"
+                    class="h-28 p-2 select-none sm:h-36"
+                    src="/images/sinf2026.svg"
                     alt="SINF 2026 logo"
                 />
+
                 <p
-                    class="absolute top-full inset-x-0 mt-12 sm:mt-24 text-center font-['Inter'] text-lg font-medium tracking-wide text-white select-none"
-                    style="font-family: 'Inter', sans-serif;"
+                    class="mt-8 text-lg font-medium tracking-wide text-neutral-300 select-none sm:text-xl"
                 >
                     Brevemente
                 </p>
+
                 <div
-                    class="absolute top-full inset-x-0 mt-22 sm:mt-34 flex flex-row items-center justify-center space-x-3 select-none"
+                    class="mt-8 flex items-center justify-center gap-4 select-none"
                 >
                     <a
                         href="https://www.instagram.com/sinffeup/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
+                        aria-label="Instagram"
+                        class="pill-container pill-item flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-white"
                     >
-                        <img
-                            class="w-4"
-                            src="images/instagram.svg"
-                            alt="Instagram"
-                        />
+                        <SocialIcon platform="instagram" :size="18" />
                     </a>
                     <a
                         href="https://www.facebook.com/sinffeup/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
+                        aria-label="Facebook"
+                        class="pill-container pill-item flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-white"
                     >
-                        <img
-                            class="w-4"
-                            src="images/facebook.svg"
-                            alt="Facebook"
-                        />
+                        <SocialIcon platform="facebook" :size="18" />
                     </a>
                     <a
                         href="https://www.linkedin.com/company/sinffeup"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-white transition-opacity hover:opacity-80"
+                        aria-label="LinkedIn"
+                        class="pill-container pill-item flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-white"
                     >
-                        <img
-                            class="w-4"
-                            src="images/linkedin.svg"
-                            alt="LinkedIn"
-                        />
+                        <SocialIcon platform="linkedin" :size="18" />
                     </a>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </template>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-.maintenance-bg {
-    background-image:
-        radial-gradient(
-            ellipse 70% 20% at 58% 46%,
-            rgb(154 0 54 / 100%) 0%,
-            rgb(64 0 23 / 0%) 100%
-        ),
-        radial-gradient(
-            ellipse 70% 20% at 42% 54%,
-            rgb(106 0 255 / 85%) 0%,
-            rgb(34 1 153 / 0%) 100%
-        );
-}
-
-@media (min-width: 640px) {
-    .maintenance-bg {
-        background-image:
-            radial-gradient(
-                ellipse 30% 24% at 58% 44%,
-                rgb(154 0 54 / 100%) 0%,
-                rgb(64 0 23 / 0%) 100%
-            ),
-            radial-gradient(
-                ellipse 30% 24% at 42% 58%,
-                rgb(106 0 255 / 85%) 0%,
-                rgb(34 1 153 / 0%) 100%
-            );
-    }
-}
-</style>

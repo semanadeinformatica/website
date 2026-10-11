@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
 import { Head } from "@inertiajs/vue3";
 import { computed } from "vue";
 
@@ -13,87 +14,83 @@ const goBack = () => {
     window.history.back();
 };
 
-const description = computed(() => {
-    return {
-        500: "Whoops, something went wrong on our servers.",
-        404: "Sorry, the page you are looking for could not be found.",
-        403: "Sorry, you are forbidden from accessing this page.",
-    }[props.status];
-});
+const descriptions: Record<number, string[]> = {
+    500: [
+        "Algo correu mal nos nossos servidores.",
+        "Podes tentar novamente daqui a uns minutos.",
+    ],
+    404: [
+        "Não encontrámos a página que procuras.",
+        "O endereço pode estar errado ou a página pode ter sido movida.",
+    ],
+    403: [
+        "Não tens permissão para aceder a esta página.",
+        "Se acreditas que isto é um erro, contacta-nos.",
+    ],
+};
+
+const messages = computed(
+    () => descriptions[props.status] ?? ["Ocorreu um erro inesperado."],
+);
 </script>
 
 <template>
     <Head :title="props.status.toString()" />
-    <main class="bg-2023-bg min-h-screen">
-        <div
-            class="flex min-h-screen flex-col content-center items-center justify-center gap-44 py-16"
+
+    <div class="relative min-h-screen bg-[#0d0e12] text-white">
+        <GlowingOrbs />
+
+        <main
+            class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16"
         >
-            <img
-                id="svg-1"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute left-[7%] w-36 opacity-50"
-                src="/../images/cy-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-2"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute top-16 right-[7%] w-32 opacity-50"
-                src="/../images/rc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-            <img
-                id="svg-3"
-                class="animate-2023-maintenance-jump max-ml:hidden absolute right-[15%] bottom-28 w-20 opacity-50"
-                src="/../images/oc-sinf.svg"
-                alt="Stylized SINF logo"
-            />
-
-            <div class="relative">
+            <div class="relative flex flex-col items-center text-center">
                 <img
-                    class="max-ml:w-72 w-96"
-                    src="/../images/sinf logo.png"
-                    alt="Stylized SINF logo"
+                    class="h-24 p-2 select-none sm:h-32"
+                    src="/images/sinf2026.svg"
+                    alt="SINF 2026 logo"
                 />
-                <span
-                    class="margin-0 text-2023-teal absolute right-0 -bottom-5 text-xl font-bold"
-                    >2023</span
-                >
-            </div>
 
-            <div
-                class="text-2023-teal-dark flex w-fit flex-col items-center gap-7 text-center"
-            >
-                <h1 class="text-8xl">{{ props.status }}</h1>
-                <p>{{ description }}</p>
-                <PrimaryButton
-                    class="w-fit"
-                    text-size="text-xl"
-                    @click="goBack()"
+                <h1
+                    class="mt-10 bg-linear-to-r from-white to-white/40 bg-clip-text text-[7rem] leading-none font-bold text-transparent select-none sm:text-[10rem]"
                 >
-                    Regressar
-                </PrimaryButton>
+                    {{ props.status }}
+                </h1>
+
+                <div class="mt-6 max-w-md space-y-2">
+                    <p
+                        v-for="(line, idx) in messages"
+                        :key="idx"
+                        class="text-sm text-neutral-400"
+                        :class="
+                            idx === 0
+                                ? 'text-lg font-medium text-neutral-200'
+                                : ''
+                        "
+                    >
+                        {{ line }}
+                    </p>
+                </div>
+
+                <div
+                    class="mt-10 flex flex-wrap items-center justify-center gap-4"
+                >
+                    <PrimaryButton color="pill" class="w-fit" @click="goBack">
+                        Regressar
+                    </PrimaryButton>
+                </div>
+
+                <div
+                    class="mt-14 flex items-center justify-center gap-2 text-sm text-neutral-400"
+                >
+                    <span>Mais informações:</span>
+                    <a
+                        href="mailto:geral@sinf.pt"
+                        class="text-neutral-200 underline-offset-4 transition-colors hover:text-white hover:underline"
+                    >
+                        geral@sinf.pt
+                    </a>
+                </div>
             </div>
-            <div class="text-2023-teal-dark text-center text-lg">
-                <p class="font-bold">Mais informações</p>
-                <p>geral@sinf.pt</p>
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </template>
-
-<style>
-body {
-    margin-bottom: 0px !important;
-}
-
-#svg-1 {
-    animation-delay: -0.5s;
-}
-
-#svg-2 {
-    animation-delay: -1s;
-}
-
-#svg-3 {
-    animation-delay: -0.8s;
-}
-</style>

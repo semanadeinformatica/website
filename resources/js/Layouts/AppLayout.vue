@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import Navbar from "@/Components/Navbar.vue";
-import Footer from "@/Components/Footer.vue";
-import Banner from "@/Components/Banner.vue";
+import Navbar from "@/Components/Navigation/Navbar.vue";
+import Footer from "@/Components/Navigation/Footer.vue";
+import GlowingOrbs from "@/Components/UI/GlowingOrbs.vue";
+import Banner from "@/Components/UI/Banner.vue";
 
 interface Props {
     title: string;
@@ -12,21 +13,20 @@ defineProps<Props>();
 </script>
 
 <template>
-    <div>
+    <div
+        class="bg-sinf-surface-dark relative flex min-h-screen flex-col text-white"
+    >
         <Head :title="title" />
-        <div class="sticky top-0 z-30">
+
+        <GlowingOrbs />
+
+        <div class="relative z-10 flex min-h-screen flex-1 flex-col">
             <Navbar />
-        </div>
-        <main class="bg-2025-bg-gradient min-h-screen py-24">
             <Banner />
-            <slot />
-        </main>
-        <Footer />
+            <main class="flex flex-1 flex-col">
+                <slot />
+            </main>
+            <Footer class="relative z-10 mt-auto" />
+        </div>
     </div>
 </template>
-
-<style>
-html {
-    scroll-behavior: smooth;
-}
-</style>
