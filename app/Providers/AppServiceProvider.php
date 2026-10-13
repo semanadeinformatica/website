@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureUrls(): void
     {
-        if ($this->app->environment('production')) {
+        if (str_starts_with((string) config('app.url'), 'https://') || ! $this->app->environment(['local', 'testing'])) {
             URL::forceScheme('https');
         }
     }

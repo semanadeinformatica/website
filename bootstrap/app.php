@@ -29,6 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->trustProxies(at: '*');
+
         $middleware->prepend([
             InjectEditionIntoRequest::class,
             LogRequestIPs::class,
