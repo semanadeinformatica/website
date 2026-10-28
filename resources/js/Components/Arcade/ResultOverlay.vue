@@ -24,7 +24,8 @@ const config = computed(() => {
                 emoji: "🎉",
                 title: "Vitória!",
                 message: `Ganhou ${props.payout} pts!`,
-                bgGradient: "from-emerald-950/90 via-emerald-900/60 to-black/90",
+                bgGradient:
+                    "from-emerald-950/90 via-emerald-900/60 to-black/90",
                 borderColor: "border-emerald-500/40",
                 textColor: "text-emerald-400",
             };
@@ -73,12 +74,17 @@ const config = computed(() => {
                 ]"
             >
                 <!-- Animated Emoji / Icon -->
-                <div class="mb-3 text-5xl select-none animate-bounce">
+                <div class="mb-3 animate-bounce text-5xl select-none">
                     {{ config.emoji }}
                 </div>
 
                 <!-- Title & Amount -->
-                <h3 :class="['text-2xl font-black tracking-tight', config.textColor]">
+                <h3
+                    :class="[
+                        'text-2xl font-black tracking-tight',
+                        config.textColor,
+                    ]"
+                >
                     {{ config.title }}
                 </h3>
                 <p class="mt-1 text-lg font-bold text-white">

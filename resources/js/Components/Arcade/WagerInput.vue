@@ -82,14 +82,14 @@ function setMax() {
                 hasError
                     ? 'border-red-500/50 ring-1 ring-red-500/20'
                     : 'border-white/10 focus-within:border-amber-400/50',
-                disabled ? 'opacity-50 pointer-events-none' : '',
+                disabled ? 'pointer-events-none opacity-50' : '',
             ]"
         >
             <!-- Decrement Button -->
             <button
                 type="button"
                 :disabled="disabled || modelValue <= min"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @click="decrement"
             >
                 <Minus :size="16" />
@@ -102,7 +102,7 @@ function setMax() {
                 :min="min"
                 :max="max"
                 :disabled="disabled"
-                class="w-full border-0 bg-transparent text-center font-mono text-lg font-bold text-white focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                class="w-full [appearance:textfield] border-0 bg-transparent text-center font-mono text-lg font-bold text-white focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 @input="handleInput"
             />
 
@@ -110,7 +110,7 @@ function setMax() {
             <button
                 type="button"
                 :disabled="disabled || modelValue >= max"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @click="increment"
             >
                 <Plus :size="16" />

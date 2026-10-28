@@ -2,11 +2,11 @@ export default interface ArcadeGame {
     id: number;
     edition_id: number;
     slug:
-        | 'coin-flip'
-        | 'high-low'
-        | 'bug-sweeper'
-        | 'mastermind'
-        | 'binary-blitz';
+        | "coin-flip"
+        | "high-low"
+        | "bug-sweeper"
+        | "mastermind"
+        | "binary-blitz";
     name: string;
     is_active: boolean;
     is_pvp: boolean;
@@ -21,7 +21,7 @@ export interface ArcadeSession {
     enrollment_id: number;
     challenger_enrollment_id: number | null;
     wager: number;
-    outcome: 'pending' | 'matched' | 'win' | 'loss' | 'cashout' | 'expired';
+    outcome: "pending" | "matched" | "win" | "loss" | "cashout" | "expired";
     payout: number;
     started_at: string;
     resolved_at: string | null;

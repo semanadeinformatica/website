@@ -46,7 +46,7 @@ function closeGameModal() {
             class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-6 sm:py-12 lg:px-8"
         >
             <!-- Header Section -->
-            <div class="text-center space-y-3">
+            <div class="space-y-3 text-center">
                 <div class="inline-flex items-center justify-center">
                     <PillSelector
                         :items="[
@@ -65,9 +65,12 @@ function closeGameModal() {
                 >
                     Arcade & Desafios
                 </h1>
-                <p class="mx-auto max-w-2xl text-sm text-neutral-400 sm:text-base">
+                <p
+                    class="mx-auto max-w-2xl text-sm text-neutral-400 sm:text-base"
+                >
                     Aposta os teus SINFrões em mini-jogos, desafia outros
-                    participantes em tempo real e multiplica os teus pontos para a loja e sorteios!
+                    participantes em tempo real e multiplica os teus pontos para
+                    a loja e sorteios!
                 </p>
             </div>
 
@@ -113,7 +116,7 @@ function closeGameModal() {
             <section class="space-y-6">
                 <div
                     v-if="games.length > 0"
-                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6"
+                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
                 >
                     <GameCard
                         v-for="game in games"
@@ -146,7 +149,8 @@ function closeGameModal() {
                         Os jogos da Arcade estarão disponíveis em breve
                     </h3>
                     <p class="mt-1 text-sm text-neutral-400">
-                        Prepara os teus SINFrões para apostar e competir durante o evento!
+                        Prepara os teus SINFrões para apostar e competir durante
+                        o evento!
                     </p>
                 </div>
             </section>
@@ -158,7 +162,9 @@ function closeGameModal() {
                 v-if="selectedGame"
                 class="relative rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
             >
-                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div
+                    class="flex items-center justify-between border-b border-white/10 pb-4"
+                >
                     <div class="flex items-center gap-3">
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-amber-400"
@@ -169,8 +175,11 @@ function closeGameModal() {
                             <h3 class="text-lg font-bold text-white">
                                 {{ selectedGame.name }}
                             </h3>
-                            <span class="text-xs text-neutral-400 font-mono">
-                                {{ selectedGame.min_wager }}–{{ selectedGame.max_wager }} pts
+                            <span class="font-mono text-xs text-neutral-400">
+                                {{ selectedGame.min_wager }}–{{
+                                    selectedGame.max_wager
+                                }}
+                                pts
                             </span>
                         </div>
                     </div>
@@ -183,12 +192,17 @@ function closeGameModal() {
                     </button>
                 </div>
 
-                <div class="py-8 text-center space-y-3">
+                <div class="space-y-3 py-8 text-center">
                     <p class="text-sm text-neutral-300">
-                        O jogo <strong class="text-white">{{ selectedGame.name }}</strong> está configurado e pronto para a fase de construção.
+                        O jogo
+                        <strong class="text-white">{{
+                            selectedGame.name
+                        }}</strong>
+                        está configurado e pronto para a fase de construção.
                     </p>
                     <p class="text-xs text-neutral-500">
-                        (Módulo individual do jogo será carregado aqui na Semana 2)
+                        (Módulo individual do jogo será carregado aqui na Semana
+                        2)
                     </p>
                 </div>
 

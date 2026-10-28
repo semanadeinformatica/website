@@ -51,7 +51,7 @@ const iconComponent = computed(() => {
             class="absolute inset-0 z-20 flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
         >
             <span
-                class="rounded-full border border-white/10 bg-neutral-900/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-neutral-400 shadow-md"
+                class="rounded-full border border-white/10 bg-neutral-900/90 px-4 py-1.5 text-xs font-semibold tracking-wider text-neutral-400 uppercase shadow-md"
             >
                 Indisponível
             </span>
@@ -85,7 +85,7 @@ const iconComponent = computed(() => {
 
             <!-- Game Info -->
             <div class="space-y-1.5">
-                <h3 class="text-lg font-bold text-white tracking-tight">
+                <h3 class="text-lg font-bold tracking-tight text-white">
                     {{ game.name }}
                 </h3>
                 <div class="flex flex-col gap-1 text-xs text-neutral-400">
@@ -109,18 +109,15 @@ const iconComponent = computed(() => {
 
             <!-- Action Button -->
             <div class="relative pt-2">
-                <div
-                    v-if="!isEnrolled"
-                    class="group/tooltip relative w-full"
-                >
+                <div v-if="!isEnrolled" class="group/tooltip relative w-full">
                     <PrimaryButton
                         disabled
-                        class="w-full justify-center opacity-50 cursor-not-allowed"
+                        class="w-full cursor-not-allowed justify-center opacity-50"
                     >
                         Jogar
                     </PrimaryButton>
                     <div
-                        class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-neutral-900 px-2.5 py-1 text-[11px] text-neutral-300 opacity-0 shadow-lg transition-opacity duration-200 group-hover/tooltip:opacity-100 ring-1 ring-white/10"
+                        class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-neutral-900 px-2.5 py-1 text-[11px] whitespace-nowrap text-neutral-300 opacity-0 shadow-lg ring-1 ring-white/10 transition-opacity duration-200 group-hover/tooltip:opacity-100"
                     >
                         Inscreve-te para jogar
                     </div>
