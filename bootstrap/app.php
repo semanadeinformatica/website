@@ -26,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
             RateLimiter::for('api', function (Request $request) {
                 return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
             });
+
+            RateLimiter::for('arcade', function (Request $request) {
+                return Limit::perMinute(15)->by($request->user()?->id ?: $request->ip());
+            });
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
