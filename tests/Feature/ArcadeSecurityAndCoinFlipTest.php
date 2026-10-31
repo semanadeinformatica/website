@@ -353,4 +353,43 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(0, $response->json('data'));
     }
+
+    public function test_status_result_is_relative_to_requesting_player(): void
+    {
+        $creatorWin = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'challenger_enrollment_id' => $this->enrollmentB->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 90,
+            'resolved_at' => now(),
+        ]);
+
+        $this->actingAs($this->userA)
+            ->getJson(route('arcade.coin-flip.status', ['session' => $creatorWin->id]))
+            ->assertJson(['outcome' => 'win', 'payout' => 90]);
+
+        $this->actingAs($this->userB)
+            ->getJson(route('arcade.coin-flip.status', ['session' => $creatorWin->id]))
+            ->assertJson(['outcome' => 'loss', 'payout' => 0]);
+
+        $challengerWin = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'challenger_enrollment_id' => $this->enrollmentB->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'loss',
+            'payout' => 90,
+            'resolved_at' => now(),
+        ]);
+
+        $this->actingAs($this->userA)
+            ->getJson(route('arcade.coin-flip.status', ['session' => $challengerWin->id]))
+            ->assertJson(['outcome' => 'loss', 'payout' => 0]);
+
+        $this->actingAs($this->userB)
+            ->getJson(route('arcade.coin-flip.status', ['session' => $challengerWin->id]))
+            ->assertJson(['outcome' => 'win', 'payout' => 90]);
+    }
 }

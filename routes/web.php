@@ -84,14 +84,23 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::prefix('arcade')
             ->name('arcade.')
-            ->middleware('throttle:arcade')
             ->group(function () {
                 Route::prefix('coin-flip')->name('coin-flip.')->group(function () {
-                    Route::get('/lobby', [ArcadeController::class, 'pendingCoinFlips'])->name('lobby');
-                    Route::post('/start', [ArcadeController::class, 'startCoinFlip'])->name('start');
-                    Route::post('/{session}/join', [ArcadeController::class, 'joinCoinFlip'])->name('join');
-                    Route::get('/{session}/status', [ArcadeController::class, 'statusCoinFlip'])->name('status');
-                    Route::post('/{session}/cancel', [ArcadeController::class, 'cancelCoinFlip'])->name('cancel');
+                    Route::get('/lobby', [ArcadeController::class, 'pendingCoinFlips'])
+                        ->middleware('throttle:arcade')
+                        ->name('lobby');
+                    Route::post('/start', [ArcadeController::class, 'startCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/join', [ArcadeController::class, 'joinCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('join');
+                    Route::get('/{session}/status', [ArcadeController::class, 'statusCoinFlip'])
+                        ->middleware('throttle:arcade-status')
+                        ->name('status');
+                    Route::post('/{session}/cancel', [ArcadeController::class, 'cancelCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('cancel');
                 });
             });
 

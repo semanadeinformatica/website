@@ -80,9 +80,11 @@ class ArcadeController extends Controller
         $request->validate(['wager' => 'required|integer|min:1']);
 
         $game = $session->game;
+        $edition = $request->input('edition') ?? $game->edition;
+
+        $this->ensureCoinFlipSession($session, $edition->id);
         Gate::authorize('play', $game);
 
-        $edition = $request->input('edition') ?? $game->edition;
         $user = $request->user();
         $challengerEnrollment = $user->usertype->enrollments()
             ->where('edition_id', $edition->id)
@@ -102,7 +104,7 @@ class ArcadeController extends Controller
             $result = random_int(0, 1);
             $houseEdgePct = (int) ($game->payout_config['house_edge_pct'] ?? 10);
             $totalPot = $lockedSession->wager * 2;
-            $payout = (int) floor($totalPot * (1 - $houseEdgePct / 100));
+            $payout = intdiv($totalPot * (100 - $houseEdgePct), 100);
 
             $creatorEnrollment = $lockedSession->enrollment;
             $winner = $result === 0 ? 'creator' : 'challenger';
@@ -128,8 +130,10 @@ class ArcadeController extends Controller
 
     public function statusCoinFlip(Request $request, ArcadeSession $session): JsonResponse
     {
-        $user = $request->user();
         $edition = $request->input('edition') ?? $session->game->edition;
+        $this->ensureCoinFlipSession($session, $edition->id);
+
+        $user = $request->user();
         $enrollment = $user?->isParticipant()
             ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
             : null;
@@ -140,9 +144,19 @@ class ArcadeController extends Controller
             'Acesso não autorizado'
         );
 
+        $isChallenger = $session->challenger_enrollment_id === $enrollment->id;
+        $outcome = $session->outcome;
+        $payout = $session->payout;
+
+        if (in_array($outcome, ['win', 'loss'], true)) {
+            $won = $isChallenger ? $outcome === 'loss' : $outcome === 'win';
+            $outcome = $won ? 'win' : 'loss';
+            $payout = $won ? $session->payout : 0;
+        }
+
         return response()->json([
-            'outcome' => $session->outcome,
-            'payout' => $session->payout,
+            'outcome' => $outcome,
+            'payout' => $payout,
             'challenger_enrollment_id' => $session->challenger_enrollment_id,
             'resolved_at' => $session->resolved_at,
         ]);
@@ -150,8 +164,10 @@ class ArcadeController extends Controller
 
     public function cancelCoinFlip(Request $request, ArcadeSession $session): JsonResponse
     {
-        $user = $request->user();
         $edition = $request->input('edition') ?? $session->game->edition;
+        $this->ensureCoinFlipSession($session, $edition->id);
+
+        $user = $request->user();
         $enrollment = $user?->isParticipant()
             ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
             : null;
@@ -197,5 +213,14 @@ class ArcadeController extends Controller
         }
 
         return response()->json($query->latest()->paginate(10));
+    }
+
+    private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void
+    {
+        abort_unless(
+            $session->game->slug === 'coin-flip' && $session->game->edition_id === $editionId,
+            404,
+            'Sessão não encontrada'
+        );
     }
 }
