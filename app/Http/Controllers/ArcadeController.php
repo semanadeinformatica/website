@@ -80,9 +80,11 @@ class ArcadeController extends Controller
         $request->validate(['wager' => 'required|integer|min:1']);
 
         $game = $session->game;
+        $edition = $request->input('edition') ?? $game->edition;
+
+        $this->ensureCoinFlipSession($session, $edition->id);
         Gate::authorize('play', $game);
 
-        $edition = $request->input('edition') ?? $game->edition;
         $user = $request->user();
         $challengerEnrollment = $user->usertype->enrollments()
             ->where('edition_id', $edition->id)
@@ -128,8 +130,10 @@ class ArcadeController extends Controller
 
     public function statusCoinFlip(Request $request, ArcadeSession $session): JsonResponse
     {
-        $user = $request->user();
         $edition = $request->input('edition') ?? $session->game->edition;
+        $this->ensureCoinFlipSession($session, $edition->id);
+
+        $user = $request->user();
         $enrollment = $user?->isParticipant()
             ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
             : null;
@@ -150,8 +154,10 @@ class ArcadeController extends Controller
 
     public function cancelCoinFlip(Request $request, ArcadeSession $session): JsonResponse
     {
-        $user = $request->user();
         $edition = $request->input('edition') ?? $session->game->edition;
+        $this->ensureCoinFlipSession($session, $edition->id);
+
+        $user = $request->user();
         $enrollment = $user?->isParticipant()
             ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
             : null;
@@ -197,5 +203,14 @@ class ArcadeController extends Controller
         }
 
         return response()->json($query->latest()->paginate(10));
+    }
+
+    private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void
+    {
+        abort_unless(
+            $session->game->slug === 'coin-flip' && $session->game->edition_id === $editionId,
+            404,
+            'Sessão não encontrada'
+        );
     }
 }
