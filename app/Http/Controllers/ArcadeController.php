@@ -104,7 +104,7 @@ class ArcadeController extends Controller
             $result = random_int(0, 1);
             $houseEdgePct = (int) ($game->payout_config['house_edge_pct'] ?? 10);
             $totalPot = $lockedSession->wager * 2;
-            $payout = (int) floor($totalPot * (1 - $houseEdgePct / 100));
+            $payout = intdiv($totalPot * (100 - $houseEdgePct), 100);
 
             $creatorEnrollment = $lockedSession->enrollment;
             $winner = $result === 0 ? 'creator' : 'challenger';
