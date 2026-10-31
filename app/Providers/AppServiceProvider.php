@@ -6,7 +6,9 @@ use App\Maintenance\EnvMaintenanceMode;
 use App\Models\ArcadeGame;
 use App\Models\Edition;
 use App\Models\Enrollment;
+use App\Models\EnrollmentProduct;
 use App\Models\Event;
+use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
@@ -115,9 +117,61 @@ class AppServiceProvider extends ServiceProvider
                 $user->usertype->participants()->exists($profile_user)
             ) ||
             (
-                $profile_user->isParticipant() &&
-                $enrollment = $profile_user->usertype->enrollments()->where('edition_id', $edition->id)->first() &&
-                $enrollment->quests()->whereHasMorph('requirement', Stand::class, fn ($query) => $query->whereRelation('sponsor.company', 'id', $user->usertype_id))->exists()
+                $user->isCompany() &&
+                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
+            )
+        ));
+
+        Gate::define('viewCVOf', fn (User $user, User $cv_user, Edition $edition) => (
+            (
+                $user->isAdmin() &&
+                ! $cv_user->isAdmin()
+            ) ||
+            (
+                $user->isParticipant() &&
+                $user->is($cv_user)
+            ) ||
+            (
+                $user->isCompany() &&
+                $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() &&
+                $cv_user->isParticipant() &&
+                $user->usertype->participants()->exists($cv_user)
+            )
+        ));
+
+        Gate::define('viewAll', fn (User $user, Edition $edition) => (
+            (
+                $user->isCompany() &&
+                $user->usertype?->sponsors()->where('edition_id', $edition->id)->first()?->tier?->canSeeAll
+            )
+        ));
+
+        Gate::define('buy', fn (User $user, Product $product) => (
+            $user->isParticipant() &&
+            ! $user->isStaff($product->edition) &&
+            $user->usertype->enrollments()->where('edition_id', $product->edition->id)->exists() &&
+            $user->usertype->enrollments()->where('edition_id', $product->edition->id)->first()->products()->where('product_id', $product->id)->doesntExist() &&
+            $user->usertype->enrollments()->where('points', '>=', $product->price)->exists() &&
+            $product->stock > 0
+        ));
+
+        Gate::define('redeem', fn (User $user, Product $product, Enrollment $enrollment) => (
+            ($user->isAdmin() || $user->isStaff($product->edition)) &&
+            EnrollmentProduct::where('enrollment_id', $enrollment->id)->where('product_id', $product->id)->where('redeemed', false)->exists()
+        ));
+
+        Gate::define('downloadCVs', fn (User $user, User $other, Edition $edition) => (
+            $user->isAdmin() ||
+            $user->isStaff($edition) ||
+            $user->is($other)
+        ));
+
+        Gate::define('downloadAllCVs', fn (User $user, User $other, Edition $edition) => (
+            $user->isAdmin() ||
+            $user->isStaff($edition) ||
+            (
+                $user->isCompany() &&
+                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
             )
         ));
     }
