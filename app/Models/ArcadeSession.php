@@ -39,6 +39,15 @@ class ArcadeSession extends Model
         'resolved_at' => 'datetime',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'server_state',
+    ];
+
     public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);
