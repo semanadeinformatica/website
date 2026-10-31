@@ -18,7 +18,7 @@ class ArcadePolicy
         }
 
         $edition = request()->input('edition') ?? $game->edition;
-        if (! $edition) {
+        if (! $edition || $edition->id !== $game->edition_id) {
             return false;
         }
 
