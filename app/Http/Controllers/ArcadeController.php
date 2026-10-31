@@ -144,9 +144,19 @@ class ArcadeController extends Controller
             'Acesso não autorizado'
         );
 
+        $isChallenger = $session->challenger_enrollment_id === $enrollment->id;
+        $outcome = $session->outcome;
+        $payout = $session->payout;
+
+        if (in_array($outcome, ['win', 'loss'], true)) {
+            $won = $isChallenger ? $outcome === 'loss' : $outcome === 'win';
+            $outcome = $won ? 'win' : 'loss';
+            $payout = $won ? $session->payout : 0;
+        }
+
         return response()->json([
-            'outcome' => $session->outcome,
-            'payout' => $session->payout,
+            'outcome' => $outcome,
+            'payout' => $payout,
             'challenger_enrollment_id' => $session->challenger_enrollment_id,
             'resolved_at' => $session->resolved_at,
         ]);
