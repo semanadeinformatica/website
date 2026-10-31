@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ArcadeController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
@@ -48,6 +49,8 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
+Route::get('/arcade', [ArcadeController::class, 'lobby'])->name('arcade.lobby');
+
 Route::prefix('/shop')->name('shop')->group(function () {
     Route::get('/', [ShopController::class, 'show'])->name('.show');
     Route::post('/{product}/buy', [ShopController::class, 'buyProduct'])->name('.product.buy');
@@ -78,6 +81,28 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/{quest}/give', [QuestController::class, 'give'])
                 ->name('quest.give');
         });
+
+        Route::prefix('arcade')
+            ->name('arcade.')
+            ->group(function () {
+                Route::prefix('coin-flip')->name('coin-flip.')->group(function () {
+                    Route::get('/lobby', [ArcadeController::class, 'pendingCoinFlips'])
+                        ->middleware('throttle:arcade')
+                        ->name('lobby');
+                    Route::post('/start', [ArcadeController::class, 'startCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/join', [ArcadeController::class, 'joinCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('join');
+                    Route::get('/{session}/status', [ArcadeController::class, 'statusCoinFlip'])
+                        ->middleware('throttle:arcade-status')
+                        ->name('status');
+                    Route::post('/{session}/cancel', [ArcadeController::class, 'cancelCoinFlip'])
+                        ->middleware('throttle:arcade')
+                        ->name('cancel');
+                });
+            });
 
         Route::prefix('admin')
             ->middleware('can:admin')
