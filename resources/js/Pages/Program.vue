@@ -5,7 +5,7 @@ import ProgramSidebar, {
     type TabOption,
 } from "@/Components/Program/ProgramSidebar.vue";
 import ProgramTimeline from "@/Components/Program/ProgramTimeline.vue";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import type EventDay from "@/Types/EventDay";
 
@@ -116,22 +116,7 @@ watch(
                 </div>
             </template>
 
-            <div
-                v-else
-                class="flex flex-col items-center justify-center py-28 text-center"
-            >
-                <PillSelector
-                    :items="[
-                        { id: 'soon', label: 'Em breve...', disabled: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                    container-class="mb-4"
-                />
-                <p class="max-w-md text-sm text-neutral-400">
-                    O programa da edição 2026 estará disponível brevemente.
-                </p>
-            </div>
+            <ComingSoon v-else class="py-28" />
         </div>
     </AppLayout>
 </template>
