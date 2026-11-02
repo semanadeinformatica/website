@@ -46,14 +46,17 @@ class StaffCRUDController extends CRUDController
             ->select('participants.id', 'participants.user_id')
             ->join('users', 'users.id', '=', 'participants.user_id')
             ->when($participantId, fn ($query) => $query->where('participants.id', $participantId))
-            ->when($search !== '', fn ($query) => $query->where('users.name', 'like', "%{$search}%"))
-            ->with(['user:id,name'])
+            ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search) {
+                $query->where('users.name', 'like', "%{$search}%")
+                    ->orWhere('users.email', 'like', "%{$search}%");
+            }))
+            ->with(['user:id,name,email'])
             ->orderBy('users.name')
             ->limit(30)
             ->get()
             ->map(fn (Participant $participant) => [
                 'id' => $participant->id,
-                'user' => ['name' => $participant->user->name],
+                'user' => ['name' => $participant->user->name, 'email' => $participant->user->email],
             ]);
     }
 }
