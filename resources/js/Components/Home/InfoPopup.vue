@@ -3,7 +3,7 @@ import Modal from "@/Components/UI/Modal.vue";
 import { inject, onMounted, ref } from "vue";
 import type { VueCookies } from "vue-cookies";
 import { route } from "ziggy-js";
-import { router, Link } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import { ArrowRight } from "@lucide/vue";
 
@@ -28,118 +28,58 @@ const enroll = () => {
 </script>
 
 <template>
-    <Modal v-model="isOpen" max-width="lg" @closed="cacheSeenInfo">
+    <Modal v-model="isOpen" max-width="md" @closed="cacheSeenInfo">
         <div class="flex flex-col">
             <img
-                class="h-12 w-auto self-start select-none sm:h-14"
+                class="h-10 w-auto self-start select-none sm:h-12"
                 src="/images/sinf-2026-sm.svg"
                 alt="SINF 2026 Logo"
             />
 
             <h2
-                class="mt-6 text-xl font-black tracking-tight text-white sm:text-2xl"
+                class="mt-5 text-xl font-bold tracking-tight text-white sm:text-2xl"
             >
                 A SINF está mais interativa do que nunca!
             </h2>
             <p
-                class="mt-2 max-w-md text-xs leading-relaxed text-neutral-400 sm:text-sm"
+                class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
             >
                 Participa nas atividades da conferência, interage com empresas
                 parceiras e ganha SINFrões para trocares por prémios.
             </p>
 
-            <div
-                class="mt-6 grid w-full grid-cols-1 gap-2.5 text-left sm:grid-cols-2"
-            >
-                <Link
-                    :href="route('program')"
-                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
-                    @click="cacheSeenInfo"
-                >
-                    <div class="min-w-0 flex-1">
-                        <h4
-                            class="text-xs font-bold text-white transition-colors group-hover:text-purple-300"
-                        >
-                            Palestras e Workshops
-                        </h4>
-                        <p
-                            class="mt-0.5 text-[11px] leading-snug text-neutral-400"
-                        >
-                            Aprende com especialistas da indústria.
-                        </p>
-                    </div>
-                </Link>
-
-                <Link
-                    :href="route('program')"
-                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
-                    @click="cacheSeenInfo"
-                >
-                    <div class="min-w-0 flex-1">
-                        <h4
-                            class="text-xs font-bold text-white transition-colors group-hover:text-amber-300"
-                        >
-                            Bancas de Empresas
-                        </h4>
-                        <p
-                            class="mt-0.5 text-[11px] leading-snug text-neutral-400"
-                        >
-                            Conhece oportunidades de estágio e carreira.
-                        </p>
-                    </div>
-                </Link>
-
-                <div
-                    class="flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5"
-                >
-                    <div class="min-w-0 flex-1">
-                        <h4 class="text-xs font-bold text-white">
-                            Competições
-                        </h4>
-                        <p
-                            class="mt-0.5 text-[11px] leading-snug text-neutral-400"
-                        >
-                            Desafia-te em programação e CTF.
-                        </p>
-                    </div>
-                </div>
-
-                <Link
-                    :href="route('shop.show')"
-                    class="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3.5 transition-colors hover:border-white/16 hover:bg-white/6"
-                    @click="cacheSeenInfo"
-                >
-                    <div class="min-w-0 flex-1">
-                        <h4
-                            class="text-xs font-bold text-white transition-colors group-hover:text-rose-300"
-                        >
-                            Loja SINF
-                        </h4>
-                        <p
-                            class="mt-0.5 text-[11px] leading-snug text-neutral-400"
-                        >
-                            Troca SINFrões por merchandising e prémios.
-                        </p>
-                    </div>
-                </Link>
-            </div>
+            <ul class="mt-6 space-y-3 text-xs text-neutral-300 sm:text-sm">
+                <li class="flex items-center gap-3">
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                    <span>Palestras e workshops com especialistas da indústria</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                    <span>Bancas de empresas com oportunidades de estágio e carreira</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                    <span>Competições com desafios práticos e prémios</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                    <span>Loja SINF para trocares SINFrões por merchandising</span>
+                </li>
+            </ul>
 
             <div
-                class="mt-6 flex w-full flex-col items-center justify-center gap-3 sm:flex-row"
+                class="mt-8 flex w-full flex-col-reverse items-center justify-end gap-3 sm:flex-row"
             >
-                <PrimaryButton
-                    color="pill"
-                    padding="px-5 py-2.5"
-                    text-size="text-xs sm:text-sm"
-                    class="w-full sm:w-auto"
+                <button
+                    type="button"
+                    class="w-full cursor-pointer px-4 py-2.5 text-center text-xs font-medium text-neutral-400 transition-colors hover:text-white sm:w-auto sm:text-sm"
                     @click="cacheSeenInfo"
                 >
                     Explorar
-                </PrimaryButton>
+                </button>
 
                 <PrimaryButton
-                    color="pill"
-                    padding="px-6 py-2.5"
+                    padding="px-5 py-2.5"
                     text-size="text-xs sm:text-sm"
                     class="w-full sm:w-auto"
                     @click="enroll"

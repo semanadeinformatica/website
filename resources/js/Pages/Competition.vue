@@ -5,6 +5,7 @@ import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Podium from "@/Components/Competition/Podium.vue";
 import CompetitionLeaderboard from "@/Components/Competition/CompetitionLeaderboard.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import type Competition from "@/Types/Competition";
 import type { CompetitionPrizes } from "@/Types/Competition";
 import { type User } from "@/Types/User";
@@ -234,7 +235,7 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                                 <PrimaryButton
                                     v-if="isOver"
                                     disabled
-                                    color="pill"
+                                    color="default"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -245,7 +246,7 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                                     <PrimaryButton
                                         v-if="!isEnrolled"
                                         type="button"
-                                        color="pill"
+                                        color="primary"
                                         class="w-full"
                                         padding="px-6 py-2.5"
                                         @click="handleEnrollClick"
@@ -261,7 +262,7 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                                         external
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        color="pill"
+                                        color="primary"
                                         class="w-full"
                                         padding="px-6 py-2.5"
                                     >
@@ -303,23 +304,10 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                 </Card>
             </div>
 
-            <div
+            <ComingSoon
                 v-if="availableTabs.length === 0"
-                class="flex flex-col items-center justify-center py-20 text-center"
-            >
-                <PillSelector
-                    :items="[
-                        { id: 'info', label: 'Em breve...', disabled: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                    container-class="mb-3"
-                />
-                <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
-                    Não há informações adicionais disponíveis para esta
-                    competição de momento.
-                </p>
-            </div>
+                class="py-20"
+            />
         </div>
     </AppLayout>
 </template>

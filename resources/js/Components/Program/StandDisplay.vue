@@ -3,7 +3,7 @@ import type Stand from "@/Types/Stand";
 import Sponsor from "@/Components/Home/Sponsor.vue";
 import type { CompanyUser } from "@/Types/User";
 import type SponsorTier from "@/Types/SponsorTier";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import { computed } from "vue";
 
 interface Props {
@@ -44,20 +44,15 @@ const standsPerTier = computed(() => {
 </script>
 
 <template>
-    <div v-if="standsPerTier.size > 0" class="space-y-12 py-4">
+    <div v-if="standsPerTier.size > 0" class="space-y-10 py-4 sm:space-y-12">
         <template v-for="[tierId, tierStands] in standsPerTier" :key="tierId">
             <section v-if="tierStands.length > 0" class="w-full">
-                <div class="mb-6 flex items-center justify-center">
-                    <div class="pill-container gap-2.5 px-4 py-1.5 shadow-none">
-                        <h3
-                            class="text-xs font-semibold tracking-wider uppercase"
-                            :style="{
-                                color: standTiers[tierId]?.color || '#ffffff',
-                            }"
-                        >
-                            {{ standTiers[tierId]?.name }}
-                        </h3>
-                    </div>
+                <div class="mb-4 flex items-center justify-center sm:mb-6">
+                    <h3
+                        class="text-xs font-semibold uppercase tracking-widest text-neutral-400 sm:text-sm"
+                    >
+                        {{ standTiers[tierId]?.name }}
+                    </h3>
                 </div>
 
                 <div
@@ -73,18 +68,5 @@ const standsPerTier = computed(() => {
         </template>
     </div>
 
-    <div
-        v-else
-        class="flex flex-col items-center justify-center py-16 text-center"
-    >
-        <PillSelector
-            :items="[{ id: 'soon', label: 'Em breve...', disabled: true }]"
-            size="sm"
-            :wrap="false"
-            container-class="mb-3"
-        />
-        <p class="max-w-md text-xs text-neutral-400 sm:text-sm">
-            As bancas de empresas para esta edição serão anunciadas brevemente.
-        </p>
-    </div>
+    <ComingSoon v-else class="py-16" />
 </template>

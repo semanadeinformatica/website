@@ -10,7 +10,7 @@ import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { ShoppingBag, Check, Search, Package, Sparkles } from "@lucide/vue";
+import { ShoppingBag, Check, Search, Package } from "@lucide/vue";
 
 interface Props {
     product: BuyableProduct;
@@ -214,62 +214,48 @@ const redeemProduct = (enrollmentId: number) => {
                     />
                 </div>
 
-                <!-- Product Card Summary inside Modal -->
-                <div
-                    class="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/4 p-3.5 sm:p-4"
-                >
+                <!-- Product Summary inside Modal -->
+                <div class="flex items-center gap-4">
+                    <img
+                        v-if="product.image_product_url"
+                        :src="product.image_product_url"
+                        :alt="product.name"
+                        class="h-16 w-16 shrink-0 rounded-xl object-contain sm:h-20 sm:w-20"
+                    />
                     <div
-                        class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-neutral-900/90 p-2 ring-1 ring-white/10 sm:h-20 sm:w-20"
+                        v-else
+                        class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-neutral-800 text-neutral-500 sm:h-20 sm:w-20"
                     >
-                        <img
-                            v-if="product.image_product_url"
-                            :src="product.image_product_url"
-                            :alt="product.name"
-                            class="max-h-full max-w-full object-contain"
-                        />
-                        <ShoppingBag
-                            v-else
-                            class="h-8 w-8 text-neutral-600 opacity-40"
-                        />
+                        <ShoppingBag class="h-8 w-8" />
                     </div>
 
-                    <div class="min-w-0 flex-1 space-y-1.5">
+                    <div class="min-w-0 flex-1 space-y-1">
                         <h3
                             class="truncate text-base font-bold tracking-tight text-white sm:text-lg"
                         >
                             {{ product.name }}
                         </h3>
 
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div
-                                class="pill-container gap-1 px-2.5 py-0.5 text-xs text-white shadow-none"
-                            >
-                                <span class="font-bold">{{
-                                    product.price
-                                }}</span>
-                                <img
-                                    class="h-3.5 w-3.5 object-contain"
-                                    alt="SINFrão"
-                                    src="/images/sinf-2026-sm.svg"
-                                />
-                            </div>
-
+                        <div class="flex flex-wrap items-center gap-2 text-xs">
+                            <span class="font-medium text-neutral-300">
+                                {{ product.price }} SINFrões
+                            </span>
+                            <span class="text-neutral-600">·</span>
                             <span
                                 v-if="isAlreadyBought"
-                                class="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400 ring-1 ring-emerald-500/25"
+                                class="font-medium text-emerald-400"
                             >
-                                <Check :size="12" />
                                 Já Adquirido
                             </span>
                             <span
                                 v-else-if="isOutOfStock"
-                                class="rounded-full bg-red-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-red-400 ring-1 ring-red-500/25"
+                                class="font-medium text-red-400"
                             >
                                 Esgotado
                             </span>
                             <span
                                 v-else
-                                class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+                                class="text-neutral-400"
                             >
                                 {{ product.stock }} disponíveis
                             </span>
@@ -282,19 +268,11 @@ const redeemProduct = (enrollmentId: number) => {
         <!-- Modal Body Content -->
         <div v-if="activeTab === 'buy'" class="w-full space-y-4">
             <!-- Already bought state -->
-            <div
-                v-if="isAlreadyBought"
-                class="space-y-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-center"
-            >
-                <div
-                    class="flex items-center justify-center gap-2 text-emerald-400"
-                >
-                    <Check :size="18" />
-                    <span class="text-sm font-semibold"
-                        >Artigo já adquirido!</span
-                    >
-                </div>
-                <p class="text-xs leading-relaxed text-neutral-300">
+            <div v-if="isAlreadyBought" class="space-y-1 py-2 text-center">
+                <p class="text-sm font-semibold text-emerald-400">
+                    Artigo já adquirido!
+                </p>
+                <p class="text-xs leading-relaxed text-neutral-400">
                     Já compraste este produto nesta edição da SINF 2026. Podes
                     levantá-lo presencialmente no secretariado ou banca da
                     organização durante o evento.
@@ -302,10 +280,7 @@ const redeemProduct = (enrollmentId: number) => {
             </div>
 
             <!-- Out of stock state -->
-            <div
-                v-else-if="isOutOfStock"
-                class="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-4 text-center"
-            >
+            <div v-else-if="isOutOfStock" class="space-y-1 py-2 text-center">
                 <p class="text-sm font-medium text-neutral-300">
                     Este produto está temporariamente esgotado.
                 </p>
@@ -319,59 +294,40 @@ const redeemProduct = (enrollmentId: number) => {
             <template v-else-if="isEnrolled">
                 <div
                     v-if="points !== null && points !== undefined"
-                    class="space-y-2.5 rounded-2xl border border-white/10 bg-white/5 p-4 text-xs"
+                    class="space-y-2 border-t border-white/10 pt-4 text-xs"
                 >
                     <div
                         class="flex items-center justify-between text-neutral-400"
                     >
                         <span>O teu saldo atual</span>
-                        <div
-                            class="flex items-center gap-1 font-mono font-bold text-white"
-                        >
-                            <span>{{ points }}</span>
-                            <img
-                                class="h-3 w-3 object-contain"
-                                alt="SINFrão"
-                                src="/images/sinf-2026-sm.svg"
-                            />
-                        </div>
+                        <span class="font-mono font-bold text-white">
+                            {{ points }} SINFrões
+                        </span>
                     </div>
 
                     <div
                         class="flex items-center justify-between text-neutral-400"
                     >
                         <span>Custo do artigo</span>
-                        <div
-                            class="flex items-center gap-1 font-mono font-bold text-white"
-                        >
-                            <span>-{{ product.price }}</span>
-                            <img
-                                class="h-3 w-3 object-contain"
-                                alt="SINFrão"
-                                src="/images/sinf-2026-sm.svg"
-                            />
-                        </div>
+                        <span class="font-mono font-bold text-white">
+                            -{{ product.price }} SINFrões
+                        </span>
                     </div>
 
                     <div
                         class="flex items-center justify-between border-t border-white/10 pt-2 font-medium"
                     >
                         <span class="text-neutral-300">Saldo após compra</span>
-                        <div
-                            class="flex items-center gap-1 font-mono font-bold"
+                        <span
+                            class="font-mono font-bold"
                             :class="
                                 hasEnoughPoints
                                     ? 'text-emerald-400'
                                     : 'text-red-400'
                             "
                         >
-                            <span>{{ points - product.price }}</span>
-                            <img
-                                class="h-3 w-3 object-contain"
-                                alt="SINFrão"
-                                src="/images/sinf-2026-sm.svg"
-                            />
-                        </div>
+                            {{ points - product.price }} SINFrões
+                        </span>
                     </div>
                 </div>
 
@@ -382,7 +338,7 @@ const redeemProduct = (enrollmentId: number) => {
                         points !== undefined &&
                         points !== null
                     "
-                    class="space-y-1.5 rounded-2xl border border-red-500/20 bg-red-500/10 p-3.5 text-center text-xs text-red-300"
+                    class="py-2 text-center text-xs text-red-400"
                 >
                     <p>
                         Precisas de mais
@@ -391,24 +347,14 @@ const redeemProduct = (enrollmentId: number) => {
                         </span>
                         para efetuar esta compra.
                     </p>
-                    <p class="text-[11px] text-red-300/80">
-                        Participa nas palestras, visita as bancas e conclui
-                        quests para acumular mais pontos!
-                    </p>
                 </div>
             </template>
 
             <!-- Not enrolled participant / Guest flow -->
             <template v-else>
                 <div
-                    class="flex flex-col items-center justify-center space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6 text-center"
+                    class="flex flex-col items-center justify-center space-y-4 py-4 text-center"
                 >
-                    <div
-                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/6 text-neutral-300 ring-1 ring-white/10"
-                    >
-                        <Sparkles :size="24" />
-                    </div>
-
                     <div class="space-y-1">
                         <h4 class="text-sm font-semibold text-white">
                             Inscrição Necessária
@@ -484,11 +430,11 @@ const redeemProduct = (enrollmentId: number) => {
                 <div
                     v-for="enrollment in filteredEnrollments"
                     :key="enrollment.id"
-                    class="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 p-3 transition-colors hover:border-white/15"
+                    class="flex items-center justify-between gap-3 rounded-xl border border-white/6 bg-white/2 p-3 transition-colors hover:border-white/12"
                 >
                     <div class="flex min-w-0 items-center gap-3">
                         <div
-                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/8 text-xs font-bold text-neutral-300 ring-1 ring-white/10"
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/8 text-xs font-bold text-neutral-300"
                         >
                             {{
                                 (
@@ -537,7 +483,7 @@ const redeemProduct = (enrollmentId: number) => {
             <!-- Empty state for search -->
             <div
                 v-else
-                class="flex flex-col items-center justify-center rounded-2xl border border-white/6 bg-white/2 py-8 text-center"
+                class="flex flex-col items-center justify-center py-8 text-center"
             >
                 <Package :size="28" class="mb-2 text-neutral-600 opacity-50" />
                 <p class="text-xs text-neutral-400">

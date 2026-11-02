@@ -5,7 +5,7 @@ import { route } from "ziggy-js";
 import type EventDay from "@/Types/EventDay";
 import { isSpeaker, type SpeakerUser } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import StandDisplay from "@/Components/Program/StandDisplay.vue";
 import { ArrowRight } from "@lucide/vue";
 
@@ -214,26 +214,10 @@ const timelineGroups = computed<TimeSlotGroup[]>(() => {
             <StandDisplay :stands="eventDay.stands ?? []" />
         </template>
 
-        <div
+        <ComingSoon
             v-else-if="filteredItems.length === 0"
-            class="flex flex-col items-center justify-center py-20 text-center"
-        >
-            <PillSelector
-                :items="[
-                    {
-                        id: 'none',
-                        label: 'Sem eventos nesta categoria',
-                        disabled: true,
-                    },
-                ]"
-                size="sm"
-                :wrap="false"
-                container-class="mb-3"
-            />
-            <p class="text-xs text-neutral-500">
-                Não existem eventos programados para este filtro no momento.
-            </p>
-        </div>
+            class="py-20"
+        />
 
         <div v-else class="relative w-full">
             <div class="relative space-y-6 sm:space-y-8">

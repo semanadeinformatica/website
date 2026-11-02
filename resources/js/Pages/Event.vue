@@ -8,6 +8,7 @@ import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SpeakerInfo from "@/Components/Event/SpeakerInfo.vue";
 import Sponsor from "@/Components/Home/Sponsor.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
@@ -330,7 +331,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="isEventFull"
                                     disabled
-                                    color="pill"
+                                    color="default"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -340,7 +341,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="!isEnrolled"
                                     type="button"
-                                    color="pill"
+                                    color="primary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                     @click="handleEnrollSinf"
@@ -354,7 +355,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                     external
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    color="pill"
+                                    color="primary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -364,7 +365,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="canJoin && event.enroll_in_site"
                                     type="button"
-                                    color="pill"
+                                    color="primary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                     @click="handleJoinEvent"
@@ -375,7 +376,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="isEnrolled"
                                     disabled
-                                    color="pill"
+                                    color="default"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -506,6 +507,15 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                     </p>
                 </div>
             </div>
+
+            <ComingSoon
+                v-if="
+                    availableTabs.length === 0 &&
+                    !isAdmin(authUser) &&
+                    !isStaff
+                "
+                class="py-16"
+            />
         </div>
     </AppLayout>
 </template>

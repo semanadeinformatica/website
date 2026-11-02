@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Sponsor from "./Sponsor.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import type SponsorType from "@/Types/Sponsor";
 import type { CompanyUser } from "@/Types/User";
 
@@ -14,13 +15,11 @@ defineProps<{
 <template>
     <div class="w-full">
         <div class="mb-6 flex items-center justify-center">
-            <div class="pill-container gap-2.5 px-4 py-1.5 shadow-none">
-                <h3
-                    class="text-xs font-semibold tracking-wider text-neutral-200 uppercase"
-                >
-                    {{ title }}
-                </h3>
-            </div>
+            <h3
+                class="text-xs font-semibold tracking-wider text-neutral-400 uppercase"
+            >
+                {{ title }}
+            </h3>
         </div>
 
         <div
@@ -33,12 +32,6 @@ defineProps<{
                 :company="sponsor.company?.user as CompanyUser"
             />
         </div>
-        <div v-else class="flex justify-center">
-            <div
-                class="pill-container px-6 py-2.5 font-mono text-xs text-neutral-500"
-            >
-                Em breve...
-            </div>
-        </div>
+        <ComingSoon v-else class="py-6" />
     </div>
 </template>

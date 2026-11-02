@@ -79,7 +79,7 @@ const handleClose = () => {
         :click-to-close="closeable && clickToClose"
         :esc-to-close="closeable && escToClose"
         :content-class="[
-            'relative flex w-full max-h-[90vh] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#111215] text-white backdrop-blur-2xl',
+            'relative flex w-full max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111215] text-white shadow-2xl',
             resolvedMaxWidth,
             contentClass,
         ]"
@@ -89,7 +89,7 @@ const handleClose = () => {
         <button
             v-if="closeable && showCloseButton"
             type="button"
-            class="pill-container absolute top-4 right-4 z-20 h-8 w-8 cursor-pointer justify-center text-neutral-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/20"
+            class="absolute top-4 right-4 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
             aria-label="Fechar"
             @click="handleClose"
         >
@@ -132,7 +132,7 @@ const handleClose = () => {
 
         <div
             v-if="$slots.footer"
-            class="flex flex-row items-center justify-end gap-3 border-t border-white/8 bg-white/5 px-6 py-4"
+            class="flex flex-row items-center justify-end gap-3 border-t border-white/8 px-6 py-4"
         >
             <slot name="footer" />
         </div>
