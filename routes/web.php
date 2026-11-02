@@ -83,6 +83,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->middleware('can:admin')
             ->name('admin.')
             ->group(function () {
+                Route::get('/staff/participants', [StaffCRUDController::class, 'participants'])
+                    ->name('staff.participants');
                 Route::resources([
                     '/editions' => EditionCRUDController::class,
                     '/events' => EventCRUDController::class,
