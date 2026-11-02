@@ -57,7 +57,7 @@ function getTierCardSize(rank: number) {
 <template>
     <div
         ref="targetRef"
-        class="relative mx-auto my-auto flex max-h-full w-full max-w-7xl flex-col items-center justify-center overflow-y-auto px-4 py-8 no-scrollbar sm:px-6 lg:px-8"
+        class="no-scrollbar relative mx-auto my-auto flex max-h-full w-full max-w-7xl flex-col items-center justify-center overflow-y-auto px-4 py-8 sm:px-6 lg:px-8"
     >
         <div class="mb-6 flex flex-col items-center text-center sm:mb-8">
             <h2
@@ -103,7 +103,7 @@ function getTierCardSize(rank: number) {
             >
                 <!-- Tier Title -->
                 <h3
-                    class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-neutral-400 sm:mb-4 sm:text-sm"
+                    class="mb-3 text-center text-xs font-semibold tracking-widest text-neutral-400 uppercase sm:mb-4 sm:text-sm"
                 >
                     {{ tier.name }}
                 </h3>
@@ -152,7 +152,7 @@ function getTierCardSize(rank: number) {
                     </h3>
                     <p
                         v-if="selectedTier"
-                        class="mt-1 text-xs font-medium uppercase tracking-wider text-neutral-400"
+                        class="mt-1 text-xs font-medium tracking-wider text-neutral-400 uppercase"
                     >
                         {{ selectedTier.name }} Partner
                     </p>

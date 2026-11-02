@@ -253,10 +253,7 @@ const redeemProduct = (enrollmentId: number) => {
                             >
                                 Esgotado
                             </span>
-                            <span
-                                v-else
-                                class="text-neutral-400"
-                            >
+                            <span v-else class="text-neutral-400">
                                 {{ product.stock }} disponíveis
                             </span>
                         </div>

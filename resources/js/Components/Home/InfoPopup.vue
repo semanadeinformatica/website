@@ -41,29 +41,44 @@ const enroll = () => {
             >
                 A SINF está mais interativa do que nunca!
             </h2>
-            <p
-                class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm"
-            >
+            <p class="mt-2 text-xs leading-relaxed text-neutral-400 sm:text-sm">
                 Participa nas atividades da conferência, interage com empresas
                 parceiras e ganha SINFrões para trocares por prémios.
             </p>
 
             <ul class="mt-6 space-y-3 text-xs text-neutral-300 sm:text-sm">
                 <li class="flex items-center gap-3">
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
-                    <span>Palestras e workshops com especialistas da indústria</span>
+                    <span
+                        class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
+                    />
+                    <span
+                        >Palestras e workshops com especialistas da
+                        indústria</span
+                    >
                 </li>
                 <li class="flex items-center gap-3">
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
-                    <span>Bancas de empresas com oportunidades de estágio e carreira</span>
+                    <span
+                        class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
+                    />
+                    <span
+                        >Bancas de empresas com oportunidades de estágio e
+                        carreira</span
+                    >
                 </li>
                 <li class="flex items-center gap-3">
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                    <span
+                        class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
+                    />
                     <span>Competições com desafios práticos e prémios</span>
                 </li>
                 <li class="flex items-center gap-3">
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
-                    <span>Loja SINF para trocares SINFrões por merchandising</span>
+                    <span
+                        class="h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
+                    />
+                    <span
+                        >Loja SINF para trocares SINFrões por
+                        merchandising</span
+                    >
                 </li>
             </ul>
 

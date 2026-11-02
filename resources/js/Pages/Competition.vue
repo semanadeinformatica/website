@@ -235,7 +235,7 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                                 <PrimaryButton
                                     v-if="isOver"
                                     disabled
-                                    color="default"
+                                    color="secondary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -304,10 +304,7 @@ const activeTab = ref<CompetitionTab>(defaultTab.value);
                 </Card>
             </div>
 
-            <ComingSoon
-                v-if="availableTabs.length === 0"
-                class="py-20"
-            />
+            <ComingSoon v-if="availableTabs.length === 0" class="py-20" />
         </div>
     </AppLayout>
 </template>

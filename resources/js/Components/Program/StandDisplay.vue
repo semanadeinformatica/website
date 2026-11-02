@@ -49,7 +49,7 @@ const standsPerTier = computed(() => {
             <section v-if="tierStands.length > 0" class="w-full">
                 <div class="mb-4 flex items-center justify-center sm:mb-6">
                     <h3
-                        class="text-xs font-semibold uppercase tracking-widest text-neutral-400 sm:text-sm"
+                        class="text-xs font-semibold tracking-widest text-neutral-400 uppercase sm:text-sm"
                     >
                         {{ standTiers[tierId]?.name }}
                     </h3>

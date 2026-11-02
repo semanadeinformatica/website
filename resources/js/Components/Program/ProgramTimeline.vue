@@ -214,10 +214,7 @@ const timelineGroups = computed<TimeSlotGroup[]>(() => {
             <StandDisplay :stands="eventDay.stands ?? []" />
         </template>
 
-        <ComingSoon
-            v-else-if="filteredItems.length === 0"
-            class="py-20"
-        />
+        <ComingSoon v-else-if="filteredItems.length === 0" class="py-20" />
 
         <div v-else class="relative w-full">
             <div class="relative space-y-6 sm:space-y-8">

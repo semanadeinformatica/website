@@ -43,7 +43,10 @@ withDefaults(defineProps<Props>(), {
                           'flex flex-col items-center gap-6 sm:flex-row sm:items-start',
                           padding || 'p-6 sm:p-7',
                       ]
-                    : ['flex flex-col justify-between', padding || 'p-4 sm:p-5'],
+                    : [
+                          'flex flex-col justify-between',
+                          padding || 'p-4 sm:p-5',
+                      ],
         ]"
     >
         <template v-if="layout === 'centered'">

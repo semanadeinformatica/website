@@ -331,7 +331,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="isEventFull"
                                     disabled
-                                    color="default"
+                                    color="secondary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -376,7 +376,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                                 <PrimaryButton
                                     v-else-if="isEnrolled"
                                     disabled
-                                    color="default"
+                                    color="secondary"
                                     class="w-full"
                                     padding="px-6 py-2.5"
                                 >
@@ -510,9 +510,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
 
             <ComingSoon
                 v-if="
-                    availableTabs.length === 0 &&
-                    !isAdmin(authUser) &&
-                    !isStaff
+                    availableTabs.length === 0 && !isAdmin(authUser) && !isStaff
                 "
                 class="py-16"
             />
