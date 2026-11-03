@@ -35,7 +35,6 @@ const pageRoutes: Routes = {
     program: { label: "Programa" },
     "shop.show": { label: "Loja" },
     "arcade.lobby": { label: "Arcade" },
-    "raffle.index": { label: "Prémios" },
     team: { label: "Equipa" },
 };
 

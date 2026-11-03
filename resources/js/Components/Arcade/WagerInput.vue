@@ -18,7 +18,7 @@ const emit = defineEmits<{
     (e: "update:modelValue", value: number): void;
 }>();
 
-const step = computed(() => Math.max(1, Math.floor(props.min / 2) || 5));
+const step = computed(() => Math.max(1, Math.floor(props.min / 10)));
 
 const isOverBalance = computed(() => props.modelValue > props.balance);
 const isBelowMin = computed(() => props.modelValue < props.min);
@@ -41,6 +41,12 @@ function updateValue(val: number) {
 
 function handleInput(event: Event) {
     const target = event.target as HTMLInputElement;
+
+    if (target.value === "") {
+        target.value = String(props.modelValue);
+        return;
+    }
+
     const num = parseInt(target.value, 10);
     if (!isNaN(num)) {
         updateValue(num);

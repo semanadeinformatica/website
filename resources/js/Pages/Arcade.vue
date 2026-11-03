@@ -101,7 +101,10 @@ function closeGameModal() {
                 </PillSelector>
             </div>
 
-            <div v-else-if="user && !isEnrolled" class="flex justify-center">
+            <div
+                v-else-if="user && isParticipant && !isEnrolled"
+                class="flex justify-center"
+            >
                 <PrimaryButton
                     padding="px-4 py-1.5"
                     text-size="text-xs"
@@ -157,7 +160,12 @@ function closeGameModal() {
         </div>
 
         <!-- Game Modal Wrapper for Week 2 integration -->
-        <Modal :show="isGameModalOpen" max-width="lg" @close="closeGameModal">
+        <Modal
+            :show="isGameModalOpen"
+            :show-close-button="false"
+            max-width="lg"
+            @close="closeGameModal"
+        >
             <div
                 v-if="selectedGame"
                 class="relative rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"

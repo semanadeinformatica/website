@@ -44,6 +44,7 @@ const iconComponent = computed(() => {
             'relative overflow-hidden transition-all duration-300',
             !game.is_active ? 'opacity-60 grayscale' : '',
         ]"
+        @click="isEnrolled && game.is_active && emit('play')"
     >
         <!-- Inactive Overlay -->
         <div
@@ -127,7 +128,7 @@ const iconComponent = computed(() => {
                     v-else
                     :disabled="!game.is_active"
                     class="w-full justify-center"
-                    @click="emit('play')"
+                    @click.stop="emit('play')"
                 >
                     Jogar
                 </PrimaryButton>
