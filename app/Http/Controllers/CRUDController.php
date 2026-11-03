@@ -215,7 +215,7 @@ abstract class CRUDController extends Controller
             $applySortAndFilters($query);
         }
 
-        $items = $query->simplePaginate()->appends($request->query());
+        $items = $query->paginate()->appends($request->query());
 
         return [
             'items' => $items,
