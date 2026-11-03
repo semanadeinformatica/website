@@ -10,6 +10,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Inertia\Inertia;
@@ -50,6 +51,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $ERROR_PAGES = [500, 404, 403];
 
         $exceptions->renderable(function (Throwable $e, Request $request) use ($DEVELOPMENT, $ERROR_PAGES) {
+            // Authentication failures are validation errors in Fortify. Let Laravel
+            // handle them normally so web requests redirect back with field errors
+            // instead of being misclassified as server errors.
+            if ($e instanceof ValidationException) {
+                return null;
+            }
+
             $status = $e instanceof HttpException
                 ? $e->getStatusCode()
                 : ($e instanceof TokenMismatchException ? 419 : 500);
