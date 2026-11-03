@@ -88,6 +88,7 @@ function setMax() {
             <!-- Decrement Button -->
             <button
                 type="button"
+                aria-label="Diminuir aposta"
                 :disabled="disabled || modelValue <= min"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @click="decrement"
@@ -98,6 +99,7 @@ function setMax() {
             <!-- Number Input -->
             <input
                 type="number"
+                aria-label="Aposta"
                 :value="modelValue"
                 :min="min"
                 :max="max"
@@ -109,6 +111,7 @@ function setMax() {
             <!-- Increment Button -->
             <button
                 type="button"
+                aria-label="Aumentar aposta"
                 :disabled="disabled || modelValue >= max"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @click="increment"
