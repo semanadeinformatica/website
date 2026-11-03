@@ -2,7 +2,7 @@
 
 ## Running the project in development mode
 
-- Clone this repository by running `git clone https://github.com/NIAEFEUP/enei-website.git`.
+- Clone this repository by running `git clone https://github.com/semanadeinformatica/website.git`.
 - Navigate to the newly created folder and copy the `env.example` file, renaming it `.env`.
 - Assuming you've already installed PHP, Composer and Node.js, simply run `./dev.sh` and access `localhost:8000`: the website should be available.
 
