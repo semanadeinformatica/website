@@ -20,7 +20,7 @@ class DepartmentCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'editions' => Edition::all(),
+            'editions' => Edition::query()->select('id', 'name')->get(),
         ];
     }
 }

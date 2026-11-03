@@ -16,6 +16,11 @@ class EventCRUDController extends CRUDController
 
     protected string $view = 'Event';
 
+    protected function editionRelationPath(): ?string
+    {
+        return 'event_day';
+    }
+
     protected array $rules = [
         'name' => 'required|string',
         'time_start' => 'required|date_format:"H:i:s"',
@@ -59,12 +64,23 @@ class EventCRUDController extends CRUDController
 
     protected $load = ['users'];
 
+    protected function editLoad(): array
+    {
+        return [
+            'users' => fn ($query) => $query->without('usertype')->select('users.id', 'users.name'),
+        ];
+    }
+
     protected function with(): array
     {
         return [
-            'event_days' => EventDay::all(),
-            'event_types' => EventType::all(),
-            'users' => User::whereIn('usertype_type', [Speaker::class, Company::class])->get(),
+            'event_days' => EventDay::query()->select('id', 'date', 'theme', 'edition_id')->get(),
+            'event_types' => EventType::query()->select('id', 'name')->get(),
+            'users' => User::query()
+                ->select('id', 'name', 'usertype_type')
+                ->without('usertype')
+                ->whereIn('usertype_type', [Speaker::class, Company::class])
+                ->get(),
         ];
     }
 }

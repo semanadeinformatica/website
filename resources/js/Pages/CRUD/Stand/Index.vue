@@ -7,6 +7,7 @@ import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
 import Header from "@/Components/CRUD/Header.vue";
 import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import type Stand from "@/Types/Stand";
 import type EventDay from "@/Types/EventDay";
 
@@ -20,6 +21,20 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const page = usePage();
+
+const editions = computed<Record<number, string>>(() => {
+    const editionOptions = page.props.editionOptions as
+        | Record<string, string>
+        | undefined;
+
+    return Object.fromEntries(
+        props.with.eventDays.map((eventDay) => [
+            eventDay.id,
+            editionOptions?.[eventDay.edition_id] ?? "-",
+        ]),
+    );
+});
 
 const eventDays = computed<Record<number, string>>(() =>
     Object.fromEntries(
@@ -55,6 +70,7 @@ const sponsors = computed<Record<number, string>>(() =>
                 <Header filter-by="sponsor_id" :filter-values="sponsors">
                     Empresa
                 </Header>
+                <Header filter-by="edition_id">Edição</Header>
                 <Header filter-by="event_day_id" :filter-values="eventDays">
                     Dia do Evento
                 </Header>
@@ -68,6 +84,9 @@ const sponsors = computed<Record<number, string>>(() =>
                         sponsors[item.sponsor_id] ??
                         `Empresa #${item.sponsor_id}`
                     }}
+                </Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.event_day_id] ?? "-" }}
                 </Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ eventDays[item.event_day_id] ?? "-" }}

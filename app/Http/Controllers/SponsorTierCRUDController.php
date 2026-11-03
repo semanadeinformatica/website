@@ -11,6 +11,11 @@ class SponsorTierCRUDController extends CRUDController
 
     protected string $view = 'SponsorTier';
 
+    protected function searchRelations(): array
+    {
+        return ['edition' => ['name']];
+    }
+
     protected array $rules = [
         'name' => 'required|string',
         'color' => 'required|string',
@@ -24,7 +29,7 @@ class SponsorTierCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'editions' => Edition::all(),
+            'editions' => Edition::query()->select('id', 'name')->get(),
         ];
     }
 }

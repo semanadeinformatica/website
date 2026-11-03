@@ -24,16 +24,17 @@ class QuestCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'editions' => Edition::all(),
-            'stands' => Stand::with([
-                'sponsor' => [
-                    'company' => [
-                        'user',
-                    ],
-                ],
-                'event_day',
-            ])->get(),
-            'events' => Event::all(),
+            'editions' => Edition::query()->select('id', 'name')->get(),
+            'stands' => Stand::query()
+                ->select('id', 'sponsor_id', 'event_day_id')
+                ->with([
+                    'sponsor:id,company_id',
+                    'sponsor.company:id,user_id',
+                    'sponsor.company.user' => fn ($query) => $query->without('usertype')->select('id', 'name'),
+                    'event_day:id,date',
+                ])
+                ->get(),
+            'events' => Event::query()->select('id', 'name')->get(),
         ];
     }
 

@@ -54,7 +54,7 @@ const formatPlace = (place: number | string) => {
 
         <template #header>
             <HeaderRow>
-                <Header>Edição</Header>
+                <Header filter-by="edition_id">Edição</Header>
                 <Header sort-by="place">Classificação</Header>
                 <Header>Competição</Header>
             </HeaderRow>

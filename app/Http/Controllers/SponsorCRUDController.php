@@ -22,9 +22,12 @@ class SponsorCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'editions' => Edition::all(),
-            'tiers' => SponsorTier::all(),
-            'companies' => Company::with('user')->get(),
+            'editions' => Edition::query()->select('id', 'name')->get(),
+            'tiers' => SponsorTier::query()->select('id', 'name', 'edition_id')->get(),
+            'companies' => Company::query()
+                ->select('id', 'user_id')
+                ->with(['user' => fn ($query) => $query->without('usertype')->select('id', 'name')])
+                ->get(),
         ];
     }
 }

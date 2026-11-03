@@ -56,7 +56,7 @@ class SlotCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'quests' => Quest::all(),
+            'quests' => Quest::query()->select('id', 'name')->get(),
         ];
     }
 }

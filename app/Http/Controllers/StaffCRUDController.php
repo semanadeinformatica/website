@@ -14,6 +14,11 @@ class StaffCRUDController extends CRUDController
 
     protected string $view = 'Staff';
 
+    protected function editionRelationPath(): ?string
+    {
+        return 'department';
+    }
+
     protected $load = ['participant.user:id,name', 'department:id,name,edition_id'];
 
     protected array $rules = [

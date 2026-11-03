@@ -15,6 +15,11 @@ class UserCRUDController extends CRUDController
 
     protected string $view = 'User';
 
+    protected function indexWithout(): array
+    {
+        return ['usertype'];
+    }
+
     protected array $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
