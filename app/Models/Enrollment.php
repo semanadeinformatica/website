@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 
 class Enrollment extends Model
@@ -52,6 +53,16 @@ class Enrollment extends Model
     public function participant(): BelongsTo
     {
         return $this->belongsTo(Participant::class);
+    }
+
+    public function arcadeSessions(): HasMany
+    {
+        return $this->hasMany(ArcadeSession::class);
+    }
+
+    public function raffleTickets(): HasMany
+    {
+        return $this->hasMany(RaffleTicket::class);
     }
 
     public function toSearchableArray(): array

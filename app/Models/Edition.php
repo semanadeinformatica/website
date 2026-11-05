@@ -102,6 +102,16 @@ class Edition extends Model
         return $this->hasMany(Competition::class)->orderBy('name');
     }
 
+    public function arcadeGames(): HasMany
+    {
+        return $this->hasMany(ArcadeGame::class);
+    }
+
+    public function raffleDraws(): HasMany
+    {
+        return $this->hasMany(RaffleDraw::class);
+    }
+
     public function toSearchableArray(): array
     {
         return [

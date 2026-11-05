@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Maintenance\EnvMaintenanceMode;
+use App\Models\ArcadeGame;
 use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\EnrollmentProduct;
@@ -11,6 +12,7 @@ use App\Models\Product;
 use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
+use App\Policies\ArcadePolicy;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\MaintenanceModeManager;
@@ -51,6 +53,8 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureGates(): void
     {
+        Gate::policy(ArcadeGame::class, ArcadePolicy::class);
+
         Gate::define('admin', fn (User $user) => $user->isAdmin());
         Gate::define('participant', fn (User $user) => $user->isParticipant());
         Gate::define('company', fn (User $user) => $user->isCompany());
