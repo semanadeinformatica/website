@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\RaffleDraw;
 use App\Services\RaffleWinnerSelector;
@@ -12,6 +13,44 @@ use Illuminate\Support\Facades\Log;
 
 class RaffleDrawCRUDController extends CRUDController
 {
+    protected string $model = RaffleDraw::class;
+
+    protected string $view = 'RaffleDraws';
+
+    protected $load = ['winner.participant.user'];
+
+    protected array $rules = [
+        'edition_id' => 'required|exists:editions,id',
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'ticket_price' => 'required|integer|min:1',
+        'is_active' => 'boolean',
+        'draw_at' => 'nullable|date|after:now',
+    ];
+
+    protected function with(): array
+    {
+        return [
+            'editions' => Edition::all(),
+        ];
+    }
+
+    protected function updateRules($old): array
+    {
+        $rules = $this->rules;
+
+        if ($old->winner_enrollment_id !== null || ! $old->is_active) {
+            $rules['draw_at'] = 'nullable|date';
+        }
+
+        return $rules;
+    }
+
+    protected function destroyed($old): bool
+    {
+        return ($old['winner_enrollment_id'] ?? null) === null;
+    }
+
     public function pickWinner(RaffleDraw $draw, RaffleWinnerSelector $selector): RedirectResponse
     {
         Gate::authorize('admin');
