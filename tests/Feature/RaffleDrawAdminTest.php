@@ -6,6 +6,7 @@ use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\Participant;
 use App\Models\RaffleDraw;
+use App\Models\RaffleTicket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -193,6 +194,29 @@ class RaffleDrawAdminTest extends TestCase
         ]);
     }
 
+    public function test_admin_cannot_change_a_raffle_draw_edition(): void
+    {
+        $otherEdition = Edition::factory()->create([
+            'year' => now()->year - 1,
+        ]);
+
+        $draw = RaffleDraw::factory()->create([
+            'edition_id' => $this->edition->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->put(route('admin.raffleDraws.update', $draw), $this->validPayload([
+                'edition_id' => $otherEdition->id,
+            ]));
+
+        $response->assertStatus(422);
+
+        $this->assertDatabaseHas('raffle_draws', [
+            'id' => $draw->id,
+            'edition_id' => $this->edition->id,
+        ]);
+    }
+
     public function test_admin_can_delete_a_raffle_draw_without_a_winner(): void
     {
         $draw = RaffleDraw::factory()->create([
@@ -224,7 +248,38 @@ class RaffleDrawAdminTest extends TestCase
             ->delete(route('admin.raffleDraws.destroy', $draw));
 
         $response->assertRedirect();
+        $response->assertSessionHas('flash', fn (array $flash) => $flash['bannerStyle'] === 'danger');
         $this->assertDatabaseHas('raffle_draws', ['id' => $draw->id]);
+    }
+
+    public function test_admin_cannot_delete_a_raffle_draw_with_purchased_tickets(): void
+    {
+        $participant = Participant::factory()->create();
+        $enrollment = Enrollment::factory()->create([
+            'edition_id' => $this->edition->id,
+            'participant_id' => $participant->id,
+        ]);
+
+        $draw = RaffleDraw::factory()->create([
+            'edition_id' => $this->edition->id,
+        ]);
+
+        RaffleTicket::factory()->create([
+            'raffle_draw_id' => $draw->id,
+            'enrollment_id' => $enrollment->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->delete(route('admin.raffleDraws.destroy', $draw));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('flash', fn (array $flash) => $flash['bannerStyle'] === 'danger');
+
+        $this->assertDatabaseHas('raffle_draws', ['id' => $draw->id]);
+        $this->assertDatabaseHas('raffle_tickets', [
+            'raffle_draw_id' => $draw->id,
+            'enrollment_id' => $enrollment->id,
+        ]);
     }
 
     public function test_non_admin_cannot_access_raffle_management(): void

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\RaffleDraw;
+use App\Models\RaffleTicket;
 use App\Services\RaffleWinnerSelector;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -46,9 +47,49 @@ class RaffleDrawCRUDController extends CRUDController
         return $rules;
     }
 
+    protected function updated($old, array $new): ?array
+    {
+        abort_if(
+            (int) $new['edition_id'] !== (int) $old->edition_id,
+            422,
+            'A edição de um sorteio não pode ser alterada.'
+        );
+
+        return $new;
+    }
+
     protected function destroyed($old): bool
     {
-        return ($old['winner_enrollment_id'] ?? null) === null;
+        if (($old['winner_enrollment_id'] ?? null) !== null) {
+            return false;
+        }
+
+        return ! RaffleTicket::where('raffle_draw_id', $old['id'] ?? null)->exists();
+    }
+
+    public function destroy($id)
+    {
+        $deleted = DB::transaction(function () use ($id) {
+            $draw = RaffleDraw::lockForUpdate()->findOrFail($id);
+
+            if (! $this->destroyed($draw->toArray())) {
+                return false;
+            }
+
+            $draw->delete();
+
+            return true;
+        });
+
+        if (! $deleted) {
+            return redirect()->back()->dangerBanner(
+                'Não é possível eliminar um sorteio com bilhetes vendidos ou vencedor.'
+            );
+        }
+
+        Log::alert('Raffle draw deleted', ['raffle_draw_id' => $id]);
+
+        return redirect()->back();
     }
 
     public function pickWinner(RaffleDraw $draw, RaffleWinnerSelector $selector): RedirectResponse
