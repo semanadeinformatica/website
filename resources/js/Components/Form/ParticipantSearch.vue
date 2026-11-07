@@ -65,7 +65,7 @@ const onFocus = () => {
 };
 
 onMounted(() => void search(props.modelValue || undefined));
-watch(query, (value) => {
+watch(query, () => {
     if (!open.value) return;
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => void search(), 250);
