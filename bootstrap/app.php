@@ -35,6 +35,10 @@ return Application::configure(basePath: dirname(__DIR__))
             RateLimiter::for('arcade-status', function (Request $request) {
                 return Limit::perMinute(120)->by($request->user()?->id ?: $request->ip());
             });
+
+            RateLimiter::for('raffle', function (Request $request) {
+                return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+            });
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
