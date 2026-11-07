@@ -23,6 +23,7 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\RaffleController;
+use App\Http\Controllers\RaffleDrawCRUDController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
@@ -138,6 +139,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/eventTypes' => EventTypeCRUDController::class,
                     '/sponsorTiers' => SponsorTierCRUDController::class,
                 ]);
+
+                Route::post('/raffleDraws/{draw}/pick-winner', [RaffleDrawCRUDController::class, 'pickWinner'])
+                    ->name('raffleDraws.pick-winner');
 
                 Route::name('index')->get('/', AdminDashboardController::class);
             });
