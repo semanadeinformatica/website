@@ -138,6 +138,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/enrollments' => EnrollmentCRUDController::class,
                     '/eventTypes' => EventTypeCRUDController::class,
                     '/sponsorTiers' => SponsorTierCRUDController::class,
+                    '/raffleDraws' => RaffleDrawCRUDController::class,
                 ]);
 
                 Route::post('/raffleDraws/{draw}/pick-winner', [RaffleDrawCRUDController::class, 'pickWinner'])
