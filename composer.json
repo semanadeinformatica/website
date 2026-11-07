@@ -18,6 +18,8 @@
         "laravel/tinker": "^3.0",
         "meilisearch/meilisearch-php": "^1.4",
         "staudenmeir/eloquent-has-many-deep": "^1.22",
+        "symfony/http-client": "^8.0",
+        "symfony/mailgun-mailer": "^8.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

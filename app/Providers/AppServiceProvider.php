@@ -118,7 +118,7 @@ class AppServiceProvider extends ServiceProvider
             ) ||
             (
                 $user->isCompany() &&
-                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
+                ($user->usertype?->sponsors()->where('edition_id', $edition->id)->first()?->tier?->canSeeAll ?? false)
             )
         ));
 

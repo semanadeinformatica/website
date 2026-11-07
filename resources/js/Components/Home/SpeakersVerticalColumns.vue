@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import type { User, SpeakerUser } from "@/Types/User";
 import SocialIcon from "@/Components/UI/SocialIcon.vue";
 import Modal from "@/Components/UI/Modal.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import { useScrollReveal } from "@/Composables/useScrollReveal";
 
 interface Props {
@@ -299,43 +300,44 @@ const columns = computed(() => {
             </div>
         </template>
 
+        <div v-else class="flex h-full w-full items-center justify-center">
+            <ComingSoon class="py-20" />
+        </div>
+
         <Modal :show="isBioModalOpen" max-width="lg" @close="closeBioModal">
-            <div
-                v-if="selectedSpeaker"
-                class="relative max-h-[85vh] overflow-y-auto rounded-2xl border border-white/10 bg-neutral-950 p-5 text-white sm:p-8"
-            >
+            <div v-if="selectedSpeaker" class="space-y-6">
                 <div class="flex items-start gap-4 sm:gap-5">
                     <img
                         :src="selectedSpeaker.profile_photo_url"
                         :alt="getSpeakerDisplayName(selectedSpeaker)"
-                        class="ring-sinf-primary/50 h-16 w-16 rounded-xl object-cover ring-2 sm:h-24 sm:w-24 sm:rounded-2xl"
+                        class="h-16 w-16 rounded-xl object-cover sm:h-20 sm:w-20"
                     />
-                    <div class="flex-1">
-                        <h3 class="text-lg font-black text-white sm:text-2xl">
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-lg font-bold text-white sm:text-xl">
                             {{ getSpeakerDisplayName(selectedSpeaker) }}
                         </h3>
                         <p
                             v-if="getSpeakerTitle(selectedSpeaker)"
-                            class="text-sinf-primary text-xs font-medium sm:text-sm"
+                            class="mt-1 text-xs text-neutral-400 sm:text-sm"
                         >
                             {{ getSpeakerTitle(selectedSpeaker) }}
                             <span
                                 v-if="getSpeakerOrganization(selectedSpeaker)"
-                                class="text-neutral-400"
+                                class="text-neutral-500"
                             >
-                                • {{ getSpeakerOrganization(selectedSpeaker) }}
+                                · {{ getSpeakerOrganization(selectedSpeaker) }}
                             </span>
                         </p>
                         <p
                             v-else-if="getSpeakerOrganization(selectedSpeaker)"
-                            class="text-xs font-medium text-neutral-400 sm:text-sm"
+                            class="mt-1 text-xs text-neutral-400 sm:text-sm"
                         >
                             {{ getSpeakerOrganization(selectedSpeaker) }}
                         </p>
 
                         <div
                             v-if="selectedSpeakerSocialLinks.length > 0"
-                            class="mt-2.5 flex flex-wrap items-center gap-2 sm:mt-3"
+                            class="mt-3 flex flex-wrap items-center gap-2"
                         >
                             <a
                                 v-for="link in selectedSpeakerSocialLinks"
@@ -344,7 +346,7 @@ const columns = computed(() => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 :aria-label="`${getSpeakerDisplayName(selectedSpeaker)} - ${link.label}`"
-                                class="hover:border-sinf-primary/60 hover:bg-sinf-primary/20 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-neutral-400 transition-all hover:text-white sm:h-9 sm:w-9"
+                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-white"
                             >
                                 <SocialIcon
                                     :platform="link.platform"
@@ -357,7 +359,7 @@ const columns = computed(() => {
 
                 <div
                     v-if="getSpeakerDescriptionHtml(selectedSpeaker)"
-                    class="mt-4 border-t border-white/10 pt-4 text-xs leading-relaxed text-neutral-300 sm:mt-6 sm:pt-5 sm:text-sm"
+                    class="prose prose-invert prose-sm border-t border-white/10 pt-4 text-xs leading-relaxed text-neutral-300 sm:text-sm"
                     v-html="getSpeakerDescriptionHtml(selectedSpeaker)"
                 />
             </div>

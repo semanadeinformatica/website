@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type Participant from "@/Types/Participant";
 import type Edition from "@/Types/Edition";
 import type Department from "@/Types/Department";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
@@ -8,10 +7,10 @@ import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import { computed } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
+import ParticipantSearch from "@/Components/Form/ParticipantSearch.vue";
 
 interface Props {
     with: {
-        participants: Participant[];
         editions: Edition[];
         departments: Department[];
     };
@@ -60,21 +59,10 @@ const submit = () => {
             </option>
         </TextInput>
 
-        <TextInput
+        <ParticipantSearch
             v-model="form.participant_id"
-            type="select"
-            required
-            label="Participante"
             :error-message="form.errors.participant_id"
-        >
-            <option
-                v-for="participant in $props.with.participants"
-                :key="participant.id"
-                :value="participant.id"
-            >
-                {{ participant.user?.name ?? `Membro #${participant.id}` }}
-            </option>
-        </TextInput>
+        />
 
         <div
             class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"

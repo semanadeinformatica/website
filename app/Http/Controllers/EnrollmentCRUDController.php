@@ -21,8 +21,13 @@ class EnrollmentCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'participants' => Participant::with('user')->get(),
-            'editions' => Edition::all(),
+            'participants' => Participant::query()
+                ->select('id', 'user_id')
+                ->without('socialMedia')
+                ->with(['user' => fn ($query) => $query->without('usertype')->select('id', 'name')])
+                ->get()
+                ->each(fn (Participant $participant) => $participant->setAppends([])),
+            'editions' => Edition::query()->select('id', 'name')->get(),
         ];
     }
 }

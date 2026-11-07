@@ -24,4 +24,6 @@ export default interface MyPageProps {
     };
     canResetPassword: boolean;
     competitions: Competition[];
+    editionOptions?: Record<string, string>;
+    defaultFilters?: Record<string, string | number>;
 }

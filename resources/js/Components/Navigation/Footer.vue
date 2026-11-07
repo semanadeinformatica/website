@@ -130,12 +130,12 @@ const currentYear = new Date().getFullYear();
                 <p class="text-center text-xs text-neutral-400 md:text-left">
                     Copyright &copy; {{ currentYear }}
                     <a
-                        href="https://niaefeup.pt/"
+                        href="https://nifeup.com/"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="font-semibold text-white transition-colors"
                     >
-                        NIAEFEUP </a
+                        NIFEUP </a
                     >. Todos os direitos reservados.
                 </p>
             </div>

@@ -4,7 +4,7 @@ import type Department from "@/Types/Department";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DepartmentSection from "@/Components/Team/DepartmentSection.vue";
 import DepartmentSidebar from "@/Components/Team/DepartmentSidebar.vue";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 
 interface Props {
@@ -29,21 +29,11 @@ const displayedDepartments = computed(() => {
         (d) => d.id === selectedDepartmentId.value,
     );
 });
-
-function handleSelectDepartment(id: number | null) {
-    selectedDepartmentId.value = id;
-    if (window.scrollY > 200) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-}
 </script>
 
 <template>
     <AppLayout title="Equipa">
-        <QuickScroll
-            v-if="hasStaff && displayedDepartments.length > 1"
-            mode="sections"
-        />
+        <QuickScroll mode="top" />
 
         <div
             class="relative mx-auto w-full max-w-7xl px-4 pt-0 pb-12 sm:px-6 sm:pb-16 lg:px-8 lg:pt-8"
@@ -54,13 +44,12 @@ function handleSelectDepartment(id: number | null) {
                         class="w-full lg:sticky lg:top-24 lg:w-64 lg:shrink-0 xl:w-72"
                     >
                         <DepartmentSidebar
-                            :departments="departments"
+                            :departments="departmentsWithStaff"
                             :selected-id="selectedDepartmentId"
-                            @select="handleSelectDepartment"
+                            @select="selectedDepartmentId = $event"
                         />
                     </aside>
 
-                    <!-- Right Column: Team Members -->
                     <div class="min-w-0 flex-1">
                         <div class="space-y-12 sm:space-y-16">
                             <DepartmentSection
@@ -74,22 +63,7 @@ function handleSelectDepartment(id: number | null) {
                 </div>
             </template>
 
-            <div
-                v-else
-                class="flex flex-col items-center justify-center py-28 text-center"
-            >
-                <PillSelector
-                    :items="[
-                        { id: 'soon', label: 'Em breve...', disabled: true },
-                    ]"
-                    size="sm"
-                    :wrap="false"
-                    container-class="mb-4"
-                />
-                <p class="max-w-md text-sm text-neutral-400">
-                    A equipa da edição 2026 estará disponível brevemente.
-                </p>
-            </div>
+            <ComingSoon v-else class="py-28" />
         </div>
     </AppLayout>
 </template>

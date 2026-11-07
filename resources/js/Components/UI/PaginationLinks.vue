@@ -12,7 +12,7 @@ defineProps<Props>();
 
 <template>
     <nav
-        v-if="links && links.length > 3"
+        v-if="links && links.length > 0"
         class="flex flex-wrap items-center justify-center gap-1.5 py-4"
         aria-label="Paginação"
     >

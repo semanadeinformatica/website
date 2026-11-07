@@ -7,6 +7,7 @@ import Row from "@/Components/CRUD/Row.vue";
 import Cell from "@/Components/CRUD/Cell.vue";
 import Header from "@/Components/CRUD/Header.vue";
 import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import type EventDay from "@/Types/EventDay";
 import type EventType from "@/Types/EventType";
 
@@ -20,6 +21,19 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const page = usePage();
+
+const editions = computed<Record<number, string>>(() => {
+    const editionOptions = page.props.editionOptions as
+        Record<string, string> | undefined;
+
+    return Object.fromEntries(
+        props.with.event_days.map((event_day) => [
+            event_day.id,
+            editionOptions?.[event_day.edition_id] ?? "-",
+        ]),
+    );
+});
 
 const event_days = computed<Record<number, string>>(() =>
     Object.fromEntries(
@@ -59,6 +73,7 @@ const formatTime = (time?: string) => {
             <HeaderRow>
                 <Header sort-by="name">Nome</Header>
                 <Header sort-by="time_start">Horário</Header>
+                <Header filter-by="edition_id">Edição</Header>
                 <Header filter-by="event_day_id" :filter-values="event_days">
                     Dia do Evento
                 </Header>
@@ -83,6 +98,9 @@ const formatTime = (time?: string) => {
                         {{ formatTime(item.time_start) }} –
                         {{ formatTime(item.time_end) }}
                     </span>
+                </Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.event_day_id] ?? "-" }}
                 </Cell>
                 <Cell>
                     <span

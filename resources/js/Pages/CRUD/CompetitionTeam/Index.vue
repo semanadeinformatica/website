@@ -41,7 +41,7 @@ const editions = computed<Record<number, string>>(() =>
 
         <template #header>
             <HeaderRow>
-                <Header>Edição</Header>
+                <Header filter-by="edition_id">Edição</Header>
                 <Header sort-by="name">Nome da Equipa</Header>
                 <Header>Nº Membros</Header>
                 <Header sort-by="points">Pontos</Header>
@@ -55,7 +55,7 @@ const editions = computed<Record<number, string>>(() =>
                 </Cell>
                 <Cell class="font-medium text-white">{{ item.name }}</Cell>
                 <Cell class="font-mono text-xs text-neutral-300">
-                    {{ item.members?.length ?? 0 }}
+                    {{ item.members_count ?? 0 }}
                 </Cell>
                 <Cell>
                     <span

@@ -115,7 +115,7 @@ const form = useForm({
     _method: "PUT",
     name: user ? user.name : "",
     email: user ? user.email : "",
-    type: (user?.usertype_type.split("\\\\").pop() ?? "").toLowerCase() as
+    type: (user?.usertype_type.split("\\").pop() ?? "").toLowerCase() as
         "participant" | "company" | "speaker" | "admin",
     title: isSpeaker ? (user?.usertype?.title ?? "") : "",
     description:

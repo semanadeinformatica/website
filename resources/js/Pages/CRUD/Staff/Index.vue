@@ -32,6 +32,12 @@ const departments = computed<Record<number, string>>(() =>
     ),
 );
 
+const editions = computed<Record<number, string>>(() =>
+    Object.fromEntries(
+        props.with.editions.map((edition) => [edition.id, edition.name]),
+    ),
+);
+
 const participants = computed<Record<number, string>>(() =>
     Object.fromEntries(
         props.with.participants.map((participant) => [
@@ -60,6 +66,7 @@ const participants = computed<Record<number, string>>(() =>
                 >
                     Membro
                 </Header>
+                <Header filter-by="edition_id">Edição</Header>
                 <Header filter-by="department_id" :filter-values="departments">
                     Departamento
                 </Header>
@@ -79,6 +86,9 @@ const participants = computed<Record<number, string>>(() =>
                         participants[item.participant_id] ??
                         `Membro #${item.participant_id}`
                     }}
+                </Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.department?.edition_id ?? 0] ?? "-" }}
                 </Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ departments[item.department_id] ?? "-" }}

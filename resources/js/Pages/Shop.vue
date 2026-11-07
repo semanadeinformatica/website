@@ -8,6 +8,7 @@ import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
 import { type User } from "@/Types/User";
@@ -248,32 +249,7 @@ const filteredAndSortedProducts = computed(() => {
                 </div>
 
                 <!-- Empty Shop State (Coming soon) -->
-                <div
-                    v-else
-                    class="flex flex-col items-center justify-center py-24 text-center"
-                >
-                    <PillSelector
-                        :items="[
-                            {
-                                id: 'soon',
-                                label: 'Em breve...',
-                                disabled: true,
-                            },
-                        ]"
-                        size="sm"
-                        :wrap="false"
-                        container-class="mb-4"
-                    />
-                    <h3 class="text-lg font-bold text-white">
-                        A loja oficial da SINF 2026 estará disponível em breve
-                    </h3>
-                    <p
-                        class="mt-2 max-w-md text-xs leading-relaxed text-neutral-400 sm:text-sm"
-                    >
-                        Estamos a preparar artigos exclusivos para esta edição.
-                        Fica atento às novidades no programa e redes sociais!
-                    </p>
-                </div>
+                <ComingSoon v-else class="py-24" />
             </section>
         </div>
     </AppLayout>

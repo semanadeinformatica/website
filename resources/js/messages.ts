@@ -3,7 +3,7 @@ const messages = {
         homePage: {
             aboutUsTitle: "Made by students, for students.",
             aboutUsDescription:
-                "SINF is the annual tech conference organized by NIAEFEUP for students at the Faculty of Engineering of the University of Porto (FEUP). Across four days, we bring invited speakers, hands-on workshops with real-world tools, and tech companies looking for talent.",
+                "SINF is the annual tech conference organized by NIFEUP for students at the Faculty of Engineering of the University of Porto (FEUP). Across four days, we bring invited speakers, hands-on workshops with real-world tools, and tech companies looking for talent.",
             pillar1Title: "Talks & Keynotes",
             pillar1Desc:
                 "Guest speakers sharing real-world software engineering experiences, architectures, and lessons learned.",
@@ -14,7 +14,7 @@ const messages = {
             pillar3Desc:
                 "Informal hallway chats with engineering teams actively recruiting interns and junior developers.",
             aboutUsText1:
-                "SINF is the annual tech conference organized by NIAEFEUP for students at the Faculty of Engineering of the University of Porto (FEUP).",
+                "SINF is the annual tech conference organized by NIFEUP for students at the Faculty of Engineering of the University of Porto (FEUP).",
             aboutUsText2:
                 "Across four days, we bring invited speakers, hands-on workshops with real-world tools, and tech companies looking for talent.",
         },
@@ -50,7 +50,7 @@ const messages = {
         homePage: {
             aboutUsTitle: "Feita por estudantes, para estudantes.",
             aboutUsDescription:
-                "A SINF é a conferência anual organizada pelo NIAEFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto. Durante quatro dias, trazemos oradores convidados, workshops práticos com ferramentas do mundo real e bancas de empresas à procura de talento.",
+                "A SINF é a conferência anual organizada pelo NIFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto. Durante quatro dias, trazemos oradores convidados, workshops práticos com ferramentas do mundo real e bancas de empresas à procura de talento.",
             pillar1Title: "Palestras & Keynotes",
             pillar1Desc:
                 "Oradores convidados a partilhar experiências reais de engenharia, arquiteturas e desafios da indústria.",
@@ -61,7 +61,7 @@ const messages = {
             pillar3Desc:
                 "Contacto direto e informal nos corredores da faculdade com empresas a recrutar estagiários e juniores.",
             aboutUsText1:
-                "A SINF é a conferência anual organizada pelo NIAEFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto.",
+                "A SINF é a conferência anual organizada pelo NIFEUP para os estudantes da Faculdade de Engenharia da Universidade do Porto.",
             aboutUsText2:
                 "Durante quatro dias, trazemos oradores convidados, workshops práticos com ferramentas do mundo real e bancas de empresas à procura de talento.",
         },

@@ -13,6 +13,11 @@ class CompetitionTeamCRUDController extends CRUDController
 
     protected string $view = 'CompetitionTeam';
 
+    protected function editionRelationPath(): ?string
+    {
+        return 'competition';
+    }
+
     protected array $rules = [
         'name' => 'required|string',
         'points' => 'required|integer',
@@ -21,9 +26,24 @@ class CompetitionTeamCRUDController extends CRUDController
         'members' => 'sometimes|array|exists:participants,id',
     ];
 
-    protected $load = [
-        'members',
-    ];
+    protected $load = ['members'];
+
+    protected function editLoad(): array
+    {
+        return [
+            'members' => fn ($query) => $query->without('socialMedia')->select('participants.id'),
+        ];
+    }
+
+    protected function indexLoad(): array
+    {
+        return [];
+    }
+
+    protected function indexWithCount(): array
+    {
+        return ['members'];
+    }
 
     protected function created(array $new): ?array
     {
@@ -63,8 +83,16 @@ class CompetitionTeamCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'competitions' => Competition::with('edition')->get(),
-            'participants' => Participant::with('user')->get(),
+            'competitions' => Competition::query()
+                ->select('id', 'name', 'edition_id')
+                ->with('edition:id,name')
+                ->get(),
+            'participants' => Participant::query()
+                ->select('id', 'user_id')
+                ->without('socialMedia')
+                ->with(['user' => fn ($query) => $query->without('usertype')->select('id', 'name')])
+                ->get()
+                ->each(fn (Participant $participant) => $participant->setAppends([])),
         ];
     }
 }

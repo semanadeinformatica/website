@@ -33,7 +33,7 @@ defineSlots<{
     row?: (props: { item: T }) => unknown;
 }>();
 
-const search = useSearch();
+const search = useSearch("query", ["items"]);
 const page = usePage();
 
 const createModules = import.meta.glob<Component>(

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -71,6 +72,42 @@ abstract class CRUDController extends Controller
      */
     protected $load = [];
 
+    /** Relations needed by list rows. Defaults to the edit relations. */
+    protected function indexLoad(): array
+    {
+        return $this->load;
+    }
+
+    /** Relations needed when editing an individual record. */
+    protected function editLoad(): array
+    {
+        return $this->load;
+    }
+
+    /** Relation counts needed by list rows without loading every related model. */
+    protected function indexWithCount(): array
+    {
+        return [];
+    }
+
+    /** Global relations that list rows do not need. */
+    protected function indexWithout(): array
+    {
+        return [];
+    }
+
+    /** Relation path to edition_id for records without a direct edition_id column. */
+    protected function editionRelationPath(): ?string
+    {
+        return null;
+    }
+
+    /** Related text fields searchable on pages without a Scout index. */
+    protected function searchRelations(): array
+    {
+        return [];
+    }
+
     /**
      * Common method to get paginated items, filters, search and relations.
      *
@@ -78,7 +115,7 @@ abstract class CRUDController extends Controller
      */
     protected function getIndexData(Request $request): array
     {
-        $isSearchable = in_array(Searchable::class, class_uses($this->model));
+        $modelUsesScout = in_array(Searchable::class, class_uses($this->model));
 
         $search = $request->query('query');
         $sortBy = $request->query('sort_by', 'id');
@@ -87,12 +124,33 @@ abstract class CRUDController extends Controller
         $modelInstance = new $this->model;
         $table = $modelInstance->getTable();
         $schema = $modelInstance->getConnection()->getSchemaBuilder();
+        $columnMetadata = $schema->getColumns($table);
+        $columns = array_column($columnMetadata, 'name');
+        $searchableColumns = array_values(array_map(
+            fn (array $column) => $column['name'],
+            array_filter($columnMetadata, function (array $column) {
+                $type = strtolower($column['type']);
 
-        $applySortAndFilters = function (Builder $query) use ($table, $schema, $sortBy, $sortDir, $request) {
-            $reserved = ['page', 'query', 'sort_by', 'sort_dir', 'filter_by', 'filter_val'];
+                return str_contains($type, 'char') || str_contains($type, 'text');
+            }),
+        ));
+        $isSearchable = $modelUsesScout || $searchableColumns !== [];
+        $editionRelationPath = $this->editionRelationPath();
+        $hasEditionFilter = in_array('edition_id', $columns, true) || $editionRelationPath !== null;
+        $editions = $hasEditionFilter
+            ? Edition::query()->select('id', 'name', 'year')->orderByDesc('year')->get()
+            : collect();
+        $activeEdition = $editions->first();
+        $requestedEdition = $request->query('edition_id');
+        $editionFilter = $requestedEdition === 'all'
+            ? null
+            : ($requestedEdition ?? $activeEdition?->id);
+
+        $applySortAndFilters = function (Builder $query) use ($table, $columns, $sortBy, $sortDir, $request, $editionFilter, $editionRelationPath) {
+            $reserved = ['page', 'query', 'sort_by', 'sort_dir', 'filter_by', 'filter_val', 'edition_id'];
             foreach ($request->query() as $key => $value) {
                 if (! in_array($key, $reserved) && $value !== null && $value !== '') {
-                    if ($schema->hasColumn($table, $key)) {
+                    if (in_array($key, $columns, true)) {
                         $query->where($table.'.'.$key, $value);
                     }
                 }
@@ -100,25 +158,60 @@ abstract class CRUDController extends Controller
 
             if ($request->filled('filter_by') && $request->has('filter_val') && $request->get('filter_val') !== '') {
                 $filterCol = $request->query('filter_by');
-                if ($schema->hasColumn($table, $filterCol)) {
+                if (in_array($filterCol, $columns, true)) {
                     $query->where($table.'.'.$filterCol, $request->query('filter_val'));
                 }
             }
 
-            if ($schema->hasColumn($table, $sortBy)) {
+            if ($editionFilter !== null) {
+                if (in_array('edition_id', $columns, true)) {
+                    $query->where($table.'.edition_id', $editionFilter);
+                } elseif ($editionRelationPath !== null) {
+                    $query->whereHas($editionRelationPath, fn (Builder $related) => $related->where('edition_id', $editionFilter));
+                }
+            }
+
+            if (in_array($sortBy, $columns, true)) {
                 $query->orderBy($table.'.'.$sortBy, $sortDir);
             } else {
                 $query->orderBy($table.'.id', 'asc');
             }
         };
 
-        if ($isSearchable && $search !== null && trim($search) !== '') {
+        if ($search !== null && trim($search) !== '' && $modelUsesScout) {
             $query = $this->model::search($search)->query(function (Builder $query) use ($applySortAndFilters) {
-                $query->with($this->load);
+                $query->without($this->indexWithout())
+                    ->with($this->indexLoad())
+                    ->withCount($this->indexWithCount());
                 $applySortAndFilters($query);
             });
         } else {
-            $query = $this->model::with($this->load);
+            $query = $this->model::without($this->indexWithout())
+                ->with($this->indexLoad())
+                ->withCount($this->indexWithCount());
+
+            if ($search !== null && trim($search) !== '' && ($searchableColumns !== [] || $this->searchRelations() !== [])) {
+                $term = trim($search);
+                $operator = $modelInstance->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+                $searchRelations = $this->searchRelations();
+
+                $query->where(function (Builder $query) use ($searchableColumns, $searchRelations, $table, $operator, $term) {
+                    foreach ($searchableColumns as $column) {
+                        $query->orWhere($table.'.'.$column, $operator, '%'.$term.'%');
+                    }
+
+                    foreach ($searchRelations as $relation => $columns) {
+                        $query->orWhereHas($relation, function (Builder $related) use ($columns, $operator, $term) {
+                            $related->where(function (Builder $relatedSearch) use ($columns, $operator, $term) {
+                                foreach ($columns as $column) {
+                                    $relatedSearch->orWhere($relatedSearch->getModel()->qualifyColumn($column), $operator, '%'.$term.'%');
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+
             $applySortAndFilters($query);
         }
 
@@ -126,7 +219,13 @@ abstract class CRUDController extends Controller
 
         return [
             'items' => $items,
-            'with' => $this->with(),
+            'with' => fn () => $this->with(),
+            'editionOptions' => $hasEditionFilter
+                ? fn () => $editions->pluck('name', 'id')->all()
+                : [],
+            'defaultFilters' => $activeEdition && $requestedEdition === null
+                ? ['edition_id' => (string) $activeEdition->id]
+                : [],
             'isSearchable' => $isSearchable,
             'view' => $this->view,
         ];
@@ -159,7 +258,7 @@ abstract class CRUDController extends Controller
         $data = $this->getIndexData($request);
         $item = $this->model::find($id);
         $data['modal'] = 'edit';
-        $data['item'] = $item ? $item->load($this->load) : null;
+        $data['item'] = $item ? $item->load($this->editLoad()) : null;
 
         return Inertia::render("CRUD/{$this->view}/Index", $data);
     }

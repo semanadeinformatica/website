@@ -15,6 +15,11 @@ class UserCRUDController extends CRUDController
 
     protected string $view = 'User';
 
+    protected function indexWithout(): array
+    {
+        return ['usertype'];
+    }
+
     protected array $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email',
@@ -30,7 +35,7 @@ class UserCRUDController extends CRUDController
         'linkedin' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[\p{L}0-9-]{3,100}\/?$/u'],
         'twitter' => ['sometimes', 'nullable', 'string', 'url:https', 'regex:/^https:\/\/(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]{4,15}\/?$/'],
         'website' => 'sometimes|nullable|string|url',
-        'photo' => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
     ];
 
     protected function updateRules($old): array

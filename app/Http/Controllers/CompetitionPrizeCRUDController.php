@@ -12,6 +12,19 @@ class CompetitionPrizeCRUDController extends CRUDController
 
     protected string $view = 'CompetitionPrizes';
 
+    protected function editionRelationPath(): ?string
+    {
+        return 'competition';
+    }
+
+    protected function searchRelations(): array
+    {
+        return [
+            'competition' => ['name'],
+            'competition.edition' => ['name'],
+        ];
+    }
+
     protected array $rules = [
         'place' => 'required|integer|min:1|max:3',
         'prize_picture' => 'nullable|mimes:jpg,jpeg,png|max:10240',
@@ -46,7 +59,10 @@ class CompetitionPrizeCRUDController extends CRUDController
     protected function with(): array
     {
         return [
-            'competitions' => Competition::with('edition')->get(),
+            'competitions' => Competition::query()
+                ->select('id', 'name', 'edition_id')
+                ->with('edition:id,name')
+                ->get(),
         ];
     }
 }

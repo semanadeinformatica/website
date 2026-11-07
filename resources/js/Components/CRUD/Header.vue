@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { ArrowUpDown, ArrowUp, ArrowDown, Filter, Check } from "@lucide/vue";
 
 interface Props {
@@ -10,6 +10,23 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const page = usePage();
+
+const availableFilterValues = computed(() => {
+    if (props.filterValues) return props.filterValues;
+    if (props.filterBy === "edition_id") {
+        return page.props.editionOptions as
+            Record<string | number, string> | undefined;
+    }
+    return undefined;
+});
+
+const defaultFilterValue = computed(() => {
+    if (!props.filterBy) return "";
+    const defaults = page.props.defaultFilters as
+        Record<string, string | number> | undefined;
+    return String(defaults?.[props.filterBy] ?? "");
+});
 
 const filterMenuOpen = ref(false);
 const filterContainerRef = ref<HTMLElement | null>(null);
@@ -32,13 +49,14 @@ onUnmounted(() => {
 });
 
 const currentSortBy = computed(() => {
-    if (typeof window === "undefined") return null;
-    return new URLSearchParams(window.location.search).get("sort_by");
+    return new URLSearchParams(page.url.split("?")[1] ?? "").get("sort_by");
 });
 
 const currentSortDir = computed(() => {
-    if (typeof window === "undefined") return "asc";
-    return new URLSearchParams(window.location.search).get("sort_dir") ?? "asc";
+    return (
+        new URLSearchParams(page.url.split("?")[1] ?? "").get("sort_dir") ??
+        "asc"
+    );
 });
 
 const isSorted = computed(() => {
@@ -90,14 +108,17 @@ const toggleSort = () => {
 };
 
 const currentFilterValue = computed(() => {
-    if (!props.filterBy || typeof window === "undefined") return "";
-    return (
-        new URLSearchParams(window.location.search).get(props.filterBy) ?? ""
-    );
+    if (!props.filterBy) return "";
+    const params = new URLSearchParams(page.url.split("?")[1] ?? "");
+    return params.has(props.filterBy)
+        ? (params.get(props.filterBy) ?? "")
+        : defaultFilterValue.value;
 });
 
 const isFilterActive = computed(() => {
-    return currentFilterValue.value !== "";
+    return (
+        currentFilterValue.value !== "" && currentFilterValue.value !== "all"
+    );
 });
 
 const setFilter = (val: string | number | null) => {
@@ -106,7 +127,11 @@ const setFilter = (val: string | number | null) => {
     const url = new URL(window.location.href);
 
     if (val === null || val === "") {
-        url.searchParams.delete(props.filterBy);
+        if (props.filterBy === "edition_id" && defaultFilterValue.value) {
+            url.searchParams.set(props.filterBy, "all");
+        } else {
+            url.searchParams.delete(props.filterBy);
+        }
     } else {
         url.searchParams.set(props.filterBy, String(val));
     }
@@ -170,7 +195,7 @@ const setFilter = (val: string | number | null) => {
 
             <!-- Filter popover dropdown -->
             <div
-                v-if="filterBy && filterValues"
+                v-if="filterBy && availableFilterValues"
                 ref="filterContainerRef"
                 class="relative inline-block text-left"
             >
@@ -226,7 +251,7 @@ const setFilter = (val: string | number | null) => {
 
                     <div class="max-h-52 space-y-0.5 overflow-y-auto">
                         <button
-                            v-for="(label, key) in filterValues"
+                            v-for="(label, key) in availableFilterValues"
                             :key="key"
                             type="button"
                             class="flex w-full cursor-pointer items-center justify-between rounded-xl px-2.5 py-1.5 text-left text-xs transition-colors hover:bg-white/10"

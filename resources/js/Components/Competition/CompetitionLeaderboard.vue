@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type CompetitionTeam from "@/Types/CompetitionTeam";
-import PillSelector from "@/Components/UI/PillSelector.vue";
+import ComingSoon from "@/Components/UI/ComingSoon.vue";
 
 interface Props {
     teams?: CompetitionTeam[];
@@ -59,40 +59,16 @@ const props = withDefaults(defineProps<Props>(), {
                         </div>
                     </div>
 
-                    <div class="shrink-0">
-                        <div
-                            class="pill-container gap-1 px-3 py-1 text-xs font-bold text-white shadow-none sm:text-sm"
-                        >
-                            <span>{{ team.points }}</span>
-                            <span
-                                class="text-[10px] font-normal text-neutral-400 sm:text-xs"
-                                >pts</span
-                            >
-                        </div>
+                    <div class="shrink-0 text-right">
+                        <span class="text-sm font-bold text-white sm:text-base">
+                            {{ team.points }}
+                        </span>
+                        <span class="ml-1 text-xs text-neutral-400">pts</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div
-            v-else
-            class="flex flex-col items-center justify-center py-20 text-center"
-        >
-            <PillSelector
-                :items="[
-                    {
-                        id: 'empty',
-                        label: 'Sem equipas registadas',
-                        disabled: true,
-                    },
-                ]"
-                size="sm"
-                :wrap="false"
-                container-class="mb-3"
-            />
-            <p class="text-xs text-neutral-400 sm:text-sm">
-                Ainda não existem equipas registadas nesta competição.
-            </p>
-        </div>
+        <ComingSoon v-else class="py-20" />
     </section>
 </template>
