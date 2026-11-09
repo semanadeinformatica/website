@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ArcadeController;
+use App\Http\Controllers\ArcadeCRUDController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
@@ -138,6 +139,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/enrollments' => EnrollmentCRUDController::class,
                     '/eventTypes' => EventTypeCRUDController::class,
                     '/sponsorTiers' => SponsorTierCRUDController::class,
+                    '/arcadeGames' => ArcadeCRUDController::class,
                     '/raffleDraws' => RaffleDrawCRUDController::class,
                 ]);
 
