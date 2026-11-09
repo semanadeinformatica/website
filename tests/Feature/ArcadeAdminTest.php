@@ -125,6 +125,28 @@ class ArcadeAdminTest extends TestCase
         $this->assertDatabaseCount('arcade_games', 0);
     }
 
+    public function test_admin_cannot_create_scalar_payout_config(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.arcadeGames.store'), $this->validPayload([
+                'payout_config' => '10',
+            ]));
+
+        $response->assertSessionHasErrors('payout_config');
+        $this->assertDatabaseCount('arcade_games', 0);
+    }
+
+    public function test_admin_cannot_create_null_payout_config(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.arcadeGames.store'), $this->validPayload([
+                'payout_config' => 'null',
+            ]));
+
+        $response->assertSessionHasErrors('payout_config');
+        $this->assertDatabaseCount('arcade_games', 0);
+    }
+
     public function test_admin_cannot_create_invalid_wager_bounds(): void
     {
         $response = $this->actingAs($this->admin)
@@ -204,6 +226,24 @@ class ArcadeAdminTest extends TestCase
         $this->assertDatabaseHas('arcade_games', [
             'id' => $game->id,
             'name' => 'Coin Flip Actualizado',
+        ]);
+    }
+
+    public function test_admin_cannot_update_scalar_payout_config(): void
+    {
+        $game = ArcadeGame::factory()->create([
+            'edition_id' => $this->edition->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->put(route('admin.arcadeGames.update', $game), $this->validPayload([
+                'payout_config' => '10',
+            ]));
+
+        $response->assertSessionHasErrors('payout_config');
+        $this->assertDatabaseHas('arcade_games', [
+            'id' => $game->id,
+            'slug' => $game->slug,
         ]);
     }
 

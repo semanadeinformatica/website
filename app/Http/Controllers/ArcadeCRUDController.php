@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ArcadeGame;
 use App\Models\Edition;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ArcadeCRUDController extends CRUDController
 {
@@ -54,14 +55,25 @@ class ArcadeCRUDController extends CRUDController
 
     protected function created(array $new): ?array
     {
-        $new['payout_config'] = json_decode($new['payout_config'], true);
-
-        return $new;
+        return $this->decodePayoutConfig($new);
     }
 
     protected function updated($old, array $new): ?array
     {
-        $new['payout_config'] = json_decode($new['payout_config'], true);
+        return $this->decodePayoutConfig($new);
+    }
+
+    private function decodePayoutConfig(array $new): array
+    {
+        $decoded = json_decode($new['payout_config'], true);
+
+        if (! is_array($decoded)) {
+            throw ValidationException::withMessages([
+                'payout_config' => 'A configuração de pagamento deve ser um objeto JSON.',
+            ]);
+        }
+
+        $new['payout_config'] = $decoded;
 
         return $new;
     }
