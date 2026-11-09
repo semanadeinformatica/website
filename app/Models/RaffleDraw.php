@@ -58,6 +58,10 @@ class RaffleDraw extends Model
      */
     public function getTotalTicketsAttribute(): int
     {
+        if (array_key_exists('total_tickets', $this->attributes)) {
+            return (int) $this->attributes['total_tickets'];
+        }
+
         return (int) ($this->relationLoaded('tickets')
             ? $this->tickets->sum('quantity')
             : $this->tickets()->sum('quantity'));
