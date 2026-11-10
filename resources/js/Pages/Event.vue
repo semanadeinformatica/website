@@ -3,10 +3,7 @@ import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Event from "@/Types/Event";
-import {
-    eventCategoryLabel,
-    eventTypeColorClassFor,
-} from "@/Types/Event";
+import { eventCategoryLabel, eventTypeColorClassFor } from "@/Types/Event";
 import type Enrollment from "@/Types/Enrollment";
 import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -91,9 +88,7 @@ const formattedSchedule = computed(() => {
     return `${start.dateText}, ${start.timeText} — ${end.timeText}`;
 });
 
-const eventTypeLabel = computed(() =>
-    eventCategoryLabel(props.event.type),
-);
+const eventTypeLabel = computed(() => eventCategoryLabel(props.event.type));
 
 const eventTypeColorClass = computed(() =>
     eventTypeColorClassFor(props.event.type),
