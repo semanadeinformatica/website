@@ -68,9 +68,11 @@ class ProgramController extends Controller
                 ],
                 'talks' => [
                     'users',
+                    'type',
                 ],
                 'activities' => [
                     'users',
+                    'type',
                 ],
             ]),
             'queryDay' => fn () => intval($queryDay),
