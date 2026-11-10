@@ -69,6 +69,10 @@ Route::prefix('/event')->name('event')->group(function () {
     });
 });
 
+Route::get('/user/{user}/cv', [CVController::class, 'show'])
+    ->whereNumber('user')
+    ->name('user.cv');
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::put('/enroll', [EnrollmentController::class, 'store'])
