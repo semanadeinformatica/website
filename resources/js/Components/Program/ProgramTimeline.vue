@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type EventDay from "@/Types/EventDay";
+import type Event from "@/Types/Event";
 import { isSpeaker, type SpeakerUser } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
 import ComingSoon from "@/Components/UI/ComingSoon.vue";
@@ -94,6 +95,19 @@ const calculateDuration = (start?: string, end?: string): string | null => {
     return `${diff}m`;
 };
 
+const formatEventTypeLabel = (event: Event, fallback: string): string => {
+    const rawName = event.type?.name?.trim();
+    if (!rawName) return fallback;
+    const lower = rawName.toLowerCase();
+    if (lower === "talk" || lower === "palestra") return "Palestra";
+    if (lower === "workshop") return "Workshop";
+    if (lower === "pitch") return "Pitch";
+    return rawName
+        .split(/\s+/)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+};
+
 const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
     const list: UnifiedTimelineItem[] = [];
 
@@ -103,7 +117,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `talk-${t.id}`,
                 rawId: t.id,
                 type: "talk",
-                typeLabel: "Palestra",
+                typeLabel: formatEventTypeLabel(t, "Palestra"),
                 name: t.name,
                 topic: t.topic,
                 location: t.location,
@@ -122,7 +136,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `act-${a.id}`,
                 rawId: a.id,
                 type: "activity",
-                typeLabel: "Workshop",
+                typeLabel: formatEventTypeLabel(a, "Workshop"),
                 name: a.name,
                 topic: a.topic,
                 location: a.location,

@@ -88,14 +88,16 @@ const formattedSchedule = computed(() => {
 });
 
 const eventCategoryLabel = computed(() => {
-    const typeName = props.event.type?.name?.toLowerCase();
+    const rawName = props.event.type?.name?.trim();
+    if (!rawName) return "Atividade";
+    const typeName = rawName.toLowerCase();
     if (typeName === "talk" || typeName === "palestra") return "Palestra";
     if (typeName === "workshop") return "Workshop";
     if (typeName === "pitch") return "Pitch";
-    if (typeName) {
-        return typeName.charAt(0).toUpperCase() + typeName.slice(1);
-    }
-    return "Atividade";
+    return rawName
+        .split(/\s+/)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 });
 
 const eventTypeColorClass = computed(() => {
