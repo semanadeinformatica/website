@@ -64,14 +64,14 @@ class Event extends Model
     public function scopeTalk(Builder $query): void
     {
         $query->whereHas('type', function ($query) {
-            $query->where('name', 'talk');
+            $query->whereIn('name', ['talk', 'palestra']);
         });
     }
 
     public function scopeActivity(Builder $query): void
     {
         $query->whereHas('type', function ($query) {
-            $query->whereNot('name', 'talk');
+            $query->whereNotIn('name', ['talk', 'palestra']);
         });
     }
 
