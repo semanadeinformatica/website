@@ -136,7 +136,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `act-${a.id}`,
                 rawId: a.id,
                 type: "activity",
-                typeLabel: formatEventTypeLabel(a, "Workshop"),
+                typeLabel: formatEventTypeLabel(a, "Atividade"),
                 name: a.name,
                 topic: a.topic,
                 location: a.location,
@@ -300,7 +300,7 @@ const timelineGroups = computed<TimeSlotGroup[]>(() => {
                                         class="mb-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs"
                                     >
                                         <span
-                                            class="font-semibold tracking-wider uppercase"
+                                            class="font-semibold tracking-wider"
                                             :class="
                                                 item.type === 'talk'
                                                     ? 'text-blue-400'
