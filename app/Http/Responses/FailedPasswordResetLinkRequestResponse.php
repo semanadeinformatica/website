@@ -16,7 +16,7 @@ class FailedPasswordResetLinkRequestResponse implements FailedPasswordResetLinkR
 
     public function toResponse($request)
     {
-        if ($this->status === Password::INVALID_USER) {
+        if (in_array($this->status, [Password::INVALID_USER, Password::RESET_THROTTLED], true)) {
             return app(SuccessfulPasswordResetLinkRequestResponseContract::class, [
                 'status' => Password::RESET_LINK_SENT,
             ])->toResponse($request);

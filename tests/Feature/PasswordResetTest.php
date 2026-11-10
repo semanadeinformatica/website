@@ -89,6 +89,30 @@ class PasswordResetTest extends TestCase
         Notification::assertNothingSent();
     }
 
+    public function test_reset_password_link_request_does_not_reveal_registered_email_when_throttled(): void
+    {
+        if (! Features::enabled(Features::resetPasswords())) {
+            $this->markTestSkipped('Password updates are not enabled.');
+
+            return;
+        }
+
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $this->post('/forgot-password', [
+            'email' => $user->email,
+        ])->assertSessionHasNoErrors();
+
+        $response = $this->post('/forgot-password', [
+            'email' => $user->email,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('status');
+    }
+
     public function test_password_can_be_reset_with_valid_token(): void
     {
         if (! Features::enabled(Features::resetPasswords())) {

@@ -12,6 +12,7 @@ use App\Models\SponsorTier;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -89,5 +90,16 @@ class PublicDataExposureTest extends TestCase
         $this->actingAs($other)
             ->get(route('user.cv', ['user' => $owner->id]))
             ->assertForbidden();
+    }
+
+    public function test_cv_upload_rejects_non_pdf_files(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->put(route('current-user-cv.update'), [
+                'cv' => UploadedFile::fake()->create('cv.html', 10, 'text/html'),
+            ])
+            ->assertSessionHasErrors('cv');
     }
 }

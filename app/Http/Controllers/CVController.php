@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 
 class CVController extends Controller
 {
@@ -32,7 +33,19 @@ class CVController extends Controller
             abort(404);
         }
 
-        return Storage::disk(config('jetstream.cv_disk'))->response($participant->cv_path);
+        $disk = Storage::disk(config('jetstream.cv_disk'));
+        $mimeType = $disk->mimeType($participant->cv_path) ?: 'application/octet-stream';
+
+        return $disk->response(
+            $participant->cv_path,
+            null,
+            [
+                'Content-Type' => $mimeType,
+                'X-Content-Type-Options' => 'nosniff',
+                'Cache-Control' => 'private, no-store',
+            ],
+            $mimeType === 'application/pdf' ? 'inline' : 'attachment'
+        );
     }
 
     /**
@@ -54,7 +67,11 @@ class CVController extends Controller
      */
     public function update(Request $request)
     {
-        Participant::where('user_id', $request->user()->id)->first()->updateCV($request->cv);
+        $request->validate([
+            'cv' => ['required', File::types(['pdf'])->max('4mb')],
+        ]);
+
+        Participant::where('user_id', $request->user()->id)->first()->updateCV($request->file('cv'));
 
         return back(303)->with('status', 'cv-updated');
     }
