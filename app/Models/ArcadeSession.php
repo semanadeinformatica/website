@@ -84,9 +84,18 @@ class ArcadeSession extends Model
      */
     public function scopeWonToday(Builder $query, int $enrollmentId, int $gameId): Builder
     {
-        return $query->where('enrollment_id', $enrollmentId)
+        return $query->where(function (Builder $q) use ($enrollmentId) {
+            $q->where('enrollment_id', $enrollmentId)
+                ->orWhere('challenger_enrollment_id', $enrollmentId);
+        })
             ->where('arcade_game_id', $gameId)
-            ->where('outcome', 'win')
-            ->whereDate('created_at', today());
+            ->whereIn('outcome', ['win', 'cashout'])
+            ->where(function (Builder $q) {
+                $q->whereDate('resolved_at', today())
+                    ->orWhere(function (Builder $sub) {
+                        $sub->whereNull('resolved_at')
+                            ->whereDate('created_at', today());
+                    });
+            });
     }
 }

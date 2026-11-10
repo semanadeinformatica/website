@@ -30,6 +30,7 @@ class RaffleController extends Controller
 
         $draws = RaffleDraw::query()
             ->where('edition_id', $edition->id)
+            ->with(['winner.participant.user:id,name,profile_photo_path'])
             ->withSum('tickets as total_tickets', 'quantity')
             ->orderByDesc('is_active')
             ->orderBy('created_at')
