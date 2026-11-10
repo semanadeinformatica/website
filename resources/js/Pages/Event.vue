@@ -3,6 +3,10 @@ import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Event from "@/Types/Event";
+import {
+    eventCategoryLabel,
+    eventTypeColorClassFor,
+} from "@/Types/Event";
 import type Enrollment from "@/Types/Enrollment";
 import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -87,23 +91,13 @@ const formattedSchedule = computed(() => {
     return `${start.dateText}, ${start.timeText} — ${end.timeText}`;
 });
 
-const eventCategoryLabel = computed(() => {
-    const typeName = props.event.type?.name?.toLowerCase();
-    if (typeName === "talk" || typeName === "palestra") return "Palestra";
-    if (typeName === "workshop") return "Workshop";
-    if (typeName === "pitch") return "Pitch";
-    if (typeName) {
-        return typeName.charAt(0).toUpperCase() + typeName.slice(1);
-    }
-    return "Atividade";
-});
+const eventTypeLabel = computed(() =>
+    eventCategoryLabel(props.event.type),
+);
 
-const eventTypeColorClass = computed(() => {
-    const typeName = props.event.type?.name?.toLowerCase();
-    if (typeName === "talk" || typeName === "palestra") return "text-sky-400";
-    if (typeName === "workshop") return "text-purple-400";
-    return "text-amber-400";
-});
+const eventTypeColorClass = computed(() =>
+    eventTypeColorClassFor(props.event.type),
+);
 
 const isEventFull = computed(() => {
     return Boolean(
@@ -250,7 +244,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                             class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs font-semibold tracking-wider uppercase"
                         >
                             <span :class="eventTypeColorClass">{{
-                                eventCategoryLabel
+                                eventTypeLabel
                             }}</span>
 
                             <template v-if="formattedSchedule">

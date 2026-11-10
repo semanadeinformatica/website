@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type EventDay from "@/Types/EventDay";
+import { eventCategoryLabel } from "@/Types/Event";
 import { isSpeaker, type SpeakerUser } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
 import ComingSoon from "@/Components/UI/ComingSoon.vue";
@@ -103,7 +104,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `talk-${t.id}`,
                 rawId: t.id,
                 type: "talk",
-                typeLabel: "Palestra",
+                typeLabel: eventCategoryLabel(t.type),
                 name: t.name,
                 topic: t.topic,
                 location: t.location,
@@ -122,7 +123,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `act-${a.id}`,
                 rawId: a.id,
                 type: "activity",
-                typeLabel: "Workshop",
+                typeLabel: eventCategoryLabel(a.type),
                 name: a.name,
                 topic: a.topic,
                 location: a.location,
