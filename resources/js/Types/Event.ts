@@ -29,3 +29,15 @@ export default interface Event extends Model {
     event_day_id: number;
     event_day?: EventDay;
 }
+
+export const eventCategoryLabel = (type?: EventType): string =>
+    type?.name ?? "Atividade";
+
+export const eventTypeColorClassFor = (type?: EventType): string => {
+    const typeName = type?.name?.toLowerCase();
+
+    if (typeName === "talk" || typeName === "palestra") return "text-sky-400";
+    if (typeName === "workshop") return "text-purple-400";
+
+    return "text-amber-400";
+};
