@@ -57,24 +57,40 @@ class ProgramController extends Controller
 
         return Inertia::render('Program', [
             'days' => fn () => $edition->event_days()->orderBy('date', 'ASC')->get(['id', 'date', 'theme']),
-            'eventDay' => fn () => $eventDay?->load([
-                'stands' => [
-                    'sponsor' => [
-                        'company' => [
-                            'user',
+            'eventDay' => function () use ($eventDay) {
+                $eventDay?->load([
+                    'stands' => [
+                        'sponsor' => [
+                            'company' => [
+                                'user',
+                            ],
+                            'tier',
                         ],
-                        'tier',
                     ],
-                ],
-                'talks' => [
-                    'users',
-                    'type',
-                ],
-                'activities' => [
-                    'users',
-                    'type',
-                ],
-            ]),
+                    'talks' => [
+                        'users',
+                        'type',
+                    ],
+                    'activities' => [
+                        'users',
+                        'type',
+                    ],
+                ]);
+
+                if ($eventDay !== null) {
+                    $eventDay->talks->each(function ($talk) {
+                        $talk->users->each(fn ($user) => $user->makeHidden('email'));
+                    });
+                    $eventDay->activities->each(function ($activity) {
+                        $activity->users->each(fn ($user) => $user->makeHidden('email'));
+                    });
+                    $eventDay->stands->each(function ($stand) {
+                        $stand->sponsor?->company?->user?->makeHidden('email');
+                    });
+                }
+
+                return $eventDay;
+            },
             'queryDay' => fn () => intval($queryDay),
             'totalDays' => fn () => intval($totalDays),
         ]);

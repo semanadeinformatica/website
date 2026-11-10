@@ -33,6 +33,13 @@ class HomeController extends Controller
 
         $can_enroll = Gate::allows('enroll', $edition);
 
+        $speakers->each(fn ($speaker) => $speaker->makeHidden('email'));
+        $sponsorTiers->each(function ($tier) {
+            $tier->sponsors->each(function ($sponsor) {
+                $sponsor->company?->user?->makeHidden('email');
+            });
+        });
+
         return Inertia::render('Home', [
             'edition' => $edition,
             'sponsorTiers' => $sponsorTiers,

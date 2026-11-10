@@ -25,6 +25,12 @@ class DepartmentController extends Controller
             ],
         ])->get();
 
+        $departments->each(function ($department) {
+            $department->staff->each(function ($staff) {
+                $staff->participant?->user?->makeHidden('email');
+            });
+        });
+
         return Inertia::render('Team', [
             'departments' => $departments,
         ]);
