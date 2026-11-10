@@ -27,6 +27,7 @@ const props = defineProps<{
     };
     user?: User;
     isAdmin?: boolean;
+    enrollmentPoints?: number | null;
 }>();
 
 const emit = defineEmits<{
@@ -284,6 +285,28 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                                 <p class="truncate text-xs text-neutral-400">
                                     {{ user.email }}
                                 </p>
+                                <div
+                                    v-if="
+                                        enrollmentPoints !== null &&
+                                        enrollmentPoints !== undefined
+                                    "
+                                    class="mt-1 flex items-center gap-1.5 text-xs"
+                                    title="O teu saldo de SINFrões"
+                                >
+                                    <span
+                                        class="font-mono font-bold text-white"
+                                        >{{ enrollmentPoints }}</span
+                                    >
+                                    <img
+                                        class="h-3 w-3 object-contain"
+                                        alt="SINFrão"
+                                        title="SINFrão"
+                                        src="/images/sinf-2026-sm.svg"
+                                    />
+                                    <span class="text-neutral-400"
+                                        >SINFrões</span
+                                    >
+                                </div>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">

@@ -35,6 +35,7 @@ const pageRoutes: Routes = {
     program: { label: "Programa" },
     "shop.show": { label: "Loja" },
     "arcade.lobby": { label: "Arcade" },
+    "raffle.index": { label: "Prémios" },
     team: { label: "Equipa" },
 };
 
@@ -48,6 +49,10 @@ const isAdmin = computed(() => checkIsAdmin(user.value));
 const competitions = computed<Competition[]>(
     () => (page.props.competitions as Competition[] | undefined) || [],
 );
+const enrollmentPoints = computed<number | null>(() => {
+    const points = page.props.enrollment_points;
+    return typeof points === "number" ? points : null;
+});
 
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
@@ -243,6 +248,28 @@ onUnmounted(() => {
                     </template>
                 </PillSelector>
 
+                <PillSelector
+                    v-if="enrollmentPoints !== null"
+                    size="sm"
+                    :wrap="false"
+                    class="hidden md:flex"
+                >
+                    <div
+                        class="pill-item cursor-default gap-1.5 hover:bg-transparent"
+                        title="O teu saldo de SINFrões"
+                    >
+                        <span class="font-mono text-sm font-bold text-white">{{
+                            enrollmentPoints
+                        }}</span>
+                        <img
+                            class="h-3.5 w-3.5 object-contain"
+                            alt="SINFrão"
+                            title="SINFrão"
+                            src="/images/sinf-2026-sm.svg"
+                        />
+                    </div>
+                </PillSelector>
+
                 <PillSelector :items="authItems" size="sm" :wrap="false">
                     <template #dropdown-auth-user>
                         <div class="border-b border-white/8 px-3 py-2.5">
@@ -308,6 +335,7 @@ onUnmounted(() => {
                     :options="options"
                     :user="user"
                     :is-admin="isAdmin"
+                    :enrollment-points="enrollmentPoints"
                 />
             </div>
         </div>
