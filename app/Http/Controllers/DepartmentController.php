@@ -27,7 +27,11 @@ class DepartmentController extends Controller
 
         $departments->each(function ($department) {
             $department->staff->each(function ($staff) {
-                $staff->participant?->user?->makeHidden('email');
+                $participant = $staff->participant;
+
+                $participant?->makeHidden('cv_url');
+                $participant?->user?->makeHidden('email');
+                $participant?->user?->usertype?->makeHidden('cv_url');
             });
         });
 

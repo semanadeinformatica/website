@@ -17,7 +17,7 @@ class PublicDataExposureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_public_pages_do_not_expose_account_emails(): void
+    public function test_public_pages_do_not_expose_private_data(): void
     {
         $edition = Edition::factory()->create();
         $eventDay = EventDay::factory()->for($edition)->create();
@@ -28,6 +28,7 @@ class PublicDataExposureTest extends TestCase
 
         $department = Department::factory()->for($edition)->create();
         $staff = Staff::factory()->for($department)->create();
+        $staff->participant->forceFill(['cv_path' => 'cvs/public-data-test.pdf'])->save();
 
         $tier = SponsorTier::factory()->for($edition)->create();
         $sponsor = Sponsor::factory()->for($edition)->for($tier, 'tier')->create();
@@ -46,6 +47,8 @@ class PublicDataExposureTest extends TestCase
             foreach ($emails as $email) {
                 $response->assertDontSee($email);
             }
+
+            $response->assertDontSee('public-data-test.pdf');
         }
     }
 }
