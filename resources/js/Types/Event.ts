@@ -30,8 +30,17 @@ export default interface Event extends Model {
     event_day?: EventDay;
 }
 
-export const eventCategoryLabel = (type?: EventType): string =>
-    type?.name ?? "Atividade";
+export const eventCategoryLabel = (type?: EventType): string => {
+    const typeName = type?.name?.toLowerCase();
+
+    if (typeName === "talk" || typeName === "palestra") return "Palestra";
+
+    if (typeName) {
+        return typeName.charAt(0).toUpperCase() + typeName.slice(1);
+    }
+
+    return "Atividade";
+};
 
 export const eventTypeColorClassFor = (type?: EventType): string => {
     const typeName = type?.name?.toLowerCase();
