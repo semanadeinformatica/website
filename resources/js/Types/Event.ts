@@ -56,3 +56,21 @@ export const eventTypeColorClassFor = (type?: EventType): string => {
 
     return "text-amber-400";
 };
+
+export const formatEventTime = (time?: string): string => {
+    if (!time) return "";
+
+    if (time.includes("T")) {
+        const date = new Date(time);
+
+        if (!isNaN(date.getTime())) {
+            return date.toLocaleTimeString("pt-PT", {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "Europe/Lisbon",
+            });
+        }
+    }
+
+    return time.slice(0, 5);
+};
