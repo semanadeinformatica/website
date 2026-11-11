@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Calendar, Clock, MapPin } from "@lucide/vue";
 import type Event from "@/Types/Event";
+import { formatEventTime } from "@/Types/Event";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
@@ -10,10 +11,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
-const formatTimeString = (time: string): string => {
-    return `1970-01-01T${time}.000000Z`;
-};
 
 const hashCode = (str: string): number => {
     let hash = 0;
@@ -124,14 +121,7 @@ const accentColor = () => {
                         </div>
                         <div
                             v-if="event.time_start"
-                            :title="
-                                $d(
-                                    new Date(
-                                        formatTimeString(event.time_start),
-                                    ),
-                                    'hourMinute',
-                                )
-                            "
+                            :title="formatEventTime(event.time_start)"
                             class="flex min-w-0 items-center gap-[.35em]"
                         >
                             <Clock
@@ -139,14 +129,7 @@ const accentColor = () => {
                                 class="h-[1.1em] w-[1.1em] shrink-0"
                             />
                             <span class="truncate">
-                                {{
-                                    $d(
-                                        new Date(
-                                            formatTimeString(event.time_start),
-                                        ),
-                                        "hourMinute",
-                                    )
-                                }}
+                                {{ formatEventTime(event.time_start) }}
                             </span>
                         </div>
                         <div
