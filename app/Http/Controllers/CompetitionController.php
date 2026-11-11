@@ -42,14 +42,20 @@ class CompetitionController extends Controller
 
         $isOver = now()->greaterThan($competition->date_end);
 
-        return Inertia::render('Competition', [
-            'competition' => $competition->load([
-                'teams' => fn ($query) => $query->orderBy('points', 'desc')->with([
-                    'members' => [
-                        'user',
-                    ],
-                ]),
+        $competition->load([
+            'teams' => fn ($query) => $query->orderBy('points', 'desc')->with([
+                'members' => [
+                    'user',
+                ],
             ]),
+        ]);
+
+        $competition->teams->each(function ($team) {
+            $team->members->each(fn ($member) => $member->user?->makeHidden('email'));
+        });
+
+        return Inertia::render('Competition', [
+            'competition' => $competition,
             'isOver' => $isOver,
             'isParticipant' => $isParticipant,
             'isEnrolled' => $isEnrolled,
