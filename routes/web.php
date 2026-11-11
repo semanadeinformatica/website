@@ -15,7 +15,6 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\EventTypeCRUDController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
@@ -68,6 +67,10 @@ Route::prefix('/event')->name('event')->group(function () {
         Route::put('/leave', [EventController::class, 'leave'])->name('.leave');
     });
 });
+
+Route::get('/user/{user}/cv', [CVController::class, 'show'])
+    ->whereNumber('user')
+    ->name('user.cv');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
@@ -124,7 +127,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
-                Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
 
             Route::get('/profile/edit', [UserController::class, 'edit'])
