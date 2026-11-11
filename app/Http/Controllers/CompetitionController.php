@@ -51,7 +51,11 @@ class CompetitionController extends Controller
         ]);
 
         $competition->teams->each(function ($team) {
-            $team->members->each(fn ($member) => $member->user?->makeHidden('email'));
+            $team->members->each(function ($member) {
+                $member->makeHidden('cv_url');
+                $member->user?->makeHidden('email');
+                $member->user?->usertype?->makeHidden('cv_url');
+            });
         });
 
         return Inertia::render('Competition', [

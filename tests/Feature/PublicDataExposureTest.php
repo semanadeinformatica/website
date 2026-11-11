@@ -65,6 +65,7 @@ class PublicDataExposureTest extends TestCase
             }
 
             $response->assertDontSee('public-data-test.pdf');
+            $response->assertDontSee('cv_url');
         }
     }
 
@@ -124,27 +125,19 @@ class PublicDataExposureTest extends TestCase
         $tier = SponsorTier::factory()->for($edition)->create(['canSeeCV' => true]);
 
         $companyUser = User::factory()->company()->create();
-        $company = $companyUser->usertype;
 
-        $sponsor = Sponsor::factory()->for($edition)->for($tier, 'tier')->for($company, 'company')->create();
-        $eventDay = EventDay::factory()->for($edition)->create();
-        $stand = Stand::factory()->for($sponsor, 'sponsor')->for($eventDay, 'event_day')->create();
-        $quest = Quest::factory()->for($edition)->create([
-            'requirement_type' => Stand::class,
-            'requirement_id' => $stand->id,
-        ]);
-
-        // Link one participant to the company's stand through the quest/enrollment chain.
         $member = Participant::factory()->create();
-        $enrollment = Enrollment::factory()->for($edition)->for($member, 'participant')->create();
-        DB::table('enrollment_quest')->insert([
-            'enrollment_id' => $enrollment->id,
-            'quest_id' => $quest->id,
-        ]);
+        $this->linkParticipantToCompany($companyUser, $edition, $member, $tier);
+
+        // A participant the company only met in a previous edition must not be accessible.
+        $oldEdition = Edition::factory()->create(['year' => now()->year - 1]);
+        $oldTier = SponsorTier::factory()->for($oldEdition)->create(['canSeeCV' => true]);
+        $oldMember = Participant::factory()->create();
+        $this->linkParticipantToCompany($companyUser, $oldEdition, $oldMember, $oldTier);
 
         $outsider = Participant::factory()->create();
 
-        foreach ([$member, $outsider] as $participant) {
+        foreach ([$member, $oldMember, $outsider] as $participant) {
             $participant->forceFill(['cv_path' => 'cvs/test.pdf'])->save();
         }
         Storage::disk(config('jetstream.cv_disk'))->put('cvs/test.pdf', 'pdf');
@@ -156,5 +149,30 @@ class PublicDataExposureTest extends TestCase
         $this->actingAs($companyUser)
             ->get(route('user.cv', ['user' => $outsider->user_id]))
             ->assertForbidden();
+
+        $this->actingAs($companyUser)
+            ->get(route('user.cv', ['user' => $oldMember->user_id]))
+            ->assertForbidden();
+    }
+
+    private function linkParticipantToCompany(User $companyUser, Edition $edition, Participant $participant, SponsorTier $tier): void
+    {
+        $sponsor = Sponsor::factory()
+            ->for($edition)
+            ->for($tier, 'tier')
+            ->for($companyUser->usertype, 'company')
+            ->create();
+        $eventDay = EventDay::factory()->for($edition)->create();
+        $stand = Stand::factory()->for($sponsor, 'sponsor')->for($eventDay, 'event_day')->create();
+        $quest = Quest::factory()->for($edition)->create([
+            'requirement_type' => Stand::class,
+            'requirement_id' => $stand->id,
+        ]);
+        $enrollment = Enrollment::factory()->for($edition)->for($participant, 'participant')->create();
+
+        DB::table('enrollment_quest')->insert([
+            'enrollment_id' => $enrollment->id,
+            'quest_id' => $quest->id,
+        ]);
     }
 }

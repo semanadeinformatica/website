@@ -110,7 +110,11 @@ class AppServiceProvider extends ServiceProvider
             (
                 $user->isCompany() &&
                 $profile_user->isParticipant() &&
-                $user->usertype->participants()->where('participants.user_id', $profile_user->id)->exists()
+                $user->usertype->participants()
+                    ->where('sponsors.edition_id', $edition->id)
+                    ->where('enrollments.edition_id', $edition->id)
+                    ->where('participants.user_id', $profile_user->id)
+                    ->exists()
             ) ||
             (
                 $user->isCompany() &&
@@ -131,7 +135,11 @@ class AppServiceProvider extends ServiceProvider
                 $user->isCompany() &&
                 $edition->sponsors()->where('company_id', $user->usertype_id)->whereRelation('tier', 'canSeeCV', true)->exists() &&
                 $cv_user->isParticipant() &&
-                $user->usertype->participants()->where('participants.user_id', $cv_user->id)->exists()
+                $user->usertype->participants()
+                    ->where('sponsors.edition_id', $edition->id)
+                    ->where('enrollments.edition_id', $edition->id)
+                    ->where('participants.user_id', $cv_user->id)
+                    ->exists()
             )
         ));
 
