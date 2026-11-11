@@ -3,7 +3,11 @@ import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Event from "@/Types/Event";
-import { eventCategoryLabel, eventTypeColorClassFor } from "@/Types/Event";
+import {
+    eventCategoryLabel,
+    eventTypeColorClassFor,
+    formatEventTime,
+} from "@/Types/Event";
 import type Enrollment from "@/Types/Enrollment";
 import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -52,17 +56,7 @@ const formatMilestoneDate = (dayDate?: string | Date, timeStr?: string) => {
             .replace(".", "");
         const month = m.charAt(0).toUpperCase() + m.slice(1);
 
-        const isoTime = timeStr.includes("T")
-            ? timeStr
-            : `1970-01-01T${timeStr}.000000Z`;
-        const timeObj = new Date(isoTime);
-        const time = isNaN(timeObj.getTime())
-            ? timeStr.slice(0, 5)
-            : timeObj.toLocaleTimeString("pt-PT", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "Europe/Lisbon",
-              });
+        const time = formatEventTime(timeStr);
 
         return {
             dateText: `${day} ${month}`,
