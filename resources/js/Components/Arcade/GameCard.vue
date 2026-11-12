@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type Component } from "vue";
 import type ArcadeGame from "@/Types/Arcade";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { Coins, Dices, Grid3x3, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
+import { Coins, Dices, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
 
 interface Props {
     game: ArcadeGame;
@@ -17,14 +17,14 @@ const emit = defineEmits<{
     (e: "play"): void;
 }>();
 
-const iconComponent = computed(() => {
+const iconComponent = computed<Component | string>(() => {
     switch (props.game.slug) {
+        case "bug-sweeper":
+            return "/images/arcade/BugSweeper-Icon.png";
         case "coin-flip":
             return Coins;
         case "high-low":
             return Dices;
-        case "bug-sweeper":
-            return Grid3x3;
         case "mastermind":
             return Key;
         case "binary-blitz":
@@ -33,6 +33,8 @@ const iconComponent = computed(() => {
             return Gamepad2;
     }
 });
+
+const isCustomIcon = computed(() => typeof iconComponent.value === "string");
 </script>
 
 <template>
@@ -62,9 +64,24 @@ const iconComponent = computed(() => {
             <!-- Header: Icon & Badges -->
             <div class="flex items-start justify-between">
                 <div
-                    class="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-amber-400 shadow-inner"
+                    class="relative flex h-12 w-12 items-center justify-center rounded-2xl shadow-inner overflow-hidden"
+                    :class="
+                        isCustomIcon
+                            ? 'border border-white/15 bg-white/[0.08] p-1.5'
+                            : 'border border-white/10 bg-white/5 text-amber-400 p-1.5'
+                    "
                 >
-                    <component :is="iconComponent" :size="24" />
+                    <img
+                        v-if="isCustomIcon"
+                        :src="iconComponent as string"
+                        :alt="game.name"
+                        class="h-full w-full object-contain drop-shadow-[0_0_6px_rgba(147,70,255,0.35)]"
+                    />
+                    <component
+                        v-else
+                        :is="iconComponent"
+                        :size="24"
+                    />
                 </div>
 
                 <div class="flex items-center gap-2">

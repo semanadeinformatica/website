@@ -298,7 +298,7 @@ async function handleCloseRequest() {
 
 <template>
     <div
-        class="relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
+        class="relative flex max-h-[88vh] flex-col overflow-y-auto rounded-3xl border border-white/10 bg-neutral-950 p-4 sm:p-6 shadow-2xl backdrop-blur-xl"
     >
         <!-- Modal Header -->
         <div
@@ -306,9 +306,13 @@ async function handleCloseRequest() {
         >
             <div class="flex items-center gap-3">
                 <div
-                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-amber-400"
+                    class="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/[0.08] p-1.5 overflow-hidden shadow-md"
                 >
-                    <Bug :size="20" />
+                    <img
+                        src="/images/arcade/BugSweeper-Icon.png"
+                        :alt="game.name"
+                        class="h-full w-full object-contain drop-shadow-[0_0_4px_rgba(147,70,255,0.35)]"
+                    />
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-white">
@@ -357,8 +361,8 @@ async function handleCloseRequest() {
                     <strong class="text-amber-400"
                         >{{ bombCount }} bugs críticos</strong
                     >
-                    escondidos nesta grelha 3×3. Cada nó limpo que encontrares
-                    aumenta o multiplicador.
+                    à solta no sistema! Descobre os nós seguros para multiplicar os
+                    teus pontos e não deixes que os bugs te roubem os SINFrões.
                 </p>
                 <p class="pt-1 text-[11px] text-neutral-400">
                     Se saíres a meio do jogo, os teus ganhos são recolhidos
@@ -460,13 +464,13 @@ async function handleCloseRequest() {
                             cell.state === 'scanning'
                                 ? 'scale-95 animate-pulse border-amber-400/70 bg-amber-400/10'
                                 : '',
-                            // Safe cell state: Antivirus Shield (SINF Secondary Roxo)
+                            // Safe cell state: Antivirus Shield 
                             cell.state === 'safe'
                                 ? 'border-[#6a00ff]/60 bg-[#4300a3]/40 text-[#9346ff] shadow-[0_0_20px_rgba(106,0,255,0.4)]'
                                 : '',
-                            // Bomb Detonated by user: Electric glitch shockwave (SINF Primary Rubi)
+                            // Bomb Detonated by user: Fixed dark red background, lines & bug pulse
                             cell.state === 'bomb_detonated'
-                                ? 'animate-electric-cell border-[#9a0036] bg-[#630022]/60 text-[#d6336c] shadow-[0_0_30px_rgba(154,0,54,0.7)]'
+                                ? 'border-[#9a0036] bg-[#630022]/40 text-[#d6336c]'
                                 : '',
                             // Bomb Revealed passively at game over
                             cell.state === 'bomb_revealed'
@@ -498,86 +502,21 @@ async function handleCloseRequest() {
                             />
                         </div>
 
-                        <!-- Bomb Detonated: Microchip Package with Bug in Center & Branching Pin Tracks -->
+                        <!-- Bomb Detonated: Microchip Package with Bug in Center -->
                         <div
                             v-else-if="cell.state === 'bomb_detonated'"
                             class="relative flex h-full w-full items-center justify-center p-1.5"
                         >
-                            <!-- Microchip Frame and Circular Pin Tracks -->
-                            <svg
-                                class="pointer-events-none absolute inset-0 h-full w-full animate-pcb-pulse"
-                                viewBox="0 0 100 100"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <!-- Central Rounded Chip Die -->
-                                <rect
-                                    x="28"
-                                    y="28"
-                                    width="44"
-                                    height="44"
-                                    rx="8"
-                                    stroke="currentColor"
-                                    stroke-width="2.5"
-                                    class="fill-black/40"
-                                />
-
-                                <!-- Orthogonal Tracks to Pins -->
-                                <g
-                                    stroke="currentColor"
-                                    stroke-width="2.2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <!-- Top Pins -->
-                                    <path d="M 50 28 V 11" />
-                                    <path d="M 38 28 V 16 H 24" />
-                                    <path d="M 62 28 V 20 H 76" />
-
-                                    <!-- Bottom Pins -->
-                                    <path d="M 50 72 V 89" />
-                                    <path d="M 38 72 V 84 H 24" />
-                                    <path d="M 62 72 V 80 H 76" />
-
-                                    <!-- Left Pins -->
-                                    <path d="M 28 50 H 11" />
-                                    <path d="M 28 38 H 18 V 24" />
-                                    <path d="M 28 62 H 14 V 76" />
-
-                                    <!-- Right Pins -->
-                                    <path d="M 72 50 H 89" />
-                                    <path d="M 72 38 H 82 V 24" />
-                                    <path d="M 72 62 H 86 V 76" />
-                                </g>
-
-                                <!-- Circular Via/Pin Terminals -->
-                                <g fill="currentColor">
-                                    <!-- Top -->
-                                    <circle cx="50" cy="8" r="4" />
-                                    <circle cx="21" cy="16" r="4" />
-                                    <circle cx="79" cy="20" r="4" />
-
-                                    <!-- Bottom -->
-                                    <circle cx="50" cy="92" r="4" />
-                                    <circle cx="21" cy="84" r="4" />
-                                    <circle cx="79" cy="80" r="4" />
-
-                                    <!-- Left -->
-                                    <circle cx="8" cy="50" r="4" />
-                                    <circle cx="18" cy="21" r="4" />
-                                    <circle cx="14" cy="79" r="4" />
-
-                                    <!-- Right -->
-                                    <circle cx="92" cy="50" r="4" />
-                                    <circle cx="82" cy="21" r="4" />
-                                    <circle cx="86" cy="79" r="4" />
-                                </g>
-                            </svg>
+                            <img
+                                src="/images/arcade/microchip-detonated.svg"
+                                alt="Microchip Detonado"
+                                class="pointer-events-none absolute inset-0 h-full w-full select-none"
+                            />
 
                             <!-- Bug Icon Centered in Microchip Core -->
                             <Bug
                                 :size="24"
-                                class="relative z-10 stroke-[2.5] animate-pcb-pulse"
+                                class="relative z-10 stroke-[2.5] animate-circuit-pulse"
                             />
                         </div>
 
@@ -586,56 +525,12 @@ async function handleCloseRequest() {
                             v-else-if="cell.state === 'bomb_revealed'"
                             class="relative flex h-full w-full items-center justify-center p-1.5 opacity-85 text-[#d6336c]"
                         >
-                            <svg
-                                class="pointer-events-none absolute inset-0 h-full w-full"
-                                viewBox="0 0 100 100"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <rect
-                                    x="28"
-                                    y="28"
-                                    width="44"
-                                    height="44"
-                                    rx="8"
-                                    stroke="currentColor"
-                                    stroke-width="2.5"
-                                    class="fill-black/30"
-                                />
-                                <g
-                                    stroke="currentColor"
-                                    stroke-width="2.2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <path d="M 50 28 V 11" />
-                                    <path d="M 38 28 V 16 H 24" />
-                                    <path d="M 62 28 V 20 H 76" />
-                                    <path d="M 50 72 V 89" />
-                                    <path d="M 38 72 V 84 H 24" />
-                                    <path d="M 62 72 V 80 H 76" />
-                                    <path d="M 28 50 H 11" />
-                                    <path d="M 28 38 H 18 V 24" />
-                                    <path d="M 28 62 H 14 V 76" />
-                                    <path d="M 72 50 H 89" />
-                                    <path d="M 72 38 H 82 V 24" />
-                                    <path d="M 72 62 H 86 V 76" />
-                                </g>
-                                <g fill="currentColor">
-                                    <circle cx="50" cy="8" r="4" />
-                                    <circle cx="21" cy="16" r="4" />
-                                    <circle cx="79" cy="20" r="4" />
-                                    <circle cx="50" cy="92" r="4" />
-                                    <circle cx="21" cy="84" r="4" />
-                                    <circle cx="79" cy="80" r="4" />
-                                    <circle cx="8" cy="50" r="4" />
-                                    <circle cx="18" cy="21" r="4" />
-                                    <circle cx="14" cy="79" r="4" />
-                                    <circle cx="92" cy="50" r="4" />
-                                    <circle cx="82" cy="21" r="4" />
-                                    <circle cx="86" cy="79" r="4" />
-                                </g>
-                            </svg>
+                            <img
+                                src="/images/arcade/microchip-revealed.svg"
+                                alt="Microchip Revelado"
+                                class="pointer-events-none absolute inset-0 h-full w-full select-none"
+                            />
+
                             <Bug
                                 :size="24"
                                 class="relative z-10 stroke-[2.5]"
@@ -655,7 +550,7 @@ async function handleCloseRequest() {
                         <span>
                             Progresso:
                             <strong class="text-white">{{ clicks }}</strong> /
-                            {{ maxSafeClicks }} nós limpos
+                            {{ maxSafeClicks }} nós seguros
                         </span>
                         <span
                             v-if="canCashout"
@@ -734,17 +629,27 @@ async function handleCloseRequest() {
                         </p>
                     </div>
 
-                    <!-- End-Game Action Buttons: Rebet & Change Wager -->
-                    <div class="flex flex-col gap-2 pt-1">
-                        <!-- Rebet Primary Button -->
-                        <PrimaryButton
-                            :disabled="localBalance < wager || isActionLoading"
-                            class="w-full justify-center"
-                            @click="handleRebet"
+                    <!-- End-Game Action Buttons: Change Wager & Rebet -->
+                    <div class="pt-1">
+                        <div
+                            v-if="localBalance >= wager"
+                            class="grid grid-cols-2 gap-2.5"
                         >
-                            <span
-                                v-if="localBalance >= wager"
-                                class="inline-flex items-center gap-1.5"
+                            <!-- Change Wager Button (Left) -->
+                            <button
+                                type="button"
+                                class="flex items-center justify-center rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-semibold text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
+                                @click="handlePlayAgain"
+                            >
+                                Mudar Aposta
+                            </button>
+
+                            <!-- Rebet Button (Right) -->
+                            <button
+                                type="button"
+                                :disabled="isActionLoading"
+                                class="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-semibold text-neutral-200 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-50"
+                                @click="handleRebet"
                             >
                                 <span>Reapostar</span>
                                 <span class="font-mono font-bold">{{ wager }}</span>
@@ -753,28 +658,17 @@ async function handleCloseRequest() {
                                     alt="SINFrão"
                                     src="/images/sinf-2026-sm.svg"
                                 />
-                            </span>
-                            <span
-                                v-else
-                                class="inline-flex items-center gap-1.5"
-                            >
-                                <span>Saldo insuficiente ({{ wager }}</span>
-                                <img
-                                    class="h-3 w-3 object-contain"
-                                    alt="SINFrão"
-                                    src="/images/sinf-2026-sm.svg"
-                                />
-                                <span>)</span>
-                            </span>
-                        </PrimaryButton>
+                            </button>
+                        </div>
 
-                        <!-- Change Wager Secondary Button -->
+                        <!-- Fallback when balance is insufficient: Change Wager takes full width -->
                         <button
+                            v-else
                             type="button"
-                            class="flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-semibold text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
+                            class="flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-semibold text-neutral-200 transition-colors hover:bg-white/10 hover:text-white"
                             @click="handlePlayAgain"
                         >
-                            Alterar Aposta
+                            Mudar Aposta
                         </button>
                     </div>
                 </div>
@@ -835,20 +729,20 @@ async function handleCloseRequest() {
     }
 }
 
-@keyframes pcbColorPulse {
+@keyframes circuitColorPulse {
     0%,
     100% {
-        color: #d6336c; /* sinf-primary-light (Rubi) */
-        filter: drop-shadow(0 0 6px rgba(154, 0, 54, 0.85));
+        color: #d6336c;
+        filter: drop-shadow(0 0 4px rgba(214, 51, 108, 0.6));
     }
     50% {
-        color: #ffffff; /* Branco elétrico */
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95));
+        color: #ffffff;
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
     }
 }
 
-.animate-pcb-pulse {
-    animation: pcbColorPulse 1.8s ease-in-out infinite;
+.animate-circuit-pulse {
+    animation: circuitColorPulse 1.5s ease-in-out infinite;
 }
 
 .animate-electric-cell {
