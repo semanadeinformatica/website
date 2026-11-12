@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch, onBeforeUnmount } from "vue";
-import { Minus, Plus, AlertCircle, ChevronsLeft, ChevronsRight } from "@lucide/vue";
+import {
+    Minus,
+    Plus,
+    AlertCircle,
+    ChevronsLeft,
+    ChevronsRight,
+} from "@lucide/vue";
 
 interface Props {
     modelValue: number;
@@ -219,7 +225,9 @@ onBeforeUnmount(() => {
 
         <!-- Validation error message if any -->
         <div v-if="hasError" class="flex items-center justify-end">
-            <span class="flex items-center gap-1 text-[11px] font-medium text-red-400">
+            <span
+                class="flex items-center gap-1 text-[11px] font-medium text-red-400"
+            >
                 <AlertCircle :size="12" />
                 {{ errorMessage }}
             </span>
