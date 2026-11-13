@@ -294,7 +294,7 @@ function resetGame() {
                     <img
                         src="/images/arcade/Mastermind-Icon.png"
                         :alt="game.name"
-                        class="h-full w-full object-contain brightness-110 contrast-125 saturate-150 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)]"
+                        class="h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
                     />
                 </div>
                 <div>
