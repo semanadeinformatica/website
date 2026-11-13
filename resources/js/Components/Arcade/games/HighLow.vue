@@ -164,17 +164,17 @@ async function play(betType: "under" | "over" | "exact") {
         <div
             class="flex items-center justify-between border-b border-white/10 pb-4"
         >
-            <div class="flex items-center gap-3">
+            <div class="flex min-w-0 items-center gap-3">
                 <div
-                    class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/[0.08] p-1.5 shadow-md"
+                    class="relative flex aspect-square h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/[0.08] p-1.5 shadow-md"
                 >
                     <img
                         src="/images/arcade/HighLow-Icon.png"
                         :alt="game.name"
-                        class="h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
+                        class="aspect-square h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
                     />
                 </div>
-                <div>
+                <div class="min-w-0">
                     <h3 class="text-lg font-bold tracking-tight text-white">
                         {{ game.name }}
                     </h3>
