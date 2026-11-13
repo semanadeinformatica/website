@@ -99,6 +99,21 @@ class ArcadeController extends Controller
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($lockedSession->outcome !== 'pending' || $lockedSession->challenger_enrollment_id !== null, 422, 'Sessão já ocupada');
 
+            $enrollmentIds = [$lockedSession->enrollment_id, $challengerEnrollment->id];
+            sort($enrollmentIds);
+
+            $lockedEnrollments = Enrollment::query()
+                ->whereIn('id', $enrollmentIds)
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            $creatorEnrollment = $lockedEnrollments->get($lockedSession->enrollment_id);
+            $challengerLockedEnrollment = $lockedEnrollments->get($challengerEnrollment->id);
+
+            abort_if($creatorEnrollment === null || $challengerLockedEnrollment === null, 422, 'Enrollment não encontrado');
+
             $wagerService->deductWager($challengerEnrollment->id, $lockedSession->wager);
 
             // 0 = creator wins, 1 = challenger wins
@@ -106,9 +121,6 @@ class ArcadeController extends Controller
             $houseEdgePct = (int) ($game->payout_config['house_edge_pct'] ?? 10);
             $totalPot = $lockedSession->wager * 2;
             $payout = intdiv($totalPot * (100 - $houseEdgePct), 100);
-
-            $creatorEnrollment = Enrollment::lockForUpdate()->findOrFail($lockedSession->enrollment_id);
-            $challengerLockedEnrollment = Enrollment::lockForUpdate()->findOrFail($challengerEnrollment->id);
 
             $creatorWon = ($result === 0);
             $winner = $creatorWon ? 'creator' : 'challenger';
@@ -222,7 +234,33 @@ class ArcadeController extends Controller
             $query->where('enrollment_id', '!=', $enrollment->id);
         }
 
-        return response()->json($query->latest()->paginate(10));
+        $sessions = $query->latest()->paginate(10)->through(function (ArcadeSession $session) {
+            $creator = $session->enrollment->participant?->user;
+
+            return [
+                'id' => $session->id,
+                'enrollment_id' => $session->enrollment_id,
+                'arcade_game_id' => $session->arcade_game_id,
+                'wager' => $session->wager,
+                'outcome' => $session->outcome,
+                'started_at' => $session->started_at,
+                'resolved_at' => $session->resolved_at,
+                'created_at' => $session->created_at,
+                'updated_at' => $session->updated_at,
+                'enrollment' => [
+                    'id' => $session->enrollment_id,
+                    'participant' => [
+                        'user' => $creator ? [
+                            'id' => $creator->id,
+                            'name' => $creator->name,
+                            'profile_photo_url' => $creator->profile_photo_url,
+                        ] : null,
+                    ],
+                ],
+            ];
+        });
+
+        return response()->json($sessions);
     }
 
     private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void

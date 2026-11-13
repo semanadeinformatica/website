@@ -296,6 +296,13 @@ class RaffleControllerTest extends TestCase
             ->component('Raffle', false)
             ->where('draws.0.winner.id', $enrollment->id)
             ->where('draws.0.winner.participant.user.name', $user->name)
+            ->where('draws.0.winner.participant.user.profile_photo_url', $user->profile_photo_url)
+            ->missing('draws.0.winner.points')
+            ->missing('draws.0.winner.participant.cv_path')
+            ->missing('draws.0.winner.participant.cv_url')
+            ->missing('draws.0.winner.participant.quest_code')
+            ->missing('draws.0.winner.participant.quest_qr_code')
+            ->missing('draws.0.winner.participant.social_media')
         );
     }
 
