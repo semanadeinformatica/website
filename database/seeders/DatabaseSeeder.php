@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ArcadeGame;
 use App\Models\Company;
 use App\Models\Competition;
 use App\Models\CompetitionPrize;
@@ -15,6 +16,7 @@ use App\Models\EventType;
 use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
+use App\Models\RaffleDraw;
 use App\Models\Slot;
 use App\Models\Speaker;
 use App\Models\Sponsor;
@@ -35,6 +37,10 @@ class DatabaseSeeder extends Seeder
     {
         $tables = [
             'competition_team_participant',
+            'raffle_tickets',
+            'raffle_draws',
+            'arcade_sessions',
+            'arcade_games',
             'competition_prizes',
             'competition_teams',
             'competitions',
@@ -758,6 +764,30 @@ class DatabaseSeeder extends Seeder
             $enrollment->points = rand(5, 150);
             $enrollment->save();
         });
+
+        $this->command->info('Creating gamification arcade games and raffle draws');
+        ArcadeGame::firstOrCreate(
+            ['edition_id' => $edition->id, 'slug' => 'coin-flip'],
+            [
+                'name' => 'Coin Flip',
+                'is_active' => true,
+                'is_pvp' => true,
+                'min_wager' => 10,
+                'max_wager' => 500,
+                'daily_win_cap' => null,
+                'payout_config' => ['house_edge_pct' => 10],
+            ]
+        );
+
+        RaffleDraw::firstOrCreate(
+            ['edition_id' => $edition->id, 'name' => 'Sorteio SINF 2026 — Fones Sony WH-1000XM5'],
+            [
+                'description' => 'Habilita-te a ganhar uns auscultadores com cancelamento de ruído topo de gama!',
+                'ticket_price' => 50,
+                'is_active' => true,
+                'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
+            ]
+        );
 
         $this->command->info('Seeding finished successfully!');
     }

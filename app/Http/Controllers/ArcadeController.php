@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArcadeGame;
 use App\Models\ArcadeSession;
+use App\Models\Enrollment;
 use App\Services\ArcadeWagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -98,6 +99,21 @@ class ArcadeController extends Controller
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($lockedSession->outcome !== 'pending' || $lockedSession->challenger_enrollment_id !== null, 422, 'Sessão já ocupada');
 
+            $enrollmentIds = [$lockedSession->enrollment_id, $challengerEnrollment->id];
+            sort($enrollmentIds);
+
+            $lockedEnrollments = Enrollment::query()
+                ->whereIn('id', $enrollmentIds)
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            $creatorEnrollment = $lockedEnrollments->get($lockedSession->enrollment_id);
+            $challengerLockedEnrollment = $lockedEnrollments->get($challengerEnrollment->id);
+
+            abort_if($creatorEnrollment === null || $challengerLockedEnrollment === null, 422, 'Enrollment não encontrado');
+
             $wagerService->deductWager($challengerEnrollment->id, $lockedSession->wager);
 
             // 0 = creator wins, 1 = challenger wins
@@ -106,22 +122,25 @@ class ArcadeController extends Controller
             $totalPot = $lockedSession->wager * 2;
             $payout = intdiv($totalPot * (100 - $houseEdgePct), 100);
 
-            $creatorEnrollment = $lockedSession->enrollment;
-            $winner = $result === 0 ? 'creator' : 'challenger';
-            $winningEnrollment = $result === 0 ? $creatorEnrollment : $challengerEnrollment;
+            $creatorWon = ($result === 0);
+            $winner = $creatorWon ? 'creator' : 'challenger';
+            $winningEnrollment = $creatorWon ? $creatorEnrollment : $challengerLockedEnrollment;
 
             $wagerService->creditPayout($winningEnrollment, $payout);
 
             $lockedSession->update([
-                'challenger_enrollment_id' => $challengerEnrollment->id,
-                'outcome' => $result === 0 ? 'win' : 'loss',
+                'challenger_enrollment_id' => $challengerLockedEnrollment->id,
+                'outcome' => $creatorWon ? 'win' : 'loss',
                 'payout' => $payout,
                 'resolved_at' => now(),
             ]);
 
             return [
                 'winner' => $winner,
+                'outcome' => $creatorWon ? 'loss' : 'win',
                 'payout' => $payout,
+                'player_payout' => $creatorWon ? 0 : $payout,
+                'resolved_at' => $lockedSession->resolved_at,
             ];
         });
 
@@ -162,7 +181,7 @@ class ArcadeController extends Controller
         ]);
     }
 
-    public function cancelCoinFlip(Request $request, ArcadeSession $session): JsonResponse
+    public function cancelCoinFlip(Request $request, ArcadeSession $session, ArcadeWagerService $wagerService): JsonResponse
     {
         $edition = $request->input('edition') ?? $session->game->edition;
         $this->ensureCoinFlipSession($session, $edition->id);
@@ -176,11 +195,11 @@ class ArcadeController extends Controller
         abort_if($session->outcome !== 'pending', 422, 'Sessão não pode ser cancelada');
         abort_if($session->started_at > now()->subMinutes(5), 422, 'Aguarde 5 minutos antes de cancelar');
 
-        DB::transaction(function () use ($session, $enrollment) {
+        DB::transaction(function () use ($session, $wagerService) {
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
-            abort_if($lockedSession->outcome !== 'pending', 422, 'Sessão já processada');
+            abort_if($lockedSession->outcome !== 'pending' || $lockedSession->challenger_enrollment_id !== null, 422, 'Sessão já processada');
 
-            $enrollment->increment('points', $lockedSession->wager);
+            $wagerService->refundWager($lockedSession->enrollment_id, $lockedSession->wager);
             $lockedSession->update([
                 'outcome' => 'expired',
                 'resolved_at' => now(),
@@ -199,6 +218,8 @@ class ArcadeController extends Controller
             ->where('edition_id', $edition->id)
             ->firstOrFail();
 
+        abort_unless($game->is_active, 422, 'Jogo inativo');
+
         $user = $request->user();
         $enrollment = $user?->isParticipant()
             ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
@@ -206,13 +227,40 @@ class ArcadeController extends Controller
 
         $query = ArcadeSession::pending()
             ->where('arcade_game_id', $game->id)
-            ->whereNull('challenger_enrollment_id');
+            ->whereNull('challenger_enrollment_id')
+            ->with(['enrollment.participant.user:id,name,profile_photo_path']);
 
         if ($enrollment) {
             $query->where('enrollment_id', '!=', $enrollment->id);
         }
 
-        return response()->json($query->latest()->paginate(10));
+        $sessions = $query->latest()->paginate(10)->through(function (ArcadeSession $session) {
+            $creator = $session->enrollment->participant?->user;
+
+            return [
+                'id' => $session->id,
+                'enrollment_id' => $session->enrollment_id,
+                'arcade_game_id' => $session->arcade_game_id,
+                'wager' => $session->wager,
+                'outcome' => $session->outcome,
+                'started_at' => $session->started_at,
+                'resolved_at' => $session->resolved_at,
+                'created_at' => $session->created_at,
+                'updated_at' => $session->updated_at,
+                'enrollment' => [
+                    'id' => $session->enrollment_id,
+                    'participant' => [
+                        'user' => $creator ? [
+                            'id' => $creator->id,
+                            'name' => $creator->name,
+                            'profile_photo_url' => $creator->profile_photo_url,
+                        ] : null,
+                    ],
+                ],
+            ];
+        });
+
+        return response()->json($sessions);
     }
 
     public function startMastermind(Request $request, ArcadeWagerService $wagerService): JsonResponse

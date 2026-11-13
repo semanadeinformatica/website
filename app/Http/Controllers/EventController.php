@@ -38,8 +38,11 @@ class EventController extends Controller
             $enrollments = null;
         }
 
+        $event->load(['users', 'event_day', 'type']);
+        $event->users->each(fn ($user) => $user->makeHidden('email'));
+
         return Inertia::render('Event', [
-            'event' => $event->load(['users', 'event_day', 'type']),
+            'event' => $event,
             'enrollments' => $enrollments,
             'enrollmentCount' => $enrollmentCount,
             'isParticipant' => $isParticipant,

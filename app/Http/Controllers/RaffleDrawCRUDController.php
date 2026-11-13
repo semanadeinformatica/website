@@ -115,7 +115,9 @@ class RaffleDrawCRUDController extends CRUDController
                 'draw_at' => now(),
             ]);
 
-            return [$winner->participant->user->name, $lockedDraw->name];
+            $winnerName = $winner->participant?->user?->name ?? "Participante #{$winnerId}";
+
+            return [$winnerName, $lockedDraw->name];
         });
 
         Log::info('Raffle draw winner selected', [
