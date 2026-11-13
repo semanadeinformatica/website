@@ -113,6 +113,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->middleware('throttle:arcade')
                         ->name('cancel');
                 });
+
+                Route::post('/high-low/play', [ArcadeController::class, 'resolveHighLow'])
+                    ->middleware('throttle:arcade')
+                    ->name('high-low.play');
             });
 
         Route::prefix('admin')

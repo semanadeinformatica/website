@@ -4,6 +4,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GameCard from "@/Components/Arcade/GameCard.vue";
+import HighLow from "@/Components/Arcade/games/HighLow.vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -159,15 +160,22 @@ function closeGameModal() {
             </section>
         </div>
 
-        <!-- Game Modal Wrapper for Week 2 integration -->
+        <!-- Game Modal Wrapper -->
         <Modal
             :show="isGameModalOpen"
             :show-close-button="false"
             max-width="lg"
             @close="closeGameModal"
         >
+            <HighLow
+                v-if="selectedGame?.slug === 'high-low'"
+                :game="selectedGame"
+                :points="points ?? 0"
+                @close="closeGameModal"
+            />
+
             <div
-                v-if="selectedGame"
+                v-else-if="selectedGame"
                 class="relative rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
             >
                 <div

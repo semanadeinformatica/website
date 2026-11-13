@@ -223,4 +223,81 @@ class ArcadeController extends Controller
             'Sessão não encontrada'
         );
     }
+
+    public function resolveHighLow(Request $request, ArcadeWagerService $wagerService): JsonResponse
+    {
+        $request->validate([
+            'wager' => 'required|integer|min:1',
+            'bet_type' => 'required|in:under,over,exact',
+        ]);
+
+        $edition = $request->input('edition');
+        abort_if(! $edition, 404, 'Edição não encontrada');
+
+        $game = ArcadeGame::where('slug', 'high-low')
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        Gate::authorize('play', $game);
+
+        $user = $request->user();
+        $enrollment = $user->usertype->enrollments()
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        $wager = $request->integer('wager');
+        $betType = (string) $request->input('bet_type');
+        $cfg = $game->payout_config ?? [];
+
+        abort_if($wager < $game->min_wager || $wager > $game->max_wager, 422, 'Aposta fora dos limites');
+
+        $underThreshold = (int) ($cfg['under_threshold'] ?? 48);
+        $overThreshold = (int) ($cfg['over_threshold'] ?? 52);
+        $exactNumber = (int) ($cfg['exact_number'] ?? 50);
+
+        $underMultiplier = (float) ($cfg['under_multiplier'] ?? 2.0);
+        $overMultiplier = (float) ($cfg['over_multiplier'] ?? 2.0);
+        $exactMultiplier = (float) ($cfg['exact_multiplier'] ?? 20.0);
+
+        $result = random_int(1, 100);
+
+        $won = match ($betType) {
+            'under' => $result < $underThreshold,
+            'over' => $result > $overThreshold,
+            'exact' => $result === $exactNumber,
+        };
+
+        $multiplier = match ($betType) {
+            'under' => $underMultiplier,
+            'over' => $overMultiplier,
+            'exact' => $exactMultiplier,
+        };
+
+        $payout = $won ? (int) floor($wager * $multiplier) : 0;
+
+        DB::transaction(function () use ($enrollment, $wager, $payout, $game, $result, $betType, $won, $wagerService) {
+            $wagerService->deductWager($enrollment->id, $wager);
+            if ($payout > 0) {
+                $wagerService->creditPayout($enrollment->fresh(), $payout);
+            }
+            ArcadeSession::create([
+                'enrollment_id' => $enrollment->id,
+                'arcade_game_id' => $game->id,
+                'wager' => $wager,
+                'outcome' => $won ? 'win' : 'loss',
+                'payout' => $payout,
+                'server_state' => ['rolled' => $result, 'bet_type' => $betType],
+                'started_at' => now(),
+                'resolved_at' => now(),
+            ]);
+        });
+
+        return response()->json([
+            'result' => $result,
+            'won' => $won,
+            'payout' => $payout,
+            'multiplier' => $multiplier,
+            'balance' => $enrollment->fresh()->points,
+        ]);
+    }
 }
