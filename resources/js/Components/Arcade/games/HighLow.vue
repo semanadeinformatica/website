@@ -215,15 +215,10 @@ async function play(betType: "under" | "over" | "exact") {
                 <span>{{ errorMessage }}</span>
             </div>
 
-            <!-- Cyber-Dice Digital Roll Stage (SINF Theme) -->
+            <!-- Digital Roll Stage (Clean, seamless) -->
             <div
-                class="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-neutral-900/90 via-neutral-950/80 to-black/90 p-5 text-center shadow-inner sm:p-6"
+                class="relative flex flex-col items-center justify-center py-2 text-center"
             >
-                <!-- Subtle Cyber Grid Background -->
-                <div
-                    class="pointer-events-none absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:16px_16px] opacity-15"
-                />
-
                 <!-- Roll Status Pill -->
                 <div class="relative z-10 mb-2">
                     <span
