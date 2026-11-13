@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\ArcadeGame;
+use App\Models\ArcadeSession;
 use App\Models\Edition;
+use App\Models\Enrollment;
+use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -258,6 +261,34 @@ class ArcadeAdminTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('arcade_games', ['id' => $game->id]);
+    }
+
+    public function test_admin_cannot_delete_arcade_game_with_existing_sessions(): void
+    {
+        $game = ArcadeGame::factory()->create([
+            'edition_id' => $this->edition->id,
+        ]);
+
+        $participant = Participant::factory()->create();
+        $enrollment = Enrollment::factory()->create([
+            'edition_id' => $this->edition->id,
+            'participant_id' => $participant->id,
+        ]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $enrollment->id,
+            'arcade_game_id' => $game->id,
+            'wager' => 50,
+            'outcome' => 'pending',
+            'started_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->delete(route('admin.arcadeGames.destroy', $game));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('flash.banner');
+        $this->assertDatabaseHas('arcade_games', ['id' => $game->id]);
     }
 
     public function test_non_admin_cannot_access_arcade_management(): void

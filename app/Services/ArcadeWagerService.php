@@ -28,20 +28,39 @@ class ArcadeWagerService
      */
     public function creditPayout(Enrollment $enrollment, int $payout): void
     {
-        $enrollment->increment('points', $payout);
+        if ($payout > 0) {
+            $enrollment->increment('points', $payout);
+        }
+    }
+
+    /**
+     * Refund wager to enrollment. MUST be called from within DB::transaction().
+     */
+    public function refundWager(int $enrollmentId, int $wager): Enrollment
+    {
+        $enrollment = Enrollment::lockForUpdate()->findOrFail($enrollmentId);
+        if ($wager > 0) {
+            $enrollment->increment('points', $wager);
+        }
+
+        return $enrollment;
     }
 
     /**
      * Check and enforce the daily win cap for skill games.
-     * Returns remaining cap (throw 422 if already at cap).
+     * Throws 422 if already at or exceeding cap.
      */
-    public function checkDailyWinCap(int $enrollmentId, ArcadeGame $game): void
+    public function checkDailyWinCap(int $enrollmentId, ArcadeGame $game, int $additionalPayout = 0): void
     {
         if ($game->daily_win_cap === null) {
             return;
         }
 
-        $wonToday = ArcadeSession::wonToday($enrollmentId, $game->id)->sum('payout');
-        abort_if($wonToday >= $game->daily_win_cap, 422, 'Limite diário atingido');
+        $wonToday = (int) ArcadeSession::wonToday($enrollmentId, $game->id)->sum('payout');
+        abort_if(
+            $wonToday >= $game->daily_win_cap || ($additionalPayout > 0 && ($wonToday + $additionalPayout) > $game->daily_win_cap),
+            422,
+            'Limite diário atingido'
+        );
     }
 }

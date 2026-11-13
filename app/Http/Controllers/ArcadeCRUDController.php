@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArcadeGame;
+use App\Models\ArcadeSession;
 use App\Models\Edition;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -61,6 +64,36 @@ class ArcadeCRUDController extends CRUDController
     protected function updated($old, array $new): ?array
     {
         return $this->decodePayoutConfig($new);
+    }
+
+    protected function destroyed($old): bool
+    {
+        return ! ArcadeSession::where('arcade_game_id', $old['id'] ?? null)->exists();
+    }
+
+    public function destroy($id)
+    {
+        $deleted = DB::transaction(function () use ($id) {
+            $game = ArcadeGame::lockForUpdate()->findOrFail($id);
+
+            if (! $this->destroyed($game->toArray())) {
+                return false;
+            }
+
+            $game->delete();
+
+            return true;
+        });
+
+        if (! $deleted) {
+            return redirect()->back()->dangerBanner(
+                'Não é possível eliminar um jogo com sessões registadas.'
+            );
+        }
+
+        Log::alert('Arcade game deleted', ['arcade_game_id' => $id]);
+
+        return redirect()->back();
     }
 
     private function decodePayoutConfig(array $new): array
