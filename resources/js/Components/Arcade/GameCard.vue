@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type Component } from "vue";
 import type ArcadeGame from "@/Types/Arcade";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -17,7 +17,7 @@ const emit = defineEmits<{
     (e: "play"): void;
 }>();
 
-const iconComponent = computed(() => {
+const iconComponent = computed<Component | string>(() => {
     switch (props.game.slug) {
         case "coin-flip":
             return Coins;
@@ -26,13 +26,15 @@ const iconComponent = computed(() => {
         case "bug-sweeper":
             return Grid3x3;
         case "mastermind":
-            return Key;
+            return "/images/arcade/Mastermind-Icon.png";
         case "binary-blitz":
             return Zap;
         default:
             return Gamepad2;
     }
 });
+
+const isCustomIcon = computed(() => typeof iconComponent.value === "string");
 </script>
 
 <template>
@@ -62,9 +64,20 @@ const iconComponent = computed(() => {
             <!-- Header: Icon & Badges -->
             <div class="flex items-start justify-between">
                 <div
-                    class="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-amber-400 shadow-inner"
+                    class="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl shadow-inner"
+                    :class="
+                        isCustomIcon
+                            ? 'border border-white/15 bg-white/[0.08] p-1.5'
+                            : 'border border-white/10 bg-white/5 p-1.5 text-amber-400'
+                    "
                 >
-                    <component :is="iconComponent" :size="24" />
+                    <img
+                        v-if="isCustomIcon"
+                        :src="iconComponent as string"
+                        :alt="game.name"
+                        class="h-full w-full object-contain brightness-110 contrast-125 saturate-150 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)]"
+                    />
+                    <component v-else :is="iconComponent" :size="24" />
                 </div>
 
                 <div class="flex items-center gap-2">
