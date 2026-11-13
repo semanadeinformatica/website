@@ -287,17 +287,17 @@ function resetGame() {
         <div
             class="flex items-center justify-between border-b border-white/10 pb-4"
         >
-            <div class="flex items-center gap-3">
+            <div class="flex min-w-0 items-center gap-3">
                 <div
-                    class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/[0.08] p-1.5 shadow-md"
+                    class="relative flex aspect-square h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/[0.08] p-1.5 shadow-md"
                 >
                     <img
                         src="/images/arcade/Mastermind-Icon.png"
                         :alt="game.name"
-                        class="h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
+                        class="aspect-square h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
                     />
                 </div>
-                <div>
+                <div class="min-w-0">
                     <h3 class="text-lg font-bold tracking-tight text-white">
                         {{ game.name }}
                     </h3>
@@ -452,19 +452,19 @@ function resetGame() {
                     <div
                         v-for="rowIndex in maxAttempts"
                         :key="rowIndex"
-                        class="flex items-center justify-between rounded-xl border px-3 py-2 transition-all duration-200"
+                        class="flex items-center gap-2.5 rounded-xl border px-2.5 transition-all duration-200 sm:gap-3.5 sm:px-3.5"
                         :class="[
                             attempts[rowIndex - 1]
-                                ? 'border-white/15 bg-white/[0.03]'
+                                ? 'border-white/15 bg-white/[0.03] py-2'
                                 : rowIndex === currentAttemptNumber &&
                                     gameState === 'playing'
-                                  ? 'border-[#6a00ff]/50 bg-[#4300a3]/20 shadow-[0_0_15px_rgba(106,0,255,0.15)]'
-                                  : 'border-white/5 bg-transparent opacity-40',
+                                  ? 'border-[#6a00ff]/50 bg-[#4300a3]/20 py-2 shadow-[0_0_15px_rgba(106,0,255,0.15)] sm:py-2.5'
+                                  : 'border-white/5 bg-transparent py-2 opacity-40',
                         ]"
                     >
-                        <!-- Row Multiplier Label -->
+                        <!-- Row Multiplier Label (Fixed width, never shrinks, cleanly aligned) -->
                         <div
-                            class="w-10 font-mono text-xs font-bold"
+                            class="w-9 shrink-0 font-mono text-xs font-bold sm:w-11"
                             :class="
                                 rowIndex === currentAttemptNumber &&
                                 gameState === 'playing'
@@ -475,10 +475,8 @@ function resetGame() {
                             {{ attemptMultipliers[String(rowIndex)] ?? 1.5 }}x
                         </div>
 
-                        <!-- 4 Digit Boxes with Wordle SINF Color Coding -->
-                        <div
-                            class="flex flex-1 items-center justify-center gap-3"
-                        >
+                        <!-- 4 Digit Boxes with Wordle SINF Color Coding (Aligned Left) -->
+                        <div class="flex items-center gap-2 sm:gap-3">
                             <template v-if="attempts[rowIndex - 1]">
                                 <div
                                     v-for="(char, cIdx) in attempts[
@@ -510,14 +508,40 @@ function resetGame() {
                                 <div
                                     v-for="(digit, dIdx) in tumblers"
                                     :key="dIdx"
-                                    class="flex h-10 w-10 items-center justify-center rounded-xl border font-mono text-base font-black shadow-inner transition-all select-none sm:h-11 sm:w-11 sm:text-lg"
-                                    :class="
-                                        focusedIndex === dIdx
-                                            ? 'border-[#9346ff] bg-[#4300a3]/30 text-white shadow-[0_0_10px_rgba(147,70,255,0.35)]'
-                                            : 'border-white/20 bg-neutral-950/70 text-neutral-300'
-                                    "
+                                    class="flex flex-col items-center"
                                 >
-                                    {{ digit }}
+                                    <!-- Up Arrow Button -->
+                                    <button
+                                        type="button"
+                                        :disabled="isActionLoading"
+                                        class="flex h-5 w-10 items-center justify-center rounded-t-lg border border-b-0 border-white/10 bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/20 disabled:opacity-40 sm:h-6 sm:w-11"
+                                        @click.stop="incrementTumbler(dIdx)"
+                                    >
+                                        <ChevronUp :size="14" />
+                                    </button>
+
+                                    <!-- Digit Box -->
+                                    <div
+                                        class="flex h-10 w-10 cursor-pointer items-center justify-center border font-mono text-base font-black transition-all select-none sm:h-11 sm:w-11 sm:text-lg"
+                                        :class="
+                                            focusedIndex === dIdx
+                                                ? 'border-[#9346ff] bg-[#4300a3]/40 text-white shadow-[0_0_12px_rgba(147,70,255,0.4)]'
+                                                : 'border-white/20 bg-neutral-950/80 text-neutral-200'
+                                        "
+                                        @click="setTumblerFocus(dIdx)"
+                                    >
+                                        {{ digit }}
+                                    </div>
+
+                                    <!-- Down Arrow Button -->
+                                    <button
+                                        type="button"
+                                        :disabled="isActionLoading"
+                                        class="flex h-5 w-10 items-center justify-center rounded-b-lg border border-t-0 border-white/10 bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/20 disabled:opacity-40 sm:h-6 sm:w-11"
+                                        @click.stop="decrementTumbler(dIdx)"
+                                    >
+                                        <ChevronDown :size="14" />
+                                    </button>
                                 </div>
                             </template>
                             <template v-else>
@@ -530,9 +554,6 @@ function resetGame() {
                                 </div>
                             </template>
                         </div>
-
-                        <!-- Right Spacer for Perfect Balance -->
-                        <div class="w-10" />
                     </div>
                 </div>
 
@@ -610,51 +631,8 @@ function resetGame() {
                     </PrimaryButton>
                 </div>
 
-                <!-- Active Tumbler / Rotor Cylinders Deck (Playing State) -->
+                <!-- Submit Action (Playing State) -->
                 <div v-else-if="gameState === 'playing'" class="space-y-3 pt-1">
-                    <div
-                        class="flex items-center justify-center gap-3 sm:gap-4"
-                    >
-                        <div
-                            v-for="(val, colIdx) in tumblers"
-                            :key="colIdx"
-                            class="flex flex-col items-center"
-                        >
-                            <!-- Increment Button (▲) -->
-                            <button
-                                type="button"
-                                :disabled="isActionLoading"
-                                class="flex h-7 w-12 items-center justify-center rounded-t-lg border border-b-0 border-white/10 bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 disabled:opacity-40 sm:h-8 sm:w-14"
-                                @click="incrementTumbler(colIdx)"
-                            >
-                                <ChevronUp :size="16" />
-                            </button>
-
-                            <!-- Digit Roller Box -->
-                            <div
-                                class="flex h-12 w-12 cursor-pointer items-center justify-center border font-mono text-2xl font-black transition-all sm:h-14 sm:w-14 sm:text-3xl"
-                                :class="
-                                    focusedIndex === colIdx
-                                        ? 'border-[#9346ff] bg-[#4300a3]/30 text-white shadow-[0_0_15px_rgba(147,70,255,0.4)]'
-                                        : 'border-white/10 bg-neutral-900 text-neutral-200'
-                                "
-                                @click="setTumblerFocus(colIdx)"
-                            >
-                                {{ val }}
-                            </div>
-
-                            <!-- Decrement Button (▼) -->
-                            <button
-                                type="button"
-                                :disabled="isActionLoading"
-                                class="flex h-7 w-12 items-center justify-center rounded-b-lg border border-t-0 border-white/10 bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 disabled:opacity-40 sm:h-8 sm:w-14"
-                                @click="decrementTumbler(colIdx)"
-                            >
-                                <ChevronDown :size="16" />
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Submit Guess Action Button -->
                     <PrimaryButton
                         class="w-full justify-center py-2.5 text-sm font-bold shadow-lg"
