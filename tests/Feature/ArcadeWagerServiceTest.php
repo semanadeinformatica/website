@@ -170,6 +170,31 @@ class ArcadeWagerServiceTest extends TestCase
         $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 60);
     }
 
+    public function test_check_daily_win_cap_counts_challenger_win(): void
+    {
+        $creatorParticipant = Participant::factory()->create();
+        $creator = Enrollment::factory()->create([
+            'edition_id' => $this->edition->id,
+            'participant_id' => $creatorParticipant->id,
+            'points' => 100,
+        ]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $creator->id,
+            'challenger_enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'loss',
+            'payout' => 190,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->expectException(HttpException::class);
+        // 190 + 120 = 310 > 300
+        $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 120);
+    }
+
     public function test_check_daily_win_cap_ignores_unrestricted_game(): void
     {
         $this->game->update(['daily_win_cap' => null]);
