@@ -25,7 +25,8 @@ const page = usePage();
 
 const editions = computed<Record<number, string>>(() => {
     const editionOptions = page.props.editionOptions as
-        Record<string, string> | undefined;
+        | Record<string, string>
+        | undefined;
 
     return Object.fromEntries(
         props.with.eventDays.map((eventDay) => [

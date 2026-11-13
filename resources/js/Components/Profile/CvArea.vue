@@ -31,9 +31,16 @@ const participant = computed(() =>
     props.item && isParticipant(props.item) ? props.item.usertype : undefined,
 );
 
-const hasCV = computed(() => Boolean(participant.value?.cv_url));
+const hasCV = computed(() =>
+    Boolean(participant.value?.cv_path || participant.value?.cv_url),
+);
 
-const cvUrl = computed(() => participant.value?.cv_url);
+const cvUrl = computed(() => {
+    if (participant.value?.cv_url) return participant.value.cv_url;
+    if (participant.value?.cv_path)
+        return `/storage/${participant.value.cv_path}`;
+    return undefined;
+});
 
 const previewOpen = ref(false);
 const isUploading = ref(false);

@@ -3,7 +3,6 @@ import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type EventDay from "@/Types/EventDay";
-import { eventCategoryLabel } from "@/Types/Event";
 import { isSpeaker, type SpeakerUser } from "@/Types/User";
 import Card from "@/Components/UI/Card.vue";
 import ComingSoon from "@/Components/UI/ComingSoon.vue";
@@ -104,7 +103,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `talk-${t.id}`,
                 rawId: t.id,
                 type: "talk",
-                typeLabel: eventCategoryLabel(t.type, "Palestra"),
+                typeLabel: "Palestra",
                 name: t.name,
                 topic: t.topic,
                 location: t.location,
@@ -123,7 +122,7 @@ const allUnifiedItems = computed<UnifiedTimelineItem[]>(() => {
                 id: `act-${a.id}`,
                 rawId: a.id,
                 type: "activity",
-                typeLabel: eventCategoryLabel(a.type, "Atividade"),
+                typeLabel: "Workshop",
                 name: a.name,
                 topic: a.topic,
                 location: a.location,
@@ -287,7 +286,7 @@ const timelineGroups = computed<TimeSlotGroup[]>(() => {
                                         class="mb-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs"
                                     >
                                         <span
-                                            class="font-semibold tracking-wider"
+                                            class="font-semibold tracking-wider uppercase"
                                             :class="
                                                 item.type === 'talk'
                                                     ? 'text-blue-400'

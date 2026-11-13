@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use App\Models\Edition;
 use Laravel\Scout\Searchable;
 use Nette\Utils\Json;
 

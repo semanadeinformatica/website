@@ -40,6 +40,6 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertRedirect()->assertSessionHasErrors('email');
+        $response->assertRedirect('/login')->assertSessionHasErrors('email');
     }
 }

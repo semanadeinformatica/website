@@ -61,10 +61,7 @@ const submit = () => {
             </option>
         </TextInput>
 
-        <ParticipantSearch
-            v-model="form.participant_id"
-            :error-message="form.errors.participant_id"
-        />
+        <ParticipantSearch v-model="form.participant_id" :error-message="form.errors.participant_id" />
 
         <div
             class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"

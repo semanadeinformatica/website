@@ -16,7 +16,8 @@ const availableFilterValues = computed(() => {
     if (props.filterValues) return props.filterValues;
     if (props.filterBy === "edition_id") {
         return page.props.editionOptions as
-            Record<string | number, string> | undefined;
+            | Record<string | number, string>
+            | undefined;
     }
     return undefined;
 });
@@ -24,7 +25,8 @@ const availableFilterValues = computed(() => {
 const defaultFilterValue = computed(() => {
     if (!props.filterBy) return "";
     const defaults = page.props.defaultFilters as
-        Record<string, string | number> | undefined;
+        | Record<string, string | number>
+        | undefined;
     return String(defaults?.[props.filterBy] ?? "");
 });
 
@@ -53,10 +55,7 @@ const currentSortBy = computed(() => {
 });
 
 const currentSortDir = computed(() => {
-    return (
-        new URLSearchParams(page.url.split("?")[1] ?? "").get("sort_dir") ??
-        "asc"
-    );
+    return new URLSearchParams(page.url.split("?")[1] ?? "").get("sort_dir") ?? "asc";
 });
 
 const isSorted = computed(() => {
@@ -116,9 +115,7 @@ const currentFilterValue = computed(() => {
 });
 
 const isFilterActive = computed(() => {
-    return (
-        currentFilterValue.value !== "" && currentFilterValue.value !== "all"
-    );
+    return currentFilterValue.value !== "" && currentFilterValue.value !== "all";
 });
 
 const setFilter = (val: string | number | null) => {
