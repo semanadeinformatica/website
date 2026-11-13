@@ -234,7 +234,33 @@ class ArcadeController extends Controller
             $query->where('enrollment_id', '!=', $enrollment->id);
         }
 
-        return response()->json($query->latest()->paginate(10));
+        $sessions = $query->latest()->paginate(10)->through(function (ArcadeSession $session) {
+            $creator = $session->enrollment->participant?->user;
+
+            return [
+                'id' => $session->id,
+                'enrollment_id' => $session->enrollment_id,
+                'arcade_game_id' => $session->arcade_game_id,
+                'wager' => $session->wager,
+                'outcome' => $session->outcome,
+                'started_at' => $session->started_at,
+                'resolved_at' => $session->resolved_at,
+                'created_at' => $session->created_at,
+                'updated_at' => $session->updated_at,
+                'enrollment' => [
+                    'id' => $session->enrollment_id,
+                    'participant' => [
+                        'user' => $creator ? [
+                            'id' => $creator->id,
+                            'name' => $creator->name,
+                            'profile_photo_url' => $creator->profile_photo_url,
+                        ] : null,
+                    ],
+                ],
+            ];
+        });
+
+        return response()->json($sessions);
     }
 
     private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void
