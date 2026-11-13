@@ -37,11 +37,7 @@ watch(
 interface Cell {
     index: number;
     state:
-        | "unrevealed"
-        | "scanning"
-        | "safe"
-        | "bomb_detonated"
-        | "bomb_revealed";
+        "unrevealed" | "scanning" | "safe" | "bomb_detonated" | "bomb_revealed";
     multiplier?: number;
 }
 
@@ -298,7 +294,7 @@ async function handleCloseRequest() {
 
 <template>
     <div
-        class="relative flex max-h-[88vh] flex-col overflow-y-auto rounded-3xl border border-white/10 bg-neutral-950 p-4 sm:p-6 shadow-2xl backdrop-blur-xl"
+        class="relative flex max-h-[88vh] flex-col overflow-y-auto rounded-3xl border border-white/10 bg-neutral-950 p-4 shadow-2xl backdrop-blur-xl sm:p-6"
     >
         <!-- Modal Header -->
         <div
@@ -306,7 +302,7 @@ async function handleCloseRequest() {
         >
             <div class="flex items-center gap-3">
                 <div
-                    class="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/[0.08] p-1.5 overflow-hidden shadow-md"
+                    class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/[0.08] p-1.5 shadow-md"
                 >
                     <img
                         src="/images/arcade/BugSweeper-Icon.png"
@@ -361,8 +357,9 @@ async function handleCloseRequest() {
                     <strong class="text-amber-400"
                         >{{ bombCount }} bugs críticos</strong
                     >
-                    à solta no sistema! Descobre os nós seguros para multiplicar os
-                    teus pontos e não deixes que os bugs te roubem os SINFrões.
+                    à solta no sistema! Descobre os nós seguros para multiplicar
+                    os teus pontos e não deixes que os bugs te roubem os
+                    SINFrões.
                 </p>
                 <p class="pt-1 text-[11px] text-neutral-400">
                     Se saíres a meio do jogo, os teus ganhos são recolhidos
@@ -406,9 +403,7 @@ async function handleCloseRequest() {
                     >
                         Multiplicador
                     </span>
-                    <span
-                        class="font-mono text-2xl font-black text-[#9346ff]"
-                    >
+                    <span class="font-mono text-2xl font-black text-[#9346ff]">
                         ×{{ currentMultiplier.toFixed(2) }}
                     </span>
                 </div>
@@ -464,7 +459,7 @@ async function handleCloseRequest() {
                             cell.state === 'scanning'
                                 ? 'scale-95 animate-pulse border-amber-400/70 bg-amber-400/10'
                                 : '',
-                            // Safe cell state: Antivirus Shield 
+                            // Safe cell state: Antivirus Shield
                             cell.state === 'safe'
                                 ? 'border-[#6a00ff]/60 bg-[#4300a3]/40 text-[#9346ff] shadow-[0_0_20px_rgba(106,0,255,0.4)]'
                                 : '',
@@ -516,14 +511,14 @@ async function handleCloseRequest() {
                             <!-- Bug Icon Centered in Microchip Core -->
                             <Bug
                                 :size="24"
-                                class="relative z-10 stroke-[2.5] animate-circuit-pulse"
+                                class="animate-circuit-pulse relative z-10 stroke-[2.5]"
                             />
                         </div>
 
                         <!-- Bomb Revealed: Microchip Package with Bug in Center (Passive) -->
                         <div
                             v-else-if="cell.state === 'bomb_revealed'"
-                            class="relative flex h-full w-full items-center justify-center p-1.5 opacity-85 text-[#d6336c]"
+                            class="relative flex h-full w-full items-center justify-center p-1.5 text-[#d6336c] opacity-85"
                         >
                             <img
                                 src="/images/arcade/microchip-revealed.svg"
@@ -565,9 +560,7 @@ async function handleCloseRequest() {
                         class="w-full justify-center"
                         @click="handleCashout"
                     >
-                        <span v-if="canCashout">
-                            Recolher
-                        </span>
+                        <span v-if="canCashout"> Recolher </span>
                         <span v-else>
                             Revela pelo menos 1 nó seguro para recolher
                         </span>
@@ -604,7 +597,10 @@ async function handleCloseRequest() {
 
                     <!-- Win / Cashout Banner (SINF Secondary Roxo) -->
                     <div
-                        v-else-if="resultOutcome === 'win' || resultOutcome === 'cashout'"
+                        v-else-if="
+                            resultOutcome === 'win' ||
+                            resultOutcome === 'cashout'
+                        "
                         class="relative overflow-hidden rounded-2xl border border-[#6a00ff]/50 bg-[#4300a3]/40 p-4 text-center shadow-[0_0_25px_rgba(106,0,255,0.25)] backdrop-blur-md"
                     >
                         <h4
@@ -615,9 +611,11 @@ async function handleCloseRequest() {
                         <p
                             class="mt-1 flex items-center justify-center gap-1.5 text-xs text-neutral-300 sm:text-sm"
                         >
-                            <span>Depuração concluída com sucesso. Recolheste</span>
-                            <strong
-                                class="font-mono font-bold text-[#9346ff]"
+                            <span
+                                >Depuração concluída com sucesso.
+                                Recolheste</span
+                            >
+                            <strong class="font-mono font-bold text-[#9346ff]"
                                 >+{{ resultPayout }}</strong
                             >
                             <img
@@ -652,7 +650,9 @@ async function handleCloseRequest() {
                                 @click="handleRebet"
                             >
                                 <span>Reapostar</span>
-                                <span class="font-mono font-bold">{{ wager }}</span>
+                                <span class="font-mono font-bold">{{
+                                    wager
+                                }}</span>
                                 <img
                                     class="h-3.5 w-3.5 object-contain"
                                     alt="SINFrão"

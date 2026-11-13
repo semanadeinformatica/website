@@ -10,9 +10,9 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -34,6 +34,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
             RateLimiter::for('arcade-status', function (Request $request) {
                 return Limit::perMinute(120)->by($request->user()?->id ?: $request->ip());
+            });
+
+            RateLimiter::for('raffle', function (Request $request) {
+                return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
             });
         },
     )

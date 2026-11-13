@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ArcadeController;
+use App\Http\Controllers\ArcadeCRUDController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
@@ -22,6 +23,8 @@ use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
+use App\Http\Controllers\RaffleController;
+use App\Http\Controllers\RaffleDrawCRUDController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
@@ -50,6 +53,14 @@ Route::get('/team', [DepartmentController::class, 'show'])->name('team');
 Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
 Route::get('/arcade', [ArcadeController::class, 'lobby'])->name('arcade.lobby');
+
+Route::prefix('/raffle')->name('raffle.')->group(function () {
+    Route::get('/', [RaffleController::class, 'index'])->name('index');
+
+    Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'throttle:raffle'])
+        ->post('/{draw}/buy', [RaffleController::class, 'buyTickets'])
+        ->name('buy');
+});
 
 Route::prefix('/shop')->name('shop')->group(function () {
     Route::get('/', [ShopController::class, 'show'])->name('.show');
@@ -140,7 +151,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/enrollments' => EnrollmentCRUDController::class,
                     '/eventTypes' => EventTypeCRUDController::class,
                     '/sponsorTiers' => SponsorTierCRUDController::class,
+                    '/arcadeGames' => ArcadeCRUDController::class,
+                    '/raffleDraws' => RaffleDrawCRUDController::class,
                 ]);
+
+                Route::post('/raffleDraws/{draw}/pick-winner', [RaffleDrawCRUDController::class, 'pickWinner'])
+                    ->name('raffleDraws.pick-winner');
 
                 Route::name('index')->get('/', AdminDashboardController::class);
             });
