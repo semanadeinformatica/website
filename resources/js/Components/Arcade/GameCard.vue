@@ -64,11 +64,11 @@ const isCustomIcon = computed(() => typeof iconComponent.value === "string");
             <!-- Header: Icon & Badges -->
             <div class="flex items-start justify-between">
                 <div
-                    class="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl shadow-inner"
+                    class="relative flex h-12 w-12 items-center justify-center rounded-2xl shadow-inner overflow-hidden"
                     :class="
                         isCustomIcon
                             ? 'border border-white/15 bg-white/[0.08] p-1.5'
-                            : 'border border-white/10 bg-white/5 p-1.5 text-amber-400'
+                            : 'border border-white/10 bg-white/5 text-amber-400 p-1.5'
                     "
                 >
                     <img
@@ -77,7 +77,11 @@ const isCustomIcon = computed(() => typeof iconComponent.value === "string");
                         :alt="game.name"
                         class="h-full w-full object-contain drop-shadow-[0_0_6px_rgba(147,70,255,0.35)]"
                     />
-                    <component v-else :is="iconComponent" :size="24" />
+                    <component
+                        v-else
+                        :is="iconComponent"
+                        :size="24"
+                    />
                 </div>
 
                 <div class="flex items-center gap-2">
