@@ -117,6 +117,43 @@ class ArcadeModelTest extends TestCase
         $this->assertEquals(190, $wonTodayPayout);
     }
 
+    public function test_won_today_counts_challenger_wins_not_challenger_losses(): void
+    {
+        $edition = Edition::factory()->create();
+        $creator = Enrollment::factory()->create(['edition_id' => $edition->id]);
+        $challenger = Enrollment::factory()->create(['edition_id' => $edition->id]);
+        $game = ArcadeGame::factory()->create([
+            'edition_id' => $edition->id,
+            'slug' => 'coin-flip',
+            'is_pvp' => true,
+        ]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $creator->id,
+            'challenger_enrollment_id' => $challenger->id,
+            'arcade_game_id' => $game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 80,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $creator->id,
+            'challenger_enrollment_id' => $challenger->id,
+            'arcade_game_id' => $game->id,
+            'wager' => 50,
+            'outcome' => 'loss',
+            'payout' => 90,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->assertSame(80, (int) ArcadeSession::wonToday($creator->id, $game->id)->sum('payout'));
+        $this->assertSame(90, (int) ArcadeSession::wonToday($challenger->id, $game->id)->sum('payout'));
+    }
+
     public function test_challenger_enrollment_nulls_on_delete(): void
     {
         $edition = Edition::factory()->create();

@@ -3,6 +3,11 @@ import { computed, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type Event from "@/Types/Event";
+import {
+    eventCategoryLabel,
+    eventTypeColorClassFor,
+    formatEventTime,
+} from "@/Types/Event";
 import type Enrollment from "@/Types/Enrollment";
 import { type User, isSpeaker, isCompany, isAdmin } from "@/Types/User";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -51,17 +56,7 @@ const formatMilestoneDate = (dayDate?: string | Date, timeStr?: string) => {
             .replace(".", "");
         const month = m.charAt(0).toUpperCase() + m.slice(1);
 
-        const isoTime = timeStr.includes("T")
-            ? timeStr
-            : `1970-01-01T${timeStr}.000000Z`;
-        const timeObj = new Date(isoTime);
-        const time = isNaN(timeObj.getTime())
-            ? timeStr.slice(0, 5)
-            : timeObj.toLocaleTimeString("pt-PT", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "Europe/Lisbon",
-              });
+        const time = formatEventTime(timeStr);
 
         return {
             dateText: `${day} ${month}`,
@@ -87,23 +82,11 @@ const formattedSchedule = computed(() => {
     return `${start.dateText}, ${start.timeText} — ${end.timeText}`;
 });
 
-const eventCategoryLabel = computed(() => {
-    const typeName = props.event.type?.name?.toLowerCase();
-    if (typeName === "talk" || typeName === "palestra") return "Palestra";
-    if (typeName === "workshop") return "Workshop";
-    if (typeName === "pitch") return "Pitch";
-    if (typeName) {
-        return typeName.charAt(0).toUpperCase() + typeName.slice(1);
-    }
-    return "Atividade";
-});
+const eventTypeLabel = computed(() => eventCategoryLabel(props.event.type));
 
-const eventTypeColorClass = computed(() => {
-    const typeName = props.event.type?.name?.toLowerCase();
-    if (typeName === "talk" || typeName === "palestra") return "text-sky-400";
-    if (typeName === "workshop") return "text-purple-400";
-    return "text-amber-400";
-});
+const eventTypeColorClass = computed(() =>
+    eventTypeColorClassFor(props.event.type),
+);
 
 const isEventFull = computed(() => {
     return Boolean(
@@ -250,7 +233,7 @@ const scanCodeTabItems = computed<PillOption[]>(() => [
                             class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs font-semibold tracking-wider uppercase"
                         >
                             <span :class="eventTypeColorClass">{{
-                                eventCategoryLabel
+                                eventTypeLabel
                             }}</span>
 
                             <template v-if="formattedSchedule">
