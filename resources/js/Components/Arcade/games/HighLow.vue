@@ -33,24 +33,24 @@ watch(
     },
 );
 
-// Payout Config extraction with numeric coercion and sensible fallbacks
-const underThreshold = computed(
-    () => Number(props.game.payout_config?.under_threshold) || 48,
+// Payout Config extraction with numeric coercion and sensible fallbacks (preserving 0)
+const underThreshold = computed(() =>
+    Number(props.game.payout_config?.under_threshold ?? 48),
 );
-const overThreshold = computed(
-    () => Number(props.game.payout_config?.over_threshold) || 52,
+const overThreshold = computed(() =>
+    Number(props.game.payout_config?.over_threshold ?? 52),
 );
-const exactNumber = computed(
-    () => Number(props.game.payout_config?.exact_number) || 50,
+const exactNumber = computed(() =>
+    Number(props.game.payout_config?.exact_number ?? 50),
 );
-const underMultiplier = computed(
-    () => Number(props.game.payout_config?.under_multiplier) || 2.0,
+const underMultiplier = computed(() =>
+    Number(props.game.payout_config?.under_multiplier ?? 2.0),
 );
-const overMultiplier = computed(
-    () => Number(props.game.payout_config?.over_multiplier) || 2.0,
+const overMultiplier = computed(() =>
+    Number(props.game.payout_config?.over_multiplier ?? 2.0),
 );
-const exactMultiplier = computed(
-    () => Number(props.game.payout_config?.exact_multiplier) || 20.0,
+const exactMultiplier = computed(() =>
+    Number(props.game.payout_config?.exact_multiplier ?? 20.0),
 );
 
 // Game state

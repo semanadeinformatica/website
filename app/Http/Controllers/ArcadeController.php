@@ -321,12 +321,15 @@ class ArcadeController extends Controller
             'exact' => $exactMultiplier,
         };
 
-        $payout = $won ? (int) floor($wager * $multiplier) : 0;
+        $potentialPayout = (int) floor($wager * $multiplier);
+        $payout = $won ? $potentialPayout : 0;
 
-        DB::transaction(function () use ($enrollment, $wager, $payout, $game, $result, $betType, $won, $wagerService) {
+        DB::transaction(function () use ($enrollment, $wager, $payout, $potentialPayout, $game, $result, $betType, $won, $wagerService) {
             $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+            if ($potentialPayout > 0) {
+                $wagerService->checkDailyWinCap($lockedEnrollment->id, $game, $potentialPayout);
+            }
             if ($won && $payout > 0) {
-                $wagerService->checkDailyWinCap($lockedEnrollment->id, $game, $payout);
                 $wagerService->creditPayout($lockedEnrollment, $payout);
             }
             ArcadeSession::create([
