@@ -33,24 +33,24 @@ watch(
     },
 );
 
-// Payout Config extraction with sensible fallbacks
+// Payout Config extraction with numeric coercion and sensible fallbacks
 const underThreshold = computed(
-    () => (props.game.payout_config?.under_threshold as number) ?? 48,
+    () => Number(props.game.payout_config?.under_threshold) || 48,
 );
 const overThreshold = computed(
-    () => (props.game.payout_config?.over_threshold as number) ?? 52,
+    () => Number(props.game.payout_config?.over_threshold) || 52,
 );
 const exactNumber = computed(
-    () => (props.game.payout_config?.exact_number as number) ?? 50,
+    () => Number(props.game.payout_config?.exact_number) || 50,
 );
 const underMultiplier = computed(
-    () => (props.game.payout_config?.under_multiplier as number) ?? 2.0,
+    () => Number(props.game.payout_config?.under_multiplier) || 2.0,
 );
 const overMultiplier = computed(
-    () => (props.game.payout_config?.over_multiplier as number) ?? 2.0,
+    () => Number(props.game.payout_config?.over_multiplier) || 2.0,
 );
 const exactMultiplier = computed(
-    () => (props.game.payout_config?.exact_multiplier as number) ?? 20.0,
+    () => Number(props.game.payout_config?.exact_multiplier) || 20.0,
 );
 
 // Game state
@@ -113,6 +113,7 @@ async function play(betType: "under" | "over" | "exact") {
     isPlaying.value = true;
     selectedBet.value = betType;
     errorMessage.value = null;
+    lastGameResult.value = null;
 
     const currentWager = wager.value;
 
@@ -145,6 +146,8 @@ async function play(betType: "under" | "over" | "exact") {
         }
     } catch (err: unknown) {
         clearInterval(animInterval);
+        displayNumber.value = exactNumber.value;
+        lastGameResult.value = null;
         if (axios.isAxiosError(err) && err.response?.data?.message) {
             errorMessage.value = err.response.data.message;
         } else {
@@ -333,7 +336,7 @@ function resetGame() {
                         <span
                             class="rounded-full border border-[#d6336c]/50 bg-[#630022]/60 px-2.5 py-0.5 font-mono text-xs font-bold text-[#d6336c]"
                         >
-                            ×{{ underMultiplier.toFixed(1) }}
+                            ×{{ underMultiplier }}
                         </span>
                     </button>
 
@@ -350,7 +353,7 @@ function resetGame() {
                         <span
                             class="rounded-full border border-amber-500/60 bg-amber-950/80 px-2.5 py-0.5 font-mono text-xs font-black text-amber-300 shadow-sm"
                         >
-                            ×{{ exactMultiplier.toFixed(1) }}
+                            ×{{ exactMultiplier }}
                         </span>
                     </button>
 
@@ -367,7 +370,7 @@ function resetGame() {
                         <span
                             class="rounded-full border border-[#6a00ff]/60 bg-[#4300a3]/60 px-2.5 py-0.5 font-mono text-xs font-bold text-[#9346ff]"
                         >
-                            ×{{ overMultiplier.toFixed(1) }}
+                            ×{{ overMultiplier }}
                         </span>
                     </button>
                 </div>
