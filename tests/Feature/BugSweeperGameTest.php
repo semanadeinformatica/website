@@ -405,12 +405,12 @@ class BugSweeperGameTest extends TestCase
     {
         $this->game->update(['daily_win_cap' => 300]);
 
-        // Prior win today of 300
+        // Prior cashout today of 300
         ArcadeSession::create([
             'enrollment_id' => $this->enrollmentA->id,
             'arcade_game_id' => $this->game->id,
             'wager' => 50,
-            'outcome' => 'win',
+            'outcome' => 'cashout',
             'payout' => 300,
             'started_at' => now(),
             'resolved_at' => now(),
@@ -422,6 +422,92 @@ class BugSweeperGameTest extends TestCase
             ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 50])
             ->assertStatus(422)
             ->assertJson(['message' => 'Limite diário atingido']);
+    }
+
+    public function test_auto_settlement_respects_remaining_daily_win_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 300]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'cashout',
+            'payout' => 290,
+            'started_at' => now(),
+            'resolved_at' => now(),
+            'created_at' => now(),
+        ]);
+
+        $abandoned = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'pending',
+            'server_state' => [
+                'bombs' => [0, 1, 2],
+                'clicks' => 1,
+                'clicked' => [3],
+            ],
+            'started_at' => now(),
+        ]);
+
+        // Nominal payout would be 60, but only 10 remains under the cap.
+        $response = $this->actingAs($this->userA)
+            ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 20]);
+
+        $response->assertStatus(201);
+        $this->assertSame(190, $response->json('balance')); // 200 + 10 - 20
+
+        $abandoned->refresh();
+        $this->assertSame('cashout', $abandoned->outcome);
+        $this->assertSame(10, $abandoned->payout);
+
+        $this->enrollmentA->refresh();
+        $this->assertSame(190, $this->enrollmentA->points);
+    }
+
+    public function test_cashout_respects_remaining_daily_win_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 300]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'cashout',
+            'payout' => 290,
+            'started_at' => now(),
+            'resolved_at' => now(),
+            'created_at' => now(),
+        ]);
+
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'pending',
+            'server_state' => [
+                'bombs' => [0, 1, 2],
+                'clicks' => 1,
+                'clicked' => [3],
+            ],
+            'started_at' => now(),
+        ]);
+
+        // Nominal payout would be 60, but only 10 remains under the cap.
+        $response = $this->actingAs($this->userA)
+            ->postJson(route('arcade.bug-sweeper.cashout', ['session' => $session->id]));
+
+        $response->assertStatus(200);
+        $this->assertSame(10, $response->json('payout'));
+
+        $session->refresh();
+        $this->assertSame('cashout', $session->outcome);
+        $this->assertSame(10, $session->payout);
+
+        $this->enrollmentA->refresh();
+        $this->assertSame(210, $this->enrollmentA->points);
     }
 
     public function test_start_auto_resolves_abandoned_session_with_safe_clicks(): void
@@ -442,9 +528,11 @@ class BugSweeperGameTest extends TestCase
 
         // Starting a new game auto-cashes out the abandoned session (50 * 1.2 = 60 payout)
         // and deducts the new wager (20): 200 + 60 - 20 = 240
-        $this->actingAs($this->userA)
-            ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 20])
-            ->assertStatus(201);
+        $response = $this->actingAs($this->userA)
+            ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 20]);
+
+        $response->assertStatus(201);
+        $this->assertSame(240, $response->json('balance'));
 
         $abandoned->refresh();
         $this->assertSame('cashout', $abandoned->outcome);

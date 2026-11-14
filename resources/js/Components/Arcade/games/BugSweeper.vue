@@ -76,7 +76,8 @@ const potentialProfit = computed(() => {
 });
 
 const maxSafeClicks = computed(() => {
-    return 9 - bombCount.value;
+    // The backend also ends the round once the multiplier ladder runs out.
+    return Math.min(9 - bombCount.value, clickMultipliers.value.length);
 });
 
 function initGrid() {
@@ -109,7 +110,10 @@ async function startGame() {
         resultPayout.value = 0;
         stage.value = "playing";
 
-        localBalance.value = Math.max(0, localBalance.value - wager.value);
+        localBalance.value =
+            typeof response.data.balance === "number"
+                ? response.data.balance
+                : Math.max(0, localBalance.value - wager.value);
         emit("update:balance", localBalance.value);
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -452,6 +456,7 @@ async function handleCloseRequest() {
                         v-for="cell in grid"
                         :key="cell.index"
                         type="button"
+                        :aria-label="`Revelar célula ${cell.index + 1}`"
                         :disabled="
                             cell.state !== 'unrevealed' ||
                             isActionLoading ||

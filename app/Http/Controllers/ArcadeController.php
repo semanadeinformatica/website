@@ -294,8 +294,12 @@ class ArcadeController extends Controller
         $clickMultipliers = $cfg['click_multipliers'] ?? [1.2, 1.5, 2.0, 3.0, 5.0];
 
         $session = DB::transaction(function () use ($enrollment, $wager, $game, $bombs, $wagerService) {
+            // Lock the enrollment first: concurrent starts for the same
+            // participant must not both observe a missing pending session.
+            $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+
             // Auto-resolve any previous abandoned pending session
-            $previous = ArcadeSession::where('enrollment_id', $enrollment->id)
+            $previous = ArcadeSession::where('enrollment_id', $lockedEnrollment->id)
                 ->where('arcade_game_id', $game->id)
                 ->where('outcome', 'pending')
                 ->lockForUpdate()
@@ -310,8 +314,9 @@ class ArcadeController extends Controller
                     $prevMultipliers = $prevCfg['click_multipliers'] ?? [1.2, 1.5, 2.0, 3.0, 5.0];
                     $prevMult = (float) $prevMultipliers[min($prevClicks - 1, count($prevMultipliers) - 1)];
                     $prevPayout = (int) floor($previous->wager * $prevMult);
+                    $prevPayout = $this->payoutWithinDailyCap($lockedEnrollment, $game, $prevPayout);
 
-                    $wagerService->creditPayout($enrollment, $prevPayout);
+                    $wagerService->creditPayout($lockedEnrollment, $prevPayout);
                     $previous->update([
                         'outcome' => 'cashout',
                         'payout' => $prevPayout,
@@ -326,27 +331,31 @@ class ArcadeController extends Controller
                 }
             }
 
-            $wagerService->deductWager($enrollment->id, $wager);
+            $wagerService->deductWager($lockedEnrollment->id, $wager);
 
-            return ArcadeSession::create([
-                'enrollment_id' => $enrollment->id,
-                'arcade_game_id' => $game->id,
-                'wager' => $wager,
-                'outcome' => 'pending',
-                'server_state' => [
-                    'bombs' => $bombs,
-                    'clicks' => 0,
-                    'clicked' => [],
-                ],
-                'started_at' => now(),
-            ]);
+            return [
+                'session' => ArcadeSession::create([
+                    'enrollment_id' => $lockedEnrollment->id,
+                    'arcade_game_id' => $game->id,
+                    'wager' => $wager,
+                    'outcome' => 'pending',
+                    'server_state' => [
+                        'bombs' => $bombs,
+                        'clicks' => 0,
+                        'clicked' => [],
+                    ],
+                    'started_at' => now(),
+                ]),
+                'balance' => $lockedEnrollment->fresh()->points,
+            ];
         });
 
         return response()->json([
-            'session_id' => $session->id,
+            'session_id' => $session['session']->id,
             'grid_size' => 9,
             'bomb_count' => $bombCount,
             'click_multipliers' => $clickMultipliers,
+            'balance' => $session['balance'],
         ], 201);
     }
 
@@ -367,6 +376,9 @@ class ArcadeController extends Controller
         $cellIndex = $request->integer('cell_index');
 
         $result = DB::transaction(function () use ($session, $cellIndex, $wagerService) {
+            // Lock the enrollment before the session so payouts are serialized
+            // with starts/cashouts and cannot race past the daily win cap.
+            $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($session->enrollment_id);
             $locked = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($locked->outcome !== 'pending', 422, 'Sessão já resolvida');
 
@@ -407,7 +419,8 @@ class ArcadeController extends Controller
 
             if ($clearedBoard) {
                 $payout = (int) floor($locked->wager * $currentMultiplier);
-                $wagerService->creditPayout($locked->enrollment, $payout);
+                $payout = $this->payoutWithinDailyCap($lockedEnrollment, $locked->game, $payout);
+                $wagerService->creditPayout($lockedEnrollment, $payout);
 
                 $locked->update([
                     'outcome' => 'cashout',
@@ -453,6 +466,7 @@ class ArcadeController extends Controller
         abort_if(! $enrollment || $session->enrollment_id !== $enrollment->id, 403, 'Acesso não autorizado');
 
         $result = DB::transaction(function () use ($session, $wagerService) {
+            $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($session->enrollment_id);
             $locked = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($locked->outcome !== 'pending', 422, 'Sessão já resolvida');
 
@@ -465,9 +479,9 @@ class ArcadeController extends Controller
             $currentMultiplier = (float) $multipliers[min($clicks - 1, count($multipliers) - 1)];
 
             $payout = (int) floor($locked->wager * $currentMultiplier);
+            $payout = $this->payoutWithinDailyCap($lockedEnrollment, $locked->game, $payout);
 
-            $wagerService->checkDailyWinCap($locked->enrollment_id, $locked->game);
-            $wagerService->creditPayout($locked->enrollment, $payout);
+            $wagerService->creditPayout($lockedEnrollment, $payout);
 
             $locked->update([
                 'outcome' => 'cashout',
@@ -483,6 +497,17 @@ class ArcadeController extends Controller
         });
 
         return response()->json($result);
+    }
+
+    private function payoutWithinDailyCap(Enrollment $enrollment, ArcadeGame $game, int $payout): int
+    {
+        if ($game->daily_win_cap === null || $payout <= 0) {
+            return $payout;
+        }
+
+        $wonToday = (int) ArcadeSession::wonToday($enrollment->id, $game->id)->sum('payout');
+
+        return min($payout, max(0, $game->daily_win_cap - $wonToday));
     }
 
     private function ensureBugSweeperSession(ArcadeSession $session, int $editionId): void
