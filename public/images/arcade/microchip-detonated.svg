@@ -1,0 +1,61 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        @keyframes circuitPulse {
+            0%, 100% {
+                stroke: #d6336c;
+            }
+            50% {
+                stroke: #ffffff;
+            }
+        }
+        .circuit-element {
+            animation: circuitPulse 1.5s ease-in-out infinite;
+        }
+    </style>
+
+    <!-- Central Rounded Chip Die -->
+    <rect
+        class="circuit-element"
+        x="28"
+        y="28"
+        width="44"
+        height="44"
+        rx="8"
+        stroke="#d6336c"
+        stroke-width="2.5"
+        fill="rgba(0, 0, 0, 0.4)"
+    />
+
+    <!-- 16 Continuous Tracks to Border (Straight & 45° Diagonals) -->
+    <g
+        class="circuit-element"
+        stroke="#d6336c"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <!-- Top Border Outputs -->
+        <path d="M 44 28 V 0" />
+        <path d="M 56 28 V 0" />
+        <path d="M 36 28 V 18 L 18 0" />
+        <path d="M 64 28 V 18 L 82 0" />
+
+        <!-- Bottom Border Outputs -->
+        <path d="M 44 72 V 100" />
+        <path d="M 56 72 V 100" />
+        <path d="M 36 72 V 82 L 18 100" />
+        <path d="M 64 72 V 82 L 82 100" />
+
+        <!-- Left Border Outputs -->
+        <path d="M 28 44 H 0" />
+        <path d="M 28 56 H 0" />
+        <path d="M 28 36 H 18 L 0 18" />
+        <path d="M 28 64 H 18 L 0 82" />
+
+        <!-- Right Border Outputs -->
+        <path d="M 72 44 H 100" />
+        <path d="M 72 56 H 100" />
+        <path d="M 72 36 H 82 L 100 18" />
+        <path d="M 72 64 H 82 L 100 82" />
+    </g>
+</svg>

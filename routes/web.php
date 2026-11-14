@@ -125,6 +125,22 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->middleware('throttle:arcade')
                         ->name('guess');
                 });
+
+                Route::prefix('bug-sweeper')->name('bug-sweeper.')->group(function () {
+                    Route::post('/start', [ArcadeController::class, 'startBugSweeper'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/click', [ArcadeController::class, 'clickBugSweeper'])
+                        ->middleware('throttle:arcade-status')
+                        ->name('click');
+                    Route::post('/{session}/cashout', [ArcadeController::class, 'cashoutBugSweeper'])
+                        ->middleware('throttle:arcade')
+                        ->name('cashout');
+                });
+
+                Route::post('/high-low/play', [ArcadeController::class, 'resolveHighLow'])
+                    ->middleware('throttle:arcade')
+                    ->name('high-low.play');
             });
 
         Route::prefix('admin')
