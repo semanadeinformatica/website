@@ -9,11 +9,10 @@ import Header from "@/Components/CRUD/Header.vue";
 import { computed } from "vue";
 import type Edition from "@/Types/Edition";
 
-
 interface Props {
     items: Paginated<ArcadeGame>;
     with: {
-        editions: Edition[]
+        editions: Edition[];
     };
     isSearchable?: boolean;
 }
@@ -43,22 +42,34 @@ const editions = computed<Record<number, string>>(() =>
                 <Header sort-by="min_wager">Aposta Mín.</Header>
                 <Header sort-by="max_wager">Aposta Máx.</Header>
                 <Header sort-by="daily_win_cap">Limite Diário</Header>
-                <Header filter-by="edition_id" :filter-values="editions">Edição</Header>
+                <Header filter-by="edition_id" :filter-values="editions">
+                    Edição
+                </Header>
             </HeaderRow>
         </template>
         <template #row="{ item }">
             <Row :item="item" name="arcadeGames">
                 <Cell class="font-medium text-white">{{ item.name }}</Cell>
-                <Cell><span class="font-mono text-xs text-neutral-400">{{ item.slug }}</span></Cell>
+                <Cell
+                    ><span class="font-mono text-xs text-neutral-400">
+                        {{ item.slug }}
+                    </span></Cell
+                >
                 <Cell>
-                    <span :class="item.is_active ? 'text-green-400' : 'text-red-400'">
-                        {{ item.is_active ? 'Ativo' : 'Inativo' }}
+                    <span
+                        :class="
+                            item.is_active ? 'text-green-400' : 'text-red-400'
+                        "
+                    >
+                        {{ item.is_active ? "Ativo" : "Inativo" }}
                     </span>
                 </Cell>
                 <Cell>{{ item.min_wager }} pts</Cell>
                 <Cell>{{ item.max_wager }} pts</Cell>
-                <Cell>{{ item.daily_win_cap ?? '—' }}</Cell>
-                <Cell class="text-xs text-neutral-400">{{ editions[item.edition_id] ?? '—' }}</Cell>
+                <Cell>{{ item.daily_win_cap ?? "—" }}</Cell>
+                <Cell class="text-xs text-neutral-400">
+                    {{ editions[item.edition_id] ?? "—" }}
+                </Cell>
             </Row>
         </template>
     </CRUDView>
