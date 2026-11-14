@@ -44,13 +44,7 @@ const attemptMultipliers = computed<Record<string, number>>(() => {
         (props.game.payout_config?.attempt_multipliers as Record<
             string,
             number
-        >) ?? {
-            "1": 6.0,
-            "2": 4.0,
-            "3": 2.5,
-            "4": 1.8,
-            "5": 1.5,
-        }
+        >) ?? {}
     );
 });
 
@@ -94,7 +88,7 @@ const currentAttemptNumber = computed(() => attempts.value.length + 1);
 
 const currentMultiplier = computed(() => {
     const key = String(Math.min(currentAttemptNumber.value, maxAttempts.value));
-    return attemptMultipliers.value[key] ?? 1.5;
+    return attemptMultipliers.value[key] ?? 1.0;
 });
 
 const currentPotentialPayout = computed(() => {
@@ -197,7 +191,7 @@ async function startGame() {
 
         if (typeof data.balance === "number") {
             localBalance.value = data.balance;
-            router.reload({ only: ["points"] });
+            router.reload({ only: ["points", "enrollment_points"] });
         }
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -251,7 +245,7 @@ async function submitGuess() {
 
             if (typeof data.balance === "number") {
                 localBalance.value = data.balance;
-                router.reload({ only: ["points"] });
+                router.reload({ only: ["points", "enrollment_points"] });
             }
         } else {
             // Reset focus to the first column for the next attempt
@@ -473,7 +467,7 @@ function resetGame() {
                                     : 'text-neutral-400'
                             "
                         >
-                            {{ attemptMultipliers[String(rowIndex)] ?? 1.5 }}x
+                            {{ attemptMultipliers[String(rowIndex)] ?? 1.0 }}x
                         </div>
 
                         <!-- 4 Digit Boxes with Wordle SINF Color Coding (Aligned Left) -->
