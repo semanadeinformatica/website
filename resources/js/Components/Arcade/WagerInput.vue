@@ -176,6 +176,8 @@ onBeforeUnmount(() => {
                 @pointerup="stopRepeat"
                 @pointerleave="stopRepeat"
                 @pointercancel="stopRepeat"
+                @keydown.enter.prevent="decrement"
+                @keydown.space.prevent="decrement"
                 @contextmenu.prevent
             >
                 <Minus :size="16" />
@@ -205,6 +207,8 @@ onBeforeUnmount(() => {
                 @pointerup="stopRepeat"
                 @pointerleave="stopRepeat"
                 @pointercancel="stopRepeat"
+                @keydown.enter.prevent="increment"
+                @keydown.space.prevent="increment"
                 @contextmenu.prevent
             >
                 <Plus :size="16" />

@@ -264,6 +264,13 @@ function handlePlayAgain() {
 }
 
 async function handleCloseRequest() {
+    // Never close while a request is in flight: for startGame this would
+    // charge the wager without showing the board, and for cell clicks it
+    // would hide the outcome.
+    if (isActionLoading.value) {
+        return;
+    }
+
     if (
         stage.value === "playing" &&
         sessionId.value &&
@@ -330,7 +337,8 @@ async function handleCloseRequest() {
             <button
                 type="button"
                 aria-label="Fechar"
-                class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white"
+                :disabled="isActionLoading"
+                class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
                 @click="handleCloseRequest"
             >
                 <X :size="18" />
