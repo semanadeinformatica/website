@@ -3,7 +3,7 @@ import { computed, type Component } from "vue";
 import type ArcadeGame from "@/Types/Arcade";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { Coins, Grid3x3, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
+import { Coins, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
 
 interface Props {
     game: ArcadeGame;
@@ -19,12 +19,12 @@ const emit = defineEmits<{
 
 const iconComponent = computed<Component | string>(() => {
     switch (props.game.slug) {
+        case "bug-sweeper":
+            return "/images/arcade/BugSweeper-Icon.png";
         case "coin-flip":
             return Coins;
         case "high-low":
             return "/images/arcade/HighLow-Icon.png";
-        case "bug-sweeper":
-            return Grid3x3;
         case "mastermind":
             return Key;
         case "binary-blitz":
