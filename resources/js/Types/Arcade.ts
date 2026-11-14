@@ -1,5 +1,6 @@
-export default interface ArcadeGame {
-    id: number;
+import type Model from "./Model";
+
+export default interface ArcadeGame extends Model {
     edition_id: number;
     slug:
         | "coin-flip"

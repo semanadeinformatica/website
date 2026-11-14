@@ -1,0 +1,147 @@
+<script setup lang="ts">
+import TextInput from "@/Components/Form/TextInput.vue";
+import Checkbox from "@/Components/Form/Checkbox.vue";
+import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
+import type ArcadeGame from "@/Types/Arcade";
+import type Edition from "@/Types/Edition";
+import { useForm } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
+
+interface Props {
+    item: ArcadeGame;
+    with: {
+        editions: Edition[];
+    };
+}
+
+const { item: arcadeGame } = defineProps<Props>();
+
+const form = useForm({
+    edition_id: arcadeGame.edition_id.toString(),
+    slug: arcadeGame.slug,
+    name: arcadeGame.name,
+    is_active: arcadeGame.is_active,
+    is_pvp: arcadeGame.is_pvp,
+    min_wager: arcadeGame.min_wager.toString(),
+    max_wager: arcadeGame.max_wager.toString(),
+    daily_win_cap: arcadeGame.daily_win_cap?.toString() ?? "",
+    payout_config: JSON.stringify(arcadeGame.payout_config ?? {}, null, 2),
+});
+
+const submit = () => {
+    form.put(route("admin.arcadeGames.update", { arcadeGame: arcadeGame.id }));
+};
+</script>
+
+<template>
+    <CRUDModal
+        title="Editar Jogo do Arcade"
+        name="arcadeGames"
+        :processing="form.processing"
+        max-width="lg"
+        @submit="submit"
+    >
+        <TextInput
+            v-model="form.edition_id"
+            type="select"
+            required
+            autofocus
+            label="Edição"
+            :error-message="form.errors.edition_id"
+        >
+            <option
+                v-for="edition in $props.with.editions"
+                :key="edition.id"
+                :value="edition.id"
+            >
+                {{ edition.name }}
+            </option>
+        </TextInput>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <TextInput
+                v-model="form.slug"
+                type="select"
+                required
+                label="Jogo"
+                :error-message="form.errors.slug"
+            >
+                <option value="coin-flip">Coin Flip</option>
+                <option value="high-low">High Low</option>
+                <option value="bug-sweeper">Bug Sweeper</option>
+                <option value="mastermind">Mastermind</option>
+                <option value="binary-blitz">Binary Blitz</option>
+            </TextInput>
+
+            <TextInput
+                id="name"
+                v-model="form.name"
+                label="Nome"
+                type="text"
+                required
+                autocomplete="name"
+                :error-message="form.errors.name"
+            />
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <TextInput
+                id="min_wager"
+                v-model="form.min_wager"
+                label="Aposta Mínima (Pontos)"
+                type="number"
+                required
+                :error-message="form.errors.min_wager"
+            />
+
+            <TextInput
+                id="max_wager"
+                v-model="form.max_wager"
+                label="Aposta Máxima (Pontos)"
+                type="number"
+                required
+                :error-message="form.errors.max_wager"
+            />
+        </div>
+
+        <TextInput
+            id="daily_win_cap"
+            v-model="form.daily_win_cap"
+            label="Limite Diário de Ganhos (Pontos)"
+            type="number"
+            placeholder="Sem limite"
+            :error-message="form.errors.daily_win_cap"
+        />
+
+        <div class="flex flex-col gap-2.5 pt-1">
+            <div
+                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+            >
+                <span class="text-xs font-medium text-neutral-300">
+                    Jogo ativo?
+                </span>
+                <Checkbox id="is_active" v-model:checked="form.is_active" />
+            </div>
+
+            <div
+                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+            >
+                <span class="text-xs font-medium text-neutral-300">
+                    Jogo PvP?
+                </span>
+                <Checkbox id="is_pvp" v-model:checked="form.is_pvp" />
+            </div>
+        </div>
+
+        <TextInput
+            id="payout_config"
+            v-model="form.payout_config"
+            label="Configuração de Pagamentos (JSON)"
+            type="textarea"
+            required
+            class="font-mono text-xs"
+            placeholder='{"house_edge_pct": 10}'
+            :error-message="form.errors.payout_config"
+        />
+    </CRUDModal>
+</template>
