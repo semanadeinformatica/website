@@ -4,6 +4,7 @@ import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type ArcadeGame from "@/Types/Arcade";
 import WagerInput from "@/Components/Arcade/WagerInput.vue";
+import ResultOverlay from "@/Components/Arcade/ResultOverlay.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import { Key, X, AlertCircle, ChevronUp, ChevronDown } from "@lucide/vue";
 import axios from "axios";
@@ -557,82 +558,8 @@ function resetGame() {
                     </div>
                 </div>
 
-                <!-- ===================== CONTROLS / RESULT DECK ===================== -->
-                <!-- Inline Result Banner (Win / Loss with Zero Layout Shift, No Emojis) -->
-                <div v-if="gameState === 'resolved'" class="space-y-3 pt-1">
-                    <!-- Win Banner -->
-                    <div
-                        v-if="lastResult?.outcome === 'win'"
-                        class="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#6a00ff]/50 bg-[#4300a3]/40 p-4 text-center shadow-[0_0_20px_rgba(106,0,255,0.25)]"
-                    >
-                        <div
-                            class="text-xs font-bold tracking-wider text-[#9346ff] uppercase"
-                        >
-                            Vitória
-                        </div>
-                        <div
-                            class="flex items-center justify-center gap-1.5 font-mono text-2xl font-black text-white"
-                        >
-                            <span>+{{ lastResult.payout }}</span>
-                            <img
-                                src="/images/sinf-2026-sm.svg"
-                                class="inline h-5 w-5 object-contain"
-                                alt="SINFrão"
-                                title="SINFrão"
-                            />
-                        </div>
-                        <div class="font-mono text-xs text-neutral-300">
-                            Multiplicador {{ lastResult.multiplier }}x ·
-                            Tentativa {{ attempts.length }}/{{ maxAttempts }}
-                        </div>
-                    </div>
-
-                    <!-- Loss Banner with Code Reveal -->
-                    <div
-                        v-else
-                        class="flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#9a0036]/50 bg-[#630022]/40 p-4 text-center shadow-[0_0_20px_rgba(214,51,108,0.25)]"
-                    >
-                        <div
-                            class="text-xs font-bold tracking-wider text-[#d6336c] uppercase"
-                        >
-                            Derrota
-                        </div>
-                        <div
-                            class="my-1 flex items-center gap-2 text-sm text-neutral-300"
-                        >
-                            <span>Código secreto:</span>
-                            <span
-                                class="rounded-lg border border-[#d6336c]/60 bg-[#9a0036]/30 px-2.5 py-0.5 font-mono text-base font-black tracking-widest text-white shadow-sm"
-                            >
-                                {{ lastResult?.code }}
-                            </span>
-                        </div>
-                        <div
-                            class="flex items-center justify-center gap-1.5 font-mono text-xs text-neutral-400"
-                        >
-                            <span
-                                >Tentativas esgotadas · {{ activeWager }}</span
-                            >
-                            <img
-                                src="/images/sinf-2026-sm.svg"
-                                class="inline h-3 w-3 object-contain"
-                                alt="SINFrão"
-                                title="SINFrão"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- Play Again Button -->
-                    <PrimaryButton
-                        class="w-full justify-center py-2.5 text-sm font-bold shadow-lg"
-                        @click="resetGame"
-                    >
-                        Jogar Novamente
-                    </PrimaryButton>
-                </div>
-
                 <!-- Submit Action (Playing State) -->
-                <div v-else-if="gameState === 'playing'" class="space-y-3 pt-1">
+                <div v-if="gameState === 'playing'" class="space-y-3 pt-1">
                     <!-- Submit Guess Action Button -->
                     <PrimaryButton
                         class="w-full justify-center py-2.5 text-sm font-bold shadow-lg"
@@ -652,5 +579,16 @@ function resetGame() {
                 </div>
             </div>
         </div>
+
+        <ResultOverlay
+            :show="gameState === 'resolved'"
+            :outcome="lastResult?.outcome ?? null"
+            :wager="activeWager"
+            :payout="lastResult?.payout ?? 0"
+            :multiplier="lastResult?.multiplier"
+            :code="lastResult?.code"
+            @close="emit('close')"
+            @play-again="resetGame"
+        />
     </div>
 </template>
