@@ -4,6 +4,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GameCard from "@/Components/Arcade/GameCard.vue";
+import BinaryBlitz from "@/Components/Arcade/games/BinaryBlitz.vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -166,8 +167,15 @@ function closeGameModal() {
             max-width="lg"
             @close="closeGameModal"
         >
+            <BinaryBlitz
+                v-if="selectedGame?.slug === 'binary-blitz'"
+                :game="selectedGame"
+                :points="points ?? 0"
+                @close="closeGameModal"
+            />
+
             <div
-                v-if="selectedGame"
+                v-else-if="selectedGame"
                 class="relative rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
             >
                 <div

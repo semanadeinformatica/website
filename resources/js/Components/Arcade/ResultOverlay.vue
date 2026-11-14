@@ -5,7 +5,7 @@ import { RotateCcw, X } from "@lucide/vue";
 
 interface Props {
     show: boolean;
-    outcome: "win" | "loss" | "cashout" | null;
+    outcome: "win" | "loss" | "partial" | "cashout" | null;
     wager: number;
     payout: number;
 }
@@ -37,6 +37,15 @@ const config = computed(() => {
                 bgGradient: "from-red-950/90 via-red-900/60 to-black/90",
                 borderColor: "border-red-500/40",
                 textColor: "text-red-400",
+            };
+        case "partial":
+            return {
+                emoji: "↩️",
+                title: "Reembolso",
+                message: `Devolvido ${props.payout} pts`,
+                bgGradient: "from-amber-950/90 via-amber-900/60 to-black/90",
+                borderColor: "border-amber-500/40",
+                textColor: "text-amber-400",
             };
         case "cashout":
             return {
