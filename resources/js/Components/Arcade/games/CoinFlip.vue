@@ -146,6 +146,22 @@ function stopWaitingTimer() {
     canCancel.value = false;
 }
 
+let resultTimeout: ReturnType<typeof setTimeout> | null = null;
+
+function stopResultTimer() {
+    if (resultTimeout) {
+        clearTimeout(resultTimeout);
+        resultTimeout = null;
+    }
+}
+
+const canDismiss = computed(
+    () =>
+        state.value !== "starting" &&
+        state.value !== "flipping" &&
+        joiningSessionId.value === null,
+);
+
 function startWaitingTimer(initialSeconds = 0) {
     stopWaitingTimer();
     waitingSeconds.value = initialSeconds;
@@ -217,7 +233,8 @@ function startPolling() {
                 clearPendingSession();
                 state.value = "flipping";
 
-                setTimeout(() => {
+                stopResultTimer();
+                resultTimeout = setTimeout(() => {
                     if (polledSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
@@ -268,7 +285,10 @@ async function joinGame(session: LobbySession) {
         state.value = "flipping";
 
         const data = res.data;
-        setTimeout(() => {
+        const joinedSessionId = session.id;
+        stopResultTimer();
+        resultTimeout = setTimeout(() => {
+            if (joinedSessionId !== sessionId.value) return;
             outcome.value = data.outcome;
             payout.value =
                 data.player_payout ??
@@ -302,6 +322,7 @@ async function cancelGame() {
         );
         stopPolling();
         stopWaitingTimer();
+        stopResultTimer();
         clearPendingSession();
         sessionId.value = null;
         state.value = "idle";
@@ -318,9 +339,14 @@ async function cancelGame() {
 }
 
 function handleClose() {
+    // Never dismiss a request that may already have charged the player:
+    // closing mid-start/join would orphan the paid session.
+    if (!canDismiss.value) return;
+
     startRequestId++;
     stopPolling();
     stopWaitingTimer();
+    stopResultTimer();
 
     if (state.value !== "waiting") {
         clearPendingSession();
@@ -339,6 +365,7 @@ function handlePlayAgain() {
     startRequestId++;
     stopPolling();
     stopWaitingTimer();
+    stopResultTimer();
     clearPendingSession();
     sessionId.value = null;
     outcome.value = null;
@@ -373,7 +400,10 @@ async function restoreOrResetSession() {
                 clearPendingSession();
                 state.value = "flipping";
 
-                setTimeout(() => {
+                const restoredSessionId = stored.id;
+                stopResultTimer();
+                resultTimeout = setTimeout(() => {
+                    if (restoredSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
                     if (data.outcome === "win") {
@@ -411,6 +441,7 @@ watch(
             startRequestId++;
             stopPolling();
             stopWaitingTimer();
+            stopResultTimer();
         }
     },
     { immediate: true },
@@ -424,6 +455,7 @@ onUnmounted(() => {
     startRequestId++;
     stopPolling();
     stopWaitingTimer();
+    stopResultTimer();
 });
 </script>
 
@@ -432,6 +464,8 @@ onUnmounted(() => {
         :show="show"
         :show-close-button="false"
         max-width="lg"
+        :click-to-close="canDismiss"
+        :esc-to-close="canDismiss"
         @close="handleClose"
     >
         <div
@@ -460,7 +494,8 @@ onUnmounted(() => {
                 <button
                     v-if="state !== 'flipping'"
                     type="button"
-                    class="rounded-lg p-1.5 text-neutral-400 transition hover:bg-white/10 hover:text-white"
+                    :disabled="!canDismiss"
+                    class="rounded-lg p-1.5 text-neutral-400 transition hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
                     aria-label="Fechar"
                     @click="handleClose"
                 >
