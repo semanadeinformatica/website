@@ -83,7 +83,7 @@ const config = computed(() => {
                 ]"
             >
                 <!-- Animated Emoji / Icon -->
-                <div class="mb-3 animate-bounce text-5xl select-none">
+                <div class="mb-3 text-5xl select-none">
                     {{ config.emoji }}
                 </div>
 
