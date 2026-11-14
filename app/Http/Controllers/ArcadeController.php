@@ -399,8 +399,17 @@ class ArcadeController extends Controller
                 $multiplier = (float) ($multipliers[(string) $attemptsUsed] ?? 1.0);
                 $payout = (int) floor($lockedSession->wager * $multiplier);
 
-                $wagerService->creditPayout($enrollment, $payout);
-                $balance = $enrollment->fresh()->points;
+                $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+                $wonToday = (int) ArcadeSession::wonToday($lockedEnrollment->id, $lockedSession->game->id)->sum('payout');
+                $dailyWinCap = $lockedSession->game->daily_win_cap;
+
+                if ($dailyWinCap !== null) {
+                    $remainingAllowance = max(0, $dailyWinCap - $wonToday);
+                    $payout = min($payout, $remainingAllowance);
+                }
+
+                $wagerService->creditPayout($lockedEnrollment, $payout);
+                $balance = $lockedEnrollment->fresh()->points;
 
                 $lockedSession->update([
                     'outcome' => 'win',

@@ -41,14 +41,15 @@ class MastermindGameTest extends TestCase
             'is_pvp' => false,
             'min_wager' => 5,
             'max_wager' => 100,
+            'daily_win_cap' => 300,
             'payout_config' => [
                 'max_attempts' => 5,
                 'attempt_multipliers' => [
-                    '1' => 6.0,
-                    '2' => 4.0,
-                    '3' => 2.5,
-                    '4' => 1.8,
-                    '5' => 1.5,
+                    '1' => 3.0,
+                    '2' => 1.5,
+                    '3' => 1.1,
+                    '4' => 1.0,
+                    '5' => 1.0,
                 ],
             ],
         ]);
@@ -185,7 +186,7 @@ class MastermindGameTest extends TestCase
 
     public function test_user_wins_and_receives_correct_multiplier(): void
     {
-        // Solved on attempt 2 (multiplier 4.0)
+        // Solved on attempt 2 (multiplier 1.5)
         $session = ArcadeSession::create([
             'enrollment_id' => $this->enrollment->id,
             'arcade_game_id' => $this->game->id,
@@ -213,14 +214,77 @@ class MastermindGameTest extends TestCase
             'misplaced' => 0,
             'attempts_used' => 2,
             'outcome' => 'win',
-            'multiplier' => 4.0,
-            'payout' => 80,
+            'multiplier' => 1.5,
+            'payout' => 30,
             'code' => '0371',
         ]);
 
-        $this->assertEquals($initialPoints + 80, $this->enrollment->fresh()->points);
+        $this->assertEquals($initialPoints + 30, $this->enrollment->fresh()->points);
         $this->assertEquals('win', $session->fresh()->outcome);
-        $this->assertEquals(80, $session->fresh()->payout);
+        $this->assertEquals(30, $session->fresh()->payout);
+    }
+
+    public function test_daily_win_cap_clamps_payout(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+            'server_state' => [
+                'code' => '0371',
+                'attempts' => [],
+            ],
+            'started_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $session), [
+            'guess' => '0371',
+            'edition' => $this->edition,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'outcome' => 'win',
+            'multiplier' => 3.0,
+            'payout' => 20,
+        ]);
+
+        $this->assertEquals(220, $this->enrollment->fresh()->points);
+        $this->assertEquals(20, $session->fresh()->payout);
+        $this->assertEquals(20, ArcadeSession::wonToday($this->enrollment->id, $this->game->id)->sum('payout'));
+    }
+
+    public function test_daily_win_cap_is_shared_across_pending_sessions(): void
+    {
+        $this->game->update(['daily_win_cap' => 50]);
+
+        $sessions = collect([1, 2])->map(fn () => ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+            'server_state' => [
+                'code' => '0371',
+                'attempts' => [],
+            ],
+            'started_at' => now(),
+        ]));
+
+        $first = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $sessions[0]), [
+            'guess' => '0371',
+            'edition' => $this->edition,
+        ]);
+        $second = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $sessions[1]), [
+            'guess' => '0371',
+            'edition' => $this->edition,
+        ]);
+
+        $first->assertOk()->assertJson(['payout' => 30]);
+        $second->assertOk()->assertJson(['payout' => 20]);
+        $this->assertEquals(50, ArcadeSession::wonToday($this->enrollment->id, $this->game->id)->sum('payout'));
     }
 
     public function test_user_loses_on_5th_attempt_and_code_is_revealed(): void
