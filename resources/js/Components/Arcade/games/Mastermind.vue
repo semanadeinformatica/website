@@ -86,6 +86,12 @@ const lastResult = ref<{
 // Computed attempt trackers
 const currentAttemptNumber = computed(() => attempts.value.length + 1);
 
+const displayedAttemptNumber = computed(() =>
+    gameState.value === "playing"
+        ? Math.min(currentAttemptNumber.value, maxAttempts.value)
+        : attempts.value.length,
+);
+
 const currentMultiplier = computed(() => {
     const key = String(Math.min(currentAttemptNumber.value, maxAttempts.value));
     return attemptMultipliers.value[key] ?? 1.0;
@@ -408,7 +414,7 @@ function resetGame() {
                             >Tentativa:</span
                         >
                         <span class="font-mono text-xs font-bold text-white">
-                            {{ Math.min(currentAttemptNumber, maxAttempts) }} /
+                            {{ displayedAttemptNumber }} /
                             {{ maxAttempts }}
                         </span>
                     </div>
