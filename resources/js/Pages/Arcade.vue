@@ -4,6 +4,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GameCard from "@/Components/Arcade/GameCard.vue";
+import CoinFlip from "@/Components/Arcade/games/CoinFlip.vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -35,6 +36,7 @@ function handlePlay(game: ArcadeGame) {
 function closeGameModal() {
     isGameModalOpen.value = false;
     selectedGame.value = null;
+    router.reload({ only: ["points"] });
 }
 </script>
 
@@ -159,8 +161,18 @@ function closeGameModal() {
             </section>
         </div>
 
+        <!-- Coin Flip PvP Modal -->
+        <CoinFlip
+            v-if="selectedGame?.slug === 'coin-flip'"
+            :game="selectedGame"
+            :points="points ?? 0"
+            :show="isGameModalOpen && selectedGame?.slug === 'coin-flip'"
+            @close="closeGameModal"
+        />
+
         <!-- Game Modal Wrapper for Week 2 integration -->
         <Modal
+            v-else
             :show="isGameModalOpen"
             :show-close-button="false"
             max-width="lg"
