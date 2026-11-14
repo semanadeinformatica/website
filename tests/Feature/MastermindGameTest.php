@@ -260,6 +260,38 @@ class MastermindGameTest extends TestCase
         $this->assertEquals(0, $session->fresh()->payout);
     }
 
+    public function test_sixth_guess_is_rejected(): void
+    {
+        $attempts = array_fill(0, 5, [
+            'guess' => '0000',
+            'exact' => 0,
+            'misplaced' => 0,
+        ]);
+
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+            'server_state' => [
+                'code' => '0371',
+                'attempts' => $attempts,
+            ],
+            'started_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $session), [
+            'guess' => '9999',
+            'edition' => $this->edition,
+        ]);
+
+        $response->assertStatus(422);
+
+        $fresh = $session->fresh();
+        $this->assertSame('pending', $fresh->outcome);
+        $this->assertCount(5, $fresh->server_state['attempts']);
+    }
+
     public function test_stale_session_cannot_bypass_attempt_limit(): void
     {
         $attempts = array_fill(0, 5, [
