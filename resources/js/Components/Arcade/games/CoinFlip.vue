@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import axios from "axios";
 import { route } from "ziggy-js";
@@ -47,11 +47,51 @@ watch(
     },
 );
 
+let startRequestId = 0;
 let pollInterval: ReturnType<typeof setInterval> | null = null;
 let waitingTimer: ReturnType<typeof setInterval> | null = null;
 const waitingSeconds = ref(0);
 const canCancel = ref(false);
 const isCancelling = ref(false);
+
+const PENDING_SESSION_KEY = "sinf_arcade_coin_flip_session";
+
+interface StoredSession {
+    id: number;
+    wager: number;
+    startedAt: number;
+}
+
+function savePendingSession(id: number, bet: number) {
+    try {
+        const item: StoredSession = {
+            id,
+            wager: bet,
+            startedAt: Date.now(),
+        };
+        sessionStorage.setItem(PENDING_SESSION_KEY, JSON.stringify(item));
+    } catch {
+        // ignore storage errors
+    }
+}
+
+function getStoredPendingSession(): StoredSession | null {
+    try {
+        const raw = sessionStorage.getItem(PENDING_SESSION_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw) as StoredSession;
+    } catch {
+        return null;
+    }
+}
+
+function clearPendingSession() {
+    try {
+        sessionStorage.removeItem(PENDING_SESSION_KEY);
+    } catch {
+        // ignore
+    }
+}
 
 interface LobbySession {
     id: number;
@@ -72,6 +112,10 @@ interface LobbySession {
 const lobbySessions = ref<LobbySession[]>([]);
 const isLoadingLobby = ref(false);
 const joiningSessionId = ref<number | null>(null);
+
+const isWagerActionInProgress = computed(
+    () => state.value === "starting" || joiningSessionId.value !== null,
+);
 
 async function fetchLobby() {
     isLoadingLobby.value = true;
@@ -102,10 +146,10 @@ function stopWaitingTimer() {
     canCancel.value = false;
 }
 
-function startWaitingTimer() {
+function startWaitingTimer(initialSeconds = 0) {
     stopWaitingTimer();
-    waitingSeconds.value = 0;
-    canCancel.value = false;
+    waitingSeconds.value = initialSeconds;
+    canCancel.value = initialSeconds >= 30;
     waitingTimer = setInterval(() => {
         waitingSeconds.value++;
         if (waitingSeconds.value >= 30) {
@@ -115,11 +159,13 @@ function startWaitingTimer() {
 }
 
 async function startGame() {
+    if (isWagerActionInProgress.value) return;
     if (wager.value > currentBalance.value) {
         errorMessage.value = "Saldo insuficiente para esta aposta.";
         return;
     }
 
+    const requestId = ++startRequestId;
     state.value = "starting";
     errorMessage.value = null;
 
@@ -127,13 +173,19 @@ async function startGame() {
         const res = await axios.post(route("arcade.coin-flip.start"), {
             wager: wager.value,
         });
+        if (requestId !== startRequestId) {
+            router.reload({ only: ["points", "enrollment_points"] });
+            return;
+        }
         const data = res.data;
         sessionId.value = data.session_id;
         currentBalance.value = Math.max(0, currentBalance.value - wager.value);
+        savePendingSession(data.session_id, wager.value);
         state.value = "waiting";
         startWaitingTimer();
         startPolling();
     } catch (err: unknown) {
+        if (requestId !== startRequestId) return;
         state.value = "idle";
         if (axios.isAxiosError(err) && err.response?.data?.message) {
             errorMessage.value = err.response.data.message;
@@ -145,39 +197,55 @@ async function startGame() {
 
 function startPolling() {
     stopPolling();
+    let requestInFlight = false;
+
     pollInterval = setInterval(async () => {
-        if (!sessionId.value) return;
+        const polledSessionId = sessionId.value;
+        if (!polledSessionId || requestInFlight) return;
+        requestInFlight = true;
+
         try {
             const res = await axios.get(
-                route("arcade.coin-flip.status", { session: sessionId.value }),
+                route("arcade.coin-flip.status", { session: polledSessionId }),
             );
+            if (polledSessionId !== sessionId.value) return;
+
             const data = res.data;
             if (data.outcome && data.outcome !== "pending") {
                 stopPolling();
                 stopWaitingTimer();
+                clearPendingSession();
                 state.value = "flipping";
+
                 setTimeout(() => {
+                    if (polledSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
                     if (data.outcome === "win") {
                         currentBalance.value += payout.value;
                     }
                     state.value = "result";
-                    router.reload({ only: ["points"] });
+                    router.reload({ only: ["points", "enrollment_points"] });
                 }, 1500); // wait for flip animation
             }
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
+                if (polledSessionId !== sessionId.value) return;
                 stopPolling();
                 stopWaitingTimer();
+                clearPendingSession();
                 state.value = "idle";
+                sessionId.value = null;
                 errorMessage.value = "A sessão já não se encontra disponível.";
             }
+        } finally {
+            requestInFlight = false;
         }
     }, 2000);
 }
 
 async function joinGame(session: LobbySession) {
+    if (isWagerActionInProgress.value) return;
     if (session.wager > currentBalance.value) {
         errorMessage.value = "Saldo insuficiente para aderir a esta sala.";
         return;
@@ -209,7 +277,7 @@ async function joinGame(session: LobbySession) {
                 currentBalance.value += payout.value;
             }
             state.value = "result";
-            router.reload({ only: ["points"] });
+            router.reload({ only: ["points", "enrollment_points"] });
         }, 1500);
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -234,6 +302,9 @@ async function cancelGame() {
         );
         stopPolling();
         stopWaitingTimer();
+        clearPendingSession();
+        sessionId.value = null;
+        state.value = "idle";
         handleClose();
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -247,38 +318,97 @@ async function cancelGame() {
 }
 
 function handleClose() {
+    startRequestId++;
     stopPolling();
     stopWaitingTimer();
-    state.value = "idle";
-    sessionId.value = null;
-    outcome.value = null;
-    payout.value = 0;
+
+    if (state.value !== "waiting") {
+        clearPendingSession();
+        state.value = "idle";
+        sessionId.value = null;
+        outcome.value = null;
+        payout.value = 0;
+    }
+
     errorMessage.value = null;
     emit("close");
-    router.reload({ only: ["points"] });
+    router.reload({ only: ["points", "enrollment_points"] });
 }
 
 function handlePlayAgain() {
+    startRequestId++;
     stopPolling();
     stopWaitingTimer();
+    clearPendingSession();
     sessionId.value = null;
     outcome.value = null;
     payout.value = 0;
     errorMessage.value = null;
     state.value = "idle";
     fetchLobby();
-    router.reload({ only: ["points"] });
+    router.reload({ only: ["points", "enrollment_points"] });
+}
+
+async function restoreOrResetSession() {
+    const stored = getStoredPendingSession();
+    if (stored) {
+        sessionId.value = stored.id;
+        wager.value = stored.wager;
+        const elapsed = Math.max(
+            0,
+            Math.floor((Date.now() - stored.startedAt) / 1000),
+        );
+        state.value = "waiting";
+        startWaitingTimer(elapsed);
+        startPolling();
+
+        try {
+            const res = await axios.get(
+                route("arcade.coin-flip.status", { session: stored.id }),
+            );
+            const data = res.data;
+            if (data.outcome && data.outcome !== "pending") {
+                stopPolling();
+                stopWaitingTimer();
+                clearPendingSession();
+                state.value = "flipping";
+
+                setTimeout(() => {
+                    outcome.value = data.outcome;
+                    payout.value = data.payout;
+                    if (data.outcome === "win") {
+                        currentBalance.value += payout.value;
+                    }
+                    state.value = "result";
+                    router.reload({ only: ["points", "enrollment_points"] });
+                }, 1500);
+            }
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 404) {
+                stopPolling();
+                stopWaitingTimer();
+                clearPendingSession();
+                state.value = "idle";
+                sessionId.value = null;
+            }
+        }
+    } else {
+        if (state.value !== "waiting") {
+            state.value = "idle";
+            errorMessage.value = null;
+            wager.value = props.game.min_wager;
+        }
+    }
+    fetchLobby();
 }
 
 watch(
     () => props.show,
     (isOpen) => {
         if (isOpen) {
-            state.value = "idle";
-            errorMessage.value = null;
-            wager.value = props.game.min_wager;
-            fetchLobby();
+            restoreOrResetSession();
         } else {
+            startRequestId++;
             stopPolling();
             stopWaitingTimer();
         }
@@ -291,6 +421,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+    startRequestId++;
     stopPolling();
     stopWaitingTimer();
 });
@@ -438,11 +569,12 @@ onUnmounted(() => {
                 <div class="flex rounded-xl bg-white/5 p-1">
                     <button
                         type="button"
+                        :disabled="isWagerActionInProgress"
                         :class="[
                             'flex-1 rounded-lg py-1.5 text-xs font-semibold transition',
                             state === 'idle' || state === 'starting'
                                 ? 'bg-amber-500/20 text-amber-400 shadow-sm'
-                                : 'text-neutral-400 hover:text-white',
+                                : 'text-neutral-400 hover:text-white disabled:opacity-50',
                         ]"
                         @click="state = 'idle'"
                     >
@@ -450,11 +582,12 @@ onUnmounted(() => {
                     </button>
                     <button
                         type="button"
+                        :disabled="isWagerActionInProgress"
                         :class="[
                             'flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition',
                             state === 'joining'
                                 ? 'bg-amber-500/20 text-amber-400 shadow-sm'
-                                : 'text-neutral-400 hover:text-white',
+                                : 'text-neutral-400 hover:text-white disabled:opacity-50',
                         ]"
                         @click="state = 'joining'"
                     >
@@ -478,7 +611,7 @@ onUnmounted(() => {
                         :min="game.min_wager"
                         :max="game.max_wager"
                         :balance="currentBalance"
-                        :disabled="state === 'starting'"
+                        :disabled="isWagerActionInProgress"
                     />
 
                     <PrimaryButton
@@ -486,7 +619,7 @@ onUnmounted(() => {
                         text-size="text-xs"
                         class="w-full justify-center gap-2"
                         :disabled="
-                            state === 'starting' ||
+                            isWagerActionInProgress ||
                             wager < game.min_wager ||
                             wager > game.max_wager ||
                             wager > currentBalance
@@ -525,7 +658,9 @@ onUnmounted(() => {
                         </div>
                         <button
                             type="button"
-                            :disabled="isLoadingLobby"
+                            :disabled="
+                                isLoadingLobby || isWagerActionInProgress
+                            "
                             class="flex items-center gap-1 text-[11px] text-neutral-400 hover:text-white disabled:opacity-50"
                             @click="fetchLobby"
                         >
@@ -595,7 +730,7 @@ onUnmounted(() => {
                                 padding="px-3.5 py-1.5"
                                 text-size="text-xs"
                                 :disabled="
-                                    joiningSessionId === sessionItem.id ||
+                                    isWagerActionInProgress ||
                                     currentBalance < sessionItem.wager
                                 "
                                 @click="joinGame(sessionItem)"
@@ -665,8 +800,17 @@ onUnmounted(() => {
     transition: transform 1.5s ease-in-out;
 }
 
+@keyframes coin-flip {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(1800deg);
+    }
+}
+
 .coin.flipping {
-    transform: rotateY(1800deg);
+    animation: coin-flip 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) forwards;
 }
 
 .coin.coin-idle {

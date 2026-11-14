@@ -36,7 +36,7 @@ function handlePlay(game: ArcadeGame) {
 function closeGameModal() {
     isGameModalOpen.value = false;
     selectedGame.value = null;
-    router.reload({ only: ["points"] });
+    router.reload({ only: ["points", "enrollment_points"] });
 }
 </script>
 
