@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onBeforeUnmount } from "vue";
 import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type ArcadeGame from "@/Types/Arcade";
@@ -74,6 +74,17 @@ const lastGameResult = ref<{
     wager: number;
 } | null>(null);
 
+let animInterval: ReturnType<typeof setInterval> | null = null;
+
+function stopAnimation() {
+    if (animInterval) {
+        clearInterval(animInterval);
+        animInterval = null;
+    }
+}
+
+onBeforeUnmount(stopAnimation);
+
 // Dynamic color according to current number's range (Ruby < 48, Gold = 50, Roxo > 52)
 const diceBoxColorClass = computed(() => {
     const val = displayNumber.value;
@@ -118,7 +129,8 @@ async function play(betType: "under" | "over" | "exact") {
     const currentWager = wager.value;
 
     // Start rapid number shuffle animation (random numbers 1-100 every 45ms)
-    const animInterval = setInterval(() => {
+    stopAnimation();
+    animInterval = setInterval(() => {
         displayNumber.value = Math.floor(Math.random() * 100) + 1;
     }, 45);
 
@@ -132,7 +144,7 @@ async function play(betType: "under" | "over" | "exact") {
 
         // Let the roll animation run for at least ~800ms for anticipation
         await new Promise((resolve) => setTimeout(resolve, 800));
-        clearInterval(animInterval);
+        stopAnimation();
 
         displayNumber.value = data.result;
         lastGameResult.value = {
@@ -145,7 +157,7 @@ async function play(betType: "under" | "over" | "exact") {
             router.reload({ only: ["points", "enrollment_points"] });
         }
     } catch (err: unknown) {
-        clearInterval(animInterval);
+        stopAnimation();
         displayNumber.value = exactNumber.value;
         lastGameResult.value = null;
         if (axios.isAxiosError(err) && err.response?.data?.message) {
