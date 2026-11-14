@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GameCard from "@/Components/Arcade/GameCard.vue";
 import CoinFlip from "@/Components/Arcade/games/CoinFlip.vue";
+import BugSweeper from "@/Components/Arcade/games/BugSweeper.vue";
+import HighLow from "@/Components/Arcade/games/HighLow.vue";
+import Mastermind from "@/Components/Arcade/games/Mastermind.vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -20,10 +23,21 @@ interface Props {
     isParticipant: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user as User | undefined);
+
+// Keep the visible balance in sync both with partial Inertia reloads and
+// with the real-time updates emitted by the games themselves.
+const displayPoints = ref<number | undefined>(props.points);
+
+watch(
+    () => props.points,
+    (newPoints) => {
+        displayPoints.value = newPoints;
+    },
+);
 
 const selectedGame = ref<ArcadeGame | null>(null);
 const isGameModalOpen = ref(false);
@@ -78,7 +92,7 @@ function closeGameModal() {
 
             <!-- User Balance Pill / Enrollment CTA -->
             <div
-                v-if="points !== null && points !== undefined"
+                v-if="displayPoints !== null && displayPoints !== undefined"
                 class="flex justify-center"
             >
                 <PillSelector size="md" :wrap="false">
@@ -90,7 +104,7 @@ function closeGameModal() {
                             class="flex items-center gap-1.5 font-bold text-white"
                         >
                             <span class="font-mono text-base font-bold">{{
-                                points
+                                displayPoints
                             }}</span>
                             <img
                                 class="h-4 w-4 object-contain"
@@ -127,7 +141,7 @@ function closeGameModal() {
                         v-for="game in games"
                         :key="game.id"
                         :game="game"
-                        :points="points"
+                        :points="displayPoints"
                         :is-enrolled="isEnrolled"
                         @play="handlePlay(game)"
                     />
@@ -165,21 +179,45 @@ function closeGameModal() {
         <CoinFlip
             v-if="selectedGame?.slug === 'coin-flip'"
             :game="selectedGame"
-            :points="points ?? 0"
+            :points="displayPoints ?? 0"
             :show="isGameModalOpen && selectedGame?.slug === 'coin-flip'"
             @close="closeGameModal"
         />
 
-        <!-- Game Modal Wrapper for Week 2 integration -->
+        <!-- Game Modal Wrapper -->
         <Modal
             v-else
             :show="isGameModalOpen"
             :show-close-button="false"
             max-width="lg"
+            :click-to-close="selectedGame?.slug !== 'mastermind'"
+            :esc-to-close="selectedGame?.slug !== 'mastermind'"
             @close="closeGameModal"
         >
+            <BugSweeper
+                v-if="selectedGame?.slug === 'bug-sweeper'"
+                :game="selectedGame"
+                :points="displayPoints ?? 0"
+                @update:balance="displayPoints = $event"
+                @close="closeGameModal"
+            />
+
+            <HighLow
+                v-else-if="selectedGame?.slug === 'high-low'"
+                :game="selectedGame"
+                :points="displayPoints ?? 0"
+                @close="closeGameModal"
+            />
+
+            <Mastermind
+                v-else-if="selectedGame?.slug === 'mastermind'"
+                :game="selectedGame"
+                :points="displayPoints ?? 0"
+                @close="closeGameModal"
+            />
+
             <div
-                v-if="selectedGame"
+                v-else-if="selectedGame"
                 class="relative rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
             >
                 <div
