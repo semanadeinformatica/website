@@ -334,60 +334,59 @@ class ArcadeController extends Controller
             : null;
 
         abort_if(! $enrollment || $session->enrollment_id !== $enrollment->id, 403, 'Acesso não autorizado');
-        abort_if($session->outcome !== 'pending', 422, 'Sessão já finalizada');
 
-        $cfg = $session->game->payout_config;
-        $maxAttempts = (int) ($cfg['max_attempts'] ?? 5);
-        $attempts = $session->server_state['attempts'] ?? [];
-        abort_if(count($attempts) >= $maxAttempts, 422, 'Número máximo de tentativas atingido');
-
-        $codeStr = (string) $session->server_state['code'];
         $guessStr = (string) $request->string('guess')->value();
 
-        $code = str_split($codeStr);
-        $guess = str_split($guessStr);
-        $exact = 0;
-        $misplaced = 0;
-        $feedback = array_fill(0, 4, 'wrong');
-        $codeRemain = [];
-
-        for ($i = 0; $i < 4; $i++) {
-            if ($code[$i] === $guess[$i]) {
-                $feedback[$i] = 'exact';
-                $exact++;
-            } else {
-                $codeRemain[] = $code[$i];
-            }
-        }
-
-        for ($i = 0; $i < 4; $i++) {
-            if ($feedback[$i] === 'exact') {
-                continue;
-            }
-            $idx = array_search($guess[$i], $codeRemain);
-            if ($idx !== false) {
-                $feedback[$i] = 'misplaced';
-                $misplaced++;
-                array_splice($codeRemain, $idx, 1);
-            }
-        }
-
-        $attempts[] = [
-            'guess' => $guessStr,
-            'exact' => $exact,
-            'misplaced' => $misplaced,
-            'feedback' => $feedback,
-        ];
-        $attemptsUsed = count($attempts);
-        $isWin = ($exact === 4);
-        $isGameOver = $isWin || ($attemptsUsed >= $maxAttempts);
-
-        $result = DB::transaction(function () use ($session, $enrollment, $attempts, $attemptsUsed, $isWin, $isGameOver, $cfg, $codeStr, $exact, $misplaced, $feedback, $wagerService) {
+        $result = DB::transaction(function () use ($session, $enrollment, $wagerService, $guessStr) {
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($lockedSession->outcome !== 'pending', 422, 'Sessão já processada');
 
-            $serverState = $lockedSession->server_state;
+            $cfg = $lockedSession->game->payout_config;
+            $maxAttempts = (int) ($cfg['max_attempts'] ?? 5);
+            $serverState = $lockedSession->server_state ?? [];
+            $attempts = $serverState['attempts'] ?? [];
+            abort_if(count($attempts) >= $maxAttempts, 422, 'Número máximo de tentativas atingido');
+
+            $codeStr = (string) ($serverState['code'] ?? '');
+            $code = str_split($codeStr);
+            $guess = str_split($guessStr);
+            $exact = 0;
+            $misplaced = 0;
+            $feedback = array_fill(0, 4, 'wrong');
+            $codeRemain = [];
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($code[$i] === $guess[$i]) {
+                    $feedback[$i] = 'exact';
+                    $exact++;
+                } else {
+                    $codeRemain[] = $code[$i];
+                }
+            }
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($feedback[$i] === 'exact') {
+                    continue;
+                }
+                $idx = array_search($guess[$i], $codeRemain);
+                if ($idx !== false) {
+                    $feedback[$i] = 'misplaced';
+                    $misplaced++;
+                    array_splice($codeRemain, $idx, 1);
+                }
+            }
+
+            $attempts[] = [
+                'guess' => $guessStr,
+                'exact' => $exact,
+                'misplaced' => $misplaced,
+                'feedback' => $feedback,
+            ];
             $serverState['attempts'] = $attempts;
+
+            $attemptsUsed = count($attempts);
+            $isWin = ($exact === 4);
+            $isGameOver = $isWin || ($attemptsUsed >= $maxAttempts);
 
             $outcome = 'pending';
             $payout = 0;
@@ -428,7 +427,7 @@ class ArcadeController extends Controller
                 'misplaced' => $misplaced,
                 'feedback' => $feedback,
                 'attempts_used' => $attemptsUsed,
-                'max_attempts' => (int) ($cfg['max_attempts'] ?? 5),
+                'max_attempts' => $maxAttempts,
                 'outcome' => $outcome,
                 'points' => $balance,
                 'balance' => $balance,
