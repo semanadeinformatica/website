@@ -6,7 +6,7 @@ import type ArcadeGame from "@/Types/Arcade";
 import WagerInput from "@/Components/Arcade/WagerInput.vue";
 import ResultOverlay from "@/Components/Arcade/ResultOverlay.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { Key, X, AlertCircle, ChevronUp, ChevronDown } from "@lucide/vue";
+import { X, AlertCircle, ChevronUp, ChevronDown } from "@lucide/vue";
 import axios from "axios";
 
 interface Props {
