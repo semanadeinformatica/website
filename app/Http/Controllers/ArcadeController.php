@@ -324,9 +324,10 @@ class ArcadeController extends Controller
         $payout = $won ? (int) floor($wager * $multiplier) : 0;
 
         DB::transaction(function () use ($enrollment, $wager, $payout, $game, $result, $betType, $won, $wagerService) {
-            $wagerService->deductWager($enrollment->id, $wager);
-            if ($payout > 0) {
-                $wagerService->creditPayout($enrollment->fresh(), $payout);
+            $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+            if ($won && $payout > 0) {
+                $wagerService->checkDailyWinCap($lockedEnrollment->id, $game, $payout);
+                $wagerService->creditPayout($lockedEnrollment, $payout);
             }
             ArcadeSession::create([
                 'enrollment_id' => $enrollment->id,

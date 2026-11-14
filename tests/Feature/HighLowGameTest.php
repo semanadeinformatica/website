@@ -248,6 +248,32 @@ class HighLowGameTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_winning_over_daily_cap_is_rejected_without_charging(): void
+    {
+        $this->game->update([
+            'daily_win_cap' => 10,
+            'payout_config' => [
+                'under_threshold' => 101,
+                'over_threshold' => 52,
+                'exact_number' => 50,
+                'under_multiplier' => 2.5,
+                'over_multiplier' => 2.0,
+                'exact_multiplier' => 20.0,
+            ],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson(route('arcade.high-low.play', [
+                'edition' => $this->edition->id,
+                'wager' => 50,
+                'bet_type' => 'under',
+            ]));
+
+        $response->assertStatus(422);
+        $this->assertSame(300, $this->enrollment->fresh()->points);
+        $this->assertSame(0, ArcadeSession::count());
+    }
+
     public function test_session_state_records_audit_trail(): void
     {
         $response = $this->actingAs($this->user)
