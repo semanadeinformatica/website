@@ -128,6 +128,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->middleware('throttle:arcade')
                         ->name('cashout');
                 });
+
+                Route::post('/high-low/play', [ArcadeController::class, 'resolveHighLow'])
+                    ->middleware('throttle:arcade')
+                    ->name('high-low.play');
             });
 
         Route::prefix('admin')

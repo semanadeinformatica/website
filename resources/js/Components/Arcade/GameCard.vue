@@ -3,7 +3,7 @@ import { computed, type Component } from "vue";
 import type ArcadeGame from "@/Types/Arcade";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { Coins, Dices, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
+import { Coins, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
 
 interface Props {
     game: ArcadeGame;
@@ -24,7 +24,7 @@ const iconComponent = computed<Component | string>(() => {
         case "coin-flip":
             return Coins;
         case "high-low":
-            return Dices;
+            return "/images/arcade/HighLow-Icon.png";
         case "mastermind":
             return Key;
         case "binary-blitz":
@@ -75,7 +75,7 @@ const isCustomIcon = computed(() => typeof iconComponent.value === "string");
                         v-if="isCustomIcon"
                         :src="iconComponent as string"
                         :alt="game.name"
-                        class="h-full w-full object-contain drop-shadow-[0_0_6px_rgba(147,70,255,0.35)]"
+                        class="h-full w-full object-contain brightness-110 contrast-125 drop-shadow-[0_0_10px_rgba(147,70,255,0.6)] saturate-150"
                     />
                     <component v-else :is="iconComponent" :size="24" />
                 </div>
