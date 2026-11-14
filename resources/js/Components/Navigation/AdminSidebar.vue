@@ -220,7 +220,7 @@ const sections: NavSection[] = [
                 route: "admin.arcadeGames.index",
                 routePrefix: "admin.arcadeGames",
                 labelKey: "models.arcadeGame",
-                defaultLabel: "Jogos",
+                defaultLabel: "Jogos do Arcade",
                 icon: Joystick,
             },
         ],
