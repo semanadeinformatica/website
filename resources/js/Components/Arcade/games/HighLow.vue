@@ -4,6 +4,7 @@ import { router } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import type ArcadeGame from "@/Types/Arcade";
 import WagerInput from "@/Components/Arcade/WagerInput.vue";
+import ResultOverlay from "@/Components/Arcade/ResultOverlay.vue";
 import { X, AlertCircle } from "@lucide/vue";
 import axios from "axios";
 
@@ -154,6 +155,13 @@ async function play(betType: "under" | "over" | "exact") {
         isPlaying.value = false;
     }
 }
+
+function resetGame() {
+    lastGameResult.value = null;
+    selectedBet.value = null;
+    displayNumber.value = exactNumber.value;
+    errorMessage.value = null;
+}
 </script>
 
 <template>
@@ -253,54 +261,12 @@ async function play(betType: "under" | "over" | "exact") {
                     </div>
                 </div>
 
-                <!-- Bottom Stage Area: Ruler (Idle/Rolling) OR Win/Loss Banner Over It (Result) -->
+                <!-- Bottom Stage Area -->
                 <div
                     class="relative z-10 mt-4 flex h-12 w-full max-w-xs items-center justify-center sm:max-w-sm"
                 >
-                    <!-- Inline Victory (SINF Secondary Roxo Over Ruler) -->
-                    <div
-                        v-if="!isPlaying && lastGameResult?.won"
-                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-[#6a00ff]/50 bg-[#4300a3]/50 px-3.5 py-2 text-xs shadow-[0_0_20px_rgba(106,0,255,0.25)] backdrop-blur-sm sm:text-sm"
-                    >
-                        <span class="font-bold text-[#9346ff]"
-                            >Previsão correta!</span
-                        >
-                        <span class="text-neutral-300">Ganhaste</span>
-                        <strong class="font-mono font-bold text-white"
-                            >+{{ lastGameResult.payout }}</strong
-                        >
-                        <img
-                            class="inline h-4 w-4 object-contain"
-                            alt="SINFrão"
-                            title="SINFrão"
-                            src="/images/sinf-2026-sm.svg"
-                        />
-                    </div>
-
-                    <!-- Inline Loss (Dark Red Over Ruler) -->
-                    <div
-                        v-else-if="
-                            !isPlaying && lastGameResult && !lastGameResult.won
-                        "
-                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-950/50 px-3.5 py-2 text-xs shadow-md backdrop-blur-sm sm:text-sm"
-                    >
-                        <span class="font-bold text-red-400"
-                            >Não foi desta!</span
-                        >
-                        <span class="text-neutral-300">Perdeste</span>
-                        <strong class="font-mono font-bold text-white">{{
-                            lastGameResult.wager
-                        }}</strong>
-                        <img
-                            class="inline h-4 w-4 object-contain"
-                            alt="SINFrão"
-                            title="SINFrão"
-                            src="/images/sinf-2026-sm.svg"
-                        />
-                    </div>
-
-                    <!-- Ruler (Shown When Idle or Rolling) -->
-                    <div v-else class="w-full">
+                    <!-- Ruler -->
+                    <div class="w-full">
                         <!-- Continuous Track with Faded Ends and Soft Faded Gold in the Middle -->
                         <div
                             class="relative flex h-2 w-full items-center overflow-hidden rounded-full bg-white/[0.04] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
@@ -407,5 +373,16 @@ async function play(betType: "under" | "over" | "exact") {
                 </div>
             </div>
         </div>
+
+        <ResultOverlay
+            :show="!!lastGameResult && !isPlaying"
+            :outcome="
+                lastGameResult ? (lastGameResult.won ? 'win' : 'loss') : null
+            "
+            :wager="lastGameResult?.wager ?? 0"
+            :payout="lastGameResult?.payout ?? 0"
+            @close="emit('close')"
+            @play-again="resetGame"
+        />
     </div>
 </template>
