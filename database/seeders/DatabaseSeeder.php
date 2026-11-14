@@ -765,6 +765,22 @@ class DatabaseSeeder extends Seeder
             $enrollment->save();
         });
 
+        $this->command->info('Creating arcade games');
+        ArcadeGame::updateOrCreate([
+            'edition_id' => $edition->id,
+            'slug' => 'bug-sweeper',
+        ], [
+            'name' => 'Bug Sweeper',
+            'is_active' => true,
+            'is_pvp' => false,
+            'min_wager' => 10,
+            'max_wager' => 200,
+            'daily_win_cap' => 1000,
+            'payout_config' => [
+                'bomb_count' => 3,
+                'click_multipliers' => [1.2, 1.5, 2.0, 3.0, 5.0],
+            ],
+        ]);
         $this->command->info('Creating gamification arcade games and raffle draws');
         ArcadeGame::firstOrCreate(
             ['edition_id' => $edition->id, 'slug' => 'coin-flip'],
