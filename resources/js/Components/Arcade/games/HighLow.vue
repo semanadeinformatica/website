@@ -141,7 +141,7 @@ async function play(betType: "under" | "over" | "exact") {
 
         if (typeof data.balance === "number") {
             localBalance.value = data.balance;
-            router.reload({ only: ["points"] });
+            router.reload({ only: ["points", "enrollment_points"] });
         }
     } catch (err: unknown) {
         clearInterval(animInterval);
