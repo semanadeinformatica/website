@@ -779,6 +779,24 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        ArcadeGame::firstOrCreate(
+            ['edition_id' => $edition->id, 'slug' => 'binary-blitz'],
+            [
+                'name' => 'Binary Blitz',
+                'is_active' => true,
+                'is_pvp' => false,
+                'min_wager' => 10,
+                'max_wager' => 100,
+                'daily_win_cap' => 500,
+                'payout_config' => [
+                    'question_count' => 3,
+                    'time_limit_seconds' => 12,
+                    'win_multiplier' => 2.5,
+                    'partial_multiplier' => 1.0,
+                ],
+            ]
+        );
+
         RaffleDraw::firstOrCreate(
             ['edition_id' => $edition->id, 'name' => 'Sorteio SINF 2026 — Fones Sony WH-1000XM5'],
             [

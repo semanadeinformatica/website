@@ -116,6 +116,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->middleware('throttle:arcade')
                         ->name('cancel');
                 });
+
+                Route::prefix('binary-blitz')->name('binary-blitz.')->group(function () {
+                    Route::post('/start', [ArcadeController::class, 'startBinaryBlitz'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/submit', [ArcadeController::class, 'submitBinaryBlitz'])
+                        ->middleware('throttle:arcade')
+                        ->name('submit');
+                });
             });
 
         Route::prefix('admin')
