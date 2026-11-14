@@ -311,7 +311,7 @@ function resetGame() {
 
             <button
                 type="button"
-                :disabled="isActionLoading && gameState === 'playing'"
+                :disabled="isActionLoading || gameState === 'playing'"
                 class="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
                 @click="emit('close')"
             >

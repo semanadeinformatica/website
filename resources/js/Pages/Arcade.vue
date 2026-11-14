@@ -165,6 +165,8 @@ function closeGameModal() {
             :show="isGameModalOpen"
             :show-close-button="false"
             max-width="lg"
+            :click-to-close="selectedGame?.slug !== 'mastermind'"
+            :esc-to-close="selectedGame?.slug !== 'mastermind'"
             @close="closeGameModal"
         >
             <Mastermind
