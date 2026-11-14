@@ -6,8 +6,10 @@ use App\Models\ArcadeGame;
 use App\Models\ArcadeSession;
 use App\Models\Enrollment;
 use App\Services\ArcadeWagerService;
+use App\Services\BinaryBlitzQuestionGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -261,6 +263,183 @@ class ArcadeController extends Controller
         });
 
         return response()->json($sessions);
+    }
+
+    public function startBinaryBlitz(
+        Request $request,
+        ArcadeWagerService $wagerService,
+        BinaryBlitzQuestionGenerator $generator
+    ): JsonResponse {
+        $request->validate(['wager' => 'required|integer|min:1']);
+
+        $edition = $request->input('edition');
+        abort_if(! $edition, 404, 'Edição não encontrada');
+
+        $game = ArcadeGame::where('slug', 'binary-blitz')
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        Gate::authorize('play', $game);
+
+        $user = $request->user();
+        $enrollment = $user->usertype->enrollments()
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        $wager = $request->integer('wager');
+        abort_if($wager < $game->min_wager || $wager > $game->max_wager, 422, 'Aposta fora dos limites');
+
+        $wagerService->checkDailyWinCap($enrollment->id, $game);
+
+        $cfg = $game->payout_config ?? [];
+        $questionCount = max(1, min(10, (int) ($cfg['question_count'] ?? 3)));
+        $timeLimit = max(1, min(120, (int) ($cfg['time_limit_seconds'] ?? 12)));
+        $questions = $generator->generate($questionCount);
+        $deadline = now()->addSeconds($timeLimit);
+
+        $sessionData = DB::transaction(function () use ($enrollment, $wager, $game, $questions, $deadline, $wagerService) {
+            $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+
+            $session = ArcadeSession::create([
+                'enrollment_id' => $enrollment->id,
+                'arcade_game_id' => $game->id,
+                'wager' => $wager,
+                'outcome' => 'pending',
+                'server_state' => [
+                    'questions' => $questions,
+                    'deadline' => $deadline->toISOString(),
+                ],
+                'started_at' => now(),
+            ]);
+
+            return [
+                'session_id' => $session->id,
+                'points' => $lockedEnrollment->points,
+            ];
+        });
+
+        $prompts = collect($questions)->map(fn (array $question) => [
+            'prompt' => $question['prompt'],
+        ])->all();
+
+        return response()->json([
+            'session_id' => $sessionData['session_id'],
+            'prompts' => $prompts,
+            'deadline' => $deadline->toISOString(),
+            'points' => $sessionData['points'],
+            'balance' => $sessionData['points'],
+        ], 201);
+    }
+
+    public function submitBinaryBlitz(
+        Request $request,
+        ArcadeSession $session,
+        ArcadeWagerService $wagerService
+    ): JsonResponse {
+        $edition = $request->input('edition') ?? $session->game->edition;
+        $this->ensureBinaryBlitzSession($session, $edition->id);
+
+        $user = $request->user();
+        $enrollment = $user?->isParticipant()
+            ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
+            : null;
+
+        abort_if(! $enrollment || $session->enrollment_id !== $enrollment->id, 403, 'Acesso não autorizado');
+
+        $state = $session->server_state ?? [];
+        $deadline = isset($state['deadline']) ? Carbon::parse($state['deadline']) : null;
+
+        if ($deadline === null || now()->gt($deadline)) {
+            DB::transaction(function () use ($session) {
+                $lockedSession = ArcadeSession::lockForUpdate()->find($session->id);
+
+                if ($lockedSession && $lockedSession->outcome === 'pending') {
+                    $lockedSession->update([
+                        'outcome' => 'expired',
+                        'resolved_at' => now(),
+                    ]);
+                }
+            });
+
+            abort(422, 'Tempo esgotado');
+        }
+
+        abort_if($session->outcome !== 'pending', 422, 'Sessão já finalizada');
+
+        $questions = $state['questions'] ?? [];
+        $total = count($questions);
+        abort_if($total === 0, 422, 'Sessão inválida');
+
+        $request->validate([
+            'answers' => ['required', 'array', 'size:'.$total],
+            'answers.*' => ['required', 'integer'],
+        ]);
+
+        $answers = array_map('intval', $request->input('answers'));
+        $correct = 0;
+        $feedback = [];
+
+        foreach ($questions as $index => $question) {
+            $isCorrect = (int) $question['answer'] === $answers[$index];
+            $feedback[] = $isCorrect;
+
+            if ($isCorrect) {
+                $correct++;
+            }
+        }
+
+        $cfg = $session->game->payout_config ?? [];
+        $winMultiplier = (float) ($cfg['win_multiplier'] ?? 2.5);
+        $partialMultiplier = (float) ($cfg['partial_multiplier'] ?? 1.0);
+        $allCorrect = $correct === $total;
+        $partial = ! $allCorrect && ($correct * 3) >= ($total * 2);
+
+        $payout = $allCorrect
+            ? (int) floor($session->wager * $winMultiplier)
+            : ($partial ? (int) floor($session->wager * $partialMultiplier) : 0);
+        $outcome = $allCorrect ? 'win' : ($partial ? 'partial' : 'loss');
+
+        $result = DB::transaction(function () use ($session, $enrollment, $correct, $total, $feedback, $allCorrect, $outcome, $payout, $wagerService) {
+            $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
+            abort_if($lockedSession->outcome !== 'pending', 422, 'Sessão já finalizada');
+
+            $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+
+            if ($allCorrect && $lockedSession->game->daily_win_cap !== null) {
+                $wonToday = (int) ArcadeSession::wonToday($lockedEnrollment->id, $lockedSession->game->id)->sum('payout');
+                $payout = min($payout, max(0, $lockedSession->game->daily_win_cap - $wonToday));
+            }
+
+            if ($payout > 0) {
+                $wagerService->creditPayout($lockedEnrollment, $payout);
+            }
+
+            $lockedSession->update([
+                'outcome' => $outcome,
+                'payout' => $payout,
+                'resolved_at' => now(),
+            ]);
+
+            return [
+                'correct' => $correct,
+                'total' => $total,
+                'payout' => $payout,
+                'outcome' => $outcome,
+                'feedback' => $feedback,
+                'balance' => $lockedEnrollment->fresh()->points,
+            ];
+        });
+
+        return response()->json($result);
+    }
+
+    private function ensureBinaryBlitzSession(ArcadeSession $session, int $editionId): void
+    {
+        abort_unless(
+            $session->game->slug === 'binary-blitz' && $session->game->edition_id === $editionId,
+            404,
+            'Sessão não encontrada'
+        );
     }
 
     private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void

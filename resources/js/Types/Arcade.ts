@@ -21,7 +21,14 @@ export interface ArcadeSession {
     enrollment_id: number;
     challenger_enrollment_id: number | null;
     wager: number;
-    outcome: "pending" | "matched" | "win" | "loss" | "cashout" | "expired";
+    outcome:
+        | "pending"
+        | "matched"
+        | "win"
+        | "loss"
+        | "partial"
+        | "cashout"
+        | "expired";
     payout: number;
     started_at: string;
     resolved_at: string | null;
