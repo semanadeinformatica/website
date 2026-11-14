@@ -117,6 +117,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->name('cancel');
                 });
 
+                Route::prefix('mastermind')->name('mastermind.')->group(function () {
+                    Route::post('/start', [ArcadeController::class, 'startMastermind'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/guess', [ArcadeController::class, 'guessMastermind'])
+                        ->middleware('throttle:arcade')
+                        ->name('guess');
+                });
+
                 Route::prefix('bug-sweeper')->name('bug-sweeper.')->group(function () {
                     Route::post('/start', [ArcadeController::class, 'startBugSweeper'])
                         ->middleware('throttle:arcade')

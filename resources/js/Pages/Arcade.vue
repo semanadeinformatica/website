@@ -6,6 +6,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import GameCard from "@/Components/Arcade/GameCard.vue";
 import BugSweeper from "@/Components/Arcade/games/BugSweeper.vue";
 import HighLow from "@/Components/Arcade/games/HighLow.vue";
+import Mastermind from "@/Components/Arcade/games/Mastermind.vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PillSelector from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
@@ -178,6 +179,8 @@ function closeGameModal() {
             :show="isGameModalOpen"
             :show-close-button="false"
             max-width="lg"
+            :click-to-close="selectedGame?.slug !== 'mastermind'"
+            :esc-to-close="selectedGame?.slug !== 'mastermind'"
             @close="closeGameModal"
         >
             <BugSweeper
@@ -190,6 +193,13 @@ function closeGameModal() {
 
             <HighLow
                 v-else-if="selectedGame?.slug === 'high-low'"
+                :game="selectedGame"
+                :points="displayPoints ?? 0"
+                @close="closeGameModal"
+            />
+
+            <Mastermind
+                v-else-if="selectedGame?.slug === 'mastermind'"
                 :game="selectedGame"
                 :points="displayPoints ?? 0"
                 @close="closeGameModal"

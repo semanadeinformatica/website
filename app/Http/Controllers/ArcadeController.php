@@ -519,6 +519,199 @@ class ArcadeController extends Controller
         );
     }
 
+    public function startMastermind(Request $request, ArcadeWagerService $wagerService): JsonResponse
+    {
+        $request->validate(['wager' => 'required|integer|min:1']);
+
+        $edition = $request->input('edition');
+        abort_if(! $edition, 404, 'Edição não encontrada');
+
+        $game = ArcadeGame::where('slug', 'mastermind')
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        Gate::authorize('play', $game);
+
+        $user = $request->user();
+        $enrollment = $user->usertype->enrollments()
+            ->where('edition_id', $edition->id)
+            ->firstOrFail();
+
+        $wager = $request->integer('wager');
+        abort_if($wager < $game->min_wager || $wager > $game->max_wager, 422, 'Aposta fora dos limites');
+
+        $wagerService->checkDailyWinCap($enrollment->id, $game);
+
+        $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+        $cfg = $game->payout_config;
+        $maxAttempts = (int) ($cfg['max_attempts'] ?? 5);
+
+        $sessionData = DB::transaction(function () use ($enrollment, $wager, $game, $code, $wagerService) {
+            $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+
+            $session = ArcadeSession::create([
+                'enrollment_id' => $enrollment->id,
+                'arcade_game_id' => $game->id,
+                'wager' => $wager,
+                'outcome' => 'pending',
+                'server_state' => [
+                    'code' => $code,
+                    'attempts' => [],
+                ],
+                'started_at' => now(),
+            ]);
+
+            return [
+                'session_id' => $session->id,
+                'points' => $lockedEnrollment->points,
+            ];
+        });
+
+        return response()->json([
+            'session_id' => $sessionData['session_id'],
+            'max_attempts' => $maxAttempts,
+            'points' => $sessionData['points'],
+            'balance' => $sessionData['points'],
+        ], 201);
+    }
+
+    public function guessMastermind(Request $request, ArcadeSession $session, ArcadeWagerService $wagerService): JsonResponse
+    {
+        $request->validate([
+            'guess' => ['required', 'string', 'regex:/^\d{4}$/'],
+        ]);
+
+        abort_unless($session->game->slug === 'mastermind', 404, 'Sessão não encontrada');
+
+        $edition = $request->input('edition') ?? $session->game->edition;
+        $user = $request->user();
+        $enrollment = $user?->isParticipant()
+            ? $user->usertype->enrollments()->where('edition_id', $edition->id)->first()
+            : null;
+
+        abort_if(! $enrollment || $session->enrollment_id !== $enrollment->id, 403, 'Acesso não autorizado');
+
+        $guessStr = (string) $request->string('guess')->value();
+
+        $result = DB::transaction(function () use ($session, $enrollment, $wagerService, $guessStr) {
+            $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
+            abort_if($lockedSession->outcome !== 'pending', 422, 'Sessão já processada');
+
+            $cfg = $lockedSession->game->payout_config;
+            $maxAttempts = (int) ($cfg['max_attempts'] ?? 5);
+            $serverState = $lockedSession->server_state ?? [];
+            $attempts = $serverState['attempts'] ?? [];
+            abort_if(count($attempts) >= $maxAttempts, 422, 'Número máximo de tentativas atingido');
+
+            $codeStr = (string) ($serverState['code'] ?? '');
+            $code = str_split($codeStr);
+            $guess = str_split($guessStr);
+            $exact = 0;
+            $misplaced = 0;
+            $feedback = array_fill(0, 4, 'wrong');
+            $codeRemain = [];
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($code[$i] === $guess[$i]) {
+                    $feedback[$i] = 'exact';
+                    $exact++;
+                } else {
+                    $codeRemain[] = $code[$i];
+                }
+            }
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($feedback[$i] === 'exact') {
+                    continue;
+                }
+                $idx = array_search($guess[$i], $codeRemain);
+                if ($idx !== false) {
+                    $feedback[$i] = 'misplaced';
+                    $misplaced++;
+                    array_splice($codeRemain, $idx, 1);
+                }
+            }
+
+            $attempts[] = [
+                'guess' => $guessStr,
+                'exact' => $exact,
+                'misplaced' => $misplaced,
+                'feedback' => $feedback,
+            ];
+            $serverState['attempts'] = $attempts;
+
+            $attemptsUsed = count($attempts);
+            $isWin = ($exact === 4);
+            $isGameOver = $isWin || ($attemptsUsed >= $maxAttempts);
+
+            $outcome = 'pending';
+            $payout = 0;
+            $multiplier = 0.0;
+            $balance = $enrollment->points;
+
+            if ($isWin) {
+                $outcome = 'win';
+                $multipliers = $cfg['attempt_multipliers'] ?? [];
+                $multiplier = (float) ($multipliers[(string) $attemptsUsed] ?? 1.0);
+                $payout = (int) floor($lockedSession->wager * $multiplier);
+
+                $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+                $wonToday = (int) ArcadeSession::wonToday($lockedEnrollment->id, $lockedSession->game->id)->sum('payout');
+                $dailyWinCap = $lockedSession->game->daily_win_cap;
+
+                if ($dailyWinCap !== null) {
+                    $remainingAllowance = max(0, $dailyWinCap - $wonToday);
+                    $payout = min($payout, $remainingAllowance);
+                }
+
+                $wagerService->creditPayout($lockedEnrollment, $payout);
+                $balance = $lockedEnrollment->fresh()->points;
+
+                $lockedSession->update([
+                    'outcome' => 'win',
+                    'payout' => $payout,
+                    'server_state' => $serverState,
+                    'resolved_at' => now(),
+                ]);
+            } elseif ($isGameOver) {
+                $outcome = 'loss';
+                $lockedSession->update([
+                    'outcome' => 'loss',
+                    'payout' => 0,
+                    'server_state' => $serverState,
+                    'resolved_at' => now(),
+                ]);
+            } else {
+                $lockedSession->update([
+                    'server_state' => $serverState,
+                ]);
+            }
+
+            $response = [
+                'exact' => $exact,
+                'misplaced' => $misplaced,
+                'feedback' => $feedback,
+                'attempts_used' => $attemptsUsed,
+                'max_attempts' => $maxAttempts,
+                'outcome' => $outcome,
+                'points' => $balance,
+                'balance' => $balance,
+            ];
+
+            if ($outcome === 'win') {
+                $response['payout'] = $payout;
+                $response['multiplier'] = $multiplier;
+                $response['code'] = $codeStr;
+            } elseif ($outcome === 'loss') {
+                $response['code'] = $codeStr;
+            }
+
+            return $response;
+        });
+
+        return response()->json($result);
+    }
+
     private function ensureCoinFlipSession(ArcadeSession $session, int $editionId): void
     {
         abort_unless(

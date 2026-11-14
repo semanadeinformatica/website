@@ -3,7 +3,7 @@ import { computed, type Component } from "vue";
 import type ArcadeGame from "@/Types/Arcade";
 import Card from "@/Components/UI/Card.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import { Coins, Key, Zap, Gamepad2, Swords } from "@lucide/vue";
+import { Coins, Zap, Gamepad2, Swords } from "@lucide/vue";
 
 interface Props {
     game: ArcadeGame;
@@ -26,7 +26,7 @@ const iconComponent = computed<Component | string>(() => {
         case "high-low":
             return "/images/arcade/HighLow-Icon.png";
         case "mastermind":
-            return Key;
+            return "/images/arcade/Mastermind-Icon.png";
         case "binary-blitz":
             return Zap;
         default:
