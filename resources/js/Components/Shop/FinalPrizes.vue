@@ -82,14 +82,6 @@ const imageSizeClass = (place: number) =>
                     class="relative flex aspect-square items-center justify-center"
                     :class="imageSizeClass(prize.place)"
                 >
-                    <div
-                        v-if="prize.place === 1"
-                        class="pointer-events-none absolute inset-4 rounded-full bg-amber-400/15 blur-3xl"
-                    />
-                    <div
-                        class="pointer-events-none absolute right-1/4 -bottom-1 left-1/4 h-3 rounded-[50%] bg-black/60 blur-lg"
-                    />
-
                     <img
                         v-if="prize.final_prize_image_url"
                         :src="prize.final_prize_image_url"
