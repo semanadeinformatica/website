@@ -4,6 +4,8 @@ import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import type ArcadeGame from "@/Types/Arcade";
 import type Edition from "@/Types/Edition";
+import { arcadeGameSlugs } from "@/Pages/CRUD/ArcadeGames/arcadeGameOptions";
+import { computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
@@ -28,6 +30,19 @@ const form = useForm({
     payout_config: JSON.stringify(arcadeGame.payout_config ?? {}, null, 2),
 });
 
+// Keep unknown slugs (e.g. rows created before a slug was available here)
+// selectable, otherwise the dropdown would show an empty value for them.
+const slugOptions = computed(() => {
+    if (arcadeGameSlugs.some((option) => option.value === arcadeGame.slug)) {
+        return arcadeGameSlugs;
+    }
+
+    return [
+        ...arcadeGameSlugs,
+        { value: arcadeGame.slug, label: arcadeGame.slug },
+    ];
+});
+
 const submit = () => {
     form.put(route("admin.arcadeGames.update", { arcadeGame: arcadeGame.id }));
 };
@@ -42,6 +57,7 @@ const submit = () => {
         @submit="submit"
     >
         <TextInput
+            id="edition_id"
             v-model="form.edition_id"
             type="select"
             required
@@ -52,7 +68,7 @@ const submit = () => {
             <option
                 v-for="edition in $props.with.editions"
                 :key="edition.id"
-                :value="edition.id"
+                :value="edition.id.toString()"
             >
                 {{ edition.name }}
             </option>
@@ -60,17 +76,20 @@ const submit = () => {
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
+                id="slug"
                 v-model="form.slug"
                 type="select"
                 required
                 label="Jogo"
                 :error-message="form.errors.slug"
             >
-                <option value="coin-flip">Coin Flip</option>
-                <option value="high-low">High Low</option>
-                <option value="bug-sweeper">Bug Sweeper</option>
-                <option value="mastermind">Mastermind</option>
-                <option value="binary-blitz">Binary Blitz</option>
+                <option
+                    v-for="slug in slugOptions"
+                    :key="slug.value"
+                    :value="slug.value"
+                >
+                    {{ slug.label }}
+                </option>
             </TextInput>
 
             <TextInput

@@ -3,6 +3,7 @@ import TextInput from "@/Components/Form/TextInput.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import type Edition from "@/Types/Edition";
+import { arcadeGameSlugs } from "@/Pages/CRUD/ArcadeGames/arcadeGameOptions";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
@@ -40,6 +41,7 @@ const submit = () => {
         @submit="submit"
     >
         <TextInput
+            id="edition_id"
             v-model="form.edition_id"
             type="select"
             required
@@ -50,7 +52,7 @@ const submit = () => {
             <option
                 v-for="edition in $props.with.editions"
                 :key="edition.id"
-                :value="edition.id"
+                :value="edition.id.toString()"
             >
                 {{ edition.name }}
             </option>
@@ -58,17 +60,20 @@ const submit = () => {
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
+                id="slug"
                 v-model="form.slug"
                 type="select"
                 required
                 label="Jogo"
                 :error-message="form.errors.slug"
             >
-                <option value="coin-flip">Coin Flip</option>
-                <option value="high-low">High Low</option>
-                <option value="bug-sweeper">Bug Sweeper</option>
-                <option value="mastermind">Mastermind</option>
-                <option value="binary-blitz">Binary Blitz</option>
+                <option
+                    v-for="slug in arcadeGameSlugs"
+                    :key="slug.value"
+                    :value="slug.value"
+                >
+                    {{ slug.label }}
+                </option>
             </TextInput>
 
             <TextInput
