@@ -70,6 +70,7 @@ const messages = {
         },
         models: {
             admin: "Administrador | Administradores",
+            arcadeGame: "Jogo do Arcade | Jogos do Arcade",
             company: "Empresa | Empresas",
             competition: "Competição | Competições",
             competitionTeam: "Equipa de Competição | Equipas de Competição",
