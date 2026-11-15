@@ -43,21 +43,23 @@ const populatedTiers = computed(() => {
     );
 });
 
+// Card has a base `w-full`, so mobile sizes use `max-w-*` to cap the width
+// until the `sm:` width utilities take over.
 function getTierCardSize(rank: number) {
     if (rank >= 3) {
-        return "h-24 w-44 sm:h-28 sm:w-56 p-4";
+        return "h-24 max-w-44 sm:h-28 sm:max-w-none sm:w-56 p-4";
     }
     if (rank === 2) {
-        return "h-20 w-36 sm:h-24 sm:w-48 p-3 sm:p-4";
+        return "h-20 max-w-36 sm:h-24 sm:max-w-none sm:w-48 p-3 sm:p-4";
     }
-    return "h-16 w-32 sm:h-20 sm:w-40 p-2.5 sm:p-3";
+    return "h-16 max-w-32 sm:h-20 sm:max-w-none sm:w-40 p-2.5 sm:p-3";
 }
 </script>
 
 <template>
     <div
         ref="targetRef"
-        class="no-scrollbar relative mx-auto my-auto flex max-h-full w-full max-w-7xl flex-col items-center justify-center overflow-y-auto px-4 py-8 sm:px-6 lg:px-8"
+        class="no-scrollbar relative mx-auto my-auto flex w-full max-w-[100rem] flex-col items-center justify-center overflow-visible px-4 py-8 sm:px-6 md:max-h-full md:overflow-y-auto lg:px-8"
     >
         <div class="mb-6 flex flex-col items-center text-center sm:mb-8">
             <h2

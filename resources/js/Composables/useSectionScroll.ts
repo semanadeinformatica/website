@@ -6,6 +6,9 @@ export interface SectionScrollOptions {
     cooldownMs?: number;
 }
 
+// Matches Tailwind's `md` breakpoint, so mobile layouts keep native scrolling.
+const MOBILE_MEDIA_QUERY = "(max-width: 767px)";
+
 /**
  * Composable for controlled section-by-section snap scrolling.
  * Anchors the center of each section at the center of the viewport and ensures
@@ -183,12 +186,41 @@ export function useSectionScroll(
         }
     }
 
-    onMounted(() => {
+    let mediaQuery: MediaQueryList | null = null;
+
+    function enableSectionScroll() {
         document.documentElement.classList.add("landing-snap");
         window.addEventListener("wheel", onWheel, { passive: false });
         window.addEventListener("keydown", onKeyDown);
         window.addEventListener("touchstart", onTouchStart, { passive: true });
         window.addEventListener("touchend", onTouchEnd, { passive: true });
+    }
+
+    function disableSectionScroll() {
+        document.documentElement.classList.remove("landing-snap");
+        window.removeEventListener("wheel", onWheel);
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("touchstart", onTouchStart);
+        window.removeEventListener("touchend", onTouchEnd);
+    }
+
+    /**
+     * Section-by-section snapping is desktop-only; mobile viewports use the
+     * browser's native free scrolling.
+     */
+    function applyScrollMode() {
+        if (mediaQuery?.matches) {
+            disableSectionScroll();
+        } else {
+            enableSectionScroll();
+        }
+    }
+
+    onMounted(() => {
+        mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+        applyScrollMode();
+        mediaQuery.addEventListener("change", applyScrollMode);
+
         window.addEventListener("scroll", syncActiveSectionFromScroll, {
             passive: true,
         });
@@ -200,11 +232,8 @@ export function useSectionScroll(
     });
 
     onBeforeUnmount(() => {
-        document.documentElement.classList.remove("landing-snap");
-        window.removeEventListener("wheel", onWheel);
-        window.removeEventListener("keydown", onKeyDown);
-        window.removeEventListener("touchstart", onTouchStart);
-        window.removeEventListener("touchend", onTouchEnd);
+        disableSectionScroll();
+        mediaQuery?.removeEventListener("change", applyScrollMode);
         window.removeEventListener("scroll", syncActiveSectionFromScroll);
         window.removeEventListener("hashchange", syncFromHash);
     });
