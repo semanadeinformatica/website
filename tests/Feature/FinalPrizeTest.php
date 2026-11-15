@@ -182,4 +182,66 @@ class FinalPrizeTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseMissing('final_prizes', ['id' => $prize->id]);
     }
+
+    public function test_deleting_a_final_prize_removes_its_image(): void
+    {
+        Storage::fake('public');
+
+        $prize = FinalPrize::factory()->for($this->edition)->create();
+        $prize->updateFinalPrizeImage(UploadedFile::fake()->image('prize.png'));
+
+        $path = $prize->image_path;
+
+        $this->assertNotNull($path);
+
+        $this->actingAs($this->admin)
+            ->delete(route('admin.finalPrizes.destroy', $prize))
+            ->assertRedirect();
+
+        Storage::disk('public')->assertMissing($path);
+    }
+
+    public function test_deleting_an_edition_removes_its_final_prize_images(): void
+    {
+        Storage::fake('public');
+
+        $prize = FinalPrize::factory()->for($this->edition)->create();
+        $prize->updateFinalPrizeImage(UploadedFile::fake()->image('prize.png'));
+
+        $path = $prize->image_path;
+
+        $this->assertNotNull($path);
+
+        $this->edition->delete();
+
+        Storage::disk('public')->assertMissing($path);
+        $this->assertDatabaseMissing('final_prizes', ['id' => $prize->id]);
+    }
+
+    public function test_replacing_a_final_prize_image_removes_the_previous_file(): void
+    {
+        Storage::fake('public');
+
+        $prize = FinalPrize::factory()->for($this->edition)->create();
+        $prize->updateFinalPrizeImage(UploadedFile::fake()->image('old.png'));
+
+        $oldPath = $prize->image_path;
+
+        $this->actingAs($this->admin)
+            ->put(route('admin.finalPrizes.update', $prize), [
+                'edition_id' => $this->edition->id,
+                'place' => $prize->place,
+                'title' => $prize->title,
+                'image' => UploadedFile::fake()->image('new.png'),
+            ])
+            ->assertRedirect(route('admin.finalPrizes.index'));
+
+        $newPath = $prize->fresh()->image_path;
+
+        $this->assertNotNull($oldPath);
+        $this->assertNotNull($newPath);
+        $this->assertNotSame($oldPath, $newPath);
+        Storage::disk('public')->assertMissing($oldPath);
+        Storage::disk('public')->assertExists($newPath);
+    }
 }

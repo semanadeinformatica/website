@@ -15,6 +15,13 @@ class Edition extends Model
     use HasRelationships;
     use Searchable;
 
+    protected static function booted(): void
+    {
+        static::deleting(function (Edition $edition) {
+            $edition->finalPrizes()->get()->each->delete();
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
