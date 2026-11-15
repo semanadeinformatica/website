@@ -193,7 +193,6 @@ class ArcadeController extends Controller
 
         abort_if(! $enrollment || $session->enrollment_id !== $enrollment->id, 403, 'Acesso não autorizado');
         abort_if($session->outcome !== 'pending', 422, 'Sessão não pode ser cancelada');
-        abort_if($session->started_at > now()->subMinutes(5), 422, 'Aguarde 5 minutos antes de cancelar');
 
         DB::transaction(function () use ($session, $wagerService) {
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);

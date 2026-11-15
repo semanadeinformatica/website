@@ -292,42 +292,44 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function test_cancel_session_rules_and_refund(): void
+    public function test_creator_can_cancel_pending_session_and_get_refund(): void
     {
         $this->enrollmentA->update(['points' => 150]);
 
-        // Cannot cancel if less than 5 minutes old
-        $recentSession = ArcadeSession::create([
+        $session = ArcadeSession::create([
             'enrollment_id' => $this->enrollmentA->id,
             'arcade_game_id' => $this->game->id,
             'wager' => 50,
             'outcome' => 'pending',
-            'started_at' => now()->subMinutes(2),
+            'started_at' => now(),
         ]);
 
         $this->actingAs($this->userA)
-            ->postJson(route('arcade.coin-flip.cancel', ['session' => $recentSession->id]))
-            ->assertStatus(422);
-
-        // Can cancel if 5+ minutes old
-        $oldSession = ArcadeSession::create([
-            'enrollment_id' => $this->enrollmentA->id,
-            'arcade_game_id' => $this->game->id,
-            'wager' => 50,
-            'outcome' => 'pending',
-            'started_at' => now()->subMinutes(6),
-        ]);
-
-        $this->actingAs($this->userA)
-            ->postJson(route('arcade.coin-flip.cancel', ['session' => $oldSession->id]))
+            ->postJson(route('arcade.coin-flip.cancel', ['session' => $session->id]))
             ->assertStatus(200);
 
-        $oldSession->refresh();
-        $this->assertEquals('expired', $oldSession->outcome);
-        $this->assertNotNull($oldSession->resolved_at);
+        $session->refresh();
+        $this->assertEquals('expired', $session->outcome);
+        $this->assertNotNull($session->resolved_at);
 
         $this->enrollmentA->refresh();
         $this->assertEquals(200, $this->enrollmentA->points); // 150 + 50 refunded
+    }
+
+    public function test_creator_cannot_cancel_session_after_opponent_joins(): void
+    {
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'pending',
+            'challenger_enrollment_id' => $this->enrollmentB->id,
+            'started_at' => now(),
+        ]);
+
+        $this->actingAs($this->userA)
+            ->postJson(route('arcade.coin-flip.cancel', ['session' => $session->id]))
+            ->assertStatus(422);
     }
 
     public function test_pending_coin_flips_lobby_listing(): void

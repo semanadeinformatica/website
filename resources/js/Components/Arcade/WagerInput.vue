@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch, onBeforeUnmount } from "vue";
-import {
-    Minus,
-    Plus,
-    AlertCircle,
-    ChevronsLeft,
-    ChevronsRight,
-} from "@lucide/vue";
+import { Minus, Plus, AlertCircle } from "@lucide/vue";
 
 interface Props {
     modelValue: number;
@@ -93,15 +87,6 @@ function increment() {
     updateValue(Math.min(props.max, props.modelValue + step.value));
 }
 
-function setMin() {
-    updateValue(props.min);
-}
-
-function setMax() {
-    const effectiveMax = Math.min(props.max, props.balance);
-    updateValue(effectiveMax > props.min ? effectiveMax : props.max);
-}
-
 // Continuous hold-to-repeat for + and - buttons
 let repeatTimeout: ReturnType<typeof setTimeout> | null = null;
 let repeatInterval: ReturnType<typeof setInterval> | null = null;
@@ -147,31 +132,19 @@ onBeforeUnmount(() => {
 
         <div
             :class="[
-                'relative flex items-center gap-1 rounded-2xl border bg-black/40 p-1.5 backdrop-blur-sm transition-colors duration-200',
+                'relative flex items-center gap-1 rounded-2xl border bg-white/[0.03] p-1.5 transition-colors duration-200',
                 hasError
                     ? 'border-red-500/50 ring-1 ring-red-500/20'
                     : 'border-white/10 focus-within:border-amber-400/50',
                 disabled ? 'pointer-events-none opacity-50' : '',
             ]"
         >
-            <!-- Jump to Min Button (<<) -->
-            <button
-                type="button"
-                aria-label="Aposta mínima"
-                title="Mínimo"
-                :disabled="disabled || modelValue <= min"
-                class="flex h-10 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-25"
-                @click="setMin"
-            >
-                <ChevronsLeft :size="16" />
-            </button>
-
             <!-- Decrement Button (-) with hold-to-repeat -->
             <button
                 type="button"
                 aria-label="Diminuir aposta"
                 :disabled="disabled || modelValue <= min"
-                class="flex h-10 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-30"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @pointerdown.prevent="startRepeat(decrement)"
                 @pointerup="stopRepeat"
                 @pointerleave="stopRepeat"
@@ -202,7 +175,7 @@ onBeforeUnmount(() => {
                 type="button"
                 aria-label="Aumentar aposta"
                 :disabled="disabled || modelValue >= max"
-                class="flex h-10 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-30"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-30"
                 @pointerdown.prevent="startRepeat(increment)"
                 @pointerup="stopRepeat"
                 @pointerleave="stopRepeat"
@@ -212,18 +185,6 @@ onBeforeUnmount(() => {
                 @contextmenu.prevent
             >
                 <Plus :size="16" />
-            </button>
-
-            <!-- Jump to Max Button (>>) -->
-            <button
-                type="button"
-                aria-label="Aposta máxima"
-                title="Máximo"
-                :disabled="disabled || modelValue >= max"
-                class="flex h-10 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-400 transition-colors hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-25"
-                @click="setMax"
-            >
-                <ChevronsRight :size="16" />
             </button>
         </div>
 
