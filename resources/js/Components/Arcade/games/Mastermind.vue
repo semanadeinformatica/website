@@ -147,12 +147,19 @@ function handleDigitInput(index: number, event: Event) {
 
     const input = event.target as HTMLInputElement;
     const raw = input.value.replace(/\D/g, "");
-    const digit = raw ? parseInt(raw.slice(-1), 10) : 0;
+
+    // Non-digit input: restore the current digit instead of wiping it to 0.
+    if (!raw) {
+        input.value = String(tumblers.value[index]);
+        return;
+    }
+
+    const digit = parseInt(raw.slice(-1), 10);
 
     tumblers.value[index] = digit;
     input.value = String(digit);
 
-    if (raw && index < 3) {
+    if (index < 3) {
         focusDigit(index + 1);
     }
 }
