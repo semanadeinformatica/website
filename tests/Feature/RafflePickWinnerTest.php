@@ -24,6 +24,8 @@ class RafflePickWinnerTest extends TestCase
     {
         parent::setUp();
 
+        $this->markTestSkipped('Raffle is disabled until the points-based prize draw ships.');
+
         $this->edition = Edition::factory()->create();
         $this->draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,

@@ -95,7 +95,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
 </script>
 
 <template>
-    <PillSelector size="sm" :wrap="false" class="md:hidden">
+    <PillSelector size="sm" :wrap="false" class="lg:hidden">
         <button
             type="button"
             class="pill-item flex h-7 w-7 items-center justify-center p-0 focus-visible:ring-2 focus-visible:ring-white/20"
@@ -117,7 +117,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
         >
             <div
                 v-if="internalOpen"
-                class="bg-sinf-surface-dark/95 fixed inset-0 z-100 flex flex-col justify-between overflow-y-auto p-5 pt-4 shadow-2xl backdrop-blur-3xl md:hidden"
+                class="bg-sinf-surface-dark/95 fixed inset-0 z-100 flex flex-col justify-between overflow-y-auto p-5 pt-4 shadow-2xl backdrop-blur-3xl lg:hidden"
             >
                 <div>
                     <div

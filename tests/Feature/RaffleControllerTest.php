@@ -23,6 +23,8 @@ class RaffleControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->markTestSkipped('Raffle is disabled until the points-based prize draw ships.');
+
         Cache::flush();
 
         $this->edition = Edition::factory()->create();

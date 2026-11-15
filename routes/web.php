@@ -22,8 +22,6 @@ use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
-use App\Http\Controllers\RaffleController;
-use App\Http\Controllers\RaffleDrawCRUDController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
@@ -53,13 +51,7 @@ Route::get('/program', [ProgramController::class, 'show'])->name('program');
 
 Route::get('/arcade', [ArcadeController::class, 'lobby'])->name('arcade.lobby');
 
-Route::prefix('/raffle')->name('raffle.')->group(function () {
-    Route::get('/', [RaffleController::class, 'index'])->name('index');
-
-    Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'throttle:raffle'])
-        ->post('/{draw}/buy', [RaffleController::class, 'buyTickets'])
-        ->name('buy');
-});
+// Raffle routes are disabled until the points-based prize draw ships.
 
 Route::prefix('/shop')->name('shop')->group(function () {
     Route::get('/', [ShopController::class, 'show'])->name('.show');
@@ -149,6 +141,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->group(function () {
                 Route::get('/staff/participants', [StaffCRUDController::class, 'participants'])
                     ->name('staff.participants');
+                // Raffle admin routes are disabled until the points-based prize draw ships.
                 Route::resources([
                     '/editions' => EditionCRUDController::class,
                     '/events' => EventCRUDController::class,
@@ -168,11 +161,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/eventTypes' => EventTypeCRUDController::class,
                     '/sponsorTiers' => SponsorTierCRUDController::class,
                     '/arcadeGames' => ArcadeCRUDController::class,
-                    '/raffleDraws' => RaffleDrawCRUDController::class,
                 ]);
-
-                Route::post('/raffleDraws/{draw}/pick-winner', [RaffleDrawCRUDController::class, 'pickWinner'])
-                    ->name('raffleDraws.pick-winner');
 
                 Route::name('index')->get('/', AdminDashboardController::class);
             });

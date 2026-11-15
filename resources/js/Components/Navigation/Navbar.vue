@@ -35,7 +35,7 @@ const pageRoutes: Routes = {
     program: { label: "Programa" },
     "shop.show": { label: "Loja" },
     "arcade.lobby": { label: "Arcade" },
-    "raffle.index": { label: "Prémios" },
+    // Raffle link intentionally hidden until the points-based prize draw ships.
     team: { label: "Equipa" },
 };
 
@@ -205,7 +205,7 @@ onUnmounted(() => {
                 :items="navItems"
                 size="sm"
                 :wrap="false"
-                class="hidden md:flex"
+                class="hidden lg:flex"
             />
 
             <div class="flex items-center gap-2.5">
@@ -213,7 +213,7 @@ onUnmounted(() => {
                     :items="editionItem"
                     size="sm"
                     :wrap="false"
-                    class="hidden md:flex"
+                    class="hidden lg:flex"
                 >
                     <template #dropdown-edition>
                         <div>
@@ -252,7 +252,7 @@ onUnmounted(() => {
                     v-if="enrollmentPoints !== null"
                     size="sm"
                     :wrap="false"
-                    class="hidden md:flex"
+                    class="hidden lg:flex"
                 >
                     <div
                         class="pill-item cursor-default gap-1.5 px-3 py-1.5 text-xs hover:bg-transparent"
