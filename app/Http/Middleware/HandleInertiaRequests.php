@@ -35,6 +35,20 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'competitions' => fn () => $request->input('edition')?->competitions ?? [],
+            'enrollment_points' => function () use ($request) {
+                $user = $request->user();
+                if (! $user?->isParticipant()) {
+                    return null;
+                }
+                $edition = $request->input('edition');
+                if (! $edition) {
+                    return null;
+                }
+
+                return $user->usertype->enrollments()
+                    ->where('edition_id', $edition->id)
+                    ->value('points');
+            },
         ]);
     }
 }

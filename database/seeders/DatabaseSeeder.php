@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ArcadeGame;
 use App\Models\Company;
 use App\Models\Competition;
 use App\Models\CompetitionPrize;
@@ -15,6 +16,7 @@ use App\Models\EventType;
 use App\Models\Participant;
 use App\Models\Product;
 use App\Models\Quest;
+use App\Models\RaffleDraw;
 use App\Models\Slot;
 use App\Models\Speaker;
 use App\Models\Sponsor;
@@ -35,6 +37,10 @@ class DatabaseSeeder extends Seeder
     {
         $tables = [
             'competition_team_participant',
+            'raffle_tickets',
+            'raffle_draws',
+            'arcade_sessions',
+            'arcade_games',
             'competition_prizes',
             'competition_teams',
             'competitions',
@@ -758,6 +764,88 @@ class DatabaseSeeder extends Seeder
             $enrollment->points = rand(5, 150);
             $enrollment->save();
         });
+
+        $this->command->info('Creating arcade games');
+        ArcadeGame::updateOrCreate([
+            'edition_id' => $edition->id,
+            'slug' => 'bug-sweeper',
+        ], [
+            'name' => 'Bug Sweeper',
+            'is_active' => true,
+            'is_pvp' => false,
+            'min_wager' => 10,
+            'max_wager' => 200,
+            'daily_win_cap' => 1000,
+            'payout_config' => [
+                'bomb_count' => 3,
+                'click_multipliers' => [1.2, 1.5, 2.0, 3.0, 5.0],
+            ],
+        ]);
+        $this->command->info('Creating gamification arcade games and raffle draws');
+        ArcadeGame::updateOrCreate(
+            ['edition_id' => $edition->id, 'slug' => 'mastermind'],
+            [
+                'name' => 'Mastermind',
+                'is_active' => true,
+                'is_pvp' => false,
+                'min_wager' => 5,
+                'max_wager' => 100,
+                'daily_win_cap' => 300,
+                'payout_config' => [
+                    'max_attempts' => 5,
+                    'attempt_multipliers' => [
+                        1 => 3.0,
+                        2 => 1.5,
+                        3 => 1.1,
+                        4 => 1.0,
+                        5 => 1.0,
+                    ],
+                ],
+            ]
+        );
+
+        ArcadeGame::updateOrCreate(
+            ['edition_id' => $edition->id, 'slug' => 'high-low'],
+            [
+                'name' => 'High-Low',
+                'is_active' => true,
+                'is_pvp' => false,
+                'min_wager' => 10,
+                'max_wager' => 300,
+                'daily_win_cap' => 1000,
+                'payout_config' => [
+                    'under_threshold' => 48,
+                    'over_threshold' => 52,
+                    'exact_number' => 50,
+                    'under_multiplier' => 2.0,
+                    'over_multiplier' => 2.0,
+                    'exact_multiplier' => 20.0,
+                ],
+            ]
+        );
+
+        ArcadeGame::firstOrCreate(
+            ['edition_id' => $edition->id, 'slug' => 'coin-flip'],
+            [
+                'name' => 'Coin Flip',
+                'is_active' => true,
+                'is_pvp' => true,
+                'min_wager' => 10,
+                'max_wager' => 500,
+                'daily_win_cap' => null,
+                'payout_config' => ['house_edge_pct' => 10],
+            ]
+        );
+
+        RaffleDraw::firstOrCreate(
+            ['edition_id' => $edition->id, 'name' => 'Sorteio SINF 2026 — Fones Sony WH-1000XM5'],
+            [
+                'description' => 'Habilita-te a ganhar uns auscultadores com cancelamento de ruído topo de gama!',
+                'ticket_price' => 50,
+                'is_active' => true,
+                'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
+            ]
+        );
 
         $this->command->info('Seeding finished successfully!');
     }

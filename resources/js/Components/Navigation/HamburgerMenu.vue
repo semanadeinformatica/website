@@ -27,6 +27,7 @@ const props = defineProps<{
     };
     user?: User;
     isAdmin?: boolean;
+    enrollmentPoints?: number | null;
 }>();
 
 const emit = defineEmits<{
@@ -94,7 +95,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
 </script>
 
 <template>
-    <PillSelector size="sm" :wrap="false" class="md:hidden">
+    <PillSelector size="sm" :wrap="false" class="lg:hidden">
         <button
             type="button"
             class="pill-item flex h-7 w-7 items-center justify-center p-0 focus-visible:ring-2 focus-visible:ring-white/20"
@@ -116,7 +117,7 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
         >
             <div
                 v-if="internalOpen"
-                class="bg-sinf-surface-dark/95 fixed inset-0 z-100 flex flex-col justify-between overflow-y-auto p-5 pt-4 shadow-2xl backdrop-blur-3xl md:hidden"
+                class="bg-sinf-surface-dark/95 fixed inset-0 z-100 flex flex-col justify-between overflow-y-auto p-5 pt-4 shadow-2xl backdrop-blur-3xl lg:hidden"
             >
                 <div>
                     <div
@@ -284,6 +285,28 @@ const getPageRoute = (name: string, query?: HasQueryParam["_query"]) => {
                                 <p class="truncate text-xs text-neutral-400">
                                     {{ user.email }}
                                 </p>
+                                <div
+                                    v-if="
+                                        enrollmentPoints !== null &&
+                                        enrollmentPoints !== undefined
+                                    "
+                                    class="mt-1 flex items-center gap-1.5 text-xs"
+                                    title="O teu saldo de SINFrões"
+                                >
+                                    <span
+                                        class="font-mono font-bold text-white"
+                                        >{{ enrollmentPoints }}</span
+                                    >
+                                    <img
+                                        class="h-3 w-3 object-contain"
+                                        alt="SINFrão"
+                                        title="SINFrão"
+                                        src="/images/sinf-2026-sm.svg"
+                                    />
+                                    <span class="text-neutral-400"
+                                        >SINFrões</span
+                                    >
+                                </div>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">

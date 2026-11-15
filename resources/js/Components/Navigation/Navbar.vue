@@ -34,6 +34,8 @@ const homeSections: Routes = {
 const pageRoutes: Routes = {
     program: { label: "Programa" },
     "shop.show": { label: "Loja" },
+    "arcade.lobby": { label: "Arcade" },
+    // Raffle link intentionally hidden until the points-based prize draw ships.
     team: { label: "Equipa" },
 };
 
@@ -47,6 +49,10 @@ const isAdmin = computed(() => checkIsAdmin(user.value));
 const competitions = computed<Competition[]>(
     () => (page.props.competitions as Competition[] | undefined) || [],
 );
+const enrollmentPoints = computed<number | null>(() => {
+    const points = page.props.enrollment_points;
+    return typeof points === "number" ? points : null;
+});
 
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
@@ -199,7 +205,7 @@ onUnmounted(() => {
                 :items="navItems"
                 size="sm"
                 :wrap="false"
-                class="hidden md:flex"
+                class="hidden lg:flex"
             />
 
             <div class="flex items-center gap-2.5">
@@ -207,7 +213,7 @@ onUnmounted(() => {
                     :items="editionItem"
                     size="sm"
                     :wrap="false"
-                    class="hidden md:flex"
+                    class="hidden lg:flex"
                 >
                     <template #dropdown-edition>
                         <div>
@@ -240,6 +246,28 @@ onUnmounted(() => {
                             </div>
                         </div>
                     </template>
+                </PillSelector>
+
+                <PillSelector
+                    v-if="enrollmentPoints !== null"
+                    size="sm"
+                    :wrap="false"
+                    class="hidden lg:flex"
+                >
+                    <div
+                        class="pill-item cursor-default gap-1.5 px-3 py-1.5 text-xs hover:bg-transparent"
+                        title="O teu saldo de SINFrões"
+                    >
+                        <span class="font-mono text-xs font-bold text-white">{{
+                            enrollmentPoints
+                        }}</span>
+                        <img
+                            class="h-3.5 w-3.5 object-contain"
+                            alt="SINFrão"
+                            title="SINFrão"
+                            src="/images/sinf-2026-sm.svg"
+                        />
+                    </div>
                 </PillSelector>
 
                 <PillSelector :items="authItems" size="sm" :wrap="false">
@@ -307,6 +335,7 @@ onUnmounted(() => {
                     :options="options"
                     :user="user"
                     :is-admin="isAdmin"
+                    :enrollment-points="enrollmentPoints"
                 />
             </div>
         </div>
