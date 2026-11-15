@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { router, usePage } from "@inertiajs/vue3";
-import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
 import FinalPrizes from "@/Components/Shop/FinalPrizes.vue";
@@ -13,8 +11,7 @@ import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
 import type FinalPrize from "@/Types/FinalPrize";
-import { type User } from "@/Types/User";
-import { ShoppingBag, ArrowRight } from "@lucide/vue";
+import { ShoppingBag } from "@lucide/vue";
 
 interface Props {
     products: BuyableProduct[];
@@ -28,9 +25,6 @@ const props = withDefaults(defineProps<Props>(), {
     finalPrizes: () => [],
     points: undefined,
 });
-
-const page = usePage();
-const user = computed(() => page.props.auth?.user as User | undefined);
 
 const selectedFilter = ref<"all" | "available" | "bought" | "out-of-stock">(
     "all",
@@ -159,46 +153,14 @@ const filteredAndSortedProducts = computed(() => {
             <!-- Final Prizes Section -->
             <FinalPrizes :prizes="finalPrizes" />
 
-            <!-- User Balance Pill / Enrollment CTA -->
-            <div
-                v-if="points !== null && points !== undefined"
-                class="flex justify-center"
-            >
-                <PillSelector size="md" :wrap="false">
-                    <div
-                        class="pill-item cursor-default gap-2.5 hover:bg-transparent"
-                    >
-                        <span class="text-neutral-400">O teu saldo:</span>
-                        <span
-                            class="flex items-center gap-1.5 font-bold text-white"
-                        >
-                            <span class="font-mono text-base font-bold">{{
-                                points
-                            }}</span>
-                            <img
-                                class="h-4 w-4 object-contain"
-                                alt="SINFrão"
-                                title="SINFrão"
-                                src="/images/sinf-2026-sm.svg"
-                            />
-                        </span>
-                    </div>
-                </PillSelector>
-            </div>
-
-            <div v-else-if="user && !isEnrolled" class="flex justify-center">
-                <PrimaryButton
-                    padding="px-4 py-1.5"
-                    text-size="text-xs"
-                    @click="router.put(route('enroll'))"
-                >
-                    <span>Inscreve-te na SINF 2026 para ganhares SINFrões</span>
-                    <ArrowRight :size="13" class="text-amber-400" />
-                </PrimaryButton>
-            </div>
-
             <!-- Products Section -->
             <section class="space-y-6">
+                <h2
+                    class="text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl"
+                >
+                    Loja
+                </h2>
+
                 <!-- Filter and Sort Bar (items-start on mobile prevents stretching) -->
                 <div
                     v-if="products.length > 0"

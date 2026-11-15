@@ -13,6 +13,7 @@ export interface Props {
     closeable?: boolean;
     showCloseButton?: boolean;
     closeDisabled?: boolean;
+    footerDivider?: boolean;
     contentClass?: string;
     overlayClass?: string;
     clickToClose?: boolean;
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
     closeable: true,
     showCloseButton: true,
     closeDisabled: false,
+    footerDivider: true,
     contentClass: "",
     overlayClass: "",
     clickToClose: true,
@@ -138,7 +140,8 @@ const handleClose = () => {
 
         <div
             v-if="$slots.footer"
-            class="flex flex-row items-center justify-end gap-3 border-t border-white/8 px-6 py-4"
+            class="flex flex-row items-center justify-end gap-3 px-6 py-4"
+            :class="{ 'border-t border-white/8': footerDivider }"
         >
             <slot name="footer" />
         </div>

@@ -20,88 +20,112 @@ const orderedPrizes = computed(() =>
         .slice(0, 3),
 );
 
+const podiumPrizes = computed(() => {
+    const byPlace = new Map(
+        orderedPrizes.value.map((prize) => [prize.place, prize]),
+    );
+
+    return [byPlace.get(2), byPlace.get(1), byPlace.get(3)].filter(
+        (prize): prize is FinalPrize => prize !== undefined,
+    );
+});
+
 const placeLabel = (place: number) =>
     place === 1 ? "1º Prémio" : place === 2 ? "2º Prémio" : "3º Prémio";
 
-const placeBadgeClass = (place: number) =>
+const placeLabelClass = (place: number) =>
     place === 1
-        ? "border-amber-300/40 bg-amber-400/15 text-amber-300"
+        ? "text-amber-300"
         : place === 2
-          ? "border-slate-300/40 bg-slate-300/15 text-slate-200"
-          : "border-amber-600/40 bg-amber-700/20 text-amber-500";
+          ? "text-slate-300"
+          : "text-amber-500";
 
-const placeCardClass = (place: number) =>
-    place === 1
-        ? "border-amber-400/25 hover:border-amber-400/40"
-        : place === 2
-          ? "border-slate-300/20 hover:border-slate-300/35"
-          : "border-amber-700/20 hover:border-amber-700/35";
+const figureClass = (place: number) => {
+    if (place === 1) {
+        return "order-1 z-20 col-span-2 sm:order-2 sm:col-span-1";
+    }
+
+    return place === 2
+        ? "order-2 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:order-1 sm:translate-y-8 sm:hover:translate-y-6"
+        : "order-3 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:translate-y-8 sm:hover:translate-y-6";
+};
+
+const imageSizeClass = (place: number) =>
+    place === 1 ? "w-40 sm:w-64 lg:w-80" : "w-24 sm:w-40 lg:w-48";
 </script>
 
 <template>
-    <section v-if="orderedPrizes.length > 0" class="space-y-7">
-        <div class="flex flex-col items-center gap-2 text-center">
-            <div
-                class="flex items-center gap-2 font-mono text-[10px] font-semibold tracking-[0.2em] text-amber-400 uppercase"
-            >
-                <Trophy :size="13" />
-                <span>Sorteio de encerramento</span>
-            </div>
-            <h2
-                class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl"
-            >
-                Prémios Finais
-            </h2>
-            <p
-                class="max-w-2xl text-xs leading-relaxed font-light text-neutral-400 sm:text-sm"
-            >
-                Os prémios finais vão ser sorteados entre os participantes da
-                SINF. Quanto mais SINFrões tiveres, maiores são as tuas chances.
-            </p>
-        </div>
+    <section v-if="podiumPrizes.length > 0" class="space-y-8">
+        <h2
+            class="text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl"
+        >
+            Prémios Finais
+        </h2>
 
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
-            <article
-                v-for="prize in orderedPrizes"
+        <div
+            class="mx-auto grid max-w-5xl grid-cols-2 items-end gap-x-4 gap-y-10 pb-2 sm:grid-cols-[1fr_1.4fr_1fr] sm:gap-6 sm:pb-8 lg:gap-10"
+        >
+            <figure
+                v-for="prize in podiumPrizes"
                 :key="prize.id"
-                class="group relative overflow-hidden rounded-3xl border bg-black/50 shadow-[0_2px_10px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-md transition-all duration-300 hover:scale-[1.015] hover:shadow-[0_6px_20px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.08)]"
-                :class="placeCardClass(prize.place)"
+                class="group relative flex flex-col items-center text-center transition-all duration-300"
+                :class="figureClass(prize.place)"
             >
-                <div
-                    class="relative flex aspect-square items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.08),transparent_65%)] p-6"
+                <span
+                    class="relative z-20 mb-3 text-xs font-medium sm:text-sm"
+                    :class="placeLabelClass(prize.place)"
                 >
+                    {{ placeLabel(prize.place) }}
+                </span>
+
+                <div
+                    class="relative flex aspect-square items-center justify-center"
+                    :class="imageSizeClass(prize.place)"
+                >
+                    <div
+                        v-if="prize.place === 1"
+                        class="pointer-events-none absolute inset-4 rounded-full bg-amber-400/15 blur-3xl"
+                    />
+                    <div
+                        class="pointer-events-none absolute right-1/4 -bottom-1 left-1/4 h-3 rounded-[50%] bg-black/60 blur-lg"
+                    />
+
                     <img
                         v-if="prize.final_prize_image_url"
                         :src="prize.final_prize_image_url"
                         :alt="prize.title"
-                        class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                        class="relative z-10 h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                        :class="
+                            prize.place === 1
+                                ? 'drop-shadow-[0_24px_50px_rgba(0,0,0,0.6)]'
+                                : 'drop-shadow-[0_12px_30px_rgba(0,0,0,0.5)]'
+                        "
                     />
                     <Gift
                         v-else
-                        :size="64"
-                        class="text-neutral-700 opacity-50"
+                        :size="prize.place === 1 ? 72 : 44"
+                        class="relative z-10 text-neutral-700 opacity-50"
                     />
-                    <span
-                        class="absolute top-4 left-4 rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md"
-                        :class="placeBadgeClass(prize.place)"
-                    >
-                        {{ placeLabel(prize.place) }}
-                    </span>
                 </div>
 
-                <div class="px-5 pt-1 pb-5 text-center">
+                <figcaption class="mt-4 w-full">
                     <h3
-                        class="text-sm font-bold tracking-tight text-white sm:text-base"
+                        class="mx-auto line-clamp-2 max-w-52 font-bold tracking-tight"
+                        :class="
+                            prize.place === 1
+                                ? 'text-lg text-white sm:text-xl'
+                                : 'text-xs text-neutral-200/90 sm:text-sm md:text-base'
+                        "
                     >
                         {{ prize.title }}
                     </h3>
-                </div>
-            </article>
+                </figcaption>
+            </figure>
         </div>
 
         <div class="flex justify-center">
             <PrimaryButton
-                color="primary"
+                color="pill"
                 padding="px-5 py-2"
                 text-size="text-xs sm:text-sm"
                 @click="howToOpen = true"
@@ -115,44 +139,48 @@ const placeCardClass = (place: number) =>
             v-model="howToOpen"
             title="Como ganhar os prémios finais?"
             max-width="lg"
+            :footer-divider="false"
         >
-            <div class="space-y-5">
-                <p class="text-sm leading-relaxed text-neutral-300">
-                    Estes prémios vão ser sorteados na nossa sessão de
-                    encerramento. Tens de obrigatoriamente estar na sessão para
-                    poderes conseguir ganhar os prémios.
-                </p>
+            <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                    <div class="pill-item shrink-0 p-2 text-neutral-400">
+                        <Trophy :size="15" />
+                    </div>
+                    <p class="text-sm leading-relaxed text-neutral-300">
+                        Estes prémios vão ser sorteados na nossa sessão de
+                        encerramento. Tens de obrigatoriamente estar na sessão
+                        para poderes conseguir ganhar os prémios.
+                    </p>
+                </div>
 
-                <div
-                    class="flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/8 p-4"
-                >
-                    <MapPin :size="16" class="mt-0.5 shrink-0 text-amber-400" />
-                    <p class="text-xs leading-relaxed text-amber-100/90">
+                <div class="flex items-start gap-3">
+                    <div class="pill-item shrink-0 p-2 text-neutral-400">
+                        <MapPin :size="15" />
+                    </div>
+                    <p class="text-sm leading-relaxed text-neutral-300">
                         Se o teu nome for chamado e não estiveres lá, um novo
                         sorteio irá acontecer.
                     </p>
                 </div>
 
-                <div class="space-y-3">
-                    <div class="flex items-start gap-3">
-                        <div class="pill-item shrink-0 p-2 text-amber-400">
-                            <Coins :size="15" />
-                        </div>
-                        <p class="text-xs leading-relaxed text-neutral-400">
-                            Quantos mais SINFrões tiveres na tua conta no ato de
-                            sorteio, mais chances tens de ganhar.
-                        </p>
+                <div class="flex items-start gap-3">
+                    <div class="pill-item shrink-0 p-2 text-neutral-400">
+                        <Coins :size="15" />
                     </div>
+                    <p class="text-sm leading-relaxed text-neutral-300">
+                        Quantos mais SINFrões tiveres na tua conta no ato de
+                        sorteio, mais chances tens de ganhar.
+                    </p>
+                </div>
 
-                    <div class="flex items-start gap-3">
-                        <div class="pill-item shrink-0 p-2 text-amber-400">
-                            <Sparkles :size="15" />
-                        </div>
-                        <p class="text-xs leading-relaxed text-neutral-400">
-                            Portanto vai a palestras/workshops, usa a nossa
-                            arcade e participa no evento!
-                        </p>
+                <div class="flex items-start gap-3">
+                    <div class="pill-item shrink-0 p-2 text-neutral-400">
+                        <Sparkles :size="15" />
                     </div>
+                    <p class="text-sm leading-relaxed text-neutral-300">
+                        Portanto vai a palestras/workshops, usa a nossa arcade e
+                        participa no evento!
+                    </p>
                 </div>
             </div>
 
