@@ -17,6 +17,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\EventTypeCRUDController;
+use App\Http\Controllers\FinalPrizeCRUDController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
@@ -146,6 +147,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     '/editions' => EditionCRUDController::class,
                     '/events' => EventCRUDController::class,
                     '/products' => ProductCRUDController::class,
+                    '/finalPrizes' => FinalPrizeCRUDController::class,
                     '/quests' => QuestCRUDController::class,
                     '/users' => UserCRUDController::class,
                     '/sponsors' => SponsorCRUDController::class,

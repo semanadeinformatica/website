@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Upload } from "@lucide/vue";
 
 interface Props {
@@ -7,16 +7,24 @@ interface Props {
     modelValue?: File | null;
     label?: string;
     errorMessage?: string;
+    initialPreview?: string | null;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
     (e: "update:modelValue", value: File | null): void;
 }>();
 
 const input = ref<HTMLInputElement | null>(null);
-const preview = ref<string | null>(null);
+const preview = ref<string | null>(props.initialPreview ?? null);
+
+watch(
+    () => props.initialPreview,
+    (value) => {
+        preview.value = value ?? null;
+    },
+);
 
 const updatePreview = () => {
     const photo = input.value?.files?.[0];
@@ -35,7 +43,7 @@ const updatePreview = () => {
 };
 
 const clearPhoto = () => {
-    preview.value = null;
+    preview.value = props.initialPreview ?? null;
     if (input.value) {
         input.value.value = "";
     }
@@ -106,14 +114,14 @@ const clearPhoto = () => {
                 </template>
             </div>
 
-            <!-- Remove action if preview active -->
+            <!-- Cancel action only when a new file has been selected -->
             <button
-                v-if="preview"
+                v-if="modelValue"
                 type="button"
                 class="mt-2 text-xs text-neutral-400 transition-colors hover:text-red-400"
                 @click.stop="clearPhoto"
             >
-                Remover imagem selecionada
+                Cancelar seleção
             </button>
         </div>
 

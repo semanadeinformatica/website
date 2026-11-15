@@ -33,7 +33,7 @@ const homeSections: Routes = {
 
 const pageRoutes: Routes = {
     program: { label: "Programa" },
-    "shop.show": { label: "Loja" },
+    "shop.show": { label: "Prémios & Loja" },
     "arcade.lobby": { label: "Arcade" },
     // Raffle link intentionally hidden until the points-based prize draw ships.
     team: { label: "Equipa" },

@@ -36,6 +36,8 @@ class ShopController extends Controller
             return response('No edition found', 500);
         }
 
+        $finalPrizes = $edition->finalPrizes()->get();
+
         $products = $edition->products()->reorder('price', 'desc')->get()->each(function (Product $product) use ($user, $boughtProductIds) {
             $product->alreadyBought = in_array($product->id, $boughtProductIds);
             $product->canBeBought =
@@ -54,6 +56,7 @@ class ShopController extends Controller
 
         return Inertia::render('Shop', [
             'products' => $products,
+            'finalPrizes' => $finalPrizes,
             'points' => $points ?? null,
             'isEnrolled' => $isEnrolled ?? null,
             'isParticipant' => $isParticipant ?? null,

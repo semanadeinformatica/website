@@ -19,6 +19,7 @@ import {
     Crown,
     Store,
     ShoppingBag,
+    Gift,
     CheckSquare,
     Briefcase,
     UserCog,
@@ -141,6 +142,11 @@ const sections: Section[] = [
                 route: "admin.products.index",
                 name: "Produtos da Loja",
                 icon: ShoppingBag,
+            },
+            {
+                route: "admin.finalPrizes.index",
+                name: "Prémios Finais",
+                icon: Gift,
             },
             {
                 route: "admin.quests.index",

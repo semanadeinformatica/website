@@ -45,7 +45,7 @@ const submit = () => {
         <ImageInput
             id="image"
             v-model="form.prize_picture"
-            :initial-preview="competitionPrize.prize_picture"
+            :initial-preview="competitionPrize.prize_image_url"
             label="Imagem do prémio"
             class="self-stretch"
             :error-message="form.errors.prize_picture"

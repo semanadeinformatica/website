@@ -17,6 +17,7 @@ import {
     Crown,
     Store,
     ShoppingBag,
+    Gift,
     CheckSquare,
     Briefcase,
     UserCog,
@@ -206,6 +207,14 @@ const sections: NavSection[] = [
                 labelKey: "models.product",
                 defaultLabel: "Produtos",
                 icon: ShoppingBag,
+            },
+            {
+                name: "finalPrizes",
+                route: "admin.finalPrizes.index",
+                routePrefix: "admin.finalPrizes",
+                labelKey: "models.finalPrize",
+                defaultLabel: "Prémios Finais",
+                icon: Gift,
             },
             {
                 name: "quests",
