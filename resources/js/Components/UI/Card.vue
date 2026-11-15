@@ -3,6 +3,7 @@ interface Props {
     as?: string;
     interactive?: boolean;
     imageSrc?: string;
+    imageBackgroundSrc?: string;
     imageAlt?: string;
     imageAspectRatio?: string;
     imageFit?: "object-cover" | "object-contain" | "object-fill" | string;
@@ -16,6 +17,7 @@ withDefaults(defineProps<Props>(), {
     as: "article",
     interactive: true,
     imageSrc: undefined,
+    imageBackgroundSrc: undefined,
     imageAlt: "",
     imageAspectRatio: "aspect-square",
     imageFit: "object-cover",
@@ -67,6 +69,16 @@ withDefaults(defineProps<Props>(), {
                             ]
                           : ['w-full', imageAspectRatio, imageClass],
                 ]"
+                :style="
+                    imageBackgroundSrc
+                        ? {
+                              backgroundImage: `url('${imageBackgroundSrc}')`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat',
+                          }
+                        : undefined
+                "
             >
                 <slot name="image">
                     <img
