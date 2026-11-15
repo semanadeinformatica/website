@@ -116,6 +116,7 @@ async function startGame() {
                 ? response.data.balance
                 : Math.max(0, localBalance.value - wager.value);
         emit("update:balance", localBalance.value);
+        router.reload({ only: ["points", "enrollment_points"] });
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
             errorMessage.value = err.response.data.message;
@@ -165,7 +166,7 @@ async function clickCell(cell: Cell) {
 
             resultOutcome.value = "loss";
             resultPayout.value = 0;
-            router.reload({ only: ["points"] });
+            router.reload({ only: ["points", "enrollment_points"] });
         } else {
             cell.state = "safe";
             cell.multiplier = data.current_multiplier;
@@ -189,7 +190,7 @@ async function clickCell(cell: Cell) {
                 resultPayout.value = data.payout;
                 localBalance.value += data.payout;
                 emit("update:balance", localBalance.value);
-                router.reload({ only: ["points"] });
+                router.reload({ only: ["points", "enrollment_points"] });
             }
         }
     } catch (err: unknown) {
@@ -237,7 +238,7 @@ async function handleCashout() {
         resultPayout.value = data.payout;
         localBalance.value += data.payout;
         emit("update:balance", localBalance.value);
-        router.reload({ only: ["points"] });
+        router.reload({ only: ["points", "enrollment_points"] });
     } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response?.data?.message) {
             errorMessage.value = err.response.data.message;
@@ -282,7 +283,7 @@ async function handleCloseRequest() {
             const data = response.data;
             localBalance.value += data.payout;
             emit("update:balance", localBalance.value);
-            router.reload({ only: ["points"] });
+            router.reload({ only: ["points", "enrollment_points"] });
         } catch {
             // Se falhar o pedido, o backend auto-recolhe no próximo arranque
         } finally {

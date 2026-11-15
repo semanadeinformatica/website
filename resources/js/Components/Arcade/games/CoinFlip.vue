@@ -189,6 +189,7 @@ async function startGame() {
         currentBalance.value = Math.max(0, currentBalance.value - wager.value);
         savePendingSession(data.session_id, wager.value);
         state.value = "waiting";
+        router.reload({ only: ["points", "enrollment_points"] });
         startPolling();
     } catch (err: unknown) {
         if (requestId !== startRequestId) return;
