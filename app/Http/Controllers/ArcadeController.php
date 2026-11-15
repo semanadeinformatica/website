@@ -61,6 +61,8 @@ class ArcadeController extends Controller
         $wager = $request->integer('wager');
         abort_if($wager < $game->min_wager || $wager > $game->max_wager, 422, 'Aposta fora dos limites');
 
+        $wagerService->checkDailyWinCap($enrollment->id, $game, $this->coinFlipPayout($game, $wager));
+
         $session = DB::transaction(function () use ($enrollment, $wager, $game, $wagerService) {
             $wagerService->deductWager($enrollment->id, $wager);
 
@@ -114,17 +116,27 @@ class ArcadeController extends Controller
 
             abort_if($creatorEnrollment === null || $challengerLockedEnrollment === null, 422, 'Enrollment não encontrado');
 
+            $wagerService->checkDailyWinCap(
+                $challengerLockedEnrollment->id,
+                $game,
+                $this->coinFlipPayout($game, (int) $lockedSession->wager),
+            );
+
             $wagerService->deductWager($challengerEnrollment->id, $lockedSession->wager);
 
             // 0 = creator wins, 1 = challenger wins
             $result = random_int(0, 1);
-            $houseEdgePct = (int) ($game->payout_config['house_edge_pct'] ?? 10);
-            $totalPot = $lockedSession->wager * 2;
-            $payout = intdiv($totalPot * (100 - $houseEdgePct), 100);
 
             $creatorWon = ($result === 0);
             $winner = $creatorWon ? 'creator' : 'challenger';
             $winningEnrollment = $creatorWon ? $creatorEnrollment : $challengerLockedEnrollment;
+
+            $payout = $this->coinFlipPayout($game, (int) $lockedSession->wager);
+
+            if ($game->daily_win_cap !== null) {
+                $wonToday = (int) ArcadeSession::wonToday($winningEnrollment->id, $game->id)->sum('payout');
+                $payout = min($payout, max(0, $game->daily_win_cap - $wonToday));
+            }
 
             $wagerService->creditPayout($winningEnrollment, $payout);
 
@@ -496,6 +508,13 @@ class ArcadeController extends Controller
         });
 
         return response()->json($result);
+    }
+
+    private function coinFlipPayout(ArcadeGame $game, int $wager): int
+    {
+        $houseEdgePct = (int) ($game->payout_config['house_edge_pct'] ?? 10);
+
+        return intdiv($wager * 2 * (100 - $houseEdgePct), 100);
     }
 
     private function payoutWithinDailyCap(Enrollment $enrollment, ArcadeGame $game, int $payout): int

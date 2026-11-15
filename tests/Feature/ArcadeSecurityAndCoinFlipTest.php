@@ -252,6 +252,119 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
         }
     }
 
+    public function test_start_coin_flip_respects_daily_win_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        // A already won 18 pts today as the challenger of another session.
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentB->id,
+            'challenger_enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'loss', // creator lost, challenger (A) won
+            'payout' => 18,
+            'resolved_at' => now(),
+        ]);
+
+        // A 10 pts wager would pay 18 pts, which is above the 2 pts still allowed.
+        $this->actingAs($this->userA)
+            ->postJson(route('arcade.coin-flip.start'), ['wager' => 10])
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Limite diário atingido');
+
+        $this->enrollmentA->refresh();
+        $this->assertEquals(200, $this->enrollmentA->points);
+        $this->assertEquals(0, ArcadeSession::where('enrollment_id', $this->enrollmentA->id)->count());
+    }
+
+    public function test_join_coin_flip_respects_daily_win_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        // B already won 18 pts today as the challenger of another session.
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'challenger_enrollment_id' => $this->enrollmentB->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'loss', // creator lost, challenger (B) won
+            'payout' => 18,
+            'resolved_at' => now(),
+        ]);
+
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+        ]);
+
+        $this->actingAs($this->userB)
+            ->postJson(route('arcade.coin-flip.join', ['session' => $session->id]), [
+                'wager' => 10,
+            ])
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Limite diário atingido');
+
+        $this->enrollmentB->refresh();
+        $this->assertEquals(200, $this->enrollmentB->points);
+
+        $session->refresh();
+        $this->assertEquals('pending', $session->outcome);
+    }
+
+    public function test_join_coin_flip_caps_payout_at_daily_win_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        // A already won 18 pts today as the challenger of another session.
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentB->id,
+            'challenger_enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'loss',
+            'payout' => 18,
+            'resolved_at' => now(),
+        ]);
+
+        // Created directly so the start-time guard does not hide the settlement cap.
+        $session = ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+        ]);
+
+        $response = $this->actingAs($this->userB)
+            ->postJson(route('arcade.coin-flip.join', ['session' => $session->id]), [
+                'wager' => 10,
+            ]);
+
+        $response->assertStatus(200);
+
+        $winner = $response->json('winner');
+        $payout = $response->json('payout');
+
+        $session->refresh();
+        $this->assertEquals($payout, $session->payout);
+
+        $this->enrollmentA->refresh();
+        $this->enrollmentB->refresh();
+
+        if ($winner === 'creator') {
+            // A can only receive the 2 pts left under the cap.
+            $this->assertEquals(2, $payout);
+            $this->assertEquals(202, $this->enrollmentA->points);
+            $this->assertEquals(190, $this->enrollmentB->points); // 200 - 10
+        } else {
+            $this->assertEquals(18, $payout);
+            $this->assertEquals(200, $this->enrollmentA->points);
+            $this->assertEquals(208, $this->enrollmentB->points); // 200 - 10 + 18
+        }
+    }
+
     public function test_cannot_join_already_resolved_session(): void
     {
         $session = ArcadeSession::create([

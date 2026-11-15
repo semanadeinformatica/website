@@ -24,6 +24,7 @@ import {
     ArrowLeft,
     LogOut,
     X,
+    Joystick,
 } from "@lucide/vue";
 
 interface Props {
@@ -213,6 +214,14 @@ const sections: NavSection[] = [
                 labelKey: "models.quest",
                 defaultLabel: "Tarefas",
                 icon: CheckSquare,
+            },
+            {
+                name: "arcadeGames",
+                route: "admin.arcadeGames.index",
+                routePrefix: "admin.arcadeGames",
+                labelKey: "models.arcadeGame",
+                defaultLabel: "Jogos do Arcade",
+                icon: Joystick,
             },
         ],
     },
