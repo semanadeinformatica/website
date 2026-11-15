@@ -123,18 +123,24 @@ const submit = () => {
             <div
                 class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
             >
-                <span class="text-xs font-medium text-neutral-300">
+                <label
+                    for="is_active"
+                    class="text-xs font-medium text-neutral-300"
+                >
                     Jogo ativo?
-                </span>
+                </label>
                 <Checkbox id="is_active" v-model:checked="form.is_active" />
             </div>
 
             <div
                 class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
             >
-                <span class="text-xs font-medium text-neutral-300">
+                <label
+                    for="is_pvp"
+                    class="text-xs font-medium text-neutral-300"
+                >
                     Jogo PvP?
-                </span>
+                </label>
                 <Checkbox id="is_pvp" v-model:checked="form.is_pvp" />
             </div>
         </div>
