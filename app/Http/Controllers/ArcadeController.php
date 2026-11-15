@@ -97,12 +97,6 @@ class ArcadeController extends Controller
         abort_if($session->outcome !== 'pending' || $session->challenger_enrollment_id !== null, 422, 'Sessão indisponível');
         abort_if($request->integer('wager') !== (int) $session->wager, 422, 'Valor da aposta deve coincidir com o da sessão');
 
-        $wagerService->checkDailyWinCap(
-            $challengerEnrollment->id,
-            $game,
-            $this->coinFlipPayout($game, (int) $session->wager),
-        );
-
         $resultData = DB::transaction(function () use ($session, $challengerEnrollment, $game, $wagerService) {
             $lockedSession = ArcadeSession::lockForUpdate()->findOrFail($session->id);
             abort_if($lockedSession->outcome !== 'pending' || $lockedSession->challenger_enrollment_id !== null, 422, 'Sessão já ocupada');
@@ -121,6 +115,12 @@ class ArcadeController extends Controller
             $challengerLockedEnrollment = $lockedEnrollments->get($challengerEnrollment->id);
 
             abort_if($creatorEnrollment === null || $challengerLockedEnrollment === null, 422, 'Enrollment não encontrado');
+
+            $wagerService->checkDailyWinCap(
+                $challengerLockedEnrollment->id,
+                $game,
+                $this->coinFlipPayout($game, (int) $lockedSession->wager),
+            );
 
             $wagerService->deductWager($challengerEnrollment->id, $lockedSession->wager);
 
