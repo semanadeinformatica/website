@@ -31,6 +31,15 @@ class Participant extends Model
         'social_media_id',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'cv_path',
+    ];
+
     protected $with = ['socialMedia'];
 
     /**

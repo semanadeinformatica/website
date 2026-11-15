@@ -281,6 +281,31 @@ class RaffleControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function test_completed_draw_loads_winner_in_public_index(): void
+    {
+        [$user, $enrollment] = $this->participantWithEnrollment(100);
+        $draw = $this->draw([
+            'is_active' => false,
+            'winner_enrollment_id' => $enrollment->id,
+        ]);
+
+        $response = $this->get(route('raffle.index'));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Raffle', false)
+            ->where('draws.0.winner.id', $enrollment->id)
+            ->where('draws.0.winner.participant.user.name', $user->name)
+            ->where('draws.0.winner.participant.user.profile_photo_url', $user->profile_photo_url)
+            ->missing('draws.0.winner.points')
+            ->missing('draws.0.winner.participant.cv_path')
+            ->missing('draws.0.winner.participant.cv_url')
+            ->missing('draws.0.winner.participant.quest_code')
+            ->missing('draws.0.winner.participant.quest_qr_code')
+            ->missing('draws.0.winner.participant.social_media')
+        );
+    }
+
     public function test_rate_limit_is_enforced(): void
     {
         [$user] = $this->participantWithEnrollment(1000);

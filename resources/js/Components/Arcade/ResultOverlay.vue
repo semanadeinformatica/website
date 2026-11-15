@@ -8,6 +8,8 @@ interface Props {
     outcome: "win" | "loss" | "cashout" | null;
     wager: number;
     payout: number;
+    multiplier?: number;
+    code?: string | null;
 }
 
 const props = defineProps<Props>();
@@ -90,6 +92,24 @@ const config = computed(() => {
                 <p class="mt-1 text-lg font-bold text-white">
                     {{ config.message }}
                 </p>
+
+                <div
+                    v-if="outcome === 'win' && multiplier !== undefined"
+                    class="mt-2 font-mono text-xs text-neutral-300"
+                >
+                    Multiplicador {{ multiplier }}x
+                </div>
+                <div
+                    v-else-if="outcome === 'loss' && code"
+                    class="mt-2 flex items-center gap-2 font-mono text-xs text-neutral-300"
+                >
+                    <span>Código secreto:</span>
+                    <span
+                        class="rounded-lg border border-white/20 bg-black/30 px-2.5 py-0.5 font-mono text-base font-black tracking-widest text-white"
+                    >
+                        {{ code }}
+                    </span>
+                </div>
 
                 <!-- Action Buttons -->
                 <div class="mt-6 flex w-full flex-col gap-2.5 sm:flex-row">

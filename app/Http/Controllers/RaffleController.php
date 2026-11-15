@@ -30,20 +30,49 @@ class RaffleController extends Controller
 
         $draws = RaffleDraw::query()
             ->where('edition_id', $edition->id)
+            ->with(['winner.participant.user:id,name,profile_photo_path'])
             ->withSum('tickets as total_tickets', 'quantity')
             ->orderByDesc('is_active')
             ->orderBy('created_at')
-            ->get()
-            ->each(function (RaffleDraw $draw) {
-                $draw->total_tickets = (int) ($draw->total_tickets ?? 0);
-            });
+            ->get();
+
+        $drawIds = $draws->modelKeys();
+
+        $draws = $draws->map(function (RaffleDraw $draw) {
+            $winner = $draw->winner;
+            $winnerUser = $winner?->participant?->user;
+
+            return [
+                'id' => $draw->id,
+                'edition_id' => $draw->edition_id,
+                'name' => $draw->name,
+                'description' => $draw->description,
+                'ticket_price' => $draw->ticket_price,
+                'is_active' => $draw->is_active,
+                'draw_at' => $draw->draw_at,
+                'winner_enrollment_id' => $draw->winner_enrollment_id,
+                'total_tickets' => (int) ($draw->total_tickets ?? 0),
+                'created_at' => $draw->created_at,
+                'updated_at' => $draw->updated_at,
+                'winner' => $winner ? [
+                    'id' => $winner->id,
+                    'participant' => [
+                        'user' => $winnerUser ? [
+                            'id' => $winnerUser->id,
+                            'name' => $winnerUser->name,
+                            'profile_photo_url' => $winnerUser->profile_photo_url,
+                        ] : null,
+                    ],
+                ] : null,
+            ];
+        });
 
         $myTickets = [];
 
-        if ($enrollment && $draws->isNotEmpty()) {
+        if ($enrollment && $drawIds !== []) {
             $myTickets = RaffleTicket::query()
                 ->where('enrollment_id', $enrollment->id)
-                ->whereIn('raffle_draw_id', $draws->modelKeys())
+                ->whereIn('raffle_draw_id', $drawIds)
                 ->pluck('quantity', 'raffle_draw_id')
                 ->all();
         }

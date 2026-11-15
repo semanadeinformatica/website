@@ -20,6 +20,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    @production
+        <script defer data-domain="sinf.pt" src="https://plausible.niaefeup.pt/js/script.js"></script>
+    @endproduction
+
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])

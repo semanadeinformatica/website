@@ -24,6 +24,7 @@ export default interface MyPageProps {
     };
     canResetPassword: boolean;
     competitions: Competition[];
+    enrollment_points: number | null;
     editionOptions?: Record<string, string>;
     defaultFilters?: Record<string, string | number>;
 }

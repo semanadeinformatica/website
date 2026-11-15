@@ -17,7 +17,6 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCRUDController;
 use App\Http\Controllers\EventDayCRUDController;
 use App\Http\Controllers\EventTypeCRUDController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
@@ -83,6 +82,10 @@ Route::prefix('/event')->name('event')->group(function () {
     });
 });
 
+Route::get('/user/{user}/cv', [CVController::class, 'show'])
+    ->whereNumber('user')
+    ->name('user.cv');
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(
     function () {
         Route::put('/enroll', [EnrollmentController::class, 'store'])
@@ -113,6 +116,31 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                         ->middleware('throttle:arcade')
                         ->name('cancel');
                 });
+
+                Route::prefix('mastermind')->name('mastermind.')->group(function () {
+                    Route::post('/start', [ArcadeController::class, 'startMastermind'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/guess', [ArcadeController::class, 'guessMastermind'])
+                        ->middleware('throttle:arcade')
+                        ->name('guess');
+                });
+
+                Route::prefix('bug-sweeper')->name('bug-sweeper.')->group(function () {
+                    Route::post('/start', [ArcadeController::class, 'startBugSweeper'])
+                        ->middleware('throttle:arcade')
+                        ->name('start');
+                    Route::post('/{session}/click', [ArcadeController::class, 'clickBugSweeper'])
+                        ->middleware('throttle:arcade-status')
+                        ->name('click');
+                    Route::post('/{session}/cashout', [ArcadeController::class, 'cashoutBugSweeper'])
+                        ->middleware('throttle:arcade')
+                        ->name('cashout');
+                });
+
+                Route::post('/high-low/play', [ArcadeController::class, 'resolveHighLow'])
+                    ->middleware('throttle:arcade')
+                    ->name('high-low.play');
             });
 
         Route::prefix('admin')
@@ -165,7 +193,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::prefix('cv')->group(function () {
                 Route::delete('/', [CVController::class, 'destroy'])->name('current-user-cv.destroy');
                 Route::put('/', [CVController::class, 'update'])->name('current-user-cv.update');
-                Route::get('/download', [FileController::class, 'download'])->name('file.download');
             });
 
             Route::get('/profile/edit', [UserController::class, 'edit'])

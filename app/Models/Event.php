@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use League\CommonMark\Util\HtmlFilter;
@@ -37,6 +38,13 @@ class Event extends Model
         'external_url',
     ];
 
+    private const TALK_TYPE_NAMES = ['talk', 'palestra'];
+
+    /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array<int, string>
+     */
     protected $appends = [
         'description_html',
     ];
@@ -64,14 +72,14 @@ class Event extends Model
     public function scopeTalk(Builder $query): void
     {
         $query->whereHas('type', function ($query) {
-            $query->where('name', 'talk');
+            $query->whereIn(DB::raw('lower(name)'), self::TALK_TYPE_NAMES);
         });
     }
 
     public function scopeActivity(Builder $query): void
     {
         $query->whereHas('type', function ($query) {
-            $query->whereNot('name', 'talk');
+            $query->whereNotIn(DB::raw('lower(name)'), self::TALK_TYPE_NAMES);
         });
     }
 

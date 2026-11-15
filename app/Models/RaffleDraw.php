@@ -38,6 +38,15 @@ class RaffleDraw extends Model
         'draw_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'total_tickets',
+    ];
+
     public function edition(): BelongsTo
     {
         return $this->belongsTo(Edition::class);

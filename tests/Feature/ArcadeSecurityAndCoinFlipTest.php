@@ -345,6 +345,13 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertCount(1, $response->json('data'));
+        $response->assertJsonPath('data.0.enrollment.participant.user.name', $this->userA->name);
+        $response->assertJsonMissingPath('data.0.enrollment.points');
+        $response->assertJsonMissingPath('data.0.enrollment.participant.cv_path');
+        $response->assertJsonMissingPath('data.0.enrollment.participant.cv_url');
+        $response->assertJsonMissingPath('data.0.enrollment.participant.quest_code');
+        $response->assertJsonMissingPath('data.0.enrollment.participant.quest_qr_code');
+        $response->assertJsonMissingPath('data.0.enrollment.participant.social_media');
 
         // User A does not see their own pending game in the joinable list
         $response = $this->actingAs($this->userA)
