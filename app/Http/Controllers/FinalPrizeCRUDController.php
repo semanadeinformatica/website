@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Edition;
 use App\Models\FinalPrize;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class FinalPrizeCRUDController extends CRUDController
 {
@@ -65,8 +66,14 @@ class FinalPrizeCRUDController extends CRUDController
             'title' => $new['title'],
         ]);
 
-        if (isset($new['image'])) {
-            $prize->updateFinalPrizeImage($new['image']);
+        try {
+            if (isset($new['image'])) {
+                $prize->updateFinalPrizeImage($new['image']);
+            }
+        } catch (Throwable $exception) {
+            $prize->delete();
+
+            throw $exception;
         }
 
         return null;
