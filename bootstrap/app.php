@@ -3,7 +3,6 @@
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\InjectEditionIntoRequest;
 use App\Http\Middleware\LogRequestIPs;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +10,6 @@ use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -23,23 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
-        then: function () {
-            RateLimiter::for('api', function (Request $request) {
-                return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-            });
-
-            RateLimiter::for('arcade', function (Request $request) {
-                return Limit::perMinute(15)->by($request->user()?->id ?: $request->ip());
-            });
-
-            RateLimiter::for('arcade-status', function (Request $request) {
-                return Limit::perMinute(120)->by($request->user()?->id ?: $request->ip());
-            });
-
-            RateLimiter::for('raffle', function (Request $request) {
-                return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
-            });
-        },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');
