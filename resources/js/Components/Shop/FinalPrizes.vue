@@ -42,12 +42,12 @@ const placeLabelClass = (place: number) =>
 
 const figureClass = (place: number) => {
     if (place === 1) {
-        return "order-1 z-20 col-span-2 sm:order-2 sm:col-span-1";
+        return "order-1 z-20 col-span-2 sm:order-2 sm:col-span-1 sm:col-start-2";
     }
 
     return place === 2
-        ? "order-2 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:order-1 sm:translate-y-8 sm:hover:translate-y-6"
-        : "order-3 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:translate-y-8 sm:hover:translate-y-6";
+        ? "order-2 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:order-1 sm:col-start-1 sm:translate-y-8 sm:hover:translate-y-6"
+        : "order-3 z-10 translate-y-4 opacity-80 hover:translate-y-2 hover:opacity-100 sm:col-start-3 sm:translate-y-8 sm:hover:translate-y-6";
 };
 
 const imageSizeClass = (place: number) =>
