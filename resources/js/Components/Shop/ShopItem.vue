@@ -22,6 +22,7 @@ interface Props {
 const props = defineProps<Props>();
 const page = usePage();
 const user = computed(() => page.props.auth?.user as User | undefined);
+const productImageBackground = "/images/product-card-background.png";
 
 const modalOpen = ref(false);
 const isBuying = ref(false);
@@ -129,6 +130,9 @@ const redeemProduct = (enrollmentId: number) => {
 <template>
     <Card
         :image-src="product.image_product_url ?? undefined"
+        :image-background-src="
+            product.image_product_url ? productImageBackground : undefined
+        "
         :image-alt="product.name"
         image-fit="object-contain p-4"
         class="h-full w-full"
@@ -221,6 +225,12 @@ const redeemProduct = (enrollmentId: number) => {
                         :src="product.image_product_url"
                         :alt="product.name"
                         class="h-16 w-16 shrink-0 rounded-xl object-contain sm:h-20 sm:w-20"
+                        :style="{
+                            backgroundImage: `url('${productImageBackground}')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                        }"
                     />
                     <div
                         v-else
