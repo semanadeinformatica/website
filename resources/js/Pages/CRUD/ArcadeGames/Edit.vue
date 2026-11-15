@@ -4,7 +4,10 @@ import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
 import type ArcadeGame from "@/Types/Arcade";
 import type Edition from "@/Types/Edition";
-import { arcadeGameSlugs } from "@/Pages/CRUD/ArcadeGames/arcadeGameOptions";
+import {
+    arcadeGameSlugs,
+    payoutConfigExamples,
+} from "@/Pages/CRUD/ArcadeGames/arcadeGameOptions";
 import { computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
@@ -160,7 +163,33 @@ const submit = () => {
             required
             class="font-mono text-xs"
             placeholder='{"house_edge_pct": 10}'
+            aria-describedby="payout_config-help"
             :error-message="form.errors.payout_config"
         />
+
+        <details
+            id="payout_config-help"
+            class="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3"
+        >
+            <summary
+                class="cursor-pointer text-xs font-medium text-neutral-300 select-none"
+            >
+                Formatos esperados por jogo
+            </summary>
+            <p class="mt-2 text-[11px] text-neutral-500">
+                As chaves em falta usam os valores por omissão do servidor.
+            </p>
+            <dl class="mt-2 space-y-2 font-mono text-[11px] leading-relaxed">
+                <div
+                    v-for="example in payoutConfigExamples"
+                    :key="example.slug"
+                >
+                    <dt class="text-neutral-300">{{ example.slug }}</dt>
+                    <dd class="break-words text-neutral-500">
+                        {{ example.config }}
+                    </dd>
+                </div>
+            </dl>
+        </details>
     </CRUDModal>
 </template>
