@@ -13,10 +13,13 @@ use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
 use App\Policies\ArcadePolicy;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\MaintenanceModeManager;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureUrls();
+        $this->configureRateLimiting();
         $this->configureGates();
     }
 
@@ -49,6 +53,25 @@ class AppServiceProvider extends ServiceProvider
         if (str_starts_with((string) config('app.url'), 'https://') || ! $this->app->environment(['local', 'testing'])) {
             URL::forceScheme('https');
         }
+    }
+
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('arcade', function (Request $request) {
+            return Limit::perMinute(15)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('arcade-status', function (Request $request) {
+            return Limit::perMinute(120)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('raffle', function (Request $request) {
+            return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+        });
     }
 
     protected function configureGates(): void
