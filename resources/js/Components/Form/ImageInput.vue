@@ -114,14 +114,14 @@ const clearPhoto = () => {
                 </template>
             </div>
 
-            <!-- Remove action if preview active -->
+            <!-- Cancel action only when a new file has been selected -->
             <button
-                v-if="preview"
+                v-if="modelValue"
                 type="button"
                 class="mt-2 text-xs text-neutral-400 transition-colors hover:text-red-400"
                 @click.stop="clearPhoto"
             >
-                Remover imagem selecionada
+                Cancelar seleção
             </button>
         </div>
 
