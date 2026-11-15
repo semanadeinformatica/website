@@ -8,6 +8,7 @@ export type { default as Enrollment } from "./Enrollment";
 export type { default as EventDay } from "./EventDay";
 export type { default as Event } from "./Event";
 export type { default as EventType } from "./EventType";
+export type { default as FinalPrize } from "./FinalPrize";
 export type { default as Model } from "./Model";
 export type { default as MyPageProps } from "./PageProps";
 export type { default as Paginated, PaginationLink } from "./Paginated";

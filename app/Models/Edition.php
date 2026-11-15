@@ -56,6 +56,11 @@ class Edition extends Model
         return $this->hasMany(Product::class)->orderBy('name');
     }
 
+    public function finalPrizes(): HasMany
+    {
+        return $this->hasMany(FinalPrize::class)->orderBy('place');
+    }
+
     public function quests(): HasMany
     {
         return $this->hasMany(Quest::class);

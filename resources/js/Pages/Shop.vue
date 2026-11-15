@@ -4,6 +4,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShopItem from "@/Components/Shop/ShopItem.vue";
+import FinalPrizes from "@/Components/Shop/FinalPrizes.vue";
 import PillSelector, {
     type PillOption,
 } from "@/Components/UI/PillSelector.vue";
@@ -11,17 +12,22 @@ import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
+import type FinalPrize from "@/Types/FinalPrize";
 import { type User } from "@/Types/User";
 import { ShoppingBag, ArrowRight } from "@lucide/vue";
 
 interface Props {
     products: BuyableProduct[];
+    finalPrizes?: FinalPrize[];
     points?: number;
     isEnrolled: boolean;
     isParticipant: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    finalPrizes: () => [],
+    points: undefined,
+});
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user as User | undefined);
@@ -144,12 +150,15 @@ const filteredAndSortedProducts = computed(() => {
 </script>
 
 <template>
-    <AppLayout title="Loja">
+    <AppLayout title="Prémios & Loja">
         <QuickScroll mode="top" />
 
         <div
             class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-6 sm:py-12 lg:px-8"
         >
+            <!-- Final Prizes Section -->
+            <FinalPrizes :prizes="finalPrizes" />
+
             <!-- User Balance Pill / Enrollment CTA -->
             <div
                 v-if="points !== null && points !== undefined"
