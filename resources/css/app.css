@@ -234,12 +234,14 @@ textarea:-webkit-autofill {
     scroll-snap-stop: always;
 }
 
-html.landing-snap {
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-}
+@media (min-width: 768px) {
+    html.landing-snap {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+    }
 
-html.landing-snap footer {
-    scroll-snap-align: end;
-    scroll-snap-stop: always;
+    html.landing-snap footer {
+        scroll-snap-align: end;
+        scroll-snap-stop: always;
+    }
 }

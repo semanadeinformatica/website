@@ -50,7 +50,7 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
         <section
             id="hero"
             ref="heroRef"
-            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center gap-8 overflow-hidden px-4 pt-16 text-center"
+            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center gap-8 overflow-hidden px-4 text-center md:pt-16"
         >
             <div
                 class="relative transition-all duration-700 ease-in-out"
@@ -131,7 +131,7 @@ const { targetRef: heroRef, isVisible: isHeroVisible } = useScrollReveal({
 
         <section
             id="sponsors"
-            class="landing-section relative flex h-screen max-h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden"
+            class="landing-section relative flex min-h-dvh w-full flex-col items-center justify-center overflow-visible md:h-screen md:max-h-dvh md:overflow-hidden"
         >
             <SponsorsShowcase :sponsor-tiers="sponsorTiers" />
         </section>
