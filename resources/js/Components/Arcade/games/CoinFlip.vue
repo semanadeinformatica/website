@@ -37,6 +37,8 @@ const payout = ref(0);
 const errorMessage = ref<string | null>(null);
 
 const currentBalance = ref(props.points);
+// `points` is refreshed after every wager/result and already includes
+// payouts, so it is the single source of truth for the balance.
 watch(
     () => props.points,
     (val) => {
@@ -228,9 +230,6 @@ function startPolling() {
                     if (polledSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
-                    if (data.outcome === "win") {
-                        currentBalance.value += payout.value;
-                    }
                     state.value = "result";
                     router.reload({ only: ["points", "enrollment_points"] });
                 }, 1500); // wait for flip animation
@@ -282,9 +281,6 @@ async function joinGame(session: LobbySession) {
             payout.value =
                 data.player_payout ??
                 (data.outcome === "win" ? data.payout : 0);
-            if (data.outcome === "win") {
-                currentBalance.value += payout.value;
-            }
             state.value = "result";
             router.reload({ only: ["points", "enrollment_points"] });
         }, 1500);
@@ -386,9 +382,6 @@ async function restoreOrResetSession() {
                     if (restoredSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
-                    if (data.outcome === "win") {
-                        currentBalance.value += payout.value;
-                    }
                     state.value = "result";
                     router.reload({ only: ["points", "enrollment_points"] });
                 }, 1500);
