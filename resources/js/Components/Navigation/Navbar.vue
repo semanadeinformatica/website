@@ -255,10 +255,10 @@ onUnmounted(() => {
                     class="hidden md:flex"
                 >
                     <div
-                        class="pill-item cursor-default gap-1.5 hover:bg-transparent"
+                        class="pill-item cursor-default gap-1.5 px-3 py-1.5 text-xs hover:bg-transparent"
                         title="O teu saldo de SINFrões"
                     >
-                        <span class="font-mono text-sm font-bold text-white">{{
+                        <span class="font-mono text-xs font-bold text-white">{{
                             enrollmentPoints
                         }}</span>
                         <img

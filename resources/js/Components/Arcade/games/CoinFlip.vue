@@ -6,17 +6,14 @@ import { route } from "ziggy-js";
 import type ArcadeGame from "@/Types/Arcade";
 import Modal from "@/Components/UI/Modal.vue";
 import WagerInput from "@/Components/Arcade/WagerInput.vue";
-import ResultOverlay from "@/Components/Arcade/ResultOverlay.vue";
+import GameHeader from "@/Components/Arcade/GameHeader.vue";
+import GameResult from "@/Components/Arcade/GameResult.vue";
+import InfoBox from "@/Components/UI/InfoBox.vue";
+import PillSelector, {
+    type PillOption,
+} from "@/Components/UI/PillSelector.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
-import {
-    AlertCircle,
-    Clock,
-    Coins,
-    Loader2,
-    RefreshCw,
-    User as UserIcon,
-    X,
-} from "@lucide/vue";
+import { Loader2, RefreshCw, User as UserIcon } from "@lucide/vue";
 
 interface Props {
     game: ArcadeGame;
@@ -40,6 +37,8 @@ const payout = ref(0);
 const errorMessage = ref<string | null>(null);
 
 const currentBalance = ref(props.points);
+// `points` is refreshed after every wager/result and already includes
+// payouts, so it is the single source of truth for the balance.
 watch(
     () => props.points,
     (val) => {
@@ -49,9 +48,6 @@ watch(
 
 let startRequestId = 0;
 let pollInterval: ReturnType<typeof setInterval> | null = null;
-let waitingTimer: ReturnType<typeof setInterval> | null = null;
-const waitingSeconds = ref(0);
-const canCancel = ref(false);
 const isCancelling = ref(false);
 
 const PENDING_SESSION_KEY = "sinf_arcade_coin_flip_session";
@@ -59,7 +55,6 @@ const PENDING_SESSION_KEY = "sinf_arcade_coin_flip_session";
 interface StoredSession {
     id: number;
     wager: number;
-    startedAt: number;
 }
 
 function savePendingSession(id: number, bet: number) {
@@ -67,7 +62,6 @@ function savePendingSession(id: number, bet: number) {
         const item: StoredSession = {
             id,
             wager: bet,
-            startedAt: Date.now(),
         };
         sessionStorage.setItem(PENDING_SESSION_KEY, JSON.stringify(item));
     } catch {
@@ -117,6 +111,26 @@ const isWagerActionInProgress = computed(
     () => state.value === "starting" || joiningSessionId.value !== null,
 );
 
+const activeTab = computed({
+    get: () => (state.value === "joining" ? "join" : "create"),
+    set: (value: string | number | null) => {
+        if (isWagerActionInProgress.value) return;
+        state.value = value === "join" ? "joining" : "idle";
+    },
+});
+
+const modeTabs = computed<PillOption[]>(() => [
+    { id: "create", label: "Criar jogo" },
+    {
+        id: "join",
+        label: "Aderir a jogo",
+        count:
+            lobbySessions.value.length > 0
+                ? lobbySessions.value.length
+                : undefined,
+    },
+]);
+
 async function fetchLobby() {
     isLoadingLobby.value = true;
     try {
@@ -137,15 +151,6 @@ function stopPolling() {
     }
 }
 
-function stopWaitingTimer() {
-    if (waitingTimer) {
-        clearInterval(waitingTimer);
-        waitingTimer = null;
-    }
-    waitingSeconds.value = 0;
-    canCancel.value = false;
-}
-
 let resultTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function stopResultTimer() {
@@ -161,18 +166,6 @@ const canDismiss = computed(
         state.value !== "flipping" &&
         joiningSessionId.value === null,
 );
-
-function startWaitingTimer(initialSeconds = 0) {
-    stopWaitingTimer();
-    waitingSeconds.value = initialSeconds;
-    canCancel.value = initialSeconds >= 30;
-    waitingTimer = setInterval(() => {
-        waitingSeconds.value++;
-        if (waitingSeconds.value >= 30) {
-            canCancel.value = true;
-        }
-    }, 1000);
-}
 
 async function startGame() {
     if (isWagerActionInProgress.value) return;
@@ -198,7 +191,7 @@ async function startGame() {
         currentBalance.value = Math.max(0, currentBalance.value - wager.value);
         savePendingSession(data.session_id, wager.value);
         state.value = "waiting";
-        startWaitingTimer();
+        router.reload({ only: ["points", "enrollment_points"] });
         startPolling();
     } catch (err: unknown) {
         if (requestId !== startRequestId) return;
@@ -229,7 +222,6 @@ function startPolling() {
             const data = res.data;
             if (data.outcome && data.outcome !== "pending") {
                 stopPolling();
-                stopWaitingTimer();
                 clearPendingSession();
                 state.value = "flipping";
 
@@ -238,9 +230,6 @@ function startPolling() {
                     if (polledSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
-                    if (data.outcome === "win") {
-                        currentBalance.value += payout.value;
-                    }
                     state.value = "result";
                     router.reload({ only: ["points", "enrollment_points"] });
                 }, 1500); // wait for flip animation
@@ -249,7 +238,6 @@ function startPolling() {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 if (polledSessionId !== sessionId.value) return;
                 stopPolling();
-                stopWaitingTimer();
                 clearPendingSession();
                 state.value = "idle";
                 sessionId.value = null;
@@ -293,9 +281,6 @@ async function joinGame(session: LobbySession) {
             payout.value =
                 data.player_payout ??
                 (data.outcome === "win" ? data.payout : 0);
-            if (data.outcome === "win") {
-                currentBalance.value += payout.value;
-            }
             state.value = "result";
             router.reload({ only: ["points", "enrollment_points"] });
         }, 1500);
@@ -321,7 +306,6 @@ async function cancelGame() {
             route("arcade.coin-flip.cancel", { session: sessionId.value }),
         );
         stopPolling();
-        stopWaitingTimer();
         stopResultTimer();
         clearPendingSession();
         sessionId.value = null;
@@ -345,7 +329,6 @@ function handleClose() {
 
     startRequestId++;
     stopPolling();
-    stopWaitingTimer();
     stopResultTimer();
 
     if (state.value !== "waiting") {
@@ -364,7 +347,6 @@ function handleClose() {
 function handlePlayAgain() {
     startRequestId++;
     stopPolling();
-    stopWaitingTimer();
     stopResultTimer();
     clearPendingSession();
     sessionId.value = null;
@@ -381,12 +363,7 @@ async function restoreOrResetSession() {
     if (stored) {
         sessionId.value = stored.id;
         wager.value = stored.wager;
-        const elapsed = Math.max(
-            0,
-            Math.floor((Date.now() - stored.startedAt) / 1000),
-        );
         state.value = "waiting";
-        startWaitingTimer(elapsed);
         startPolling();
 
         try {
@@ -396,7 +373,6 @@ async function restoreOrResetSession() {
             const data = res.data;
             if (data.outcome && data.outcome !== "pending") {
                 stopPolling();
-                stopWaitingTimer();
                 clearPendingSession();
                 state.value = "flipping";
 
@@ -406,9 +382,6 @@ async function restoreOrResetSession() {
                     if (restoredSessionId !== sessionId.value) return;
                     outcome.value = data.outcome;
                     payout.value = data.payout;
-                    if (data.outcome === "win") {
-                        currentBalance.value += payout.value;
-                    }
                     state.value = "result";
                     router.reload({ only: ["points", "enrollment_points"] });
                 }, 1500);
@@ -416,7 +389,6 @@ async function restoreOrResetSession() {
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 stopPolling();
-                stopWaitingTimer();
                 clearPendingSession();
                 state.value = "idle";
                 sessionId.value = null;
@@ -440,7 +412,6 @@ watch(
         } else {
             startRequestId++;
             stopPolling();
-            stopWaitingTimer();
             stopResultTimer();
         }
     },
@@ -454,7 +425,6 @@ onMounted(() => {
 onUnmounted(() => {
     startRequestId++;
     stopPolling();
-    stopWaitingTimer();
     stopResultTimer();
 });
 </script>
@@ -462,68 +432,39 @@ onUnmounted(() => {
 <template>
     <Modal
         :show="show"
-        :show-close-button="false"
         max-width="lg"
+        :close-disabled="!canDismiss"
         :click-to-close="canDismiss"
         :esc-to-close="canDismiss"
         @close="handleClose"
     >
-        <div
-            class="relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl backdrop-blur-xl"
-        >
-            <!-- Modal Header -->
-            <div
-                class="flex items-center justify-between border-b border-white/10 pb-4"
-            >
-                <div class="flex items-center gap-3">
-                    <div
-                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400"
-                    >
-                        <Coins :size="20" />
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-white">
-                            {{ game.name }}
-                        </h3>
-                        <span class="font-mono text-xs text-neutral-400">
-                            {{ game.min_wager }}–{{ game.max_wager }} pts • PvP
-                            em tempo real
-                        </span>
-                    </div>
-                </div>
-                <button
-                    v-if="state !== 'flipping'"
-                    type="button"
-                    :disabled="!canDismiss"
-                    class="rounded-lg p-1.5 text-neutral-400 transition hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
-                    aria-label="Fechar"
-                    @click="handleClose"
-                >
-                    <X :size="18" />
-                </button>
-            </div>
+        <template #header>
+            <GameHeader
+                :game="game"
+                :show-limits="
+                    state === 'idle' ||
+                    state === 'starting' ||
+                    state === 'joining'
+                "
+                description="Desafia outro participante num duelo de moedas em tempo real."
+            />
+        </template>
 
-            <!-- Error Banner -->
-            <div
-                v-if="errorMessage"
-                class="mt-4 flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400"
-            >
-                <AlertCircle :size="16" class="shrink-0" />
-                <span>{{ errorMessage }}</span>
-            </div>
+        <div class="space-y-5">
+            <InfoBox v-if="errorMessage" variant="danger">
+                {{ errorMessage }}
+            </InfoBox>
 
-            <!-- State: Flipping Animation (Plays for 1.5s) -->
+            <!-- Flipping -->
             <div
                 v-if="state === 'flipping'"
                 class="flex flex-col items-center justify-center py-12"
             >
                 <div class="coin-container">
                     <div class="coin flipping">
-                        <!-- heads face -->
                         <div class="face heads">
                             <img src="/images/sinf-2026-sm.svg" alt="Heads" />
                         </div>
-                        <!-- tails face -->
                         <div class="face tails">
                             <img
                                 src="/images/sinf-2026-tails.svg"
@@ -533,18 +474,18 @@ onUnmounted(() => {
                     </div>
                 </div>
                 <p
-                    class="mt-8 animate-pulse font-mono text-sm font-semibold tracking-wide text-amber-400"
+                    class="mt-8 animate-pulse text-sm font-medium tracking-wide text-neutral-400"
                 >
                     A lançar a moeda...
                 </p>
             </div>
 
-            <!-- State: Waiting for opponent (polling GET /arcade/coin-flip/{id}/status every 2s) -->
+            <!-- Waiting for opponent -->
             <div
                 v-else-if="state === 'waiting'"
-                class="flex flex-col items-center justify-center py-8 text-center"
+                class="flex flex-col items-center justify-center py-4 text-center"
             >
-                <div class="coin-container mb-4">
+                <div class="coin-container">
                     <div class="coin coin-idle">
                         <div class="face heads">
                             <img src="/images/sinf-2026-sm.svg" alt="Heads" />
@@ -558,85 +499,67 @@ onUnmounted(() => {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 text-white">
-                    <Loader2 class="h-4 w-4 animate-spin text-amber-400" />
-                    <h4 class="text-base font-bold">
+                <div class="mt-5 flex items-center gap-2 text-white">
+                    <Loader2 class="h-4 w-4 animate-spin text-neutral-400" />
+                    <h3 class="text-base font-semibold">
                         À espera de um adversário...
-                    </h4>
+                    </h3>
                 </div>
 
                 <p class="mt-1 text-xs text-neutral-400">
                     A tua aposta:
-                    <strong class="font-mono text-white">{{ wager }}</strong>
+                    <strong class="text-white">{{ wager }}</strong>
                     pts
                 </p>
 
-                <p
-                    class="mt-3 flex items-center gap-1.5 font-mono text-xs text-neutral-400"
+                <div
+                    class="mt-4 flex w-full flex-col gap-3 rounded-2xl border border-white/8 bg-white/[0.03] p-3 sm:flex-row sm:items-center sm:justify-between"
                 >
-                    <Clock :size="13" class="text-neutral-500" />
-                    <span>À espera há {{ waitingSeconds }}s</span>
-                </p>
+                    <div class="space-y-0.5 text-left">
+                        <p class="text-xs text-neutral-400">
+                            Podes cancelar enquanto ninguém entrar na sala.
+                        </p>
+                        <p class="text-[11px] text-neutral-500">
+                            A aposta é devolvida ao cancelar.
+                        </p>
+                    </div>
 
-                <!-- Cancel button: appears after 30s of waiting -->
-                <div v-if="canCancel" class="mt-6 flex flex-col items-center">
-                    <button
-                        type="button"
+                    <PrimaryButton
+                        padding="px-4 py-2"
+                        text-size="text-xs"
                         :disabled="isCancelling"
-                        class="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-semibold text-red-400 transition hover:bg-red-500/20 hover:text-red-300 disabled:opacity-50"
                         @click="cancelGame"
                     >
                         <Loader2
                             v-if="isCancelling"
                             class="h-3.5 w-3.5 animate-spin"
                         />
-                        <span>Cancelar e recuperar aposta</span>
-                    </button>
-                    <span class="mt-1.5 text-[11px] text-neutral-500">
-                        Reembolso de acordo com as regras de cancelamento
-                    </span>
+                        {{ isCancelling ? "A cancelar..." : "Cancelar jogo" }}
+                    </PrimaryButton>
                 </div>
             </div>
 
-            <!-- States: Idle, Starting, Joining -->
-            <div v-else class="space-y-6 pt-5">
-                <!-- Mode Switch Tabs -->
-                <div class="flex rounded-xl bg-white/5 p-1">
-                    <button
-                        type="button"
-                        :disabled="isWagerActionInProgress"
-                        :class="[
-                            'flex-1 rounded-lg py-1.5 text-xs font-semibold transition',
-                            state === 'idle' || state === 'starting'
-                                ? 'bg-amber-500/20 text-amber-400 shadow-sm'
-                                : 'text-neutral-400 hover:text-white disabled:opacity-50',
-                        ]"
-                        @click="state = 'idle'"
-                    >
-                        Criar jogo
-                    </button>
-                    <button
-                        type="button"
-                        :disabled="isWagerActionInProgress"
-                        :class="[
-                            'flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition',
-                            state === 'joining'
-                                ? 'bg-amber-500/20 text-amber-400 shadow-sm'
-                                : 'text-neutral-400 hover:text-white disabled:opacity-50',
-                        ]"
-                        @click="state = 'joining'"
-                    >
-                        <span>Aderir a jogo</span>
-                        <span
-                            v-if="lobbySessions.length > 0"
-                            class="py-0.2 rounded-full bg-amber-500/30 px-1.5 font-mono text-[10px] text-amber-300"
-                        >
-                            {{ lobbySessions.length }}
-                        </span>
-                    </button>
+            <!-- Result -->
+            <GameResult
+                v-else-if="state === 'result'"
+                :outcome="outcome"
+                :wager="wager"
+                :payout="payout"
+                @play-again="handlePlayAgain"
+            />
+
+            <!-- Idle / starting / joining -->
+            <template v-else>
+                <div class="flex justify-center">
+                    <PillSelector
+                        v-model="activeTab"
+                        :items="modeTabs"
+                        size="sm"
+                        :wrap="false"
+                    />
                 </div>
 
-                <!-- Idle / Starting: Criar jogo Form -->
+                <!-- Create game -->
                 <div
                     v-if="state === 'idle' || state === 'starting'"
                     class="space-y-4"
@@ -650,9 +573,7 @@ onUnmounted(() => {
                     />
 
                     <PrimaryButton
-                        padding="py-2.5 px-4"
-                        text-size="text-xs"
-                        class="w-full justify-center gap-2"
+                        class="w-full justify-center"
                         :disabled="
                             isWagerActionInProgress ||
                             wager < game.min_wager ||
@@ -665,49 +586,38 @@ onUnmounted(() => {
                             v-if="state === 'starting'"
                             class="h-4 w-4 animate-spin"
                         />
-                        <span>{{
+                        {{
                             state === "starting"
                                 ? "A criar jogo..."
                                 : "Criar jogo"
-                        }}</span>
+                        }}
                     </PrimaryButton>
                 </div>
 
-                <!-- Open Sessions Section ("Aderir a jogo") -->
-                <div class="space-y-3 pt-2">
-                    <div
-                        class="flex items-center justify-between border-t border-white/5 pt-4"
-                    >
-                        <div class="flex items-center gap-2">
-                            <span
-                                class="text-xs font-bold tracking-wider text-neutral-400 uppercase"
-                            >
-                                Salas Abertas
-                            </span>
-                            <span
-                                v-if="lobbySessions.length > 0"
-                                class="rounded-full bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-neutral-300"
-                            >
-                                {{ lobbySessions.length }}
-                            </span>
-                        </div>
-                        <button
-                            type="button"
+                <!-- Join game -->
+                <div v-else class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="text-xs font-semibold tracking-wider text-neutral-500 uppercase"
+                        >
+                            Salas abertas
+                        </span>
+                        <PrimaryButton
+                            padding="px-3 py-1.5"
+                            text-size="text-[11px]"
                             :disabled="
                                 isLoadingLobby || isWagerActionInProgress
                             "
-                            class="flex items-center gap-1 text-[11px] text-neutral-400 hover:text-white disabled:opacity-50"
                             @click="fetchLobby"
                         >
                             <RefreshCw
                                 :size="12"
                                 :class="{ 'animate-spin': isLoadingLobby }"
                             />
-                            <span>Atualizar</span>
-                        </button>
+                            Atualizar
+                        </PrimaryButton>
                     </div>
 
-                    <!-- Lobby List -->
                     <div
                         v-if="lobbySessions.length > 0"
                         class="max-h-56 space-y-2 overflow-y-auto pr-1"
@@ -715,9 +625,9 @@ onUnmounted(() => {
                         <div
                             v-for="sessionItem in lobbySessions"
                             :key="sessionItem.id"
-                            class="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-3 transition hover:border-white/10"
+                            class="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-3"
                         >
-                            <div class="flex items-center gap-2.5">
+                            <div class="flex min-w-0 items-center gap-2.5">
                                 <img
                                     v-if="
                                         sessionItem.enrollment?.participant
@@ -740,9 +650,9 @@ onUnmounted(() => {
                                     <UserIcon :size="14" />
                                 </div>
 
-                                <div>
+                                <div class="min-w-0">
                                     <div
-                                        class="text-xs font-semibold text-white"
+                                        class="truncate text-xs font-semibold text-white"
                                     >
                                         {{
                                             sessionItem.enrollment?.participant
@@ -750,13 +660,13 @@ onUnmounted(() => {
                                         }}
                                     </div>
                                     <div
-                                        class="flex items-center gap-1 font-mono text-[11px] text-neutral-400"
+                                        class="flex items-center gap-1 text-[11px] text-neutral-500"
                                     >
-                                        <span>Aposta:</span>
-                                        <span class="font-bold text-amber-400">
+                                        Aposta
+                                        <span class="font-semibold text-white">
                                             {{ sessionItem.wager }}
                                         </span>
-                                        <span>pts</span>
+                                        pts
                                     </div>
                                 </div>
                             </div>
@@ -772,52 +682,33 @@ onUnmounted(() => {
                             >
                                 <Loader2
                                     v-if="joiningSessionId === sessionItem.id"
-                                    class="mr-1 h-3 w-3 animate-spin"
+                                    class="h-3 w-3 animate-spin"
                                 />
-                                <span>{{
+                                {{
                                     currentBalance < sessionItem.wager
                                         ? "Sem saldo"
                                         : "Aderir"
-                                }}</span>
+                                }}
                             </PrimaryButton>
                         </div>
                     </div>
 
-                    <!-- Empty Lobby State -->
-                    <div
-                        v-else-if="!isLoadingLobby"
-                        class="rounded-2xl border border-dashed border-white/10 bg-white/2 p-6 text-center"
-                    >
-                        <p class="text-xs text-neutral-400">
-                            Não há jogos abertos de momento.
-                        </p>
-                        <p class="mt-1 text-[11px] text-neutral-500">
-                            Cria um jogo acima e aguarda por um adversário!
-                        </p>
-                    </div>
+                    <InfoBox v-else-if="!isLoadingLobby">
+                        Não há jogos abertos de momento. Cria um jogo acima e
+                        aguarda por um adversário.
+                    </InfoBox>
 
-                    <!-- Loading Lobby State -->
                     <div
                         v-else
                         class="flex items-center justify-center py-6 text-xs text-neutral-400"
                     >
                         <Loader2
-                            class="mr-2 h-4 w-4 animate-spin text-amber-400"
+                            class="mr-2 h-4 w-4 animate-spin text-neutral-400"
                         />
-                        <span>A procurar salas...</span>
+                        A procurar salas...
                     </div>
                 </div>
-            </div>
-
-            <!-- Result Overlay -->
-            <ResultOverlay
-                :show="state === 'result'"
-                :outcome="outcome"
-                :wager="wager"
-                :payout="payout"
-                @close="handleClose"
-                @play-again="handlePlayAgain"
-            />
+            </template>
         </div>
     </Modal>
 </template>
@@ -870,12 +761,11 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    background: radial-gradient(circle at 35% 35%, #2a2a2a, #121212);
-    border: 4px solid rgba(245, 158, 11, 0.4);
+    background: radial-gradient(circle at 35% 35%, #232428, #121316);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     box-shadow:
-        0 10px 25px -5px rgba(0, 0, 0, 0.6),
-        inset 0 2px 4px rgba(255, 255, 255, 0.15),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        0 8px 20px -8px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
 .face img {

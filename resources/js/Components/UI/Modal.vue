@@ -12,6 +12,7 @@ export interface Props {
     maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | string;
     closeable?: boolean;
     showCloseButton?: boolean;
+    closeDisabled?: boolean;
     contentClass?: string;
     overlayClass?: string;
     clickToClose?: boolean;
@@ -26,6 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
     maxWidth: "lg",
     closeable: true,
     showCloseButton: true,
+    closeDisabled: false,
     contentClass: "",
     overlayClass: "",
     clickToClose: true,
@@ -66,7 +68,10 @@ const resolvedMaxWidth = computed(() => {
     return maxWidthMap[props.maxWidth] ?? props.maxWidth;
 });
 
+const canDismiss = computed(() => props.closeable && !props.closeDisabled);
+
 const handleClose = () => {
+    if (!props.closeable || props.closeDisabled) return;
     isOpen.value = false;
 };
 </script>
@@ -76,8 +81,8 @@ const handleClose = () => {
         v-model="isOpen"
         class="z-50 flex items-center justify-center p-4"
         :overlay-class="['bg-black/80 backdrop-blur-sm', overlayClass]"
-        :click-to-close="closeable && clickToClose"
-        :esc-to-close="closeable && escToClose"
+        :click-to-close="canDismiss && clickToClose"
+        :esc-to-close="canDismiss && escToClose"
         :content-class="[
             'relative flex w-full max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111215] text-white shadow-2xl',
             resolvedMaxWidth,
@@ -89,7 +94,8 @@ const handleClose = () => {
         <button
             v-if="closeable && showCloseButton"
             type="button"
-            class="absolute top-4 right-4 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none"
+            :disabled="closeDisabled"
+            class="absolute top-4 right-4 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40"
             aria-label="Fechar"
             @click="handleClose"
         >
