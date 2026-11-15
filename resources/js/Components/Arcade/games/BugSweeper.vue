@@ -352,7 +352,7 @@ async function handleCloseRequest() {
 
             <!-- Playing / game over -->
             <div v-else class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
+                <div v-if="stage === 'playing'" class="grid grid-cols-2 gap-3">
                     <div
                         class="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3"
                     >
