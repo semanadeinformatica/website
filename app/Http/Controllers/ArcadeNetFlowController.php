@@ -134,6 +134,7 @@ class ArcadeNetFlowController extends Controller
         $validated = $request->validate([
             'low_enrollment_id' => ['required', 'integer', 'exists:enrollments,id'],
             'high_enrollment_id' => ['required', 'integer', 'exists:enrollments,id'],
+            'snapshot_matches' => ['required', 'integer', 'min:1'],
             'status' => [
                 'required',
                 Rule::in([
@@ -163,6 +164,14 @@ class ArcadeNetFlowController extends Controller
         }
 
         $status = $validated['status'];
+        $snapshotMatches = (int) $validated['snapshot_matches'];
+
+        // Only acknowledge the activity the admin actually saw. If new matches
+        // resolved since the modal was rendered, keep them outside the review
+        // so the pair is shown as unreviewed on the next load.
+        $reviewedMatchCount = $status === ArcadeNetFlowReview::STATUS_OPEN
+            ? 0
+            : min($snapshotMatches, $matches);
 
         ArcadeNetFlowReview::updateOrCreate(
             [
@@ -173,7 +182,7 @@ class ArcadeNetFlowController extends Controller
                 'status' => $status,
                 'note' => $validated['note'] ?? null,
                 'reviewed_by' => $request->user()->id,
-                'reviewed_match_count' => $status === ArcadeNetFlowReview::STATUS_OPEN ? 0 : $matches,
+                'reviewed_match_count' => $reviewedMatchCount,
                 'reviewed_at' => now(),
             ],
         );
@@ -183,6 +192,8 @@ class ArcadeNetFlowController extends Controller
             'high_enrollment_id' => $highEnrollmentId,
             'status' => $status,
             'matches' => $matches,
+            'snapshot_matches' => $snapshotMatches,
+            'reviewed_match_count' => $reviewedMatchCount,
             'admin_id' => $request->user()->id,
         ]);
 

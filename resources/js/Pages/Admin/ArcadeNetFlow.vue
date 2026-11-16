@@ -108,6 +108,7 @@ const selectedPair = ref<Pair | null>(null);
 const reviewForm = useForm({
     low_enrollment_id: 0,
     high_enrollment_id: 0,
+    snapshot_matches: 0,
     status: "cleared" as ReviewStatus,
     note: "",
 });
@@ -275,6 +276,7 @@ const openReview = (pair: Pair) => {
     selectedPair.value = pair;
     reviewForm.low_enrollment_id = pair.low.enrollment_id;
     reviewForm.high_enrollment_id = pair.high.enrollment_id;
+    reviewForm.snapshot_matches = pair.matches;
     reviewForm.status = "cleared";
     reviewForm.note = pair.review?.note ?? "";
     reviewForm.clearErrors();

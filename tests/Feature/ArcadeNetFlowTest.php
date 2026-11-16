@@ -235,6 +235,7 @@ class ArcadeNetFlowTest extends TestCase
             ->post(route('admin.arcadeNetFlow.review'), [
                 'low_enrollment_id' => $lowId,
                 'high_enrollment_id' => $highId,
+                'snapshot_matches' => 2,
                 'status' => ArcadeNetFlowReview::STATUS_CLEARED,
                 'note' => 'Confirmado com os participantes.',
             ])
@@ -271,6 +272,7 @@ class ArcadeNetFlowTest extends TestCase
             ->post(route('admin.arcadeNetFlow.review'), [
                 'low_enrollment_id' => $lowId,
                 'high_enrollment_id' => $highId,
+                'snapshot_matches' => 3,
                 'status' => ArcadeNetFlowReview::STATUS_FLAGGED,
             ])
             ->assertRedirect();
@@ -286,6 +288,7 @@ class ArcadeNetFlowTest extends TestCase
             ->post(route('admin.arcadeNetFlow.review'), [
                 'low_enrollment_id' => $lowId,
                 'high_enrollment_id' => $highId,
+                'snapshot_matches' => 3,
                 'status' => ArcadeNetFlowReview::STATUS_OPEN,
             ])
             ->assertRedirect();
@@ -294,6 +297,45 @@ class ArcadeNetFlowTest extends TestCase
             ->get(route('admin.arcadeNetFlow.index'))
             ->assertInertia(fn (Assert $page) => $page
                 ->where('pairs.data.0.review_state', ArcadeNetFlowService::REVIEW_UNREVIEWED)
+            );
+    }
+
+    public function test_review_does_not_acknowledge_matches_added_after_the_modal_was_opened(): void
+    {
+        foreach (range(1, 4) as $ignored) {
+            $this->resolvedSession($this->alice, $this->bob, 100, true);
+        }
+
+        $lowId = min($this->alice->id, $this->bob->id);
+        $highId = max($this->alice->id, $this->bob->id);
+
+        // The modal showed 4 matches. A fifth match resolves before the POST.
+        $this->resolvedSession($this->alice, $this->bob, 100, true);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.arcadeNetFlow.review'), [
+                'low_enrollment_id' => $lowId,
+                'high_enrollment_id' => $highId,
+                'snapshot_matches' => 4,
+                'status' => ArcadeNetFlowReview::STATUS_CLEARED,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('arcade_net_flow_reviews', [
+            'low_enrollment_id' => $lowId,
+            'high_enrollment_id' => $highId,
+            'status' => ArcadeNetFlowReview::STATUS_CLEARED,
+            'reviewed_match_count' => 4,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.arcadeNetFlow.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('pairs.data.0.matches', 5)
+                ->where('pairs.data.0.review_state', ArcadeNetFlowService::REVIEW_UNREVIEWED)
+                ->where('pairs.data.0.review.status', ArcadeNetFlowReview::STATUS_CLEARED)
+                ->where('pairs.data.0.review.reviewed_match_count', 4)
+                ->where('pairs.data.0.review.has_new_activity', true)
             );
     }
 
@@ -306,6 +348,7 @@ class ArcadeNetFlowTest extends TestCase
             ->post(route('admin.arcadeNetFlow.review'), [
                 'low_enrollment_id' => min($carol->id, $dave->id),
                 'high_enrollment_id' => max($carol->id, $dave->id),
+                'snapshot_matches' => 1,
                 'status' => ArcadeNetFlowReview::STATUS_CLEARED,
             ])
             ->assertSessionHasErrors('low_enrollment_id');
