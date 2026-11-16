@@ -24,6 +24,7 @@ import {
     Briefcase,
     UserCog,
     ArrowUpRight,
+    ArrowRightLeft,
     Plus,
 } from "@lucide/vue";
 
@@ -152,6 +153,11 @@ const sections: Section[] = [
                 route: "admin.quests.index",
                 name: "Tarefas & Missões",
                 icon: CheckSquare,
+            },
+            {
+                route: "admin.arcadeNetFlow.index",
+                name: "Fluxo entre Contas",
+                icon: ArrowRightLeft,
             },
         ],
     },
