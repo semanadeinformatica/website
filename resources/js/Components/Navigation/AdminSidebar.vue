@@ -26,6 +26,7 @@ import {
     LogOut,
     X,
     Joystick,
+    ScanLine,
 } from "@lucide/vue";
 
 interface Props {
@@ -223,6 +224,13 @@ const sections: NavSection[] = [
                 labelKey: "models.quest",
                 defaultLabel: "Tarefas",
                 icon: CheckSquare,
+            },
+            {
+                name: "questAwards",
+                route: "admin.questAwards.index",
+                routePrefix: "admin.questAwards",
+                defaultLabel: "Validar Tarefas",
+                icon: ScanLine,
             },
             {
                 name: "arcadeGames",

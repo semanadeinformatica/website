@@ -25,6 +25,7 @@ import {
     UserCog,
     ArrowUpRight,
     Plus,
+    ScanLine,
 } from "@lucide/vue";
 
 interface Stats {
@@ -153,6 +154,11 @@ const sections: Section[] = [
                 name: "Tarefas & Missões",
                 icon: CheckSquare,
             },
+            {
+                route: "admin.questAwards.index",
+                name: "Validar Tarefas",
+                icon: ScanLine,
+            },
         ],
     },
     {
@@ -186,6 +192,14 @@ const sections: Section[] = [
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-2.5">
+                    <PrimaryButton
+                        color="pill"
+                        text-size="text-xs"
+                        :href="route('admin.questAwards.index')"
+                    >
+                        <ScanLine :size="13" />
+                        <span>Validar Tarefa</span>
+                    </PrimaryButton>
                     <PrimaryButton
                         color="pill"
                         text-size="text-xs"
