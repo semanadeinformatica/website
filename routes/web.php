@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ArcadeController;
 use App\Http\Controllers\ArcadeCRUDController;
+use App\Http\Controllers\ArcadeNetFlowController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionCRUDController;
 use App\Http\Controllers\CompetitionPrizeCRUDController;
@@ -142,6 +143,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->group(function () {
                 Route::get('/staff/participants', [StaffCRUDController::class, 'participants'])
                     ->name('staff.participants');
+                Route::get('/arcade/net-flow', [ArcadeNetFlowController::class, 'index'])
+                    ->name('arcadeNetFlow.index');
+                Route::post('/arcade/net-flow/review', [ArcadeNetFlowController::class, 'review'])
+                    ->name('arcadeNetFlow.review');
                 // Raffle admin routes are disabled until the points-based prize draw ships.
                 Route::resources([
                     '/editions' => EditionCRUDController::class,
