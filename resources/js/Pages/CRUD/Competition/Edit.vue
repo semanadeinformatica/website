@@ -5,8 +5,6 @@ import type Competition from "@/Types/Competition";
 import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import slugify from "slugify";
-import { watchEffect } from "vue";
 
 interface Props {
     item: Competition;
@@ -34,10 +32,6 @@ const submit = () => {
         route("admin.competitions.update", { competition: competition.id }),
     );
 };
-
-watchEffect(() => {
-    form.slug = slugify(form.name, { lower: true });
-});
 </script>
 
 <template>
