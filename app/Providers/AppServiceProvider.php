@@ -194,7 +194,14 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('downloadCVs', fn (User $user, User $other, Edition $edition) => (
             $user->isAdmin() ||
             $user->isStaff($edition) ||
-            $user->is($other)
+            (
+                $user->isCompany() &&
+                $user->is($other) &&
+                $user->usertype->sponsors()
+                    ->where('edition_id', $edition->id)
+                    ->whereRelation('tier', 'canSeeCV', true)
+                    ->exists()
+            )
         ));
 
         Gate::define('downloadAllCVs', fn (User $user, User $other, Edition $edition) => (
@@ -202,7 +209,11 @@ class AppServiceProvider extends ServiceProvider
             $user->isStaff($edition) ||
             (
                 $user->isCompany() &&
-                $user->usertype->sponsors()->where('edition_id', $edition->id)->first()->tier->canSeeAll
+                $user->is($other) &&
+                $user->usertype->sponsors()
+                    ->where('edition_id', $edition->id)
+                    ->whereRelation('tier', 'canSeeAll', true)
+                    ->exists()
             )
         ));
     }

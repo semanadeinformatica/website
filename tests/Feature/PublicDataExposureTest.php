@@ -20,7 +20,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class PublicDataExposureTest extends TestCase
@@ -174,5 +176,103 @@ class PublicDataExposureTest extends TestCase
             'enrollment_id' => $enrollment->id,
             'quest_id' => $quest->id,
         ]);
+    }
+
+    public function test_participant_cannot_download_cv_zips(): void
+    {
+        $edition = Edition::factory()->create();
+        $participant = Participant::factory()->create();
+        Enrollment::factory()->for($edition)->for($participant, 'participant')->create();
+
+        $this->actingAs($participant->user)
+            ->get(route('user.company.participants.cvs.all', ['user' => $participant->user_id]))
+            ->assertForbidden();
+
+        $this->actingAs($participant->user)
+            ->get(route('user.company.participants.cvs', ['user' => $participant->user_id]))
+            ->assertForbidden();
+    }
+
+    public function test_company_without_cv_permission_cannot_download_cv_zips(): void
+    {
+        Storage::fake(config('jetstream.cv_disk'));
+
+        $edition = Edition::factory()->create();
+        $tier = SponsorTier::factory()->for($edition)->create([
+            'canSeeCV' => false,
+            'canSeeAll' => false,
+        ]);
+
+        $companyUser = User::factory()->company()->create();
+        $member = Participant::factory()->create();
+        $this->linkParticipantToCompany($companyUser, $edition, $member, $tier);
+
+        $member->forceFill(['cv_path' => 'cvs/member.pdf'])->save();
+        Storage::disk(config('jetstream.cv_disk'))->put('cvs/member.pdf', 'pdf');
+
+        $this->actingAs($companyUser)
+            ->get(route('user.company.participants.cvs', ['user' => $companyUser->id]))
+            ->assertForbidden();
+
+        $this->actingAs($companyUser)
+            ->get(route('user.company.participants.cvs.all', ['user' => $companyUser->id]))
+            ->assertForbidden();
+    }
+
+    public function test_company_with_cv_permission_can_download_member_cvs(): void
+    {
+        Storage::fake(config('jetstream.cv_disk'));
+
+        $edition = Edition::factory()->create();
+        $tier = SponsorTier::factory()->for($edition)->create([
+            'canSeeCV' => true,
+            'canSeeAll' => false,
+        ]);
+
+        $companyUser = User::factory()->company()->create();
+        $member = Participant::factory()->create();
+        $this->linkParticipantToCompany($companyUser, $edition, $member, $tier);
+
+        $member->forceFill(['cv_path' => 'cvs/member.pdf'])->save();
+        Storage::disk(config('jetstream.cv_disk'))->put('cvs/member.pdf', 'pdf');
+
+        $response = $this->actingAs($companyUser)
+            ->get(route('user.company.participants.cvs', ['user' => $companyUser->id]));
+
+        $response->assertOk();
+        $this->assertStringContainsString('zip', (string) $response->headers->get('content-type'));
+
+        File::delete(storage_path('app/temp/'.Str::slug($companyUser->name, '_').'-participants-cvs.zip'));
+    }
+
+    public function test_company_with_all_cv_permission_can_download_all_cvs(): void
+    {
+        Storage::fake(config('jetstream.cv_disk'));
+
+        $edition = Edition::factory()->create();
+        $tier = SponsorTier::factory()->for($edition)->create([
+            'canSeeCV' => false,
+            'canSeeAll' => true,
+        ]);
+
+        $companyUser = User::factory()->company()->create();
+        Sponsor::factory()
+            ->for($edition)
+            ->for($tier, 'tier')
+            ->for($companyUser->usertype, 'company')
+            ->create();
+
+        $participant = Participant::factory()->create();
+        Enrollment::factory()->for($edition)->for($participant, 'participant')->create();
+        $participant->forceFill(['cv_path' => 'cvs/participant.pdf'])->save();
+        Storage::disk(config('jetstream.cv_disk'))->put('cvs/participant.pdf', 'pdf');
+
+        $response = $this->actingAs($companyUser)
+            ->get(route('user.company.participants.cvs.all', ['user' => $companyUser->id]));
+
+        $response->assertOk();
+        $this->assertStringContainsString('zip', (string) $response->headers->get('content-type'));
+
+        File::delete(storage_path('app/temp/'.Str::slug($companyUser->name, '_').'-participants-cvs.zip'));
     }
 }

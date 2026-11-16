@@ -15,11 +15,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
-use League\Flysystem\PathPrefixer;
 use ZipArchive;
 
 class UserController extends UserProfileController
@@ -275,10 +275,7 @@ class UserController extends UserProfileController
             return response('No edition found', 500);
         }
 
-        if (Gate::allows('downloadAllCVs', [$user, $edition])) {
-            /** @var Company */
-            $company = $user->usertype;
-        }
+        Gate::authorize('downloadAllCVs', [$user, $edition]);
 
         $participant_cv_paths = Participant::query()
             ->whereHas('enrollments', function ($query) use ($edition) {
@@ -299,7 +296,7 @@ class UserController extends UserProfileController
         }
 
         $zip = new ZipArchive;
-        $prefixer = new PathPrefixer(storage_path('app/public'));
+        $cvDisk = Storage::disk(config('jetstream.cv_disk'));
 
         $openResult = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
@@ -315,13 +312,13 @@ class UserController extends UserProfileController
         $addedFiles = 0;
 
         foreach ($participant_cv_paths as $file_path) {
-            $path = $prefixer->prefixPath($file_path);
-
-            if (! file_exists($path)) {
-                \Log::warning('CV file not found', ['path' => $path]);
+            if (! $cvDisk->exists($file_path)) {
+                \Log::warning('CV file not found', ['path' => $file_path]);
 
                 continue;
             }
+
+            $path = $cvDisk->path($file_path);
 
             // Use participant name or ID to avoid filename conflicts
             $relativeNameInZipFile = basename($path);
@@ -356,12 +353,18 @@ class UserController extends UserProfileController
             return response('No edition found', 500);
         }
 
-        if (Gate::allows('downloadCVs', [$user, $edition])) {
-            /** @var Company */
-            $company = $user->usertype;
+        Gate::authorize('downloadCVs', [$user, $edition]);
+
+        if (! $user->isCompany()) {
+            return redirect()->back()->dangerBanner('Nenhum CV foi encontrado para adicionar ao zip.');
         }
 
+        /** @var Company $company */
+        $company = $user->usertype;
+
         $participant_cv_paths = $company->participants()
+            ->where('sponsors.edition_id', $edition->id)
+            ->where('enrollments.edition_id', $edition->id)
             ->get()
             ->pluck('cv_path')
             ->filter();
@@ -378,7 +381,7 @@ class UserController extends UserProfileController
         }
 
         $zip = new ZipArchive;
-        $prefixer = new PathPrefixer(storage_path('app/public'));
+        $cvDisk = Storage::disk(config('jetstream.cv_disk'));
 
         $openResult = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
@@ -394,13 +397,13 @@ class UserController extends UserProfileController
         $addedFiles = 0;
 
         foreach ($participant_cv_paths as $file_path) {
-            $path = $prefixer->prefixPath($file_path);
-
-            if (! file_exists($path)) {
-                \Log::warning('CV file not found', ['path' => $path]);
+            if (! $cvDisk->exists($file_path)) {
+                \Log::warning('CV file not found', ['path' => $file_path]);
 
                 continue;
             }
+
+            $path = $cvDisk->path($file_path);
 
             // Use participant name or ID to avoid filename conflicts
             $relativeNameInZipFile = basename($path);
