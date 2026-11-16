@@ -16,7 +16,25 @@ class EnrollmentCRUDController extends CRUDController
         'participant_id' => 'required|exists:participants,id',
         'edition_id' => 'required|exists:editions,id',
         'points' => 'required|integer',
+        'flagged' => 'sometimes|boolean',
+        'flag_reason' => 'nullable|string|max:255',
     ];
+
+    protected function updated($old, array $new): ?array
+    {
+        if (array_key_exists('flagged', $new)) {
+            $flagged = (bool) $new['flagged'];
+            unset($new['flagged']);
+
+            $new['flagged_at'] = $flagged ? ($old->flagged_at ?? now()) : null;
+
+            if (! $flagged) {
+                $new['flag_reason'] = null;
+            }
+        }
+
+        return $new;
+    }
 
     protected function with(): array
     {

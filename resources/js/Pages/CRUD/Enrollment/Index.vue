@@ -59,6 +59,7 @@ const editions = computed<Record<number, string>>(() =>
                     Edição
                 </Header>
                 <Header sort-by="points">Pontos</Header>
+                <Header sort-by="flagged_at">Estado</Header>
             </HeaderRow>
         </template>
 
@@ -80,6 +81,15 @@ const editions = computed<Record<number, string>>(() =>
                         {{ item.points }}
                     </span>
                     <span class="ml-1 text-xs text-neutral-500">pts</span>
+                </Cell>
+                <Cell>
+                    <span
+                        v-if="item.flagged_at"
+                        class="rounded-full border border-red-500/30 bg-red-500/10 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-red-200 uppercase"
+                    >
+                        Sinalizado
+                    </span>
+                    <span v-else class="text-xs text-neutral-600">—</span>
                 </Cell>
             </Row>
         </template>

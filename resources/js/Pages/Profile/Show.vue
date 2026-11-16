@@ -14,6 +14,7 @@ import EnrolledParticipants from "@/Components/Profile/EnrolledParticipants.vue"
 import type { Tabs } from "@/Types/ProfilePage";
 import { usePage } from "@inertiajs/vue3";
 import AllParticipants from "@/Components/Profile/AllParticipants.vue";
+import InfoBox from "@/Components/UI/InfoBox.vue";
 
 interface Props {
     confirmsTwoFactorAuthentication: boolean;
@@ -25,6 +26,7 @@ interface Props {
     canViewCV: boolean;
     canViewAll: boolean;
     points?: number;
+    isFlagged: boolean;
 }
 
 const props = defineProps<Props>();
@@ -71,6 +73,13 @@ const buttons = computed<Tabs>(() => {
         <div
             class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
         >
+            <!-- Flag warning for the account owner -->
+            <InfoBox v-if="isFlagged" variant="danger" title="Conta sinalizada">
+                A tua conta foi marcada por atividade suspeita. Os pontos e
+                prémios associados podem ser revistos pela organização. Se
+                acreditas que é um erro, contacta-nos.
+            </InfoBox>
+
             <!-- Profile Hero Card -->
             <ProfileCard :user="user" :is-staff="isStaff" :points="points" />
 

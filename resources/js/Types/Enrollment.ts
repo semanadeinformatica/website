@@ -10,4 +10,7 @@ export default interface Enrollment extends Model {
     edition?: Edition;
 
     points: number;
+
+    flagged_at: string | null;
+    flag_reason?: string | null;
 }
