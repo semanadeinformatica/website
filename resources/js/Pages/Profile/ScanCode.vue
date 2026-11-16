@@ -172,6 +172,7 @@ const resetScanner = () => {
     }
     countdown.value = null;
     form.quest_code = "";
+    form.clearErrors();
     scanStatus.value = "idle";
     statusMessage.value = "";
 };
@@ -188,7 +189,7 @@ const triggerSubmit = (code: string) => {
     const cleanedCode = code.trim();
     if (!cleanedCode) {
         scanStatus.value = "error";
-        statusMessage.value = "Código inválido.";
+        statusMessage.value = "Introduz o código do participante.";
         vibrate([100, 50, 100]);
         return;
     }
@@ -221,7 +222,7 @@ const triggerSubmit = (code: string) => {
             statusMessage.value =
                 errs.quest_code ||
                 errs.quest ||
-                "Erro ao validar o código do participante.";
+                "Não foi possível validar o código. Tenta novamente.";
             vibrate([100, 50, 100]);
         },
     });
