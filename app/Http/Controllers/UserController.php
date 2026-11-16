@@ -50,12 +50,14 @@ class UserController extends UserProfileController
         $canViewCv = $request->user()->can('viewCVOf', [$user, $edition]);
         $canViewAll = $request->user()->can('viewAll', [$edition]);
 
+        $currentEnrollment = null;
+
         if ($user->isParticipant()) {
             [$tickets, $slots] = $this->processTicketsAndSlots($user, $edition->id, $tickets, $slots);
 
-            $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id);
-            if ($enrollment->exists()) {
-                $points = $enrollment->first()->points;
+            $currentEnrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first();
+            if ($currentEnrollment !== null) {
+                $points = $currentEnrollment->points;
             }
 
             if ($request->user()->isCompany()) {
@@ -82,6 +84,8 @@ class UserController extends UserProfileController
             'canViewCV' => fn () => $canViewCv,
             'canViewAll' => fn () => $canViewAll,
             'points' => $points ?? null,
+            'isFlagged' => fn () => $request->user()->id === $user->id
+                && $currentEnrollment?->flagged_at !== null,
         ]);
     }
 
