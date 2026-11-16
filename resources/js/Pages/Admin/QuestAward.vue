@@ -152,6 +152,7 @@ watch(participantId, (value) => {
         return;
     }
 
+    confirmOpen.value = false;
     loadParticipant(value);
 });
 
@@ -162,6 +163,13 @@ watch(
         if (id !== participantId.value) {
             participantId.value = id;
         }
+    },
+);
+
+watch(
+    () => props.participant?.id,
+    () => {
+        confirmOpen.value = false;
     },
 );
 

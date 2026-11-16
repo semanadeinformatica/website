@@ -10,6 +10,7 @@ use App\Models\Quest;
 use App\Models\Stand;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -132,7 +133,14 @@ class QuestAwardController extends Controller
             );
         }
 
-        $enrollment->quests()->attach($quest);
+        try {
+            $enrollment->quests()->attach($quest);
+        } catch (UniqueConstraintViolationException) {
+            // Another request awarded the same quest after our duplicate check.
+            return $redirect->dangerBanner(
+                "O participante já realizou a tarefa \"{$quest->name}\"."
+            );
+        }
 
         Log::info('Quest {quest} manually given to user {user} by admin {admin}', [
             'quest' => $quest->name,
