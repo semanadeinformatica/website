@@ -274,6 +274,76 @@ class HighLowGameTest extends TestCase
         $this->assertSame(0, ArcadeSession::count());
     }
 
+    public function test_winning_with_gross_payout_over_cap_but_net_under_cap_is_allowed(): void
+    {
+        $this->game->update([
+            'daily_win_cap' => 100,
+            'payout_config' => [
+                'under_threshold' => 101,
+                'over_threshold' => 52,
+                'exact_number' => 50,
+                'under_multiplier' => 2.5,
+                'over_multiplier' => 2.0,
+                'exact_multiplier' => 20.0,
+            ],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson(route('arcade.high-low.play', [
+                'edition' => $this->edition->id,
+                'wager' => 50,
+                'bet_type' => 'under',
+            ]));
+
+        // Gross is 125, but net is only 75, so it fits under the 100 cap.
+        $response->assertOk();
+        $response->assertJson([
+            'won' => true,
+            'payout' => 125,
+        ]);
+        $this->assertSame(375, $this->enrollment->fresh()->points);
+    }
+
+    public function test_daily_cap_counts_net_earnings_on_a_two_x_game(): void
+    {
+        $this->game->update([
+            'daily_win_cap' => 500,
+            'payout_config' => [
+                'under_threshold' => 101,
+                'over_threshold' => 52,
+                'exact_number' => 50,
+                'under_multiplier' => 2.0,
+                'over_multiplier' => 2.0,
+                'exact_multiplier' => 20.0,
+            ],
+        ]);
+        $this->enrollment->update(['points' => 1000]);
+
+        $play = fn () => $this->actingAs($this->user)->postJson(
+            route('arcade.high-low.play', [
+                'edition' => $this->edition->id,
+                'wager' => 250,
+                'bet_type' => 'under',
+            ]),
+        );
+
+        // 250 wager at 2x: 500 gross payout, but only 250 net.
+        $first = $play();
+        $first->assertOk()->assertJson(['won' => true, 'payout' => 500]);
+        $this->assertSame(1250, $this->enrollment->fresh()->points);
+
+        // Second win reaches 500 net; it is still allowed.
+        $second = $play();
+        $second->assertOk()->assertJson(['won' => true, 'payout' => 500]);
+        $this->assertSame(1500, $this->enrollment->fresh()->points);
+
+        // Third bet is blocked; the wager is refunded.
+        $third = $play();
+        $third->assertStatus(422);
+        $this->assertSame(1500, $this->enrollment->fresh()->points);
+        $this->assertSame(2, ArcadeSession::count());
+    }
+
     public function test_losing_roll_over_daily_cap_is_also_rejected_without_charging(): void
     {
         $this->game->update([
