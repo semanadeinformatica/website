@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import Modal from "@/Components/UI/Modal.vue";
 import PrimaryButton from "@/Components/UI/PrimaryButton.vue";
 import type FinalPrize from "@/Types/FinalPrize";
-import { Gift, Trophy, Coins, MapPin, Sparkles } from "@lucide/vue";
+import { FileText, Gift, Trophy, Coins, MapPin, Sparkles } from "@lucide/vue";
 
 interface Props {
     prizes: FinalPrize[];
@@ -115,7 +115,7 @@ const imageSizeClass = (place: number) =>
             </figure>
         </div>
 
-        <div class="flex justify-center">
+        <div class="flex flex-col items-center gap-3">
             <PrimaryButton
                 color="pill"
                 padding="px-5 py-2"
@@ -125,6 +125,17 @@ const imageSizeClass = (place: number) =>
                 <Trophy :size="14" />
                 <span>Como ganhar os prémios finais?</span>
             </PrimaryButton>
+
+            <a
+                href="/documents/RegulamentoPontosLojaSorteioSINF2627.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-400 underline decoration-white/20 underline-offset-4 transition-colors hover:text-white"
+                title="Abrir o regulamento em PDF numa nova aba"
+            >
+                <FileText :size="14" />
+                Consultar o regulamento (PDF)
+            </a>
         </div>
 
         <Modal
