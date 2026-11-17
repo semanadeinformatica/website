@@ -301,7 +301,7 @@ class ArcadeController extends Controller
         $wager = $request->integer('wager');
         abort_if($wager < $game->min_wager || $wager > $game->max_wager, 422, 'Aposta fora dos limites');
 
-        $wagerService->checkDailyWinCap($enrollment->id, $game);
+        $this->settlePendingBugSweeper($enrollment, $game, $wagerService);
 
         $cfg = $game->payout_config ?? [];
         $bombCount = (int) ($cfg['bomb_count'] ?? 3);
@@ -316,45 +316,7 @@ class ArcadeController extends Controller
             $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
 
             $wagerService->checkDailyBetLimit($lockedEnrollment->id, $game);
-
-            // Auto-resolve any previous abandoned pending session
-            $previous = ArcadeSession::where('enrollment_id', $lockedEnrollment->id)
-                ->where('arcade_game_id', $game->id)
-                ->where('outcome', 'pending')
-                ->lockForUpdate()
-                ->first();
-
-            if ($previous) {
-                $prevState = $previous->server_state ?? [];
-                $prevClicks = (int) ($prevState['clicks'] ?? 0);
-
-                if ($prevClicks >= 1) {
-                    $prevCfg = $game->payout_config ?? [];
-                    $prevMultipliers = $prevCfg['click_multipliers'] ?? [1.2, 1.5, 2.0, 3.0, 5.0];
-                    $prevMult = (float) $prevMultipliers[min($prevClicks - 1, count($prevMultipliers) - 1)];
-                    $prevPayout = (int) floor($previous->wager * $prevMult);
-                    $prevPayout = $wagerService->payoutWithinDailyCap(
-                        $lockedEnrollment,
-                        $game,
-                        (int) $previous->wager,
-                        $prevPayout,
-                    );
-
-                    $wagerService->creditPayout($lockedEnrollment, $prevPayout);
-                    $previous->update([
-                        'outcome' => 'cashout',
-                        'payout' => $prevPayout,
-                        'resolved_at' => now(),
-                    ]);
-                } else {
-                    $previous->update([
-                        'outcome' => 'loss',
-                        'payout' => 0,
-                        'resolved_at' => now(),
-                    ]);
-                }
-            }
-
+            $wagerService->checkDailyWinCap($lockedEnrollment->id, $game);
             $wagerService->deductWager($lockedEnrollment->id, $wager);
 
             return [
@@ -381,6 +343,62 @@ class ArcadeController extends Controller
             'click_multipliers' => $clickMultipliers,
             'balance' => $session['balance'],
         ], 201);
+    }
+
+    /**
+     * Settle an abandoned Bug Sweeper round before checking whether the
+     * player may start another one. This must commit independently so a
+     * rejected new bet cannot roll back the earned payout.
+     */
+    private function settlePendingBugSweeper(
+        Enrollment $enrollment,
+        ArcadeGame $game,
+        ArcadeWagerService $wagerService,
+    ): void {
+        DB::transaction(function () use ($enrollment, $game, $wagerService) {
+            $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+
+            $previous = ArcadeSession::where('enrollment_id', $lockedEnrollment->id)
+                ->where('arcade_game_id', $game->id)
+                ->where('outcome', 'pending')
+                ->lockForUpdate()
+                ->first();
+
+            if ($previous === null) {
+                return;
+            }
+
+            $state = $previous->server_state ?? [];
+            $clicks = (int) ($state['clicks'] ?? 0);
+
+            if ($clicks >= 1) {
+                $cfg = $game->payout_config ?? [];
+                $multipliers = $cfg['click_multipliers'] ?? [1.2, 1.5, 2.0, 3.0, 5.0];
+                $multiplier = (float) $multipliers[min($clicks - 1, count($multipliers) - 1)];
+                $payout = (int) floor($previous->wager * $multiplier);
+                $payout = $wagerService->payoutWithinDailyCap(
+                    $lockedEnrollment,
+                    $game,
+                    (int) $previous->wager,
+                    $payout,
+                );
+
+                $wagerService->creditPayout($lockedEnrollment, $payout);
+                $previous->update([
+                    'outcome' => 'cashout',
+                    'payout' => $payout,
+                    'resolved_at' => now(),
+                ]);
+
+                return;
+            }
+
+            $previous->update([
+                'outcome' => 'loss',
+                'payout' => 0,
+                'resolved_at' => now(),
+            ]);
+        });
     }
 
     public function clickBugSweeper(Request $request, ArcadeSession $session, ArcadeWagerService $wagerService): JsonResponse

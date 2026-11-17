@@ -104,6 +104,48 @@ class ArcadeBetLimitTest extends TestCase
         $this->assertSame(1, ArcadeSession::where('arcade_game_id', $game->id)->count());
     }
 
+    public function test_pending_bug_sweeper_payout_is_settled_when_bet_limit_blocks_new_start(): void
+    {
+        $game = $this->game('bug-sweeper', 1, [
+            'bomb_count' => 3,
+            'click_multipliers' => [1.2, 1.5, 2.0, 3.0, 5.0],
+        ]);
+        [$user, $enrollment] = $this->enrollment();
+
+        $sessionId = $this->actingAs($user)
+            ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 10])
+            ->assertStatus(201)
+            ->json('session_id');
+
+        $session = ArcadeSession::findOrFail($sessionId);
+        $session->update([
+            'server_state' => [
+                'bombs' => [0, 1, 2],
+                'clicks' => 0,
+                'clicked' => [],
+            ],
+        ]);
+
+        $this->actingAs($user)
+            ->postJson(route('arcade.bug-sweeper.click', ['session' => $sessionId]), [
+                'cell_index' => 3,
+            ])
+            ->assertOk();
+
+        // Settlement must run and commit before the bet limit rejects the new start.
+        $this->actingAs($user)
+            ->postJson(route('arcade.bug-sweeper.start'), ['wager' => 10])
+            ->assertStatus(422)
+            ->assertJson(['message' => 'Limite diário de apostas atingido']);
+
+        $session->refresh();
+        $this->assertSame('cashout', $session->outcome);
+        $this->assertSame(12, $session->payout);
+
+        $this->assertSame(102, $enrollment->fresh()->points); // 100 - 10 + 12
+        $this->assertSame(1, ArcadeSession::where('arcade_game_id', $game->id)->count());
+    }
+
     public function test_coin_flip_counts_creator_and_challenger_bets_separately(): void
     {
         $game = $this->game('coin-flip', 1, ['house_edge_pct' => 10]);
