@@ -42,6 +42,7 @@ const editions = computed<Record<number, string>>(() =>
                 <Header sort-by="min_wager">Aposta Mín.</Header>
                 <Header sort-by="max_wager">Aposta Máx.</Header>
                 <Header sort-by="daily_win_cap">Limite Diário</Header>
+                <Header sort-by="daily_bet_limit">Apostas/dia</Header>
                 <Header filter-by="edition_id" :filter-values="editions">
                     Edição
                 </Header>
@@ -67,6 +68,7 @@ const editions = computed<Record<number, string>>(() =>
                 <Cell>{{ item.min_wager }} pts</Cell>
                 <Cell>{{ item.max_wager }} pts</Cell>
                 <Cell>{{ item.daily_win_cap ?? "—" }}</Cell>
+                <Cell>{{ item.daily_bet_limit ?? "—" }}</Cell>
                 <Cell class="text-xs text-neutral-400">
                     {{ editions[item.edition_id] ?? "—" }}
                 </Cell>

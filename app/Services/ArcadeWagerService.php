@@ -106,4 +106,40 @@ class ArcadeWagerService
             'Limite diário atingido'
         );
     }
+
+    /**
+     * Bets placed by an enrollment today for a game.
+     * A coin-flip challenger's bet is counted on the join date.
+     */
+    public function betsToday(int $enrollmentId, ArcadeGame $game): int
+    {
+        return ArcadeSession::query()
+            ->where('arcade_game_id', $game->id)
+            ->where(function ($query) use ($enrollmentId) {
+                $query->where(function ($creator) use ($enrollmentId) {
+                    $creator->where('enrollment_id', $enrollmentId)
+                        ->whereDate('started_at', today());
+                })->orWhere(function ($challenger) use ($enrollmentId) {
+                    $challenger->where('challenger_enrollment_id', $enrollmentId)
+                        ->whereDate('resolved_at', today());
+                });
+            })
+            ->count();
+    }
+
+    /**
+     * Check and enforce the daily bet-count limit.
+     */
+    public function checkDailyBetLimit(int $enrollmentId, ArcadeGame $game): void
+    {
+        if ($game->daily_bet_limit === null) {
+            return;
+        }
+
+        abort_if(
+            $this->betsToday($enrollmentId, $game) >= $game->daily_bet_limit,
+            422,
+            'Limite diário de apostas atingido'
+        );
+    }
 }

@@ -64,6 +64,7 @@ class ArcadeController extends Controller
         $session = DB::transaction(function () use ($enrollment, $wager, $game, $wagerService) {
             $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
 
+            $wagerService->checkDailyBetLimit($lockedEnrollment->id, $game);
             $wagerService->checkDailyWinCap(
                 $lockedEnrollment->id,
                 $game,
@@ -124,6 +125,7 @@ class ArcadeController extends Controller
 
             $wager = (int) $lockedSession->wager;
 
+            $wagerService->checkDailyBetLimit($challengerLockedEnrollment->id, $game);
             $wagerService->checkDailyWinCap(
                 $challengerLockedEnrollment->id,
                 $game,
@@ -312,6 +314,8 @@ class ArcadeController extends Controller
             // Lock the enrollment first: concurrent starts for the same
             // participant must not both observe a missing pending session.
             $lockedEnrollment = Enrollment::lockForUpdate()->findOrFail($enrollment->id);
+
+            $wagerService->checkDailyBetLimit($lockedEnrollment->id, $game);
 
             // Auto-resolve any previous abandoned pending session
             $previous = ArcadeSession::where('enrollment_id', $lockedEnrollment->id)
@@ -574,6 +578,7 @@ class ArcadeController extends Controller
 
         $sessionData = DB::transaction(function () use ($enrollment, $wager, $game, $code, $wagerService) {
             $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+            $wagerService->checkDailyBetLimit($lockedEnrollment->id, $game);
 
             $session = ArcadeSession::create([
                 'enrollment_id' => $enrollment->id,
@@ -800,6 +805,7 @@ class ArcadeController extends Controller
 
         DB::transaction(function () use ($enrollment, $wager, $payout, $potentialPayout, $game, $result, $betType, $won, $wagerService) {
             $lockedEnrollment = $wagerService->deductWager($enrollment->id, $wager);
+            $wagerService->checkDailyBetLimit($lockedEnrollment->id, $game);
             if ($potentialPayout > 0) {
                 $wagerService->checkDailyWinCap(
                     $lockedEnrollment->id,

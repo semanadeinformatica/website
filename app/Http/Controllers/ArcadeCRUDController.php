@@ -25,6 +25,7 @@ class ArcadeCRUDController extends CRUDController
         'min_wager' => 'required|integer|min:1',
         'max_wager' => 'required|integer|min:1|gte:min_wager',
         'daily_win_cap' => 'nullable|integer|min:1',
+        'daily_bet_limit' => 'nullable|integer|min:1',
         'payout_config' => 'required|json',
     ];
 

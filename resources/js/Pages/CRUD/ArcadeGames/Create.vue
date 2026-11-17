@@ -27,6 +27,7 @@ const form = useForm({
     min_wager: "10",
     max_wager: "500",
     daily_win_cap: "",
+    daily_bet_limit: "",
     payout_config: "{}",
 });
 
@@ -117,6 +118,15 @@ const submit = () => {
             type="number"
             placeholder="Sem limite"
             :error-message="form.errors.daily_win_cap"
+        />
+
+        <TextInput
+            id="daily_bet_limit"
+            v-model="form.daily_bet_limit"
+            label="Limite Diário de Apostas"
+            type="number"
+            placeholder="Sem limite"
+            :error-message="form.errors.daily_bet_limit"
         />
 
         <div class="flex flex-col gap-2.5 pt-1">
