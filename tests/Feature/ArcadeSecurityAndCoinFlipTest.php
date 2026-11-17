@@ -126,7 +126,7 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
             'arcade_game_id' => $skillGame->id,
             'wager' => 50,
             'outcome' => 'win',
-            'payout' => 100,
+            'payout' => 150, // Net 100, exactly at the cap.
             'started_at' => now(),
             'resolved_at' => now(),
         ]);
@@ -256,18 +256,18 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
     {
         $this->game->update(['daily_win_cap' => 20]);
 
-        // A already won 18 pts today as the challenger of another session.
+        // A already has 20 net pts today as the challenger of another session.
         ArcadeSession::create([
             'enrollment_id' => $this->enrollmentB->id,
             'challenger_enrollment_id' => $this->enrollmentA->id,
             'arcade_game_id' => $this->game->id,
             'wager' => 10,
             'outcome' => 'loss', // creator lost, challenger (A) won
-            'payout' => 18,
+            'payout' => 30,
             'resolved_at' => now(),
         ]);
 
-        // A 10 pts wager would pay 18 pts, which is above the 2 pts still allowed.
+        // A is already at the cap, so a new wager is rejected.
         $this->actingAs($this->userA)
             ->postJson(route('arcade.coin-flip.start'), ['wager' => 10])
             ->assertStatus(422)
@@ -278,18 +278,42 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
         $this->assertEquals(0, ArcadeSession::where('enrollment_id', $this->enrollmentA->id)->count());
     }
 
+    public function test_start_coin_flip_allows_a_win_under_the_net_cap(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        // A has 8 net pts today (18 payout - 10 wager).
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollmentB->id,
+            'challenger_enrollment_id' => $this->enrollmentA->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'loss',
+            'payout' => 18,
+            'resolved_at' => now(),
+        ]);
+
+        // Another 8 net would be 16, still under the 20 cap.
+        $this->actingAs($this->userA)
+            ->postJson(route('arcade.coin-flip.start'), ['wager' => 10])
+            ->assertStatus(201);
+
+        $this->enrollmentA->refresh();
+        $this->assertEquals(190, $this->enrollmentA->points);
+    }
+
     public function test_join_coin_flip_respects_daily_win_cap(): void
     {
         $this->game->update(['daily_win_cap' => 20]);
 
-        // B already won 18 pts today as the challenger of another session.
+        // B already has 20 net pts today as the challenger of another session.
         ArcadeSession::create([
             'enrollment_id' => $this->enrollmentA->id,
             'challenger_enrollment_id' => $this->enrollmentB->id,
             'arcade_game_id' => $this->game->id,
             'wager' => 10,
             'outcome' => 'loss', // creator lost, challenger (B) won
-            'payout' => 18,
+            'payout' => 30,
             'resolved_at' => now(),
         ]);
 
@@ -318,14 +342,14 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
     {
         $this->game->update(['daily_win_cap' => 20]);
 
-        // A already won 18 pts today as the challenger of another session.
+        // A already has 18 net pts today (28 payout - 10 wager).
         ArcadeSession::create([
             'enrollment_id' => $this->enrollmentB->id,
             'challenger_enrollment_id' => $this->enrollmentA->id,
             'arcade_game_id' => $this->game->id,
             'wager' => 10,
             'outcome' => 'loss',
-            'payout' => 18,
+            'payout' => 28,
             'resolved_at' => now(),
         ]);
 
@@ -354,9 +378,9 @@ class ArcadeSecurityAndCoinFlipTest extends TestCase
         $this->enrollmentB->refresh();
 
         if ($winner === 'creator') {
-            // A can only receive the 2 pts left under the cap.
-            $this->assertEquals(2, $payout);
-            $this->assertEquals(202, $this->enrollmentA->points);
+            // A can only receive the stake plus the 2 pts of net left under the cap.
+            $this->assertEquals(12, $payout);
+            $this->assertEquals(212, $this->enrollmentA->points);
             $this->assertEquals(190, $this->enrollmentB->points); // 200 - 10
         } else {
             $this->assertEquals(18, $payout);

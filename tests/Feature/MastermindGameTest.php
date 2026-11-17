@@ -224,7 +224,7 @@ class MastermindGameTest extends TestCase
         $this->assertEquals(30, $session->fresh()->payout);
     }
 
-    public function test_daily_win_cap_clamps_payout(): void
+    public function test_daily_win_cap_allows_full_payout_within_net_cap(): void
     {
         $this->game->update(['daily_win_cap' => 20]);
 
@@ -249,12 +249,12 @@ class MastermindGameTest extends TestCase
         $response->assertJson([
             'outcome' => 'win',
             'multiplier' => 3.0,
-            'payout' => 20,
+            'payout' => 30,
         ]);
 
-        $this->assertEquals(220, $this->enrollment->fresh()->points);
-        $this->assertEquals(20, $session->fresh()->payout);
-        $this->assertEquals(20, ArcadeSession::wonToday($this->enrollment->id, $this->game->id)->sum('payout'));
+        $this->assertEquals(230, $this->enrollment->fresh()->points);
+        $this->assertEquals(30, $session->fresh()->payout);
+        $this->assertEquals(20, app(ArcadeWagerService::class)->netWonToday($this->enrollment->id, $this->game));
     }
 
     public function test_daily_win_cap_is_shared_across_pending_sessions(): void
@@ -283,8 +283,38 @@ class MastermindGameTest extends TestCase
         ]);
 
         $first->assertOk()->assertJson(['payout' => 30]);
-        $second->assertOk()->assertJson(['payout' => 20]);
-        $this->assertEquals(50, ArcadeSession::wonToday($this->enrollment->id, $this->game->id)->sum('payout'));
+        $second->assertOk()->assertJson(['payout' => 30]);
+        $this->assertEquals(40, app(ArcadeWagerService::class)->netWonToday($this->enrollment->id, $this->game));
+    }
+
+    public function test_daily_win_cap_returns_only_the_stake_when_no_net_remains(): void
+    {
+        $this->game->update(['daily_win_cap' => 20]);
+
+        $sessions = collect([1, 2])->map(fn () => ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 10,
+            'outcome' => 'pending',
+            'server_state' => [
+                'code' => '0371',
+                'attempts' => [],
+            ],
+            'started_at' => now(),
+        ]));
+
+        $first = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $sessions[0]), [
+            'guess' => '0371',
+            'edition' => $this->edition,
+        ]);
+        $second = $this->actingAs($this->user)->postJson(route('arcade.mastermind.guess', $sessions[1]), [
+            'guess' => '0371',
+            'edition' => $this->edition,
+        ]);
+
+        $first->assertOk()->assertJson(['payout' => 30]);
+        $second->assertOk()->assertJson(['payout' => 10]);
+        $this->assertEquals(20, app(ArcadeWagerService::class)->netWonToday($this->enrollment->id, $this->game));
     }
 
     public function test_user_loses_on_5th_attempt_and_code_is_revealed(): void
