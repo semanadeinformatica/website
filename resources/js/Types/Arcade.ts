@@ -14,6 +14,7 @@ export default interface ArcadeGame extends Model {
     min_wager: number;
     max_wager: number;
     daily_win_cap: number | null;
+    daily_bet_limit: number | null;
     payout_config: Record<string, unknown>;
 }
 
