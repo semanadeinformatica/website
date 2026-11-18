@@ -172,6 +172,7 @@ class QuestAwardController extends Controller
         return $edition->quests()
             ->with(['requirement' => function (MorphTo $morphTo) {
                 $morphTo->morphWith([
+                    Event::class => ['type'],
                     Stand::class => ['sponsor.company.user', 'event_day'],
                 ]);
             }])
