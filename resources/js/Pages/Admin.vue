@@ -26,6 +26,7 @@ import {
     ArrowUpRight,
     ArrowRightLeft,
     Plus,
+    ScanLine,
 } from "@lucide/vue";
 
 interface Stats {
@@ -155,6 +156,11 @@ const sections: Section[] = [
                 icon: CheckSquare,
             },
             {
+                route: "admin.questAwards.index",
+                name: "Validar Tarefas",
+                icon: ScanLine,
+            },
+            {
                 route: "admin.arcadeNetFlow.index",
                 name: "Fluxo entre Contas",
                 icon: ArrowRightLeft,
@@ -192,6 +198,14 @@ const sections: Section[] = [
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-2.5">
+                    <PrimaryButton
+                        color="pill"
+                        text-size="text-xs"
+                        :href="route('admin.questAwards.index')"
+                    >
+                        <ScanLine :size="13" />
+                        <span>Validar Tarefa</span>
+                    </PrimaryButton>
                     <PrimaryButton
                         color="pill"
                         text-size="text-xs"

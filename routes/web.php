@@ -22,6 +22,7 @@ use App\Http\Controllers\FinalPrizeCRUDController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductCRUDController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\QuestAwardController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
 use App\Http\Controllers\ShopController;
@@ -143,6 +144,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->group(function () {
                 Route::get('/staff/participants', [StaffCRUDController::class, 'participants'])
                     ->name('staff.participants');
+                Route::get('/quests/award', [QuestAwardController::class, 'index'])
+                    ->name('questAwards.index');
+                Route::post('/quests/award', [QuestAwardController::class, 'store'])
+                    ->name('questAwards.store');
                 Route::get('/arcade/net-flow', [ArcadeNetFlowController::class, 'index'])
                     ->name('arcadeNetFlow.index');
                 Route::post('/arcade/net-flow/review', [ArcadeNetFlowController::class, 'review'])
