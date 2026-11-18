@@ -135,7 +135,35 @@ const awardError = computed(
     () => form.errors.quest_id ?? form.errors.participant_id ?? "",
 );
 
+const pickerKey = ref(0);
+let loadRequestId = 0;
+let pendingLoad: { cancel: () => void; requestId: number } | null = null;
+
+const loadedParticipantId = computed(() =>
+    String(props.selectedParticipantId ?? ""),
+);
+
+// True while the picker points at a participant whose details are not loaded yet
+// (or the selection is being cleared), so awards must stay disabled.
+const selectionPending = computed(
+    () => participantId.value !== loadedParticipantId.value,
+);
+
+const cancelPendingLoad = () => {
+    pendingLoad?.cancel();
+    pendingLoad = null;
+};
+
+const restoreLoadedSelection = () => {
+    participantId.value = loadedParticipantId.value;
+    // Remount the picker so it displays the participant whose details are loaded.
+    pickerKey.value += 1;
+};
+
 const loadParticipant = (id: string) => {
+    const requestId = ++loadRequestId;
+    cancelPendingLoad();
+
     router.get(
         route("admin.questAwards.index"),
         { participant: id },
@@ -143,12 +171,34 @@ const loadParticipant = (id: string) => {
             preserveState: true,
             preserveScroll: true,
             replace: true,
+            onCancelToken: (token) => {
+                pendingLoad = { cancel: () => token.cancel(), requestId };
+            },
+            onFinish: () => {
+                if (pendingLoad?.requestId === requestId) {
+                    pendingLoad = null;
+                }
+            },
+            // Allow the admin to retry the same participant after a failed load.
+            onNetworkError: () => {
+                if (loadRequestId === requestId) restoreLoadedSelection();
+            },
+            onHttpException: () => {
+                if (loadRequestId === requestId) restoreLoadedSelection();
+            },
         },
     );
 };
 
 watch(participantId, (value) => {
-    if (!value || value === String(props.participant?.id ?? "")) {
+    if (!value) {
+        return;
+    }
+
+    if (value === loadedParticipantId.value) {
+        // The admin reselected the participant that is already loaded, so drop any
+        // pending request before its late response replaces this selection.
+        cancelPendingLoad();
         return;
     }
 
@@ -181,6 +231,7 @@ watch(confirmOpen, (open) => {
 });
 
 const clearParticipant = () => {
+    cancelPendingLoad();
     participantId.value = "";
     router.get(
         route("admin.questAwards.index"),
@@ -199,7 +250,11 @@ const openConfirm = (quest: QuestAwardItem) => {
 };
 
 const confirmAward = () => {
-    if (!props.participant || !confirmingQuest.value) {
+    if (
+        selectionPending.value ||
+        !props.participant ||
+        !confirmingQuest.value
+    ) {
         return;
     }
 
@@ -256,7 +311,10 @@ const confirmAward = () => {
             >
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                     <div class="min-w-0 flex-1">
-                        <ParticipantSearch v-model="participantId" />
+                        <ParticipantSearch
+                            :key="pickerKey"
+                            v-model="participantId"
+                        />
                     </div>
 
                     <PrimaryButton
@@ -521,6 +579,7 @@ const confirmAward = () => {
                                     type="button"
                                     color="primary"
                                     :disabled="
+                                        selectionPending ||
                                         awardingQuestId === quest.id ||
                                         form.processing
                                     "
@@ -539,6 +598,7 @@ const confirmAward = () => {
         <Modal
             v-model="confirmOpen"
             title="Atribuir tarefa?"
+            :close-disabled="form.processing"
             :description="
                 confirmingQuest
                     ? `Confirma a atribuição da tarefa a ${participant?.name ?? 'este participante'}.`

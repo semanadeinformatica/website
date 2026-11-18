@@ -14,6 +14,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -98,45 +99,54 @@ class QuestAwardController extends Controller
             return $redirect->dangerBanner('A tarefa selecionada não pertence à edição atual.');
         }
 
-        $enrollment = $participant->enrollments()
-            ->where('edition_id', $edition->id)
-            ->first();
-
-        if ($enrollment === null) {
-            return $redirect->dangerBanner("O participante não se inscreveu no {$edition->name}.");
-        }
-
-        if ($enrollment->quests()->whereKey($quest->id)->exists()) {
-            return $redirect->dangerBanner(
-                "O participante já realizou a tarefa \"{$quest->name}\"."
-            );
-        }
-
-        if ($this->missingRequiredEventEnrollment($quest, $enrollment)) {
-            return $redirect->dangerBanner(
-                $this->missingRequiredEventEnrollmentMessage($quest)
-            );
-        }
-
         /** @var User $user */
         $user = $request->user();
 
-        // Keep the policy as the final authority in case the checks above drift.
-        if ($user->cannot('give', [$quest, $enrollment])) {
-            Log::warning('Current user is not allowed to manually give quest "{quest}" to user {user}', [
-                'quest' => $quest->name,
-                'user' => $participant->user->name,
-            ]);
-
-            return $redirect->dangerBanner(
-                'Não foi possível atribuir a tarefa ao participante.'
-            );
-        }
-
         try {
-            $enrollment->quests()->attach($quest);
+            $response = DB::transaction(function () use ($edition, $participant, $quest, $user, $redirect) {
+                // Serialize awards for this enrollment so concurrent awards cannot both
+                // miss the slot-unlock threshold in the database trigger.
+                $enrollment = $participant->enrollments()
+                    ->where('edition_id', $edition->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($enrollment === null) {
+                    return $redirect->dangerBanner("O participante não se inscreveu no {$edition->name}.");
+                }
+
+                if ($enrollment->quests()->whereKey($quest->id)->exists()) {
+                    return $redirect->dangerBanner(
+                        "O participante já realizou a tarefa \"{$quest->name}\"."
+                    );
+                }
+
+                if ($this->missingRequiredEventEnrollment($quest, $enrollment)) {
+                    return $redirect->dangerBanner(
+                        $this->missingRequiredEventEnrollmentMessage($quest)
+                    );
+                }
+
+                // Keep the policy as the final authority in case the checks above drift.
+                if ($user->cannot('give', [$quest, $enrollment])) {
+                    Log::warning('Current user is not allowed to manually give quest "{quest}" to user {user}', [
+                        'quest' => $quest->name,
+                        'user' => $participant->user->name,
+                    ]);
+
+                    return $redirect->dangerBanner(
+                        'Não foi possível atribuir a tarefa ao participante.'
+                    );
+                }
+
+                $enrollment->quests()->attach($quest);
+
+                return $redirect->banner(
+                    "Tarefa \"{$quest->name}\" atribuída a {$participant->user->name}."
+                );
+            });
         } catch (UniqueConstraintViolationException) {
-            // Another request awarded the same quest after our duplicate check.
+            // Safety net in case the row lock is bypassed by another writer.
             return $redirect->dangerBanner(
                 "O participante já realizou a tarefa \"{$quest->name}\"."
             );
@@ -148,9 +158,7 @@ class QuestAwardController extends Controller
             'admin' => $user->name,
         ]);
 
-        return $redirect->banner(
-            "Tarefa \"{$quest->name}\" atribuída a {$participant->user->name}."
-        );
+        return $response;
     }
 
     /**
