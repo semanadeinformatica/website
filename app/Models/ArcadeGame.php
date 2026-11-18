@@ -27,6 +27,7 @@ class ArcadeGame extends Model
         'min_wager',
         'max_wager',
         'daily_win_cap',
+        'daily_bet_limit',
         'payout_config',
     ];
 

@@ -30,6 +30,7 @@ const form = useForm({
     min_wager: arcadeGame.min_wager.toString(),
     max_wager: arcadeGame.max_wager.toString(),
     daily_win_cap: arcadeGame.daily_win_cap?.toString() ?? "",
+    daily_bet_limit: arcadeGame.daily_bet_limit?.toString() ?? "",
     payout_config: JSON.stringify(arcadeGame.payout_config ?? {}, null, 2),
 });
 
@@ -133,6 +134,15 @@ const submit = () => {
             type="number"
             placeholder="Sem limite"
             :error-message="form.errors.daily_win_cap"
+        />
+
+        <TextInput
+            id="daily_bet_limit"
+            v-model="form.daily_bet_limit"
+            label="Limite Diário de Apostas"
+            type="number"
+            placeholder="Sem limite"
+            :error-message="form.errors.daily_bet_limit"
         />
 
         <div class="flex flex-col gap-2.5 pt-1">

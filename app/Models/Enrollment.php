@@ -23,6 +23,12 @@ class Enrollment extends Model
         'edition_id',
         'participant_id',
         'points',
+        'flagged_at',
+        'flag_reason',
+    ];
+
+    protected $casts = [
+        'flagged_at' => 'datetime',
     ];
 
     public function edition(): BelongsTo

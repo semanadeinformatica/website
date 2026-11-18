@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             'competition_team_participant',
             'raffle_tickets',
             'raffle_draws',
+            'arcade_net_flow_reviews',
             'arcade_sessions',
             'arcade_games',
             'competition_prizes',

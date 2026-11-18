@@ -132,12 +132,28 @@ class ArcadeWagerServiceTest extends TestCase
             'resolved_at' => now(),
         ]);
 
-        // Cap is 300, current is 150 -> no exception
+        // Cap is 300, net so far is 100 (150 payout - 50 wager).
         $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 50);
         $this->assertTrue(true);
     }
 
     public function test_check_daily_win_cap_rejects_when_at_cap(): void
+    {
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 350,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->expectException(HttpException::class);
+        $this->service->checkDailyWinCap($this->enrollment->id, $this->game);
+    }
+
+    public function test_check_daily_win_cap_rejects_when_additional_net_exceeds_cap(): void
     {
         ArcadeSession::create([
             'enrollment_id' => $this->enrollment->id,
@@ -150,23 +166,7 @@ class ArcadeWagerServiceTest extends TestCase
         ]);
 
         $this->expectException(HttpException::class);
-        $this->service->checkDailyWinCap($this->enrollment->id, $this->game);
-    }
-
-    public function test_check_daily_win_cap_rejects_when_additional_payout_exceeds_cap(): void
-    {
-        ArcadeSession::create([
-            'enrollment_id' => $this->enrollment->id,
-            'arcade_game_id' => $this->game->id,
-            'wager' => 50,
-            'outcome' => 'win',
-            'payout' => 250,
-            'started_at' => now(),
-            'resolved_at' => now(),
-        ]);
-
-        $this->expectException(HttpException::class);
-        // 250 + 60 = 310 > 300
+        // Net is 250 (300 payout - 50 wager); 250 + 60 = 310 > 300.
         $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 60);
     }
 
@@ -185,14 +185,77 @@ class ArcadeWagerServiceTest extends TestCase
             'arcade_game_id' => $this->game->id,
             'wager' => 50,
             'outcome' => 'loss',
-            'payout' => 190,
+            'payout' => 300,
             'started_at' => now(),
             'resolved_at' => now(),
         ]);
 
         $this->expectException(HttpException::class);
-        // 190 + 120 = 310 > 300
-        $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 120);
+        // Net is 250 (300 payout - 50 wager); 250 + 60 = 310 > 300.
+        $this->service->checkDailyWinCap($this->enrollment->id, $this->game, 60);
+    }
+
+    public function test_net_won_today_counts_payout_minus_wager_only_for_wins(): void
+    {
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 150,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'loss',
+            'payout' => 0,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->assertSame(100, $this->service->netWonToday($this->enrollment->id, $this->game));
+    }
+
+    public function test_payout_within_daily_cap_keeps_stake_plus_remaining_net(): void
+    {
+        // Net is 290 (340 payout - 50 wager), so only 10 net remains.
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 340,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->assertSame(
+            60,
+            $this->service->payoutWithinDailyCap($this->enrollment, $this->game, 50, 190),
+        );
+    }
+
+    public function test_payout_within_daily_cap_never_pays_below_wager(): void
+    {
+        // Net is already at the cap, so a pending win can only return the stake.
+        ArcadeSession::create([
+            'enrollment_id' => $this->enrollment->id,
+            'arcade_game_id' => $this->game->id,
+            'wager' => 50,
+            'outcome' => 'win',
+            'payout' => 350,
+            'started_at' => now(),
+            'resolved_at' => now(),
+        ]);
+
+        $this->assertSame(
+            50,
+            $this->service->payoutWithinDailyCap($this->enrollment, $this->game, 50, 190),
+        );
     }
 
     public function test_check_daily_win_cap_ignores_unrestricted_game(): void

@@ -24,6 +24,7 @@ import {
     Briefcase,
     UserCog,
     ArrowUpRight,
+    ArrowRightLeft,
     Plus,
     ScanLine,
 } from "@lucide/vue";
@@ -158,6 +159,11 @@ const sections: Section[] = [
                 route: "admin.questAwards.index",
                 name: "Validar Tarefas",
                 icon: ScanLine,
+            },
+            {
+                route: "admin.arcadeNetFlow.index",
+                name: "Fluxo entre Contas",
+                icon: ArrowRightLeft,
             },
         ],
     },
