@@ -25,6 +25,7 @@ export default interface MyPageProps {
     canResetPassword: boolean;
     competitions: Competition[];
     enrollment_points: number | null;
+    shop_enabled: boolean;
     editionOptions?: Record<string, string>;
     defaultFilters?: Record<string, string | number>;
 }

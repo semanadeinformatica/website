@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Edition;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductCRUDController extends CRUDController
 {
@@ -18,6 +20,20 @@ class ProductCRUDController extends CRUDController
         'edition_id' => 'required|exists:editions,id',
         'image' => 'nullable|mimes:jpg,jpeg,png|max:1024',
     ];
+
+    public function index(Request $request)
+    {
+        $data = $this->getIndexData($request);
+
+        /** @var Edition|null $edition */
+        $edition = $request->input('edition');
+
+        return Inertia::render("CRUD/{$this->view}/Index", array_merge($data, [
+            'shopEnabled' => $edition?->shop_enabled ?? true,
+            'shopEditionName' => $edition?->name,
+            'shopEditionId' => $edition?->id,
+        ]));
+    }
 
     protected function with(): array
     {

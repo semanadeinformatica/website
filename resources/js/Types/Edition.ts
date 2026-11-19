@@ -10,6 +10,7 @@ import type Sponsor from "./Sponsor";
 export default interface Edition extends Model {
     name: string;
     year: number;
+    shop_enabled: boolean;
 
     // Relationships
     enrollments?: Enrollment[];

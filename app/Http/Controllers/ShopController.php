@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\EnrollmentProduct;
 use App\Models\Product;
@@ -15,12 +16,26 @@ class ShopController extends Controller
 {
     public function show(Request $request)
     {
+        /** @var Edition|null $edition */
         $edition = $request->input('edition');
+        /** @var User|null $user */
         $user = $request->user();
         $boughtProductIds = [];
+        $isParticipant = $user?->isParticipant() ?? false;
+        $isEnrolled = false;
+        $points = null;
 
-        if ($user && $user->isParticipant()) {
-            $isParticipant = $user->isParticipant();
+        if ($edition === null) {
+            return response('No edition found', 500);
+        }
+
+        $canManageShop = Gate::allows('admin') || Gate::allows('staff', [$edition]);
+
+        if (! $edition->shop_enabled && ! $canManageShop) {
+            return redirect()->route('home')->dangerBanner('A loja encontra-se temporariamente indisponível.');
+        }
+
+        if ($user !== null && $isParticipant) {
             $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first();
 
             // This makes one less query to the DB ☝️🤓
@@ -30,10 +45,6 @@ class ShopController extends Controller
             if ($enrollment) {
                 $boughtProductIds = $enrollment->products()->pluck('products.id')->all();
             }
-        }
-
-        if ($edition === null) {
-            return response('No edition found', 500);
         }
 
         $finalPrizes = $edition->finalPrizes()->get();
@@ -57,18 +68,24 @@ class ShopController extends Controller
         return Inertia::render('Shop', [
             'products' => $products,
             'finalPrizes' => $finalPrizes,
-            'points' => $points ?? null,
-            'isEnrolled' => $isEnrolled ?? null,
-            'isParticipant' => $isParticipant ?? null,
+            'points' => $points,
+            'isEnrolled' => $isEnrolled,
+            'isParticipant' => $isParticipant,
+            'shopEnabled' => $edition->shop_enabled,
         ]);
     }
 
     public function buyProduct(Request $request, Product $product)
     {
+        /** @var Edition|null $edition */
         $edition = $request->input('edition');
 
         if ($edition === null) {
             return response('No edition found', 500);
+        }
+
+        if (! $edition->shop_enabled) {
+            return redirect()->back()->dangerBanner('A loja encontra-se temporariamente indisponível.');
         }
 
         /** @var User|null */
@@ -88,7 +105,13 @@ class ShopController extends Controller
             return redirect()->back()->dangerBanner('Não podes comprar este produto');
         }
 
-        $user->usertype->enrollments()->where('edition_id', $edition->id)->first()->products()->attach($product);
+        $enrollment = $user->usertype->enrollments()->where('edition_id', $edition->id)->first();
+
+        if ($enrollment === null) {
+            return redirect()->back()->dangerBanner('Não estás inscrito nesta edição');
+        }
+
+        $enrollment->products()->attach($product->id, ['price' => $product->price]);
         $product->decrement('stock', 1);
         Log::info('User {user_name}[{user_email}] bought product "{product_name}" for {product_price} points', [
             'user_name' => $user->name,
