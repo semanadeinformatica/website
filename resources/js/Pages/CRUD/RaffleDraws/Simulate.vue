@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 import { Head } from "@inertiajs/vue3";
-import { RotateCcw, SkipForward, Sparkles, Trophy } from "@lucide/vue";
+import {
+    ArrowRight,
+    Play,
+    RotateCcw,
+    SkipForward,
+    Sparkles,
+    Trophy,
+} from "@lucide/vue";
 import type { SimulationPrize } from "@/Types/Raffle";
 
 interface Props {
@@ -24,13 +31,27 @@ const currentIndex = ref(-1);
 const rollingName = ref("");
 const revealedIds = ref<number[]>([]);
 const confettiKey = ref(0);
+const confettiVisible = ref(false);
 
 let activeRun = 0;
+let confettiToken = 0;
 const timers: number[] = [];
 
+// The presentation reveals the prizes from third to first. The private draw
+// and the stored results remain ordered from first to third.
+const revealOrder = computed(() => [...props.prizes].reverse());
+
 const currentPrize = computed<SimulationPrize | null>(
-    () => props.prizes[currentIndex.value] ?? null,
+    () => revealOrder.value[currentIndex.value] ?? null,
 );
+
+const nextPrize = computed<SimulationPrize | null>(() => {
+    if (currentIndex.value < 0) {
+        return revealOrder.value[0] ?? null;
+    }
+
+    return revealOrder.value[currentIndex.value + 1] ?? null;
+});
 
 const progress = computed(() => {
     if (props.prizes.length === 0) return 0;
@@ -65,6 +86,34 @@ const badgeLabel = computed(() => {
 const placeLabel = (place: number | null, index: number) =>
     place ? `${place}º Prémio` : `${index + 1}º Prémio`;
 
+const currentPlaceLabel = computed(() => {
+    const prize = currentPrize.value;
+
+    if (!prize) return null;
+
+    return placeLabel(
+        prize.place,
+        props.prizes.findIndex((item) => item.id === prize.id),
+    );
+});
+
+const nextActionLabel = computed(() => {
+    if (phase.value === "rolling") return "A sortear...";
+    if (phase.value === "finished") return "Repetir apresentação";
+
+    const next = nextPrize.value;
+
+    if (!next) return "Apresentação concluída";
+
+    return currentIndex.value < 0
+        ? `Começar · ${placeLabel(next.place, props.prizes.indexOf(next))}`
+        : `Próximo · ${placeLabel(next.place, props.prizes.indexOf(next))}`;
+});
+
+const primaryDisabled = computed(
+    () => phase.value === "rolling" || revealOrder.value.length === 0,
+);
+
 const placeAccent = (place: number | null) => {
     if (place === 1)
         return "border-amber-400/40 shadow-[0_0_40px_rgba(251,191,36,0.18)]";
@@ -80,100 +129,123 @@ const schedule = (callback: () => void, delay: number) => {
     return id;
 };
 
-const sleep = (delay: number) =>
-    new Promise<void>((resolve) => {
-        schedule(resolve, delay);
-    });
+const showConfetti = () => {
+    const token = ++confettiToken;
 
-const run = async () => {
-    const token = ++activeRun;
+    confettiVisible.value = true;
+    confettiKey.value++;
 
-    revealedIds.value = [];
-    currentIndex.value = -1;
-    rollingName.value = "";
-    phase.value = "idle";
+    schedule(() => {
+        if (token === confettiToken) {
+            confettiVisible.value = false;
+        }
+    }, 3200);
+};
 
-    await sleep(700);
-    if (token !== activeRun) return;
+const isRevealed = (prize: SimulationPrize) =>
+    revealedIds.value.includes(prize.id);
 
-    if (props.prizes.length === 0) {
+const startCurrentPrize = async () => {
+    const prize = currentPrize.value;
+
+    if (!prize) {
         phase.value = "finished";
         return;
     }
 
-    for (let index = 0; index < props.prizes.length; index++) {
-        if (token !== activeRun) return;
+    const token = ++activeRun;
 
-        const prize = props.prizes[index];
-        currentIndex.value = index;
-
-        if (!prize.winner) {
-            revealedIds.value.push(prize.id);
-            continue;
-        }
-
-        phase.value = "rolling";
-
-        const pool = prize.pool.length > 0 ? prize.pool : [prize.winner];
-        const duration = 2600 + index * 250;
-        const startedAt = performance.now();
-
-        await new Promise<void>((resolve) => {
-            const tick = () => {
-                if (token !== activeRun) {
-                    resolve();
-                    return;
-                }
-
-                const elapsed = performance.now() - startedAt;
-
-                if (elapsed >= duration) {
-                    rollingName.value = prize.winner!.name;
-                    resolve();
-                    return;
-                }
-
-                const ratio = Math.min(1, elapsed / duration);
-
-                rollingName.value =
-                    pool[Math.floor(Math.random() * pool.length)].name;
-
-                schedule(tick, 45 + Math.pow(ratio, 3) * 260);
-            };
-
-            tick();
-        });
-
-        if (token !== activeRun) return;
-
+    if (!prize.winner) {
         revealedIds.value.push(prize.id);
-        phase.value = "revealed";
-        confettiKey.value++;
-
-        await sleep(2700);
+        rollingName.value = "";
+        phase.value = nextPrize.value ? "revealed" : "finished";
+        return;
     }
 
-    if (token === activeRun) {
-        phase.value = "finished";
+    phase.value = "rolling";
+
+    const pool = prize.pool.length > 0 ? prize.pool : [prize.winner];
+    const duration = 2600;
+    const startedAt = performance.now();
+
+    await new Promise<void>((resolve) => {
+        const tick = () => {
+            if (token !== activeRun) {
+                resolve();
+                return;
+            }
+
+            const elapsed = performance.now() - startedAt;
+
+            if (elapsed >= duration) {
+                rollingName.value = prize.winner!.name;
+                resolve();
+                return;
+            }
+
+            const ratio = Math.min(1, elapsed / duration);
+
+            rollingName.value =
+                pool[Math.floor(Math.random() * pool.length)].name;
+
+            schedule(tick, 45 + Math.pow(ratio, 3) * 260);
+        };
+
+        tick();
+    });
+
+    if (token !== activeRun) return;
+
+    revealedIds.value.push(prize.id);
+    phase.value = nextPrize.value ? "revealed" : "finished";
+    showConfetti();
+};
+
+const advance = () => {
+    if (phase.value === "rolling" || revealOrder.value.length === 0) return;
+
+    if (phase.value === "finished") {
+        replay();
+        return;
+    }
+
+    if (currentIndex.value < 0) {
+        currentIndex.value = 0;
+        void startCurrentPrize();
+        return;
+    }
+
+    if (phase.value === "revealed" && nextPrize.value) {
+        currentIndex.value++;
+        void startCurrentPrize();
     }
 };
 
 const replay = () => {
-    void run();
+    activeRun++;
+    revealedIds.value = [];
+    currentIndex.value = 0;
+    rollingName.value = "";
+    confettiVisible.value = false;
+    phase.value = "idle";
+
+    if (revealOrder.value.length === 0) {
+        phase.value = "finished";
+        return;
+    }
+
+    void startCurrentPrize();
 };
 
 const revealAll = () => {
     activeRun++;
     revealedIds.value = props.prizes.map((prize) => prize.id);
-    currentIndex.value = Math.max(0, props.prizes.length - 1);
+    currentIndex.value = revealOrder.value.length - 1;
     rollingName.value =
-        props.prizes[props.prizes.length - 1]?.winner?.name ?? "";
+        revealOrder.value[currentIndex.value]?.winner?.name ?? "";
     phase.value = "finished";
-    confettiKey.value++;
+    showConfetti();
 };
-
-const isRevealed = (prize: SimulationPrize) =>
-    revealedIds.value.includes(prize.id);
 
 // Confetti pieces are generated once so they do not jump between re-renders.
 const colors = [
@@ -209,12 +281,9 @@ const confettiStyle = (piece: (typeof confetti)[number]) =>
         "--spin": `${piece.spin}deg`,
     }) as Record<string, string>;
 
-onMounted(() => {
-    void run();
-});
-
 onBeforeUnmount(() => {
     activeRun++;
+    confettiToken++;
     timers.forEach((id) => window.clearTimeout(id));
 });
 </script>
@@ -288,10 +357,10 @@ onBeforeUnmount(() => {
                     <div
                         class="flex items-center gap-2 text-xs font-medium tracking-[0.25em] text-neutral-500 uppercase"
                     >
-                        <span v-if="currentPrize">
-                            {{ placeLabel(currentPrize.place, currentIndex) }}
+                        <span v-if="currentPlaceLabel">
+                            {{ currentPlaceLabel }}
                         </span>
-                        <span v-else>Pronto para começar</span>
+                        <span v-else>3º → 2º → 1º</span>
                     </div>
 
                     <h2
@@ -315,7 +384,10 @@ onBeforeUnmount(() => {
                             <span
                                 class="text-xs font-medium tracking-[0.3em] uppercase"
                             >
-                                A preparar o sorteio
+                                Pronto para começar
+                            </span>
+                            <span class="text-xs text-neutral-600">
+                                O apresentador controla o ritmo de cada prémio.
                             </span>
                         </div>
 
@@ -372,6 +444,31 @@ onBeforeUnmount(() => {
                             class="from-sinf-primary h-full rounded-full bg-linear-to-r to-amber-400 transition-all duration-700"
                             :style="{ width: `${progress}%` }"
                         ></div>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-2">
+                        <button
+                            type="button"
+                            class="inline-flex cursor-pointer items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+                            :class="
+                                phase === 'finished'
+                                    ? 'border-white/10 bg-white/5 text-neutral-200 hover:bg-white/10'
+                                    : 'border-amber-400/30 bg-amber-400/15 text-amber-200 hover:bg-amber-400/25'
+                            "
+                            :disabled="primaryDisabled"
+                            @click="advance"
+                        >
+                            <RotateCcw v-if="phase === 'finished'" :size="16" />
+                            <Play
+                                v-else-if="phase === 'idle' || currentIndex < 0"
+                                :size="16"
+                            />
+                            <ArrowRight v-else :size="16" />
+                            <span>{{ nextActionLabel }}</span>
+                        </button>
+                        <span class="text-[11px] text-neutral-600">
+                            Cada clique revela o prémio seguinte.
+                        </span>
                     </div>
                 </section>
 
@@ -438,7 +535,10 @@ onBeforeUnmount(() => {
                 </template>
             </p>
 
-            <div class="flex flex-wrap items-center gap-2">
+            <div
+                v-if="prizes.length > 0"
+                class="flex flex-wrap items-center gap-2"
+            >
                 <button
                     type="button"
                     class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-medium text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
@@ -459,7 +559,7 @@ onBeforeUnmount(() => {
         </footer>
 
         <div
-            v-if="phase === 'revealed'"
+            v-if="confettiVisible"
             :key="confettiKey"
             class="pointer-events-none fixed inset-0 z-20 overflow-hidden"
         >
