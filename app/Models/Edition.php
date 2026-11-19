@@ -30,6 +30,11 @@ class Edition extends Model
     protected $fillable = [
         'name',
         'year',
+        'shop_enabled',
+    ];
+
+    protected $casts = [
+        'shop_enabled' => 'boolean',
     ];
 
     public function enrollments(): HasMany

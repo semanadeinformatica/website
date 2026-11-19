@@ -31,18 +31,28 @@ const homeSections: Routes = {
     sponsors: { label: "Patrocínios", href: "/#sponsors" },
 };
 
-const pageRoutes: Routes = {
-    program: { label: "Programa" },
-    "shop.show": { label: "Prémios & Loja" },
-    "arcade.lobby": { label: "Arcade" },
-    // Raffle link intentionally hidden until the points-based prize draw ships.
-    team: { label: "Equipa" },
-};
+const page = usePage();
+
+const shopEnabled = computed(() => page.props.shop_enabled !== false);
+
+const pageRoutes = computed<Routes>(() => {
+    const routes: Routes = {
+        program: { label: "Programa" },
+        "shop.show": { label: "Prémios & Loja" },
+        "arcade.lobby": { label: "Arcade" },
+        // Raffle link intentionally hidden until the points-based prize draw ships.
+        team: { label: "Equipa" },
+    };
+
+    if (!shopEnabled.value) {
+        delete routes["shop.show"];
+    }
+
+    return routes;
+});
 
 const editions = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
 const currentEdition = 2026;
-
-const page = usePage();
 
 const user = computed(() => page.props.auth?.user as User | undefined);
 const isAdmin = computed(() => checkIsAdmin(user.value));
@@ -94,7 +104,9 @@ const navItems = computed<PillOption[]>(() => {
             href: href || "/",
         });
     }
-    for (const [pageKey, { label, _query }] of Object.entries(pageRoutes)) {
+    for (const [pageKey, { label, _query }] of Object.entries(
+        pageRoutes.value,
+    )) {
         items.push({
             id: `page-${pageKey}`,
             label,
@@ -166,7 +178,7 @@ const authItems = computed<PillOption[]>(() => {
 });
 
 const options = computed(() => ({
-    pages: pageRoutes,
+    pages: pageRoutes.value,
     homeSections,
     competitions: competitions.value,
     editions,

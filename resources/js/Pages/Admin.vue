@@ -27,6 +27,7 @@ import {
     ArrowRightLeft,
     Plus,
     ScanLine,
+    Receipt,
 } from "@lucide/vue";
 
 interface Stats {
@@ -144,6 +145,11 @@ const sections: Section[] = [
                 route: "admin.products.index",
                 name: "Produtos da Loja",
                 icon: ShoppingBag,
+            },
+            {
+                route: "admin.shop.purchases",
+                name: "Compras da Loja",
+                icon: Receipt,
             },
             {
                 route: "admin.finalPrizes.index",

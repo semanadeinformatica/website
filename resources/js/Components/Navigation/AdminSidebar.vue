@@ -28,6 +28,7 @@ import {
     X,
     Joystick,
     ScanLine,
+    Receipt,
 } from "@lucide/vue";
 
 interface Props {
@@ -209,6 +210,13 @@ const sections: NavSection[] = [
                 labelKey: "models.product",
                 defaultLabel: "Produtos",
                 icon: ShoppingBag,
+            },
+            {
+                name: "shopPurchases",
+                route: "admin.shop.purchases",
+                routePrefix: "admin.shop",
+                defaultLabel: "Compras da Loja",
+                icon: Receipt,
             },
             {
                 name: "finalPrizes",

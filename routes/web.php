@@ -25,6 +25,7 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestAwardController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\QuestCRUDController;
+use App\Http\Controllers\ShopAdminController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlotCRUDController;
 use App\Http\Controllers\SponsorCRUDController;
@@ -153,6 +154,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::post('/arcade/net-flow/review', [ArcadeNetFlowController::class, 'review'])
                     ->name('arcadeNetFlow.review');
                 // Raffle admin routes are disabled until the points-based prize draw ships.
+
+                Route::post('/shop/toggle', [ShopAdminController::class, 'toggle'])
+                    ->name('shop.toggle');
+                Route::get('/shop/purchases', [ShopAdminController::class, 'purchases'])
+                    ->name('shop.purchases');
+                Route::post('/shop/purchases/{product}/{enrollment}/refund', [ShopAdminController::class, 'refund'])
+                    ->name('shop.purchases.refund');
+
                 Route::resources([
                     '/editions' => EditionCRUDController::class,
                     '/events' => EventCRUDController::class,

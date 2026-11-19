@@ -11,7 +11,7 @@ import ComingSoon from "@/Components/UI/ComingSoon.vue";
 import QuickScroll from "@/Components/UI/QuickScroll.vue";
 import { type BuyableProduct } from "@/Types/ShopPage";
 import type FinalPrize from "@/Types/FinalPrize";
-import { ShoppingBag } from "@lucide/vue";
+import { ShoppingBag, AlertTriangle } from "@lucide/vue";
 
 interface Props {
     products: BuyableProduct[];
@@ -19,11 +19,13 @@ interface Props {
     points?: number;
     isEnrolled: boolean;
     isParticipant: boolean;
+    shopEnabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     finalPrizes: () => [],
     points: undefined,
+    shopEnabled: true,
 });
 
 const selectedFilter = ref<"all" | "available" | "bought" | "out-of-stock">(
@@ -150,6 +152,24 @@ const filteredAndSortedProducts = computed(() => {
         <div
             class="relative mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-6 sm:py-12 lg:px-8"
         >
+            <div
+                v-if="!shopEnabled"
+                class="flex items-start gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/10 p-4 text-amber-200"
+            >
+                <AlertTriangle :size="18" class="mt-0.5 shrink-0" />
+                <div class="space-y-1">
+                    <p class="text-sm font-semibold">
+                        Loja temporariamente desativada
+                    </p>
+                    <p class="text-xs leading-relaxed text-amber-200/80">
+                        Os participantes não conseguem aceder à loja nem efetuar
+                        compras enquanto esta opção estiver ativa. Podes
+                        reativá-la na página de produtos do painel de
+                        administração.
+                    </p>
+                </div>
+            </div>
+
             <!-- Final Prizes Section -->
             <FinalPrizes :prizes="finalPrizes" />
 

@@ -29,6 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
 defineSlots<{
     heading?: () => unknown;
     actions?: () => unknown;
+    top?: () => unknown;
+    bottom?: () => unknown;
     header?: () => unknown;
     row?: (props: { item: T }) => unknown;
 }>();
@@ -134,6 +136,8 @@ const activeModalComponent = computed(() => {
 
         <!-- Main View: Table & Pagination -->
         <div class="flex flex-col gap-6">
+            <slot name="top" />
+
             <Table :items="items.data">
                 <template #header>
                     <slot name="header" />
@@ -144,6 +148,8 @@ const activeModalComponent = computed(() => {
             </Table>
 
             <PaginationLinks :links="items.links" />
+
+            <slot name="bottom" />
         </div>
 
         <!-- Dynamic CRUD Modal rendered OVER the table -->
