@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
@@ -7,20 +6,9 @@ import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
-interface EventOption {
-    id: number;
-    name: string;
-    event_day_id?: number;
-    event_day?: {
-        id: number;
-        edition_id: number;
-    };
-}
-
 interface Props {
     with: {
         editions: Edition[];
-        events?: EventOption[];
     };
 }
 
@@ -28,47 +16,12 @@ const props = defineProps<Props>();
 
 const form = useForm({
     edition_id: props.with.editions?.[0]?.id?.toString() ?? "",
-    required_event_id: "",
+    place: "1",
     name: "",
     description: "",
-    ticket_price: 10,
     is_active: true,
     draw_at: "",
 });
-
-// Strictly filter events to ONLY those belonging to the selected edition
-const availableEvents = computed(() => {
-    if (!props.with.events || !form.edition_id) return [];
-    return props.with.events.filter((e) => {
-        const editionId = e.event_day?.edition_id;
-        return (
-            editionId !== undefined &&
-            editionId !== null &&
-            editionId.toString() === form.edition_id.toString()
-        );
-    });
-});
-
-// Reset required_event_id if the selected edition changes and the event does not belong to it
-watch(
-    () => form.edition_id,
-    (newEditionId) => {
-        if (!newEditionId) {
-            form.required_event_id = "";
-            return;
-        }
-        const currentEvent = props.with.events?.find(
-            (e) => e.id.toString() === form.required_event_id,
-        );
-        if (
-            currentEvent &&
-            currentEvent.event_day?.edition_id?.toString() !==
-                newEditionId.toString()
-        ) {
-            form.required_event_id = "";
-        }
-    },
-);
 
 const submit = () => {
     form.post(route("admin.raffleDraws.store"));
@@ -104,14 +57,17 @@ const submit = () => {
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextInput
-                id="ticket_price"
-                v-model="form.ticket_price"
-                label="Preço do Bilhete (SINFrões)"
-                type="number"
-                min="1"
+                id="place"
+                v-model="form.place"
+                label="Posição"
+                type="select"
                 required
-                :error-message="form.errors.ticket_price"
-            />
+                :error-message="form.errors.place"
+            >
+                <option value="1">1º Prémio</option>
+                <option value="2">2º Prémio</option>
+                <option value="3">3º Prémio</option>
+            </TextInput>
 
             <TextInput
                 v-model="form.edition_id"
@@ -132,36 +88,19 @@ const submit = () => {
         </div>
 
         <TextInput
-            id="required_event_id"
-            v-model="form.required_event_id"
-            type="select"
-            label="Presença Obrigatória (Palestra/Workshop Opcional)"
-            :disabled="!form.edition_id"
-            :error-message="form.errors.required_event_id"
-        >
-            <option value="">
-                {{
-                    form.edition_id
-                        ? "Nenhum (aberto a todos os inscritos com pontos)"
-                        : "Seleciona primeiro uma edição"
-                }}
-            </option>
-            <option
-                v-for="event in availableEvents"
-                :key="event.id"
-                :value="event.id"
-            >
-                {{ event.name }}
-            </option>
-        </TextInput>
-
-        <TextInput
             id="draw_at"
             v-model="form.draw_at"
-            label="Data do Sorteio"
+            label="Data prevista do sorteio"
             type="datetime-local"
             :error-message="form.errors.draw_at"
         />
+
+        <div
+            class="rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200/90"
+        >
+            Só entram participantes com scan na Sessão de Encerramento. Staff e
+            administração ficam sempre de fora do sorteio.
+        </div>
 
         <div class="flex items-center gap-3 pt-1">
             <Checkbox id="is_active" v-model:checked="form.is_active" />

@@ -18,6 +18,8 @@ export type {
     default as RaffleDraw,
     EligibleParticipant,
     RaffleTicketMap,
+    SimulationPerson,
+    SimulationPrize,
 } from "./Raffle";
 export type { View, TabId, Tabs } from "./ProfilePage";
 export type { default as Quest } from "./Quest";

@@ -840,36 +840,40 @@ class DatabaseSeeder extends Seeder
 
         $finalPrizes = [
             [
+                'place' => 1,
                 'name' => '1º Prémio Final — Consola Nintendo Switch OLED',
                 'description' => 'O grande prémio da SINF 2026 sorteado na Sessão de Encerramento!',
-                'ticket_price' => 1,
             ],
             [
+                'place' => 2,
                 'name' => '2º Prémio Final — Teclado Mecânico Custom',
                 'description' => 'Teclado mecânico premium para elevar o teu setup de programação.',
-                'ticket_price' => 1,
             ],
             [
+                'place' => 3,
                 'name' => '3º Prémio Final — Fones Sony WH-1000XM5',
                 'description' => 'Auscultadores topo de gama com cancelamento de ruído ativo líder de mercado.',
-                'ticket_price' => 1,
             ],
         ];
 
         $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $edition->id))
             ->where(function ($q) {
-                $q->where('name', 'ilike', '%Sessão de Encerramento%')
-                    ->orWhere('name', 'ilike', '%Encerramento%');
+                $q->whereRaw('LOWER(events.name) LIKE ?', ['%encerramento%'])
+                    ->orWhereRaw("LOWER(COALESCE(events.topic, '')) LIKE ?", ['%encerramento%']);
             })
             ->first();
 
+        if ($closingEvent === null) {
+            $this->command->warn('No closing session event found; final prize draws will not be eligible until one exists.');
+        }
+
         foreach ($finalPrizes as $prize) {
-            RaffleDraw::firstOrCreate(
+            RaffleDraw::updateOrCreate(
                 ['edition_id' => $edition->id, 'name' => $prize['name']],
                 [
+                    'place' => $prize['place'],
                     'required_event_id' => $closingEvent?->id,
                     'description' => $prize['description'],
-                    'ticket_price' => $prize['ticket_price'],
                     'is_active' => true,
                     'draw_at' => Carbon::create($editionYear, 11, 19, 18, 0, 0),
                 ]

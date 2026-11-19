@@ -7,9 +7,10 @@ export default interface RaffleDraw extends Model {
         id: number;
         name: string;
     } | null;
+    place: number | null;
     name: string;
     description: string | null;
-    ticket_price: number;
+    ticket_price?: number;
     is_active: boolean;
     draw_at: string | null;
     winner_enrollment_id: number | null;
@@ -32,7 +33,22 @@ export interface EligibleParticipant {
     name: string;
     email: string | null;
     points: number;
-    tickets: number;
+}
+
+export interface SimulationPerson {
+    id: number;
+    name: string;
+}
+
+export interface SimulationPrize {
+    id: number;
+    place: number | null;
+    name: string;
+    description: string | null;
+    winner: SimulationPerson | null;
+    is_simulated: boolean;
+    eligible_count: number;
+    pool: SimulationPerson[];
 }
 
 export interface RaffleTicketMap {

@@ -181,7 +181,10 @@ class QuestAwardController extends Controller
             ->get()
             ->map(function (Quest $quest) use ($completedQuestIds, $joinedEventIds, $enrollment, $user) {
                 $completed = in_array($quest->id, $completedQuestIds, true);
+                // Free-entry events have no per-event enrollment: the staff scan
+                // itself is the attendance record.
                 $missingRequiredEvent = $quest->requirement_type === Event::class
+                    && $quest->requirement?->enroll_in_site !== false
                     && ! in_array($quest->requirement_id, $joinedEventIds, true);
                 $available = ! $completed
                     && ! $missingRequiredEvent
@@ -242,6 +245,7 @@ class QuestAwardController extends Controller
     private function missingRequiredEventEnrollment(Quest $quest, Enrollment $enrollment): bool
     {
         return $quest->requirement_type === Event::class
+            && $quest->requirement?->enroll_in_site !== false
             && ! $enrollment->events()->where('event_id', $quest->requirement_id)->exists();
     }
 

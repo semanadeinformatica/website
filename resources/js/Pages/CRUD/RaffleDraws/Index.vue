@@ -13,7 +13,16 @@ import type RaffleDraw from "@/Types/Raffle";
 import type { EligibleParticipant } from "@/Types/Raffle";
 import type Edition from "@/Types/Edition";
 import type Paginated from "@/Types/Paginated";
-import { Dices, Inbox, RotateCcw, Search, X } from "@lucide/vue";
+import {
+    AlertCircle,
+    Dices,
+    Inbox,
+    RotateCcw,
+    Search,
+    Sparkles,
+    Trophy,
+    X,
+} from "@lucide/vue";
 
 interface Props {
     items: Paginated<RaffleDraw>;
@@ -22,25 +31,25 @@ interface Props {
     };
     isSearchable?: boolean;
     eligibleCount?: number;
-    totalTickets?: number;
+    totalEntries?: number;
     eligibleParticipants?: EligibleParticipant[];
     selectedDrawId?: number | null;
     selectedDrawName?: string | null;
     requiredEventName?: string | null;
+    hasClosingEvent?: boolean;
     activeEditionId?: number;
-    isPointsBased?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     isSearchable: false,
     eligibleCount: 0,
-    totalTickets: 0,
+    totalEntries: 0,
     eligibleParticipants: () => [],
     selectedDrawId: null,
     selectedDrawName: null,
     requiredEventName: null,
-    activeEditionId: 1,
-    isPointsBased: true,
+    hasClosingEvent: true,
+    activeEditionId: 0,
 });
 
 const editions = computed<Record<number, string>>(() =>
@@ -49,13 +58,39 @@ const editions = computed<Record<number, string>>(() =>
     ),
 );
 
+const sortedDraws = computed(() =>
+    [...props.items.data].sort(
+        (first, second) => (first.place ?? 99) - (second.place ?? 99),
+    ),
+);
+
+const pendingDraws = computed(() =>
+    sortedDraws.value.filter((draw) => !draw.winner_enrollment_id),
+);
+
+const drawnDraws = computed(() =>
+    sortedDraws.value.filter((draw) => Boolean(draw.winner_enrollment_id)),
+);
+
+const hasDraws = computed(() => props.items.data.length > 0);
+const allDrawn = computed(
+    () => hasDraws.value && pendingDraws.value.length === 0,
+);
+const canDraw = computed(
+    () => hasDraws.value && props.hasClosingEvent && !allDrawn.value,
+);
+
+const simulateUrl = computed(() =>
+    route("admin.raffleDraws.simulate", {
+        edition_id: props.activeEditionId,
+    }),
+);
+
 const selectDraw = (drawId: string) => {
     const targetDraw = props.items.data.find(
-        (d) => d.id.toString() === drawId.toString(),
+        (draw) => draw.id.toString() === drawId.toString(),
     );
-    const editionId = targetDraw
-        ? targetDraw.edition_id
-        : props.activeEditionId;
+    const editionId = targetDraw?.edition_id ?? props.activeEditionId;
 
     router.get(
         route("admin.raffleDraws.index"),
@@ -70,12 +105,12 @@ const selectDraw = (drawId: string) => {
                 "items",
                 "eligibleParticipants",
                 "eligibleCount",
-                "totalTickets",
+                "totalEntries",
                 "selectedDrawId",
                 "selectedDrawName",
                 "requiredEventName",
+                "hasClosingEvent",
                 "activeEditionId",
-                "isPointsBased",
             ],
         },
     );
@@ -84,73 +119,35 @@ const selectDraw = (drawId: string) => {
 // Search & filter eligible participants
 const eligibleSearch = ref("");
 const filteredEligible = computed(() => {
-    const q = eligibleSearch.value.trim().toLowerCase();
-    if (!q) return props.eligibleParticipants;
+    const query = eligibleSearch.value.trim().toLowerCase();
+
+    if (!query) {
+        return props.eligibleParticipants;
+    }
+
     return props.eligibleParticipants.filter(
-        (p) =>
-            p.name.toLowerCase().includes(q) ||
-            (p.email && p.email.toLowerCase().includes(q)),
+        (participant) =>
+            participant.name.toLowerCase().includes(query) ||
+            (participant.email &&
+                participant.email.toLowerCase().includes(query)),
     );
 });
 
-const formatProbability = (tickets: number) => {
-    if (!props.totalTickets || props.totalTickets <= 0) return "0.0%";
-    const pct = (tickets / props.totalTickets) * 100;
-    return pct < 0.1 ? "<0.1%" : `${pct.toFixed(1)}%`;
+const formatProbability = (points: number) => {
+    if (!props.totalEntries || props.totalEntries <= 0) return "0.0%";
+
+    const percentage = (points / props.totalEntries) * 100;
+
+    return percentage < 0.1 ? "<0.1%" : `${percentage.toFixed(1)}%`;
 };
 
-// Pick Winner
-const raffleToDraw = ref<RaffleDraw | null>(null);
-const isPickingWinner = ref(false);
-
-const openDrawModal = (item: RaffleDraw) => {
-    raffleToDraw.value = item;
-    if (props.selectedDrawId !== item.id) {
-        selectDraw(item.id.toString());
-    }
-};
-
-const confirmPickWinner = () => {
-    if (!raffleToDraw.value) return;
-    isPickingWinner.value = true;
-    router.post(
-        route("admin.raffleDraws.pick-winner", { draw: raffleToDraw.value.id }),
-        {},
-        {
-            preserveScroll: true,
-            onFinish: () => {
-                isPickingWinner.value = false;
-                raffleToDraw.value = null;
-            },
-        },
-    );
-};
-
-// Reset Winner
-const raffleToReset = ref<RaffleDraw | null>(null);
-const isResetting = ref(false);
-
-const confirmResetWinner = () => {
-    if (!raffleToReset.value) return;
-    isResetting.value = true;
-    router.post(
-        route("admin.raffleDraws.reset-winner", {
-            draw: raffleToReset.value.id,
-        }),
-        {},
-        {
-            preserveScroll: true,
-            onFinish: () => {
-                isResetting.value = false;
-                raffleToReset.value = null;
-            },
-        },
-    );
-};
+const formatPlace = (place: number | null) => (place ? `${place}º` : "—");
 
 const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "-";
+
     const date = new Date(dateStr);
+
     return date.toLocaleString("pt-PT", {
         day: "2-digit",
         month: "2-digit",
@@ -158,6 +155,48 @@ const formatDate = (dateStr: string | null) => {
         hour: "2-digit",
         minute: "2-digit",
     });
+};
+
+// Draw all prizes (first to third)
+const showDrawAllModal = ref(false);
+const isDrawingAll = ref(false);
+
+const confirmDrawAll = () => {
+    if (!canDraw.value) return;
+
+    isDrawingAll.value = true;
+
+    router.post(
+        route("admin.raffleDraws.draw-all"),
+        { edition_id: props.activeEditionId },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                isDrawingAll.value = false;
+                showDrawAllModal.value = false;
+            },
+        },
+    );
+};
+
+// Reset all prizes
+const showResetAllModal = ref(false);
+const isResettingAll = ref(false);
+
+const confirmResetAll = () => {
+    isResettingAll.value = true;
+
+    router.post(
+        route("admin.raffleDraws.reset-all"),
+        { edition_id: props.activeEditionId },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                isResettingAll.value = false;
+                showResetAllModal.value = false;
+            },
+        },
+    );
 };
 </script>
 
@@ -177,7 +216,105 @@ const formatDate = (dateStr: string | null) => {
             </h1>
         </template>
 
-        <!-- Main CRUD Table for Raffle Prizes (Top Table) -->
+        <template #top>
+            <section
+                class="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/40 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.3)] backdrop-blur-md"
+            >
+                <div
+                    class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+                >
+                    <div class="flex flex-col gap-1.5">
+                        <div class="flex items-center gap-2">
+                            <Trophy :size="16" class="text-amber-400" />
+                            <h2 class="text-sm font-semibold text-white">
+                                Sorteio privado
+                            </h2>
+                            <span
+                                class="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[11px] text-neutral-300"
+                            >
+                                {{ drawnDraws.length }}/{{ items.data.length }}
+                                sorteados
+                            </span>
+                        </div>
+                        <p class="max-w-2xl text-xs text-neutral-400">
+                            Sorteia os prémios por ordem, do 1º ao 3º lugar.
+                            Apenas participam inscritos que fizeram scan na
+                            <span class="font-medium text-neutral-200">
+                                {{
+                                    requiredEventName ??
+                                    "Sessão de Encerramento"
+                                }} </span
+                            >. Staff e administração ficam sempre de fora. Quem
+                            já venceu um prémio não volta a entrar.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <PrimaryButton
+                            color="primary"
+                            padding="px-4 py-2"
+                            text-size="text-xs"
+                            :disabled="!canDraw || isDrawingAll"
+                            @click="showDrawAllModal = true"
+                        >
+                            <Dices :size="15" />
+                            <span>Sortear 1º → 3º</span>
+                        </PrimaryButton>
+
+                        <PrimaryButton
+                            :href="simulateUrl"
+                            external
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="pill"
+                            padding="px-4 py-2"
+                            text-size="text-xs"
+                        >
+                            <Sparkles :size="15" />
+                            <span>Simular sorteio</span>
+                        </PrimaryButton>
+
+                        <PrimaryButton
+                            color="danger"
+                            padding="px-4 py-2"
+                            text-size="text-xs"
+                            :disabled="
+                                drawnDraws.length === 0 || isResettingAll
+                            "
+                            @click="showResetAllModal = true"
+                        >
+                            <RotateCcw :size="14" />
+                            <span>Repor sorteio</span>
+                        </PrimaryButton>
+                    </div>
+                </div>
+
+                <div
+                    v-if="!hasClosingEvent"
+                    class="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-xs text-red-300"
+                >
+                    <AlertCircle :size="15" class="mt-0.5 shrink-0" />
+                    <span>
+                        Não foi encontrada uma Sessão de Encerramento para esta
+                        edição. Cria o evento (ou confirma o nome/tópico) antes
+                        de sortear.
+                    </span>
+                </div>
+
+                <div
+                    v-else-if="allDrawn"
+                    class="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-3 text-xs text-emerald-300"
+                >
+                    <Trophy :size="15" class="shrink-0" />
+                    <span>
+                        Todos os prémios foram sorteados. A apresentação pode
+                        ser repetida em “Simular sorteio”; usa “Repor sorteio”
+                        para voltar a sortear.
+                    </span>
+                </div>
+            </section>
+        </template>
+
         <template #header>
             <HeaderRow>
                 <Header
@@ -187,32 +324,46 @@ const formatDate = (dateStr: string | null) => {
                         'items',
                         'eligibleParticipants',
                         'eligibleCount',
-                        'totalTickets',
+                        'totalEntries',
                         'selectedDrawId',
                         'selectedDrawName',
                         'requiredEventName',
+                        'hasClosingEvent',
                         'activeEditionId',
-                        'isPointsBased',
                     ]"
                 >
                     Edição
                 </Header>
+                <Header sort-by="place">Posição</Header>
                 <Header sort-by="name">Prémio</Header>
                 <Header>Presença Obrigatória</Header>
                 <Header sort-by="is_active">Estado</Header>
                 <Header>Vencedor</Header>
-                <Header sort-by="draw_at">Data do Sorteio</Header>
+                <Header sort-by="draw_at">Data</Header>
             </HeaderRow>
         </template>
 
         <template #row="{ item }">
             <Row name="raffleDraws" :item="item">
-                <!-- Edition -->
                 <Cell class="text-xs text-neutral-400">
                     {{ editions[item.edition_id] ?? "-" }}
                 </Cell>
 
-                <!-- Prize name & description -->
+                <Cell>
+                    <span
+                        class="inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 text-xs font-bold"
+                        :class="
+                            item.place === 1
+                                ? 'border-amber-400/30 bg-amber-400/10 text-amber-300'
+                                : item.place === 2
+                                  ? 'border-slate-300/30 bg-slate-300/10 text-slate-200'
+                                  : 'border-amber-700/30 bg-amber-700/10 text-amber-500'
+                        "
+                    >
+                        {{ formatPlace(item.place) }}
+                    </span>
+                </Cell>
+
                 <Cell>
                     <div class="flex flex-col">
                         <span class="font-medium text-white">{{
@@ -227,25 +378,21 @@ const formatDate = (dateStr: string | null) => {
                     </div>
                 </Cell>
 
-                <!-- Evento Obrigatório -->
                 <Cell class="text-xs">
                     <span
-                        v-if="item.required_event?.name"
+                        v-if="requiredEventName"
                         class="inline-flex items-center gap-1.5 text-neutral-300"
                     >
                         <span
                             class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"
                         ></span>
-                        <span class="line-clamp-1">{{
-                            item.required_event.name
-                        }}</span>
+                        <span class="line-clamp-1">
+                            {{ requiredEventName }}
+                        </span>
                     </span>
-                    <span v-else class="text-neutral-500">
-                        Nenhum (Aberto)
-                    </span>
+                    <span v-else class="text-red-400"> Sem evento </span>
                 </Cell>
 
-                <!-- Status -->
                 <Cell class="whitespace-nowrap">
                     <span
                         class="text-xs font-medium"
@@ -261,13 +408,12 @@ const formatDate = (dateStr: string | null) => {
                             item.winner_enrollment_id
                                 ? "Sorteado"
                                 : item.is_active
-                                  ? "Por Sortear"
+                                  ? "Por sortear"
                                   : "Inativo"
                         }}
                     </span>
                 </Cell>
 
-                <!-- Winner -->
                 <Cell>
                     <div
                         v-if="item.winner?.participant?.user?.name"
@@ -286,60 +432,12 @@ const formatDate = (dateStr: string | null) => {
                     <span v-else class="text-xs text-neutral-500"> — </span>
                 </Cell>
 
-                <!-- Draw date -->
                 <Cell class="text-xs whitespace-nowrap text-neutral-400">
                     {{ formatDate(item.draw_at) }}
                 </Cell>
-
-                <!-- Extra action: Sortear or Reset -->
-                <template #extra-actions>
-                    <button
-                        v-if="item.id !== selectedDrawId"
-                        type="button"
-                        class="inline-flex cursor-pointer items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-white"
-                        title="Ver participantes elegíveis na tômbola abaixo"
-                        @click="selectDraw(item.id.toString())"
-                    >
-                        <span>Ver elegíveis</span>
-                    </button>
-                    <span
-                        v-else
-                        class="inline-flex items-center text-xs font-medium text-amber-400"
-                        title="A exibir participantes elegíveis deste sorteio abaixo"
-                    >
-                        <span>Na tômbola</span>
-                    </span>
-
-                    <span class="text-neutral-700">·</span>
-
-                    <button
-                        v-if="!item.winner_enrollment_id && item.is_active"
-                        type="button"
-                        class="inline-flex cursor-pointer items-center gap-1 font-medium text-amber-400 transition-colors hover:text-amber-300"
-                        title="Sortear Vencedor"
-                        @click="openDrawModal(item)"
-                    >
-                        <Dices :size="13" />
-                        <span>Sortear</span>
-                    </button>
-
-                    <button
-                        v-if="item.winner_enrollment_id"
-                        type="button"
-                        class="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-neutral-400 transition-colors hover:text-amber-400"
-                        title="Anular vencedor e permitir novo sorteio"
-                        @click="raffleToReset = item"
-                    >
-                        <RotateCcw :size="12" />
-                        <span>Anular</span>
-                    </button>
-
-                    <span class="text-neutral-700">·</span>
-                </template>
             </Row>
         </template>
 
-        <!-- Eligible Participants Table (Under the Raffle Table) -->
         <template #bottom>
             <div
                 class="flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/40 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.3)] backdrop-blur-md"
@@ -350,7 +448,7 @@ const formatDate = (dateStr: string | null) => {
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2">
                             <h2 class="text-sm font-semibold text-white">
-                                Participantes Elegíveis na Tômbola
+                                Participantes elegíveis
                             </h2>
                             <span class="font-mono text-xs text-neutral-400">
                                 ({{ eligibleCount }} participantes)
@@ -364,40 +462,35 @@ const formatDate = (dateStr: string | null) => {
                             · Presença obrigatória:
                             <span class="font-medium text-neutral-200">
                                 {{
-                                    requiredEventName
-                                        ? `${requiredEventName} (apenas quem fez scan do QR code pode ganhar)`
-                                        : "Nenhuma (aberto a todos os inscritos com pontos)"
+                                    requiredEventName ??
+                                    "Sessão de Encerramento não encontrada"
                                 }}
                             </span>
                             ·
                             <span class="text-neutral-200">{{
                                 eligibleCount
                             }}</span>
-                            elegíveis ({{ totalTickets }}
-                            {{
-                                isPointsBased
-                                    ? "SINFrões em jogo"
-                                    : "bilhetes em jogo"
-                            }}). Quem já venceu um prémio é excluído dos
-                            restantes.
+                            elegíveis ({{ totalEntries }} SINFrões em jogo).
+                            Staff e administração excluídos.
                         </p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2.5">
                         <select
-                            v-if="items.data.length > 1"
+                            v-if="sortedDraws.length > 1"
                             :value="selectedDrawId"
                             class="pill-container h-8 rounded-full border border-white/10 bg-black/50 px-3 text-xs text-neutral-200 focus:outline-none"
                             aria-label="Selecionar sorteio para ver participantes elegíveis"
                             @change="
-                                (e) =>
+                                (event) =>
                                     selectDraw(
-                                        (e.target as HTMLSelectElement).value,
+                                        (event.target as HTMLSelectElement)
+                                            .value,
                                     )
                             "
                         >
                             <option
-                                v-for="draw in items.data"
+                                v-for="draw in sortedDraws"
                                 :key="draw.id"
                                 :value="draw.id"
                             >
@@ -433,6 +526,17 @@ const formatDate = (dateStr: string | null) => {
                 </div>
 
                 <div
+                    v-if="!hasClosingEvent"
+                    class="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-xs text-red-300"
+                >
+                    <AlertCircle :size="15" class="mt-0.5 shrink-0" />
+                    <span>
+                        Sem Sessão de Encerramento não há presenças para validar
+                        e o sorteio fica bloqueado.
+                    </span>
+                </div>
+
+                <div
                     class="max-h-80 w-full overflow-y-auto rounded-xl border border-white/5 bg-white/[0.01]"
                 >
                     <table class="w-full border-collapse text-left">
@@ -444,12 +548,8 @@ const formatDate = (dateStr: string | null) => {
                                 <th class="px-4 py-2.5 font-medium">
                                     Participante
                                 </th>
-                                <th class="w-36 px-4 py-2.5 font-medium">
-                                    {{
-                                        isPointsBased
-                                            ? "SINFrões (Entradas)"
-                                            : "Bilhetes Comprados"
-                                    }}
+                                <th class="w-44 px-4 py-2.5 font-medium">
+                                    SINFrões (entradas)
                                 </th>
                                 <th
                                     class="w-32 px-4 py-2.5 text-right font-medium"
@@ -487,12 +587,12 @@ const formatDate = (dateStr: string | null) => {
                                 <td
                                     class="px-4 py-2.5 font-mono text-xs text-neutral-300"
                                 >
-                                    {{ participant.tickets }}
+                                    {{ participant.points }}
                                 </td>
                                 <td
                                     class="px-4 py-2.5 text-right font-mono text-xs text-neutral-400"
                                 >
-                                    {{ formatProbability(participant.tickets) }}
+                                    {{ formatProbability(participant.points) }}
                                 </td>
                             </tr>
                             <tr v-if="filteredEligible.length === 0">
@@ -524,33 +624,41 @@ const formatDate = (dateStr: string | null) => {
         </template>
     </CRUDView>
 
-    <!-- Confirm Sorteio Modal -->
+    <!-- Confirm Draw All Modal -->
     <Modal
-        :model-value="raffleToDraw !== null"
-        title="Sortear vencedor"
-        description="Será selecionado aleatoriamente um participante elegível, proporcionalmente aos seus SINFrões."
+        :model-value="showDrawAllModal"
+        title="Sortear todos os prémios"
+        description="O sorteio é imediato e fica guardado. Podes repor os vencedores depois."
         max-width="md"
-        @close="raffleToDraw = null"
+        @close="showDrawAllModal = false"
     >
         <div class="flex flex-col gap-4">
             <div
-                v-if="raffleToDraw"
-                class="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-white/5 p-4 text-xs text-neutral-300"
+                class="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-4 text-xs text-neutral-300"
             >
-                <div>
-                    Confirmar sorteio para
-                    <strong class="text-white">"{{ raffleToDraw.name }}"</strong
-                    >?
-                </div>
-                <div class="text-neutral-400">
-                    Presença obrigatória:
-                    <span class="font-medium text-neutral-200">
-                        {{
-                            raffleToDraw.required_event?.name ??
-                            "Nenhuma (Aberto a todos os inscritos)"
-                        }}
-                    </span>
-                </div>
+                <p>
+                    Ordem do sorteio:
+                    <strong class="text-white">1º → 3º lugar</strong>.
+                </p>
+                <ul class="flex flex-col gap-1">
+                    <li
+                        v-for="draw in pendingDraws"
+                        :key="draw.id"
+                        class="flex items-center justify-between gap-3"
+                    >
+                        <span class="text-neutral-400">
+                            {{ formatPlace(draw.place) }} lugar
+                        </span>
+                        <span class="truncate font-medium text-neutral-200">
+                            {{ draw.name }}
+                        </span>
+                    </li>
+                </ul>
+                <p class="text-neutral-400">
+                    Só entram participantes com presença registada na Sessão de
+                    Encerramento. Staff, administração e vencedores anteriores
+                    são excluídos.
+                </p>
             </div>
 
             <div
@@ -560,45 +668,40 @@ const formatDate = (dateStr: string | null) => {
                     type="button"
                     color="pill"
                     text-size="text-xs"
-                    :disabled="isPickingWinner"
-                    @click="raffleToDraw = null"
+                    :disabled="isDrawingAll"
+                    @click="showDrawAllModal = false"
                 >
                     Cancelar
                 </PrimaryButton>
                 <PrimaryButton
                     type="button"
-                    color="pill"
+                    color="primary"
                     text-size="text-xs"
-                    :disabled="isPickingWinner"
-                    @click="confirmPickWinner"
+                    :disabled="isDrawingAll"
+                    @click="confirmDrawAll"
                 >
-                    {{ isPickingWinner ? "A sortear..." : "Sortear" }}
+                    {{ isDrawingAll ? "A sortear..." : "Sortear prémios" }}
                 </PrimaryButton>
             </div>
         </div>
     </Modal>
 
-    <!-- Confirm Reset Winner Modal -->
+    <!-- Confirm Reset All Modal -->
     <Modal
-        :model-value="raffleToReset !== null"
-        title="Anular vencedor"
-        description="O vencedor atual será retirado do prémio e o prémio voltará a ficar disponível para sorteio."
+        :model-value="showResetAllModal"
+        title="Repor sorteio"
+        description="Os vencedores de todos os prémios desta edição serão removidos e os prémios voltam a poder ser sorteados."
         max-width="md"
-        @close="raffleToReset = null"
+        @close="showResetAllModal = false"
     >
         <div class="flex flex-col gap-4">
             <div
-                v-if="raffleToReset"
-                class="rounded-xl border border-white/10 bg-white/5 p-4 text-xs text-neutral-300"
+                class="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/5 p-4 text-xs text-red-300"
             >
-                Anular o vencedor de
-                <strong class="text-white">"{{ raffleToReset.name }}"</strong>?
-                <span class="mt-1 block text-neutral-400">
-                    Vencedor atual:
-                    {{
-                        raffleToReset.winner?.participant?.user?.name ??
-                        `#${raffleToReset.winner_enrollment_id}`
-                    }}
+                <AlertCircle :size="15" class="mt-0.5 shrink-0" />
+                <span>
+                    Esta ação remove os vencedores atuais. A apresentação volta
+                    a mostrar “simulação” até ser feito um novo sorteio.
                 </span>
             </div>
 
@@ -609,8 +712,8 @@ const formatDate = (dateStr: string | null) => {
                     type="button"
                     color="pill"
                     text-size="text-xs"
-                    :disabled="isResetting"
-                    @click="raffleToReset = null"
+                    :disabled="isResettingAll"
+                    @click="showResetAllModal = false"
                 >
                     Cancelar
                 </PrimaryButton>
@@ -618,10 +721,10 @@ const formatDate = (dateStr: string | null) => {
                     type="button"
                     color="danger"
                     text-size="text-xs"
-                    :disabled="isResetting"
-                    @click="confirmResetWinner"
+                    :disabled="isResettingAll"
+                    @click="confirmResetAll"
                 >
-                    {{ isResetting ? "A anular..." : "Anular Vencedor" }}
+                    {{ isResettingAll ? "A repor..." : "Repor sorteio" }}
                 </PrimaryButton>
             </div>
         </div>

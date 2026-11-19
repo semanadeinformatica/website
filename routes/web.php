@@ -157,6 +157,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                     ->name('raffleDraws.pick-winner');
                 Route::post('/raffleDraws/{draw}/reset-winner', [RaffleDrawCRUDController::class, 'resetWinner'])
                     ->name('raffleDraws.reset-winner');
+                Route::post('/raffleDraws/draw-all', [RaffleDrawCRUDController::class, 'drawAll'])
+                    ->name('raffleDraws.draw-all');
+                Route::post('/raffleDraws/reset-all', [RaffleDrawCRUDController::class, 'resetAll'])
+                    ->name('raffleDraws.reset-all');
+                Route::get('/raffleDraws/simulate', [RaffleDrawCRUDController::class, 'simulate'])
+                    ->name('raffleDraws.simulate');
 
                 Route::resources([
                     '/editions' => EditionCRUDController::class,

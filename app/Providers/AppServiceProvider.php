@@ -116,7 +116,10 @@ class AppServiceProvider extends ServiceProvider
                     (
                         (
                             $quest->requirement_type === Event::class &&
-                            $enrollment->events()->where('event_id', $quest->requirement_id)->exists()
+                            (
+                                $enrollment->events()->where('event_id', $quest->requirement_id)->exists() ||
+                                $quest->requirement?->enroll_in_site === false
+                            )
                         ) ||
                         $quest->requirement_type === Stand::class ||
                         $quest->requirement_type === null

@@ -21,6 +21,7 @@ class RaffleDraw extends Model
     protected $fillable = [
         'edition_id',
         'required_event_id',
+        'place',
         'name',
         'description',
         'ticket_price',
@@ -35,6 +36,7 @@ class RaffleDraw extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'place' => 'integer',
         'is_active' => 'boolean',
         'draw_at' => 'datetime',
     ];
@@ -42,11 +44,13 @@ class RaffleDraw extends Model
     /**
      * The accessors to append to the model's array form.
      *
+     * The legacy ticket totals are not appended to every serialization:
+     * final prize draws are points-based and the public raffle controller
+     * loads the aggregate explicitly when it needs it.
+     *
      * @var array<int, string>
      */
-    protected $appends = [
-        'total_tickets',
-    ];
+    protected $appends = [];
 
     public function edition(): BelongsTo
     {

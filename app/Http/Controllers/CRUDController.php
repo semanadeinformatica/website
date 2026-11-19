@@ -108,6 +108,18 @@ abstract class CRUDController extends Controller
         return [];
     }
 
+    /** Apply filters shared by every query path (Scout and database). */
+    protected function indexQuery(Builder $query): void
+    {
+        //
+    }
+
+    /** Default column used to sort the index list. */
+    protected function defaultSortBy(): string
+    {
+        return 'id';
+    }
+
     /**
      * Common method to get paginated items, filters, search and relations.
      *
@@ -118,7 +130,7 @@ abstract class CRUDController extends Controller
         $modelUsesScout = in_array(Searchable::class, class_uses($this->model));
 
         $search = $request->query('query');
-        $sortBy = $request->query('sort_by', 'id');
+        $sortBy = $request->query('sort_by', $this->defaultSortBy());
         $sortDir = strtolower($request->query('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         $modelInstance = new $this->model;
@@ -183,12 +195,15 @@ abstract class CRUDController extends Controller
                 $query->without($this->indexWithout())
                     ->with($this->indexLoad())
                     ->withCount($this->indexWithCount());
+                $this->indexQuery($query);
                 $applySortAndFilters($query);
             });
         } else {
             $query = $this->model::without($this->indexWithout())
                 ->with($this->indexLoad())
                 ->withCount($this->indexWithCount());
+
+            $this->indexQuery($query);
 
             if ($search !== null && trim($search) !== '' && ($searchableColumns !== [] || $this->searchRelations() !== [])) {
                 $term = trim($search);
