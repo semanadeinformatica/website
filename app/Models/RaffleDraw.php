@@ -20,6 +20,7 @@ class RaffleDraw extends Model
      */
     protected $fillable = [
         'edition_id',
+        'required_event_id',
         'name',
         'description',
         'ticket_price',
@@ -50,6 +51,16 @@ class RaffleDraw extends Model
     public function edition(): BelongsTo
     {
         return $this->belongsTo(Edition::class);
+    }
+
+    public function required_event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'required_event_id');
+    }
+
+    public function requiredEvent(): BelongsTo
+    {
+        return $this->required_event();
     }
 
     public function tickets(): HasMany

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, watch } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
@@ -6,22 +7,68 @@ import type Edition from "@/Types/Edition";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
-interface Props {
-    with: {
-        editions: Edition[];
+interface EventOption {
+    id: number;
+    name: string;
+    event_day_id?: number;
+    event_day?: {
+        id: number;
+        edition_id: number;
     };
 }
 
-defineProps<Props>();
+interface Props {
+    with: {
+        editions: Edition[];
+        events?: EventOption[];
+    };
+}
+
+const props = defineProps<Props>();
 
 const form = useForm({
-    edition_id: "",
+    edition_id: props.with.editions?.[0]?.id?.toString() ?? "",
+    required_event_id: "",
     name: "",
     description: "",
     ticket_price: 10,
     is_active: true,
     draw_at: "",
 });
+
+// Strictly filter events to ONLY those belonging to the selected edition
+const availableEvents = computed(() => {
+    if (!props.with.events || !form.edition_id) return [];
+    return props.with.events.filter((e) => {
+        const editionId = e.event_day?.edition_id;
+        return (
+            editionId !== undefined &&
+            editionId !== null &&
+            editionId.toString() === form.edition_id.toString()
+        );
+    });
+});
+
+// Reset required_event_id if the selected edition changes and the event does not belong to it
+watch(
+    () => form.edition_id,
+    (newEditionId) => {
+        if (!newEditionId) {
+            form.required_event_id = "";
+            return;
+        }
+        const currentEvent = props.with.events?.find(
+            (e) => e.id.toString() === form.required_event_id,
+        );
+        if (
+            currentEvent &&
+            currentEvent.event_day?.edition_id?.toString() !==
+                newEditionId.toString()
+        ) {
+            form.required_event_id = "";
+        }
+    },
+);
 
 const submit = () => {
     form.post(route("admin.raffleDraws.store"));
@@ -83,6 +130,26 @@ const submit = () => {
                 </option>
             </TextInput>
         </div>
+
+        <TextInput
+            id="required_event_id"
+            v-model="form.required_event_id"
+            type="select"
+            label="Presença Obrigatória (Palestra/Workshop Opcional)"
+            :disabled="!form.edition_id"
+            :error-message="form.errors.required_event_id"
+        >
+            <option value="">
+                {{ form.edition_id ? "Nenhum (aberto a todos os inscritos com pontos)" : "Seleciona primeiro uma edição" }}
+            </option>
+            <option
+                v-for="event in availableEvents"
+                :key="event.id"
+                :value="event.id"
+            >
+                {{ event.name }}
+            </option>
+        </TextInput>
 
         <TextInput
             id="draw_at"

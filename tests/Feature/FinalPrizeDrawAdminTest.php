@@ -74,6 +74,7 @@ class FinalPrizeDrawAdminTest extends TestCase
     {
         $draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,
+            'required_event_id' => $this->closingEvent->id,
             'name' => '1º Prémio Final',
             'is_active' => true,
         ]);
@@ -91,7 +92,7 @@ class FinalPrizeDrawAdminTest extends TestCase
             ->where('eligibleCount', 1)
             ->where('totalTickets', 50)
             ->has('eligibleParticipants', 1)
-            ->where('closingEventName', 'Sessão de Encerramento e Entrega de Prémios')
+            ->where('requiredEventName', 'Sessão de Encerramento e Entrega de Prémios')
             ->has('items.data', 1)
         );
     }
@@ -100,6 +101,7 @@ class FinalPrizeDrawAdminTest extends TestCase
     {
         $draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,
+            'required_event_id' => $this->closingEvent->id,
             'is_active' => true,
         ]);
 
@@ -117,6 +119,7 @@ class FinalPrizeDrawAdminTest extends TestCase
     {
         $draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,
+            'required_event_id' => $this->closingEvent->id,
             'is_active' => true,
         ]);
 
@@ -197,5 +200,40 @@ class FinalPrizeDrawAdminTest extends TestCase
         $this->assertNull($fresh->winner_enrollment_id);
         $this->assertTrue($fresh->is_active);
         $this->assertNull($fresh->draw_at);
+    }
+
+    public function test_draw_without_required_event_allows_all_enrolled_with_points(): void
+    {
+        $draw = RaffleDraw::factory()->create([
+            'edition_id' => $this->edition->id,
+            'required_event_id' => null, // No event requirement!
+            'is_active' => true,
+        ]);
+
+        // Participant did NOT attend closing session or any event, but has points
+        $enrollment = $this->createParticipant(points: 150, attendClosing: false);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.pick-winner', $draw))
+            ->assertRedirect();
+
+        $this->assertEquals($enrollment->id, $draw->fresh()->winner_enrollment_id);
+    }
+
+    public function test_cannot_set_required_event_from_different_edition(): void
+    {
+        $otherEdition = Edition::factory()->create(['year' => 2025]);
+        $otherDay = EventDay::factory()->create(['edition_id' => $otherEdition->id]);
+        $otherEvent = Event::factory()->create(['event_day_id' => $otherDay->id]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.store'), [
+                'edition_id' => $this->edition->id,
+                'required_event_id' => $otherEvent->id,
+                'name' => 'Sorteio Inválido',
+                'ticket_price' => 10,
+                'is_active' => true,
+            ])
+            ->assertStatus(422);
     }
 }

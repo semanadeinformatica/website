@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
@@ -7,23 +8,48 @@ import type RaffleDraw from "@/Types/Raffle";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
+interface EventOption {
+    id: number;
+    name: string;
+    event_day_id?: number;
+    event_day?: {
+        id: number;
+        edition_id: number;
+    };
+}
+
 interface Props {
     item: RaffleDraw;
     with: {
         editions: Edition[];
+        events?: EventOption[];
     };
 }
 
-const { item: raffleDraw } = defineProps<Props>();
+const props = defineProps<Props>();
+const raffleDraw = props.item;
 
 const form = useForm({
     _method: "PUT",
     edition_id: raffleDraw.edition_id.toString(),
+    required_event_id: raffleDraw.required_event_id ? raffleDraw.required_event_id.toString() : "",
     name: raffleDraw.name,
     description: raffleDraw.description ?? "",
     ticket_price: raffleDraw.ticket_price,
     is_active: raffleDraw.is_active,
     draw_at: raffleDraw.draw_at ? raffleDraw.draw_at.substring(0, 16) : "",
+});
+
+const availableEvents = computed(() => {
+    if (!props.with.events || !form.edition_id) return [];
+    return props.with.events.filter((e) => {
+        const editionId = e.event_day?.edition_id;
+        return (
+            editionId !== undefined &&
+            editionId !== null &&
+            editionId.toString() === form.edition_id.toString()
+        );
+    });
 });
 
 const submit = () => {
@@ -86,6 +112,23 @@ const submit = () => {
                 </option>
             </TextInput>
         </div>
+
+        <TextInput
+            id="required_event_id"
+            v-model="form.required_event_id"
+            type="select"
+            label="Presença Obrigatória (Palestra/Workshop Opcional)"
+            :error-message="form.errors.required_event_id"
+        >
+            <option value="">Nenhum (aberto a todos os inscritos com pontos)</option>
+            <option
+                v-for="event in availableEvents"
+                :key="event.id"
+                :value="event.id"
+            >
+                {{ event.name }}
+            </option>
+        </TextInput>
 
         <TextInput
             id="draw_at"

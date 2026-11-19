@@ -20,10 +20,11 @@ class RaffleDrawCRUDController extends CRUDController
 
     protected string $view = 'RaffleDraws';
 
-    protected $load = ['winner.participant.user'];
+    protected $load = ['winner.participant.user', 'required_event'];
 
     protected array $rules = [
         'edition_id' => 'required|exists:editions,id',
+        'required_event_id' => 'nullable|exists:events,id',
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'ticket_price' => 'required|integer|min:1',
@@ -35,6 +36,7 @@ class RaffleDrawCRUDController extends CRUDController
     {
         return [
             'editions' => Edition::all(),
+            'events' => Event::with('event_day:id,edition_id')->orderBy('name')->get(['id', 'name', 'event_day_id']),
         ];
     }
 
@@ -49,6 +51,20 @@ class RaffleDrawCRUDController extends CRUDController
         return $rules;
     }
 
+    protected function created(array $new): ?array
+    {
+        if (! empty($new['required_event_id'])) {
+            $event = Event::with('event_day')->findOrFail($new['required_event_id']);
+            abort_if(
+                (int) $event->event_day?->edition_id !== (int) $new['edition_id'],
+                422,
+                'O evento obrigatório tem de pertencer à mesma edição do sorteio.'
+            );
+        }
+
+        return $new;
+    }
+
     protected function updated($old, array $new): ?array
     {
         abort_if(
@@ -56,6 +72,15 @@ class RaffleDrawCRUDController extends CRUDController
             422,
             'A edição de um sorteio não pode ser alterada.'
         );
+
+        if (! empty($new['required_event_id'])) {
+            $event = Event::with('event_day')->findOrFail($new['required_event_id']);
+            abort_if(
+                (int) $event->event_day?->edition_id !== (int) $new['edition_id'],
+                422,
+                'O evento obrigatório tem de pertencer à mesma edição do sorteio.'
+            );
+        }
 
         return $new;
     }
@@ -103,22 +128,23 @@ class RaffleDrawCRUDController extends CRUDController
             ? (int) $requestedEdition
             : (Edition::orderByDesc('year')->value('id') ?? 1);
 
-        $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $editionId))
-            ->where(function ($q) {
-                $q->where('name', 'ilike', '%Sessão de Encerramento%')
-                  ->orWhere('name', 'ilike', '%Encerramento%');
-            })
-            ->first();
+        $drawsInEdition = RaffleDraw::with('required_event')
+            ->where('edition_id', $editionId)
+            ->orderBy('id')
+            ->get();
 
-        if (! $closingEvent) {
-            $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $editionId))
-                ->orderByDesc('event_day_id')
-                ->orderByDesc('time_start')
-                ->first();
+        $requestedDrawId = $request->query('draw_id');
+        $selectedDraw = null;
+        if ($requestedDrawId) {
+            $selectedDraw = $drawsInEdition->firstWhere('id', (int) $requestedDrawId);
+        }
+        if (! $selectedDraw) {
+            $selectedDraw = $drawsInEdition->firstWhere('winner_enrollment_id', null) ?? $drawsInEdition->first();
         }
 
         $alreadyWonEnrollmentIds = RaffleDraw::where('edition_id', $editionId)
             ->whereNotNull('winner_enrollment_id')
+            ->when($selectedDraw, fn ($q) => $q->where('id', '!=', $selectedDraw->id))
             ->pluck('winner_enrollment_id');
 
         $eligibleQuery = Enrollment::query()
@@ -126,11 +152,15 @@ class RaffleDrawCRUDController extends CRUDController
             ->where('points', '>', 0)
             ->whereNotIn('id', $alreadyWonEnrollmentIds);
 
-        if ($closingEvent) {
-            $eligibleQuery->where(function ($query) use ($closingEvent) {
-                $query->whereHas('events', fn ($q) => $q->where('events.id', $closingEvent->id))
-                      ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $closingEvent->id));
+        if ($selectedDraw && $selectedDraw->required_event_id) {
+            $requiredEventId = $selectedDraw->required_event_id;
+            $eligibleQuery->where(function ($query) use ($requiredEventId) {
+                $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
+                      ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
             });
+            $requiredEventName = $selectedDraw->required_event?->name;
+        } else {
+            $requiredEventName = null;
         }
 
         $eligibleCount = (clone $eligibleQuery)->count();
@@ -147,10 +177,12 @@ class RaffleDrawCRUDController extends CRUDController
                 'points' => (int) $e->points,
             ]);
 
+        $data['selectedDrawId'] = $selectedDraw?->id;
+        $data['selectedDrawName'] = $selectedDraw?->name;
+        $data['requiredEventName'] = $requiredEventName;
         $data['eligibleCount'] = $eligibleCount;
         $data['totalTickets'] = $totalTickets;
         $data['eligibleParticipants'] = $eligibleParticipants;
-        $data['closingEventName'] = $closingEvent?->name ?? 'Sessão de Encerramento';
         $data['activeEditionId'] = $editionId;
 
         return $data;
@@ -168,20 +200,6 @@ class RaffleDrawCRUDController extends CRUDController
 
             $editionId = $lockedDraw->edition_id;
 
-            $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $editionId))
-                ->where(function ($q) {
-                    $q->where('name', 'ilike', '%Sessão de Encerramento%')
-                      ->orWhere('name', 'ilike', '%Encerramento%');
-                })
-                ->first();
-
-            if (! $closingEvent) {
-                $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $editionId))
-                    ->orderByDesc('event_day_id')
-                    ->orderByDesc('time_start')
-                    ->first();
-            }
-
             // Exclude anyone who already won ANY raffle in this edition
             $alreadyWonEnrollmentIds = RaffleDraw::where('edition_id', $editionId)
                 ->where('id', '!=', $lockedDraw->id)
@@ -193,10 +211,11 @@ class RaffleDrawCRUDController extends CRUDController
                 ->where('points', '>', 0)
                 ->whereNotIn('id', $alreadyWonEnrollmentIds);
 
-            if ($closingEvent) {
-                $eligibleQuery->where(function ($query) use ($closingEvent) {
-                    $query->whereHas('events', fn ($q) => $q->where('events.id', $closingEvent->id))
-                          ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $closingEvent->id));
+            if ($lockedDraw->required_event_id) {
+                $requiredEventId = $lockedDraw->required_event_id;
+                $eligibleQuery->where(function ($query) use ($requiredEventId) {
+                    $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
+                          ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
                 });
             }
 

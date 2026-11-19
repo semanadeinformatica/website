@@ -856,10 +856,18 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $edition->id))
+            ->where(function ($q) {
+                $q->where('name', 'ilike', '%Sessão de Encerramento%')
+                  ->orWhere('name', 'ilike', '%Encerramento%');
+            })
+            ->first();
+
         foreach ($finalPrizes as $prize) {
             RaffleDraw::firstOrCreate(
                 ['edition_id' => $edition->id, 'name' => $prize['name']],
                 [
+                    'required_event_id' => $closingEvent?->id,
                     'description' => $prize['description'],
                     'ticket_price' => $prize['ticket_price'],
                     'is_active' => true,

@@ -2,6 +2,11 @@ import type Model from "./Model";
 
 export default interface RaffleDraw extends Model {
     edition_id: number;
+    required_event_id: number | null;
+    required_event?: {
+        id: number;
+        name: string;
+    } | null;
     name: string;
     description: string | null;
     ticket_price: number;
