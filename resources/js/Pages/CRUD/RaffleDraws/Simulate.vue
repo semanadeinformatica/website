@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 type Phase = "idle" | "rolling" | "revealed" | "finished";
 
 const rowHeight = 96;
-const reelDuration = 7400;
+const reelDuration = 12000;
 
 const phase = ref<Phase>("idle");
 const currentIndex = ref(-1);
@@ -124,7 +124,7 @@ const buildReel = (prize: SimulationPrize) => {
             ? prize.pool
             : [{ id: prize.winner?.id ?? 0, name: winnerName }];
     const items: string[] = [];
-    const fillerCount = 48 + Math.floor(Math.random() * 12);
+    const fillerCount = 70 + Math.floor(Math.random() * 20);
 
     for (let index = 0; index < fillerCount; index++) {
         items.push(randomName(pool, winnerName));
