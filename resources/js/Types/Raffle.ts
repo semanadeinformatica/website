@@ -45,6 +45,7 @@ export interface SimulationPrize {
     place: number | null;
     name: string;
     description: string | null;
+    image_url: string | null;
     winner: SimulationPerson | null;
     is_simulated: boolean;
     eligible_count: number;

@@ -8,6 +8,7 @@ use App\Models\Enrollment;
 use App\Models\Event;
 use App\Models\EventDay;
 use App\Models\EventType;
+use App\Models\FinalPrize;
 use App\Models\Participant;
 use App\Models\Quest;
 use App\Models\RaffleDraw;
@@ -15,6 +16,7 @@ use App\Models\Staff;
 use App\Models\User;
 use App\Services\RaffleWinnerSelector;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -365,6 +367,12 @@ class FinalPrizeDrawAdminTest extends TestCase
         $this->makeDraw(2);
         $this->makeDraw(3);
 
+        FinalPrize::factory()->create([
+            'edition_id' => $this->edition->id,
+            'place' => 1,
+            'image_path' => 'final-prize-images/first-prize.png',
+        ]);
+
         $this->makeParticipant(points: 100);
         $this->makeParticipant(points: 50);
         $this->makeParticipant(points: 25);
@@ -382,6 +390,7 @@ class FinalPrizeDrawAdminTest extends TestCase
             ->where('prizes.0.place', 1)
             ->where('prizes.1.place', 2)
             ->where('prizes.2.place', 3)
+            ->where('prizes.0.image_url', Storage::disk('public')->url('final-prize-images/first-prize.png'))
             ->where('prizes.0.is_simulated', true)
             ->has('prizes.0.winner')
             ->has('prizes.1.winner')

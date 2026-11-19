@@ -103,7 +103,8 @@ const submit = () => {
             class="rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200/90"
         >
             Só entram participantes com scan na Sessão de Encerramento. Staff e
-            administração ficam sempre de fora do sorteio.
+            administração ficam sempre de fora do sorteio. A imagem apresentada
+            vem do Prémio Final com a mesma posição.
         </div>
 
         <div class="flex items-center gap-3 pt-1">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Edition;
 use App\Models\Enrollment;
 use App\Models\Event;
+use App\Models\FinalPrize;
 use App\Models\RaffleDraw;
 use App\Services\RaffleEligibilityService;
 use App\Services\RaffleWinnerSelector;
@@ -364,8 +365,9 @@ class RaffleDrawCRUDController extends CRUDController
         Gate::authorize('admin');
 
         $editionId = $this->editionId($request);
-        $edition = Edition::findOrFail($editionId);
         $closingEvent = $this->eligibility->closingEventForEdition($editionId);
+
+        Edition::query()->findOrFail($editionId);
 
         $draws = RaffleDraw::query()
             ->where('edition_id', $editionId)
@@ -374,6 +376,11 @@ class RaffleDrawCRUDController extends CRUDController
             ->orderBy('place')
             ->orderBy('id')
             ->get();
+
+        $finalPrizes = FinalPrize::query()
+            ->where('edition_id', $editionId)
+            ->get()
+            ->keyBy(fn (FinalPrize $prize) => (int) $prize->place);
 
         $usedEnrollmentIds = [];
         $prizes = [];
@@ -428,6 +435,9 @@ class RaffleDrawCRUDController extends CRUDController
                 'place' => $draw->place !== null ? (int) $draw->place : null,
                 'name' => $draw->name,
                 'description' => $draw->description,
+                'image_url' => $draw->place !== null
+                    ? $finalPrizes->get((int) $draw->place)?->final_prize_image_url
+                    : null,
                 'winner' => $winner !== null ? [
                     'id' => (int) $winner->id,
                     'name' => $this->participantName($winner),
@@ -439,12 +449,6 @@ class RaffleDrawCRUDController extends CRUDController
         }
 
         return Inertia::render('CRUD/RaffleDraws/Simulate', [
-            'edition' => [
-                'id' => $edition->id,
-                'name' => $edition->name,
-                'year' => $edition->year,
-            ],
-            'closingEventName' => $closingEvent?->name,
             'prizes' => $prizes,
             'isSimulation' => $hasSimulation,
         ]);
