@@ -156,7 +156,7 @@ class RaffleDrawCRUDController extends CRUDController
             $requiredEventId = $selectedDraw->required_event_id;
             $eligibleQuery->where(function ($query) use ($requiredEventId) {
                 $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
-                      ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
+                    ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
             });
             $requiredEventName = $selectedDraw->required_event?->name;
         } else {
@@ -215,7 +215,7 @@ class RaffleDrawCRUDController extends CRUDController
                 $requiredEventId = $lockedDraw->required_event_id;
                 $eligibleQuery->where(function ($query) use ($requiredEventId) {
                     $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
-                          ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
+                        ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
                 });
             }
 

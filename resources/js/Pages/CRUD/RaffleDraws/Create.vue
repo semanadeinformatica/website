@@ -140,7 +140,11 @@ const submit = () => {
             :error-message="form.errors.required_event_id"
         >
             <option value="">
-                {{ form.edition_id ? "Nenhum (aberto a todos os inscritos com pontos)" : "Seleciona primeiro uma edição" }}
+                {{
+                    form.edition_id
+                        ? "Nenhum (aberto a todos os inscritos com pontos)"
+                        : "Seleciona primeiro uma edição"
+                }}
             </option>
             <option
                 v-for="event in availableEvents"

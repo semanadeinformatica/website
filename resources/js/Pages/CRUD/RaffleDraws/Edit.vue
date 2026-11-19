@@ -32,7 +32,9 @@ const raffleDraw = props.item;
 const form = useForm({
     _method: "PUT",
     edition_id: raffleDraw.edition_id.toString(),
-    required_event_id: raffleDraw.required_event_id ? raffleDraw.required_event_id.toString() : "",
+    required_event_id: raffleDraw.required_event_id
+        ? raffleDraw.required_event_id.toString()
+        : "",
     name: raffleDraw.name,
     description: raffleDraw.description ?? "",
     ticket_price: raffleDraw.ticket_price,
@@ -120,7 +122,9 @@ const submit = () => {
             label="Presença Obrigatória (Palestra/Workshop Opcional)"
             :error-message="form.errors.required_event_id"
         >
-            <option value="">Nenhum (aberto a todos os inscritos com pontos)</option>
+            <option value="">
+                Nenhum (aberto a todos os inscritos com pontos)
+            </option>
             <option
                 v-for="event in availableEvents"
                 :key="event.id"

@@ -859,7 +859,7 @@ class DatabaseSeeder extends Seeder
         $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $edition->id))
             ->where(function ($q) {
                 $q->where('name', 'ilike', '%Sessão de Encerramento%')
-                  ->orWhere('name', 'ilike', '%Encerramento%');
+                    ->orWhere('name', 'ilike', '%Encerramento%');
             })
             ->first();
 

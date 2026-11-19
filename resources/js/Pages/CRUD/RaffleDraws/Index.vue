@@ -122,7 +122,9 @@ const confirmResetWinner = () => {
     if (!raffleToReset.value) return;
     isResetting.value = true;
     router.post(
-        route("admin.raffleDraws.reset-winner", { draw: raffleToReset.value.id }),
+        route("admin.raffleDraws.reset-winner", {
+            draw: raffleToReset.value.id,
+        }),
         {},
         {
             preserveScroll: true,
@@ -156,7 +158,9 @@ const formatDate = (dateStr: string | null) => {
         :is-searchable="isSearchable"
     >
         <template #heading>
-            <h1 class="text-base font-bold tracking-tight text-white sm:text-lg">
+            <h1
+                class="text-base font-bold tracking-tight text-white sm:text-lg"
+            >
                 Sorteio Final
             </h1>
         </template>
@@ -185,7 +189,9 @@ const formatDate = (dateStr: string | null) => {
                 <!-- Prize name & description -->
                 <Cell>
                     <div class="flex flex-col">
-                        <span class="font-medium text-white">{{ item.name }}</span>
+                        <span class="font-medium text-white">{{
+                            item.name
+                        }}</span>
                         <span
                             v-if="item.description"
                             class="line-clamp-1 text-xs text-neutral-400"
@@ -201,8 +207,12 @@ const formatDate = (dateStr: string | null) => {
                         v-if="item.required_event?.name"
                         class="inline-flex items-center gap-1.5 text-neutral-300"
                     >
-                        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"></span>
-                        <span class="line-clamp-1">{{ item.required_event.name }}</span>
+                        <span
+                            class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"
+                        ></span>
+                        <span class="line-clamp-1">{{
+                            item.required_event.name
+                        }}</span>
                     </span>
                     <span v-else class="text-neutral-500">
                         Nenhum (Aberto)
@@ -247,13 +257,11 @@ const formatDate = (dateStr: string | null) => {
                             {{ item.winner.participant.user.email }}
                         </span>
                     </div>
-                    <span v-else class="text-xs text-neutral-500">
-                        —
-                    </span>
+                    <span v-else class="text-xs text-neutral-500"> — </span>
                 </Cell>
 
                 <!-- Draw date -->
-                <Cell class="text-xs text-neutral-400 whitespace-nowrap">
+                <Cell class="text-xs whitespace-nowrap text-neutral-400">
                     {{ formatDate(item.draw_at) }}
                 </Cell>
 
@@ -324,14 +332,23 @@ const formatDate = (dateStr: string | null) => {
                         </div>
                         <p class="text-xs text-neutral-400">
                             A avaliar:
-                            <span class="font-medium text-amber-400">{{ selectedDrawName ?? "Sorteio" }}</span>
+                            <span class="font-medium text-amber-400">{{
+                                selectedDrawName ?? "Sorteio"
+                            }}</span>
                             · Presença obrigatória:
                             <span class="font-medium text-neutral-200">
-                                {{ requiredEventName ? `${requiredEventName} (apenas quem fez scan do QR code pode ganhar)` : "Nenhuma (aberto a todos os inscritos com pontos)" }}
+                                {{
+                                    requiredEventName
+                                        ? `${requiredEventName} (apenas quem fez scan do QR code pode ganhar)`
+                                        : "Nenhuma (aberto a todos os inscritos com pontos)"
+                                }}
                             </span>
                             ·
-                            <span class="text-neutral-200">{{ eligibleCount }}</span>
-                            elegíveis ({{ totalTickets }} SINFrões em jogo). Quem já venceu um prémio é excluído dos restantes.
+                            <span class="text-neutral-200">{{
+                                eligibleCount
+                            }}</span>
+                            elegíveis ({{ totalTickets }} SINFrões em jogo).
+                            Quem já venceu um prémio é excluído dos restantes.
                         </p>
                     </div>
 
@@ -341,7 +358,12 @@ const formatDate = (dateStr: string | null) => {
                             :value="selectedDrawId"
                             class="pill-container h-8 rounded-full border border-white/10 bg-black/50 px-3 text-xs text-neutral-200 focus:outline-none"
                             aria-label="Selecionar sorteio para ver participantes elegíveis"
-                            @change="(e) => selectDraw((e.target as HTMLSelectElement).value)"
+                            @change="
+                                (e) =>
+                                    selectDraw(
+                                        (e.target as HTMLSelectElement).value,
+                                    )
+                            "
                         >
                             <option
                                 v-for="draw in items.data"
@@ -388,18 +410,30 @@ const formatDate = (dateStr: string | null) => {
                                 class="border-b border-white/10 bg-white/[0.03] text-xs font-medium text-neutral-400"
                             >
                                 <th class="w-20 px-4 py-2.5 font-medium">ID</th>
-                                <th class="px-4 py-2.5 font-medium">Participante</th>
-                                <th class="w-36 px-4 py-2.5 font-medium">SINFrões (Entradas)</th>
-                                <th class="w-32 px-4 py-2.5 text-right font-medium">Probabilidade</th>
+                                <th class="px-4 py-2.5 font-medium">
+                                    Participante
+                                </th>
+                                <th class="w-36 px-4 py-2.5 font-medium">
+                                    SINFrões (Entradas)
+                                </th>
+                                <th
+                                    class="w-32 px-4 py-2.5 text-right font-medium"
+                                >
+                                    Probabilidade
+                                </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5 text-sm text-neutral-200">
+                        <tbody
+                            class="divide-y divide-white/5 text-sm text-neutral-200"
+                        >
                             <tr
                                 v-for="participant in filteredEligible"
                                 :key="participant.id"
                                 class="transition-colors hover:bg-white/[0.04]"
                             >
-                                <td class="px-4 py-2.5 font-mono text-xs text-neutral-500">
+                                <td
+                                    class="px-4 py-2.5 font-mono text-xs text-neutral-500"
+                                >
                                     #{{ participant.id }}
                                 </td>
                                 <td class="px-4 py-2.5">
@@ -415,10 +449,14 @@ const formatDate = (dateStr: string | null) => {
                                         </span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-2.5 font-mono text-xs text-neutral-300">
+                                <td
+                                    class="px-4 py-2.5 font-mono text-xs text-neutral-300"
+                                >
                                     {{ participant.points }}
                                 </td>
-                                <td class="px-4 py-2.5 text-right font-mono text-xs text-neutral-400">
+                                <td
+                                    class="px-4 py-2.5 text-right font-mono text-xs text-neutral-400"
+                                >
                                     {{ formatProbability(participant.points) }}
                                 </td>
                             </tr>
@@ -427,10 +465,16 @@ const formatDate = (dateStr: string | null) => {
                                     <div
                                         class="flex flex-col items-center justify-center gap-1.5 text-neutral-400"
                                     >
-                                        <Inbox :size="20" class="text-neutral-500" />
-                                        <span class="text-xs font-medium text-neutral-300">
+                                        <Inbox
+                                            :size="20"
+                                            class="text-neutral-500"
+                                        />
+                                        <span
+                                            class="text-xs font-medium text-neutral-300"
+                                        >
                                             {{
-                                                eligibleParticipants.length === 0
+                                                eligibleParticipants.length ===
+                                                0
                                                     ? "Nenhum participante elegível encontrado"
                                                     : "Nenhum participante corresponde à pesquisa"
                                             }}
@@ -460,17 +504,23 @@ const formatDate = (dateStr: string | null) => {
             >
                 <div>
                     Confirmar sorteio para
-                    <strong class="text-white">"{{ raffleToDraw.name }}"</strong>?
+                    <strong class="text-white">"{{ raffleToDraw.name }}"</strong
+                    >?
                 </div>
                 <div class="text-neutral-400">
                     Presença obrigatória:
                     <span class="font-medium text-neutral-200">
-                        {{ raffleToDraw.required_event?.name ?? "Nenhuma (Aberto a todos os inscritos)" }}
+                        {{
+                            raffleToDraw.required_event?.name ??
+                            "Nenhuma (Aberto a todos os inscritos)"
+                        }}
                     </span>
                 </div>
             </div>
 
-            <div class="mt-2 flex items-center justify-end gap-2.5 border-t border-white/10 pt-4">
+            <div
+                class="mt-2 flex items-center justify-end gap-2.5 border-t border-white/10 pt-4"
+            >
                 <PrimaryButton
                     type="button"
                     color="pill"
@@ -508,12 +558,18 @@ const formatDate = (dateStr: string | null) => {
             >
                 Anular o vencedor de
                 <strong class="text-white">"{{ raffleToReset.name }}"</strong>?
-                <span class="block mt-1 text-neutral-400">
-                    Vencedor atual: {{ raffleToReset.winner?.participant?.user?.name ?? `#${raffleToReset.winner_enrollment_id}` }}
+                <span class="mt-1 block text-neutral-400">
+                    Vencedor atual:
+                    {{
+                        raffleToReset.winner?.participant?.user?.name ??
+                        `#${raffleToReset.winner_enrollment_id}`
+                    }}
                 </span>
             </div>
 
-            <div class="mt-2 flex items-center justify-end gap-2.5 border-t border-white/10 pt-4">
+            <div
+                class="mt-2 flex items-center justify-end gap-2.5 border-t border-white/10 pt-4"
+            >
                 <PrimaryButton
                     type="button"
                     color="pill"
