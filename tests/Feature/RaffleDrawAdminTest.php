@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventDay;
 use App\Models\EventType;
 use App\Models\Participant;
+use App\Models\Quest;
 use App\Models\RaffleDraw;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +23,8 @@ class RaffleDrawAdminTest extends TestCase
     private User $admin;
 
     private Event $closingEvent;
+
+    private Quest $closingQuest;
 
     protected function setUp(): void
     {
@@ -39,6 +42,14 @@ class RaffleDrawAdminTest extends TestCase
             'name' => 'Sessão de Encerramento e Entrega de Prémios',
             'topic' => 'Encerramento',
         ]);
+
+        $this->closingQuest = Quest::create([
+            'name' => 'Assistir à Sessão de Encerramento',
+            'edition_id' => $this->edition->id,
+            'category' => 'TALK',
+            'requirement_id' => $this->closingEvent->id,
+            'requirement_type' => Event::class,
+        ]);
     }
 
     private function validPayload(array $overrides = []): array
@@ -46,6 +57,7 @@ class RaffleDrawAdminTest extends TestCase
         return array_merge([
             'edition_id' => $this->edition->id,
             'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => 'Sorteio de teste',
             'description' => 'Descrição do sorteio',
             'is_active' => true,
@@ -58,6 +70,7 @@ class RaffleDrawAdminTest extends TestCase
         return RaffleDraw::factory()->create(array_merge([
             'edition_id' => $this->edition->id,
             'place' => $place,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => "{$place}º Prémio",
         ], $overrides));
     }
@@ -76,7 +89,9 @@ class RaffleDrawAdminTest extends TestCase
             ->where('items.data.0.id', $draw->id)
             ->where('items.data.0.name', 'Teclado Mecânico')
             ->where('items.data.0.place', 1)
+            ->where('items.data.0.required_quest.id', $this->closingQuest->id)
             ->has('with.editions', 1)
+            ->has('with.quests', 1)
         );
     }
 
@@ -115,7 +130,7 @@ class RaffleDrawAdminTest extends TestCase
         $this->assertDatabaseHas('raffle_draws', [
             'edition_id' => $this->edition->id,
             'place' => 1,
-            'required_event_id' => $this->closingEvent->id,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => 'Sorteio de teste',
             'is_active' => true,
         ]);
@@ -138,6 +153,10 @@ class RaffleDrawAdminTest extends TestCase
         $this->actingAs($this->admin)
             ->post(route('admin.raffleDraws.store'), $this->validPayload(['place' => 4]))
             ->assertSessionHasErrors('place');
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.store'), $this->validPayload(['required_quest_id' => 99999]))
+            ->assertSessionHasErrors('required_quest_id');
 
         $this->makeDraw(place: 1);
 
@@ -166,7 +185,7 @@ class RaffleDrawAdminTest extends TestCase
             'id' => $draw->id,
             'name' => 'Nome novo',
             'place' => 2,
-            'required_event_id' => $this->closingEvent->id,
+            'required_quest_id' => $this->closingQuest->id,
         ]);
     }
 

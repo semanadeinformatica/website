@@ -7,6 +7,11 @@ export default interface RaffleDraw extends Model {
         id: number;
         name: string;
     } | null;
+    required_quest_id: number | null;
+    required_quest?: {
+        id: number;
+        name: string;
+    } | null;
     place: number | null;
     name: string;
     description: string | null;

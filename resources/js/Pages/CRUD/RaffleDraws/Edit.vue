@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import CRUDModal from "@/Components/CRUD/CRUDModal.vue";
@@ -7,10 +8,17 @@ import type RaffleDraw from "@/Types/Raffle";
 import { useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
 
+interface QuestOption {
+    id: number;
+    name: string;
+    edition_id: number;
+}
+
 interface Props {
     item: RaffleDraw;
     with: {
         editions: Edition[];
+        quests: QuestOption[];
     };
 }
 
@@ -21,11 +29,18 @@ const form = useForm({
     _method: "PUT",
     edition_id: raffleDraw.edition_id.toString(),
     place: raffleDraw.place?.toString() ?? "1",
+    required_quest_id: raffleDraw.required_quest_id?.toString() ?? "",
     name: raffleDraw.name,
     description: raffleDraw.description ?? "",
     is_active: raffleDraw.is_active,
     draw_at: raffleDraw.draw_at ? raffleDraw.draw_at.substring(0, 16) : "",
 });
+
+const availableQuests = computed(() =>
+    props.with.quests.filter(
+        (quest) => quest.edition_id.toString() === form.edition_id.toString(),
+    ),
+);
 
 const submit = () => {
     form.post(route("admin.raffleDraws.update", { raffleDraw: raffleDraw.id }));
@@ -92,6 +107,24 @@ const submit = () => {
         </div>
 
         <TextInput
+            id="required_quest_id"
+            v-model="form.required_quest_id"
+            label="Tarefa de presença"
+            type="select"
+            required
+            :error-message="form.errors.required_quest_id"
+        >
+            <option value="" disabled>Selecionar tarefa</option>
+            <option
+                v-for="quest in availableQuests"
+                :key="quest.id"
+                :value="quest.id"
+            >
+                {{ quest.name }}
+            </option>
+        </TextInput>
+
+        <TextInput
             id="draw_at"
             v-model="form.draw_at"
             label="Data prevista do sorteio"
@@ -102,9 +135,10 @@ const submit = () => {
         <div
             class="rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200/90"
         >
-            Só entram participantes com scan na Sessão de Encerramento. Staff e
-            administração ficam sempre de fora do sorteio. A imagem apresentada
-            vem do Prémio Final com a mesma posição.
+            Escolhe a tarefa que regista a presença na Sessão de Encerramento.
+            Só entram participantes com essa tarefa; staff e administração ficam
+            sempre de fora. A imagem apresentada vem do Prémio Final com a mesma
+            posição.
         </div>
 
         <div class="flex items-center gap-3 pt-1">

@@ -35,8 +35,8 @@ interface Props {
     eligibleParticipants?: EligibleParticipant[];
     selectedDrawId?: number | null;
     selectedDrawName?: string | null;
-    requiredEventName?: string | null;
-    hasClosingEvent?: boolean;
+    requiredQuestName?: string | null;
+    hasRequiredQuest?: boolean;
     activeEditionId?: number;
 }
 
@@ -47,8 +47,8 @@ const props = withDefaults(defineProps<Props>(), {
     eligibleParticipants: () => [],
     selectedDrawId: null,
     selectedDrawName: null,
-    requiredEventName: null,
-    hasClosingEvent: true,
+    requiredQuestName: null,
+    hasRequiredQuest: true,
     activeEditionId: 0,
 });
 
@@ -77,7 +77,7 @@ const allDrawn = computed(
     () => hasDraws.value && pendingDraws.value.length === 0,
 );
 const canDraw = computed(
-    () => hasDraws.value && props.hasClosingEvent && !allDrawn.value,
+    () => hasDraws.value && props.hasRequiredQuest && !allDrawn.value,
 );
 
 const simulateUrl = computed(() =>
@@ -108,8 +108,8 @@ const selectDraw = (drawId: string) => {
                 "totalEntries",
                 "selectedDrawId",
                 "selectedDrawName",
-                "requiredEventName",
-                "hasClosingEvent",
+                "requiredQuestName",
+                "hasRequiredQuest",
                 "activeEditionId",
             ],
         },
@@ -238,12 +238,10 @@ const confirmResetAll = () => {
                         </div>
                         <p class="max-w-2xl text-xs text-neutral-400">
                             Sorteia os prémios por ordem, do 1º ao 3º lugar.
-                            Apenas participam inscritos que fizeram scan na
+                            Apenas participam inscritos com a tarefa de presença
+                            escolhida:
                             <span class="font-medium text-neutral-200">
-                                {{
-                                    requiredEventName ??
-                                    "Sessão de Encerramento"
-                                }} </span
+                                {{ requiredQuestName ?? "sem tarefa" }} </span
                             >. Staff e administração ficam sempre de fora. Quem
                             já venceu um prémio não volta a entrar.
                         </p>
@@ -290,14 +288,14 @@ const confirmResetAll = () => {
                 </div>
 
                 <div
-                    v-if="!hasClosingEvent"
+                    v-if="!hasRequiredQuest"
                     class="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-xs text-red-300"
                 >
                     <AlertCircle :size="15" class="mt-0.5 shrink-0" />
                     <span>
-                        Não foi encontrada uma Sessão de Encerramento para esta
-                        edição. Cria o evento (ou confirma o nome/tópico) antes
-                        de sortear.
+                        O sorteio selecionado não tem tarefa de presença
+                        associada. Edita o sorteio e escolhe a tarefa da Sessão
+                        de Encerramento.
                     </span>
                 </div>
 
@@ -327,8 +325,8 @@ const confirmResetAll = () => {
                         'totalEntries',
                         'selectedDrawId',
                         'selectedDrawName',
-                        'requiredEventName',
-                        'hasClosingEvent',
+                        'requiredQuestName',
+                        'hasRequiredQuest',
                         'activeEditionId',
                     ]"
                 >
@@ -336,7 +334,7 @@ const confirmResetAll = () => {
                 </Header>
                 <Header sort-by="place">Posição</Header>
                 <Header sort-by="name">Prémio</Header>
-                <Header>Presença Obrigatória</Header>
+                <Header>Tarefa de Presença</Header>
                 <Header sort-by="is_active">Estado</Header>
                 <Header>Vencedor</Header>
                 <Header sort-by="draw_at">Data</Header>
@@ -380,17 +378,17 @@ const confirmResetAll = () => {
 
                 <Cell class="text-xs">
                     <span
-                        v-if="requiredEventName"
+                        v-if="item.required_quest?.name"
                         class="inline-flex items-center gap-1.5 text-neutral-300"
                     >
                         <span
                             class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"
                         ></span>
                         <span class="line-clamp-1">
-                            {{ requiredEventName }}
+                            {{ item.required_quest.name }}
                         </span>
                     </span>
-                    <span v-else class="text-red-400"> Sem evento </span>
+                    <span v-else class="text-red-400"> Sem tarefa </span>
                 </Cell>
 
                 <Cell class="whitespace-nowrap">
@@ -459,11 +457,11 @@ const confirmResetAll = () => {
                             <span class="font-medium text-amber-400">{{
                                 selectedDrawName ?? "Sorteio"
                             }}</span>
-                            · Presença obrigatória:
+                            · Tarefa de presença:
                             <span class="font-medium text-neutral-200">
                                 {{
-                                    requiredEventName ??
-                                    "Sessão de Encerramento não encontrada"
+                                    requiredQuestName ??
+                                    "sem tarefa selecionada"
                                 }}
                             </span>
                             ·
@@ -526,13 +524,13 @@ const confirmResetAll = () => {
                 </div>
 
                 <div
-                    v-if="!hasClosingEvent"
+                    v-if="!hasRequiredQuest"
                     class="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-xs text-red-300"
                 >
                     <AlertCircle :size="15" class="mt-0.5 shrink-0" />
                     <span>
-                        Sem Sessão de Encerramento não há presenças para validar
-                        e o sorteio fica bloqueado.
+                        Sem uma tarefa de presença associada ao sorteio, não há
+                        presenças para validar e o sorteio fica bloqueado.
                     </span>
                 </div>
 

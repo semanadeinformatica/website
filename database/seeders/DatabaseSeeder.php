@@ -863,8 +863,16 @@ class DatabaseSeeder extends Seeder
             })
             ->first();
 
-        if ($closingEvent === null) {
-            $this->command->warn('No closing session event found; final prize draws will not be eligible until one exists.');
+        $closingQuest = $closingEvent !== null
+            ? Quest::query()
+                ->where('requirement_type', Event::class)
+                ->where('requirement_id', $closingEvent->id)
+                ->orderBy('id')
+                ->first()
+            : null;
+
+        if ($closingEvent === null || $closingQuest === null) {
+            $this->command->warn('No closing session task found; final prize draws will not be eligible until one is selected.');
         }
 
         foreach ($finalPrizes as $prize) {
@@ -873,6 +881,7 @@ class DatabaseSeeder extends Seeder
                 [
                     'place' => $prize['place'],
                     'required_event_id' => $closingEvent?->id,
+                    'required_quest_id' => $closingQuest?->id,
                     'description' => $prize['description'],
                     'is_active' => true,
                     'draw_at' => Carbon::create($editionYear, 11, 19, 18, 0, 0),

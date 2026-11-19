@@ -51,6 +51,7 @@ class RafflePickWinnerTest extends TestCase
         $this->draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,
             'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'is_active' => true,
         ]);
     }

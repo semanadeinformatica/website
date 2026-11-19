@@ -21,6 +21,7 @@ class RaffleDraw extends Model
     protected $fillable = [
         'edition_id',
         'required_event_id',
+        'required_quest_id',
         'place',
         'name',
         'description',
@@ -65,6 +66,16 @@ class RaffleDraw extends Model
     public function requiredEvent(): BelongsTo
     {
         return $this->required_event();
+    }
+
+    public function required_quest(): BelongsTo
+    {
+        return $this->belongsTo(Quest::class, 'required_quest_id');
+    }
+
+    public function requiredQuest(): BelongsTo
+    {
+        return $this->required_quest();
     }
 
     public function tickets(): HasMany

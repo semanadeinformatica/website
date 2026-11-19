@@ -64,6 +64,7 @@ class FinalPrizeDrawAdminTest extends TestCase
         return RaffleDraw::factory()->create(array_merge([
             'edition_id' => $this->edition->id,
             'place' => $place,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => "{$place}º Prémio Final",
             'is_active' => true,
         ], $overrides));
@@ -143,8 +144,8 @@ class FinalPrizeDrawAdminTest extends TestCase
             ->where('totalEntries', 50)
             ->has('eligibleParticipants', 1)
             ->where('eligibleParticipants.0.points', 50)
-            ->where('hasClosingEvent', true)
-            ->where('requiredEventName', 'Sessão de Encerramento e Entrega de Prémios')
+            ->where('hasRequiredQuest', true)
+            ->where('requiredQuestName', 'Assistir à Sessão de Encerramento')
         );
     }
 
@@ -442,11 +443,12 @@ class FinalPrizeDrawAdminTest extends TestCase
         $this->assertSame($thirdWinner->id, $third->fresh()->winner_enrollment_id);
     }
 
-    public function test_create_forces_the_closing_session_and_unique_places(): void
+    public function test_create_requires_the_selected_attendance_task_and_unique_places(): void
     {
         $payload = [
             'edition_id' => $this->edition->id,
             'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => 'Sorteio Inválido',
             'is_active' => true,
         ];
@@ -458,11 +460,27 @@ class FinalPrizeDrawAdminTest extends TestCase
         $this->assertDatabaseHas('raffle_draws', [
             'edition_id' => $this->edition->id,
             'place' => 1,
-            'required_event_id' => $this->closingEvent->id,
+            'required_quest_id' => $this->closingQuest->id,
         ]);
 
         $this->actingAs($this->admin)
             ->post(route('admin.raffleDraws.store'), $payload)
             ->assertSessionHasErrors('place');
+    }
+
+    public function test_create_rejects_an_attendance_task_from_another_edition(): void
+    {
+        $otherEdition = Edition::factory()->create(['year' => 2025]);
+        $otherQuest = Quest::factory()->create(['edition_id' => $otherEdition->id]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.store'), [
+                'edition_id' => $this->edition->id,
+                'place' => 1,
+                'required_quest_id' => $otherQuest->id,
+                'name' => 'Sorteio Inválido',
+                'is_active' => true,
+            ])
+            ->assertSessionHasErrors('required_quest_id');
     }
 }
