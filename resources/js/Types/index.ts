@@ -14,6 +14,7 @@ export type { default as MyPageProps } from "./PageProps";
 export type { default as Paginated, PaginationLink } from "./Paginated";
 export type { default as Participant } from "./Participant";
 export type { default as Product } from "./Product";
+export type { default as RaffleDraw, EligibleParticipant, RaffleTicketMap } from "./Raffle";
 export type { View, TabId, Tabs } from "./ProfilePage";
 export type { default as Quest } from "./Quest";
 export type { default as Session } from "./Session";

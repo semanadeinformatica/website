@@ -24,8 +24,6 @@ class RaffleDrawAdminTest extends TestCase
     {
         parent::setUp();
 
-        $this->markTestSkipped('Raffle is disabled until the points-based prize draw ships.');
-
         $this->edition = Edition::factory()->create();
         $this->admin = User::factory()->admin()->create();
     }

@@ -838,15 +838,35 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        RaffleDraw::firstOrCreate(
-            ['edition_id' => $edition->id, 'name' => 'Sorteio SINF 2026 — Fones Sony WH-1000XM5'],
+        $finalPrizes = [
             [
-                'description' => 'Habilita-te a ganhar uns auscultadores com cancelamento de ruído topo de gama!',
-                'ticket_price' => 50,
-                'is_active' => true,
-                'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
-            ]
-        );
+                'name' => '1º Prémio Final — Consola Nintendo Switch OLED',
+                'description' => 'O grande prémio da SINF 2026 sorteado na Sessão de Encerramento!',
+                'ticket_price' => 1,
+            ],
+            [
+                'name' => '2º Prémio Final — Teclado Mecânico Custom',
+                'description' => 'Teclado mecânico premium para elevar o teu setup de programação.',
+                'ticket_price' => 1,
+            ],
+            [
+                'name' => '3º Prémio Final — Fones Sony WH-1000XM5',
+                'description' => 'Auscultadores topo de gama com cancelamento de ruído ativo líder de mercado.',
+                'ticket_price' => 1,
+            ],
+        ];
+
+        foreach ($finalPrizes as $prize) {
+            RaffleDraw::firstOrCreate(
+                ['edition_id' => $edition->id, 'name' => $prize['name']],
+                [
+                    'description' => $prize['description'],
+                    'ticket_price' => $prize['ticket_price'],
+                    'is_active' => true,
+                    'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
+                ]
+            );
+        }
 
         $this->command->info('Seeding finished successfully!');
     }

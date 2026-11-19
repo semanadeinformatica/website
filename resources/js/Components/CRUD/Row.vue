@@ -44,6 +44,8 @@ const confirmDelete = () => {
 
         <Cell class="text-right">
             <div class="flex items-center justify-end gap-3 text-xs">
+                <slot name="extra-actions" :item="item"></slot>
+
                 <Link
                     :href="route(`admin.${name}.edit`, { id: item.id })"
                     class="inline-flex items-center gap-1 font-medium text-neutral-400 transition-colors hover:text-white"
