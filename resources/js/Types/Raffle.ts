@@ -32,6 +32,7 @@ export interface EligibleParticipant {
     name: string;
     email: string | null;
     points: number;
+    tickets: number;
 }
 
 export interface RaffleTicketMap {

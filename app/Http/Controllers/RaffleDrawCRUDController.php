@@ -154,28 +154,50 @@ class RaffleDrawCRUDController extends CRUDController
 
         if ($selectedDraw && $selectedDraw->required_event_id) {
             $requiredEventId = $selectedDraw->required_event_id;
-            $eligibleQuery->where(function ($query) use ($requiredEventId) {
-                $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
-                    ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
-            });
+            $eligibleQuery->whereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
             $requiredEventName = $selectedDraw->required_event?->name;
         } else {
             $requiredEventName = null;
         }
 
-        $eligibleCount = (clone $eligibleQuery)->count();
-        $totalTickets = (int) (clone $eligibleQuery)->sum('points');
+        $hasPurchasedTickets = (bool) ($selectedDraw && $selectedDraw->tickets()->exists());
 
-        $eligibleParticipants = (clone $eligibleQuery)
-            ->with('participant.user')
-            ->orderByDesc('points')
-            ->get()
-            ->map(fn (Enrollment $e) => [
-                'id' => $e->id,
-                'name' => $e->participant?->user?->name ?? "Participante #{$e->id}",
-                'email' => $e->participant?->user?->email,
-                'points' => (int) $e->points,
-            ]);
+        if ($hasPurchasedTickets) {
+            $eligibleEnrollmentIds = (clone $eligibleQuery)->pluck('id');
+            $purchasedTickets = $selectedDraw->tickets()
+                ->whereIn('enrollment_id', $eligibleEnrollmentIds)
+                ->with('enrollment.participant.user')
+                ->get();
+
+            $eligibleCount = $purchasedTickets->count();
+            $totalTickets = (int) $purchasedTickets->sum('quantity');
+
+            $eligibleParticipants = $purchasedTickets
+                ->sortByDesc('quantity')
+                ->values()
+                ->map(fn ($ticket) => [
+                    'id' => $ticket->enrollment_id,
+                    'name' => $ticket->enrollment?->participant?->user?->name ?? "Participante #{$ticket->enrollment_id}",
+                    'email' => $ticket->enrollment?->participant?->user?->email,
+                    'points' => (int) ($ticket->enrollment?->points ?? 0),
+                    'tickets' => (int) $ticket->quantity,
+                ]);
+        } else {
+            $eligibleCount = (clone $eligibleQuery)->count();
+            $totalTickets = (int) (clone $eligibleQuery)->sum('points');
+
+            $eligibleParticipants = (clone $eligibleQuery)
+                ->with('participant.user')
+                ->orderByDesc('points')
+                ->get()
+                ->map(fn (Enrollment $e) => [
+                    'id' => $e->id,
+                    'name' => $e->participant?->user?->name ?? "Participante #{$e->id}",
+                    'email' => $e->participant?->user?->email,
+                    'points' => (int) $e->points,
+                    'tickets' => (int) $e->points,
+                ]);
+        }
 
         $data['selectedDrawId'] = $selectedDraw?->id;
         $data['selectedDrawName'] = $selectedDraw?->name;
@@ -184,6 +206,7 @@ class RaffleDrawCRUDController extends CRUDController
         $data['totalTickets'] = $totalTickets;
         $data['eligibleParticipants'] = $eligibleParticipants;
         $data['activeEditionId'] = $editionId;
+        $data['isPointsBased'] = ! $hasPurchasedTickets;
 
         return $data;
     }
@@ -193,12 +216,13 @@ class RaffleDrawCRUDController extends CRUDController
         Gate::authorize('admin');
 
         [$winnerName, $drawName] = DB::transaction(function () use ($draw, $selector) {
+            $editionId = $draw->edition_id;
+            Edition::lockForUpdate()->findOrFail($editionId);
+
             $lockedDraw = RaffleDraw::lockForUpdate()->findOrFail($draw->id);
 
             abort_if($lockedDraw->winner_enrollment_id !== null, 422, 'Vencedor já selecionado');
             abort_if(! $lockedDraw->is_active, 422, 'Sorteio inativo');
-
-            $editionId = $lockedDraw->edition_id;
 
             // Exclude anyone who already won ANY raffle in this edition
             $alreadyWonEnrollmentIds = RaffleDraw::where('edition_id', $editionId)
@@ -213,10 +237,7 @@ class RaffleDrawCRUDController extends CRUDController
 
             if ($lockedDraw->required_event_id) {
                 $requiredEventId = $lockedDraw->required_event_id;
-                $eligibleQuery->where(function ($query) use ($requiredEventId) {
-                    $query->whereHas('events', fn ($q) => $q->where('events.id', $requiredEventId))
-                        ->orWhereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
-                });
+                $eligibleQuery->whereHas('quests', fn ($q) => $q->where('quests.requirement_type', Event::class)->where('quests.requirement_id', $requiredEventId));
             }
 
             // If purchased tickets exist for this draw, respect them (filtering by eligibility):

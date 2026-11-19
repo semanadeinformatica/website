@@ -871,7 +871,7 @@ class DatabaseSeeder extends Seeder
                     'description' => $prize['description'],
                     'ticket_price' => $prize['ticket_price'],
                     'is_active' => true,
-                    'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
+                    'draw_at' => Carbon::create($editionYear, 11, 19, 18, 0, 0),
                 ]
             );
         }

@@ -9,6 +9,7 @@ use App\Models\EventDay;
 use App\Models\EventType;
 use App\Models\Quest;
 use App\Models\RaffleDraw;
+use App\Models\RaffleTicket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,6 +23,8 @@ class FinalPrizeDrawAdminTest extends TestCase
     private User $admin;
 
     private Event $closingEvent;
+
+    private Quest $closingQuest;
 
     protected function setUp(): void
     {
@@ -38,6 +41,14 @@ class FinalPrizeDrawAdminTest extends TestCase
             'event_type_id' => $eventType->id,
             'name' => 'Sessão de Encerramento e Entrega de Prémios',
         ]);
+
+        $this->closingQuest = Quest::create([
+            'name' => 'Assistir à Sessão de Encerramento',
+            'edition_id' => $this->edition->id,
+            'category' => 'TALK',
+            'requirement_id' => $this->closingEvent->id,
+            'requirement_type' => Event::class,
+        ]);
     }
 
     private function createParticipant(int $points = 100, bool $attendClosing = true): Enrollment
@@ -48,7 +59,7 @@ class FinalPrizeDrawAdminTest extends TestCase
         ]);
 
         if ($attendClosing) {
-            $enrollment->events()->attach($this->closingEvent->id);
+            $enrollment->quests()->attach($this->closingQuest->id);
         }
 
         return $enrollment;
@@ -128,14 +139,7 @@ class FinalPrizeDrawAdminTest extends TestCase
             'points' => 200,
         ]);
 
-        $quest = Quest::create([
-            'name' => 'Assistir à Sessão de Encerramento',
-            'edition_id' => $this->edition->id,
-            'category' => 'TALK',
-            'requirement_id' => $this->closingEvent->id,
-            'requirement_type' => Event::class,
-        ]);
-        $enrollment->quests()->attach($quest->id);
+        $enrollment->quests()->attach($this->closingQuest->id);
 
         $response = $this->actingAs($this->admin)
             ->post(route('admin.raffleDraws.pick-winner', $draw));
@@ -143,6 +147,29 @@ class FinalPrizeDrawAdminTest extends TestCase
         $response->assertRedirect();
         $this->assertEquals($enrollment->id, $draw->fresh()->winner_enrollment_id);
         $this->assertFalse($draw->fresh()->is_active);
+    }
+
+    public function test_registration_alone_does_not_qualify_without_quest_award(): void
+    {
+        $draw = RaffleDraw::factory()->create([
+            'edition_id' => $this->edition->id,
+            'required_event_id' => $this->closingEvent->id,
+            'is_active' => true,
+        ]);
+
+        $enrollment = Enrollment::factory()->create([
+            'edition_id' => $this->edition->id,
+            'points' => 200,
+        ]);
+
+        // Simulates self-service pre-registration on web (events()->attach) without staff QR scan quest
+        $enrollment->events()->attach($this->closingEvent->id);
+
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.pick-winner', $draw));
+
+        $response->assertStatus(422);
+        $this->assertNull($draw->fresh()->winner_enrollment_id);
     }
 
     public function test_winner_of_one_raffle_is_excluded_from_other_raffles_in_edition(): void
@@ -235,5 +262,46 @@ class FinalPrizeDrawAdminTest extends TestCase
                 'is_active' => true,
             ])
             ->assertStatus(422);
+    }
+
+    public function test_purchased_tickets_pool_is_reported_when_tickets_exist(): void
+    {
+        $draw = RaffleDraw::factory()->create([
+            'edition_id' => $this->edition->id,
+            'required_event_id' => null,
+            'name' => 'Rifa Especial com Bilhetes',
+            'is_active' => true,
+        ]);
+
+        $eA = $this->createParticipant(points: 100, attendClosing: false);
+        $eB = $this->createParticipant(points: 50, attendClosing: false);
+
+        // A buys 4 tickets; B buys none
+        RaffleTicket::create([
+            'raffle_draw_id' => $draw->id,
+            'enrollment_id' => $eA->id,
+            'quantity' => 4,
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->get(route('admin.raffleDraws.index', ['draw_id' => $draw->id]));
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('CRUD/RaffleDraws/Index', false)
+            ->where('eligibleCount', 1)
+            ->where('totalTickets', 4)
+            ->where('isPointsBased', false)
+            ->has('eligibleParticipants', 1)
+            ->where('eligibleParticipants.0.id', $eA->id)
+            ->where('eligibleParticipants.0.tickets', 4)
+        );
+
+        // When drawn, A must win
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.pick-winner', $draw))
+            ->assertRedirect();
+
+        $this->assertEquals($eA->id, $draw->fresh()->winner_enrollment_id);
     }
 }

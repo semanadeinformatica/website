@@ -28,6 +28,7 @@ interface Props {
     selectedDrawName?: string | null;
     requiredEventName?: string | null;
     activeEditionId?: number;
+    isPointsBased?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
     selectedDrawName: null,
     requiredEventName: null,
     activeEditionId: 1,
+    isPointsBased: true,
 });
 
 const editions = computed<Record<number, string>>(() =>
@@ -48,22 +50,32 @@ const editions = computed<Record<number, string>>(() =>
 );
 
 const selectDraw = (drawId: string) => {
+    const targetDraw = props.items.data.find(
+        (d) => d.id.toString() === drawId.toString(),
+    );
+    const editionId = targetDraw
+        ? targetDraw.edition_id
+        : props.activeEditionId;
+
     router.get(
         route("admin.raffleDraws.index"),
         {
-            edition_id: props.activeEditionId,
+            edition_id: editionId,
             draw_id: drawId,
         },
         {
             preserveState: true,
             preserveScroll: true,
             only: [
+                "items",
                 "eligibleParticipants",
                 "eligibleCount",
                 "totalTickets",
                 "selectedDrawId",
                 "selectedDrawName",
                 "requiredEventName",
+                "activeEditionId",
+                "isPointsBased",
             ],
         },
     );
@@ -81,9 +93,9 @@ const filteredEligible = computed(() => {
     );
 });
 
-const formatProbability = (points: number) => {
+const formatProbability = (tickets: number) => {
     if (!props.totalTickets || props.totalTickets <= 0) return "0.0%";
-    const pct = (points / props.totalTickets) * 100;
+    const pct = (tickets / props.totalTickets) * 100;
     return pct < 0.1 ? "<0.1%" : `${pct.toFixed(1)}%`;
 };
 
@@ -168,7 +180,21 @@ const formatDate = (dateStr: string | null) => {
         <!-- Main CRUD Table for Raffle Prizes (Top Table) -->
         <template #header>
             <HeaderRow>
-                <Header filter-by="edition_id" :filter-values="editions">
+                <Header
+                    filter-by="edition_id"
+                    :filter-values="editions"
+                    :reload-props="[
+                        'items',
+                        'eligibleParticipants',
+                        'eligibleCount',
+                        'totalTickets',
+                        'selectedDrawId',
+                        'selectedDrawName',
+                        'requiredEventName',
+                        'activeEditionId',
+                        'isPointsBased',
+                    ]"
+                >
                     Edição
                 </Header>
                 <Header sort-by="name">Prémio</Header>
@@ -347,8 +373,13 @@ const formatDate = (dateStr: string | null) => {
                             <span class="text-neutral-200">{{
                                 eligibleCount
                             }}</span>
-                            elegíveis ({{ totalTickets }} SINFrões em jogo).
-                            Quem já venceu um prémio é excluído dos restantes.
+                            elegíveis ({{ totalTickets }}
+                            {{
+                                isPointsBased
+                                    ? "SINFrões em jogo"
+                                    : "bilhetes em jogo"
+                            }}). Quem já venceu um prémio é excluído dos
+                            restantes.
                         </p>
                     </div>
 
@@ -414,7 +445,11 @@ const formatDate = (dateStr: string | null) => {
                                     Participante
                                 </th>
                                 <th class="w-36 px-4 py-2.5 font-medium">
-                                    SINFrões (Entradas)
+                                    {{
+                                        isPointsBased
+                                            ? "SINFrões (Entradas)"
+                                            : "Bilhetes Comprados"
+                                    }}
                                 </th>
                                 <th
                                     class="w-32 px-4 py-2.5 text-right font-medium"
@@ -452,12 +487,12 @@ const formatDate = (dateStr: string | null) => {
                                 <td
                                     class="px-4 py-2.5 font-mono text-xs text-neutral-300"
                                 >
-                                    {{ participant.points }}
+                                    {{ participant.tickets }}
                                 </td>
                                 <td
                                     class="px-4 py-2.5 text-right font-mono text-xs text-neutral-400"
                                 >
-                                    {{ formatProbability(participant.points) }}
+                                    {{ formatProbability(participant.tickets) }}
                                 </td>
                             </tr>
                             <tr v-if="filteredEligible.length === 0">
