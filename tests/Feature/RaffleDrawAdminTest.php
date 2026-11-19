@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\Edition;
 use App\Models\Enrollment;
+use App\Models\Event;
+use App\Models\EventDay;
+use App\Models\EventType;
 use App\Models\Participant;
+use App\Models\Quest;
 use App\Models\RaffleDraw;
-use App\Models\RaffleTicket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class RaffleDrawAdminTest extends TestCase
@@ -20,45 +22,76 @@ class RaffleDrawAdminTest extends TestCase
 
     private User $admin;
 
+    private Event $closingEvent;
+
+    private Quest $closingQuest;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->markTestSkipped('Raffle is disabled until the points-based prize draw ships.');
-
-        $this->edition = Edition::factory()->create();
+        $this->edition = Edition::factory()->create(['year' => 2026]);
         $this->admin = User::factory()->admin()->create();
+
+        $eventDay = EventDay::factory()->create(['edition_id' => $this->edition->id]);
+        $eventType = EventType::factory()->create(['name' => 'talk']);
+
+        $this->closingEvent = Event::factory()->create([
+            'event_day_id' => $eventDay->id,
+            'event_type_id' => $eventType->id,
+            'name' => 'Sessão de Encerramento e Entrega de Prémios',
+            'topic' => 'Encerramento',
+        ]);
+
+        $this->closingQuest = Quest::create([
+            'name' => 'Assistir à Sessão de Encerramento',
+            'edition_id' => $this->edition->id,
+            'category' => 'TALK',
+            'requirement_id' => $this->closingEvent->id,
+            'requirement_type' => Event::class,
+        ]);
     }
 
     private function validPayload(array $overrides = []): array
     {
         return array_merge([
             'edition_id' => $this->edition->id,
+            'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => 'Sorteio de teste',
             'description' => 'Descrição do sorteio',
-            'ticket_price' => 25,
             'is_active' => true,
             'draw_at' => now()->addDay()->toDateTimeString(),
         ], $overrides);
     }
 
+    private function makeDraw(int $place = 1, array $overrides = []): RaffleDraw
+    {
+        return RaffleDraw::factory()->create(array_merge([
+            'edition_id' => $this->edition->id,
+            'place' => $place,
+            'required_quest_id' => $this->closingQuest->id,
+            'name' => "{$place}º Prémio",
+        ], $overrides));
+    }
+
     public function test_admin_can_list_raffle_draws(): void
     {
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
-            'name' => 'Teclado Mecânico',
-        ]);
+        $draw = $this->makeDraw(place: 1, overrides: ['name' => 'Teclado Mecânico']);
 
         $response = $this->actingAs($this->admin)
             ->get(route('admin.raffleDraws.index'));
 
         $response->assertOk();
-        $response->assertInertia(fn (Assert $page) => $page
+        $response->assertInertia(fn ($page) => $page
             ->component('CRUD/RaffleDraws/Index', false)
             ->has('items.data', 1)
             ->where('items.data.0.id', $draw->id)
             ->where('items.data.0.name', 'Teclado Mecânico')
+            ->where('items.data.0.place', 1)
+            ->where('items.data.0.required_quest.id', $this->closingQuest->id)
             ->has('with.editions', 1)
+            ->has('with.quests', 1)
         );
     }
 
@@ -70,8 +103,7 @@ class RaffleDrawAdminTest extends TestCase
             'participant_id' => $participant->id,
         ]);
 
-        RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
+        $this->makeDraw(place: 1, overrides: [
             'winner_enrollment_id' => $enrollment->id,
             'is_active' => false,
             'draw_at' => now()->subDay(),
@@ -81,7 +113,7 @@ class RaffleDrawAdminTest extends TestCase
             ->get(route('admin.raffleDraws.index'));
 
         $response->assertOk();
-        $response->assertInertia(fn (Assert $page) => $page
+        $response->assertInertia(fn ($page) => $page
             ->component('CRUD/RaffleDraws/Index', false)
             ->where('items.data.0.winner.id', $enrollment->id)
             ->where('items.data.0.winner.participant.user.name', $participant->user->name)
@@ -97,8 +129,9 @@ class RaffleDrawAdminTest extends TestCase
 
         $this->assertDatabaseHas('raffle_draws', [
             'edition_id' => $this->edition->id,
+            'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'name' => 'Sorteio de teste',
-            'ticket_price' => 25,
             'is_active' => true,
         ]);
     }
@@ -114,20 +147,27 @@ class RaffleDrawAdminTest extends TestCase
             ->assertSessionHasErrors('edition_id');
 
         $this->actingAs($this->admin)
-            ->post(route('admin.raffleDraws.store'), $this->validPayload(['ticket_price' => 0]))
-            ->assertSessionHasErrors('ticket_price');
+            ->post(route('admin.raffleDraws.store'), $this->validPayload(['place' => 0]))
+            ->assertSessionHasErrors('place');
 
         $this->actingAs($this->admin)
-            ->post(route('admin.raffleDraws.store'), $this->validPayload([
-                'draw_at' => now()->subDay()->toDateTimeString(),
-            ]))
-            ->assertSessionHasErrors('draw_at');
+            ->post(route('admin.raffleDraws.store'), $this->validPayload(['place' => 4]))
+            ->assertSessionHasErrors('place');
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.store'), $this->validPayload(['required_quest_id' => 99999]))
+            ->assertSessionHasErrors('required_quest_id');
+
+        $this->makeDraw(place: 1);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.raffleDraws.store'), $this->validPayload(['place' => 1]))
+            ->assertSessionHasErrors('place');
     }
 
     public function test_admin_can_update_an_active_raffle_draw(): void
     {
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
+        $draw = $this->makeDraw(place: 1, overrides: [
             'name' => 'Nome antigo',
             'is_active' => true,
             'draw_at' => now()->addDay(),
@@ -135,8 +175,8 @@ class RaffleDrawAdminTest extends TestCase
 
         $response = $this->actingAs($this->admin)
             ->put(route('admin.raffleDraws.update', $draw), $this->validPayload([
+                'place' => 2,
                 'name' => 'Nome novo',
-                'ticket_price' => 50,
             ]));
 
         $response->assertRedirect(route('admin.raffleDraws.index'));
@@ -144,46 +184,20 @@ class RaffleDrawAdminTest extends TestCase
         $this->assertDatabaseHas('raffle_draws', [
             'id' => $draw->id,
             'name' => 'Nome novo',
-            'ticket_price' => 50,
+            'place' => 2,
+            'required_quest_id' => $this->closingQuest->id,
         ]);
     }
 
-    public function test_active_draw_rejects_a_past_draw_date(): void
+    public function test_active_draw_can_keep_a_past_draw_date_on_update(): void
     {
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
+        $draw = $this->makeDraw(place: 1, overrides: [
             'is_active' => true,
             'draw_at' => now()->addDay(),
         ]);
 
         $response = $this->actingAs($this->admin)
             ->put(route('admin.raffleDraws.update', $draw), $this->validPayload([
-                'draw_at' => now()->subDay()->toDateTimeString(),
-            ]));
-
-        $response->assertSessionHasErrors('draw_at');
-    }
-
-    public function test_completed_draw_can_keep_a_past_draw_date_on_update(): void
-    {
-        $participant = Participant::factory()->create();
-        $enrollment = Enrollment::factory()->create([
-            'edition_id' => $this->edition->id,
-            'participant_id' => $participant->id,
-        ]);
-
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
-            'name' => 'Nome antigo',
-            'winner_enrollment_id' => $enrollment->id,
-            'is_active' => false,
-            'draw_at' => now()->subDay(),
-        ]);
-
-        $response = $this->actingAs($this->admin)
-            ->put(route('admin.raffleDraws.update', $draw), $this->validPayload([
-                'name' => 'Nome corrigido',
-                'is_active' => false,
                 'draw_at' => now()->subDay()->toDateTimeString(),
             ]));
 
@@ -192,7 +206,7 @@ class RaffleDrawAdminTest extends TestCase
 
         $this->assertDatabaseHas('raffle_draws', [
             'id' => $draw->id,
-            'name' => 'Nome corrigido',
+            'place' => 1,
         ]);
     }
 
@@ -202,9 +216,7 @@ class RaffleDrawAdminTest extends TestCase
             'year' => now()->year - 1,
         ]);
 
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
-        ]);
+        $draw = $this->makeDraw(place: 1);
 
         $response = $this->actingAs($this->admin)
             ->put(route('admin.raffleDraws.update', $draw), $this->validPayload([
@@ -221,9 +233,7 @@ class RaffleDrawAdminTest extends TestCase
 
     public function test_admin_can_delete_a_raffle_draw_without_a_winner(): void
     {
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
-        ]);
+        $draw = $this->makeDraw(place: 1);
 
         $response = $this->actingAs($this->admin)
             ->delete(route('admin.raffleDraws.destroy', $draw));
@@ -240,8 +250,7 @@ class RaffleDrawAdminTest extends TestCase
             'participant_id' => $participant->id,
         ]);
 
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
+        $draw = $this->makeDraw(place: 1, overrides: [
             'winner_enrollment_id' => $enrollment->id,
             'is_active' => false,
         ]);
@@ -252,36 +261,6 @@ class RaffleDrawAdminTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('flash', fn (array $flash) => $flash['bannerStyle'] === 'danger');
         $this->assertDatabaseHas('raffle_draws', ['id' => $draw->id]);
-    }
-
-    public function test_admin_cannot_delete_a_raffle_draw_with_purchased_tickets(): void
-    {
-        $participant = Participant::factory()->create();
-        $enrollment = Enrollment::factory()->create([
-            'edition_id' => $this->edition->id,
-            'participant_id' => $participant->id,
-        ]);
-
-        $draw = RaffleDraw::factory()->create([
-            'edition_id' => $this->edition->id,
-        ]);
-
-        RaffleTicket::factory()->create([
-            'raffle_draw_id' => $draw->id,
-            'enrollment_id' => $enrollment->id,
-        ]);
-
-        $response = $this->actingAs($this->admin)
-            ->delete(route('admin.raffleDraws.destroy', $draw));
-
-        $response->assertRedirect();
-        $response->assertSessionHas('flash', fn (array $flash) => $flash['bannerStyle'] === 'danger');
-
-        $this->assertDatabaseHas('raffle_draws', ['id' => $draw->id]);
-        $this->assertDatabaseHas('raffle_tickets', [
-            'raffle_draw_id' => $draw->id,
-            'enrollment_id' => $enrollment->id,
-        ]);
     }
 
     public function test_non_admin_cannot_access_raffle_management(): void

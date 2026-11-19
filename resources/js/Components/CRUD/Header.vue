@@ -7,6 +7,7 @@ interface Props {
     sortBy?: string;
     filterBy?: string;
     filterValues?: Record<string | number, string>;
+    reloadProps?: string[];
 }
 
 const props = defineProps<Props>();
@@ -136,14 +137,20 @@ const setFilter = (val: string | number | null) => {
         url.searchParams.set(props.filterBy, String(val));
     }
 
+    if (props.filterBy === "edition_id") {
+        url.searchParams.delete("draw_id");
+    }
+
     url.searchParams.set("page", "1");
     filterMenuOpen.value = false;
+
+    const reloadOnly = props.reloadProps ?? ["items"];
 
     router.visit(url.toString(), {
         preserveState: true,
         preserveScroll: true,
         replace: true,
-        only: ["items"],
+        only: reloadOnly,
     });
 };
 </script>

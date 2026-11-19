@@ -838,15 +838,56 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        RaffleDraw::firstOrCreate(
-            ['edition_id' => $edition->id, 'name' => 'Sorteio SINF 2026 — Fones Sony WH-1000XM5'],
+        $finalPrizes = [
             [
-                'description' => 'Habilita-te a ganhar uns auscultadores com cancelamento de ruído topo de gama!',
-                'ticket_price' => 50,
-                'is_active' => true,
-                'draw_at' => Carbon::create($editionYear, 11, 18, 19, 0, 0),
-            ]
-        );
+                'place' => 1,
+                'name' => '1º Prémio Final — Consola Nintendo Switch OLED',
+                'description' => 'O grande prémio da SINF 2026 sorteado na Sessão de Encerramento!',
+            ],
+            [
+                'place' => 2,
+                'name' => '2º Prémio Final — Teclado Mecânico Custom',
+                'description' => 'Teclado mecânico premium para elevar o teu setup de programação.',
+            ],
+            [
+                'place' => 3,
+                'name' => '3º Prémio Final — Fones Sony WH-1000XM5',
+                'description' => 'Auscultadores topo de gama com cancelamento de ruído ativo líder de mercado.',
+            ],
+        ];
+
+        $closingEvent = Event::whereHas('event_day', fn ($q) => $q->where('edition_id', $edition->id))
+            ->where(function ($q) {
+                $q->whereRaw('LOWER(events.name) LIKE ?', ['%encerramento%'])
+                    ->orWhereRaw("LOWER(COALESCE(events.topic, '')) LIKE ?", ['%encerramento%']);
+            })
+            ->first();
+
+        $closingQuest = $closingEvent !== null
+            ? Quest::query()
+                ->where('requirement_type', Event::class)
+                ->where('requirement_id', $closingEvent->id)
+                ->orderBy('id')
+                ->first()
+            : null;
+
+        if ($closingEvent === null || $closingQuest === null) {
+            $this->command->warn('No closing session task found; final prize draws will not be eligible until one is selected.');
+        }
+
+        foreach ($finalPrizes as $prize) {
+            RaffleDraw::updateOrCreate(
+                ['edition_id' => $edition->id, 'name' => $prize['name']],
+                [
+                    'place' => $prize['place'],
+                    'required_event_id' => $closingEvent?->id,
+                    'required_quest_id' => $closingQuest?->id,
+                    'description' => $prize['description'],
+                    'is_active' => true,
+                    'draw_at' => Carbon::create($editionYear, 11, 19, 18, 0, 0),
+                ]
+            );
+        }
 
         $this->command->info('Seeding finished successfully!');
     }

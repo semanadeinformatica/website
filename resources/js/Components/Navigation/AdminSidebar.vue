@@ -28,6 +28,7 @@ import {
     X,
     Joystick,
     ScanLine,
+    Ticket,
 } from "@lucide/vue";
 
 interface Props {
@@ -217,6 +218,13 @@ const sections: NavSection[] = [
                 labelKey: "models.finalPrize",
                 defaultLabel: "Prémios Finais",
                 icon: Gift,
+            },
+            {
+                name: "raffleDraws",
+                route: "admin.raffleDraws.index",
+                routePrefix: "admin.raffleDraws",
+                defaultLabel: "Sorteio Final",
+                icon: Ticket,
             },
             {
                 name: "quests",

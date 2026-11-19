@@ -27,6 +27,7 @@ import {
     ArrowRightLeft,
     Plus,
     ScanLine,
+    Ticket,
 } from "@lucide/vue";
 
 interface Stats {
@@ -149,6 +150,11 @@ const sections: Section[] = [
                 route: "admin.finalPrizes.index",
                 name: "Prémios Finais",
                 icon: Gift,
+            },
+            {
+                route: "admin.raffleDraws.index",
+                name: "Sorteio Final",
+                icon: Ticket,
             },
             {
                 route: "admin.quests.index",

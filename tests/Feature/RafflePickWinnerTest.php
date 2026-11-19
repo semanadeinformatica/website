@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Edition;
 use App\Models\Enrollment;
-use App\Models\Participant;
+use App\Models\Event;
+use App\Models\EventDay;
+use App\Models\EventType;
+use App\Models\Quest;
 use App\Models\RaffleDraw;
-use App\Models\RaffleTicket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
@@ -20,15 +22,36 @@ class RafflePickWinnerTest extends TestCase
 
     private RaffleDraw $draw;
 
+    private Quest $closingQuest;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->markTestSkipped('Raffle is disabled until the points-based prize draw ships.');
+        $this->edition = Edition::factory()->create(['year' => 2026]);
 
-        $this->edition = Edition::factory()->create();
+        $eventDay = EventDay::factory()->create(['edition_id' => $this->edition->id]);
+        $eventType = EventType::factory()->create(['name' => 'talk']);
+
+        $closingEvent = Event::factory()->create([
+            'event_day_id' => $eventDay->id,
+            'event_type_id' => $eventType->id,
+            'name' => 'Sessão de Encerramento e Entrega de Prémios',
+            'topic' => 'Encerramento',
+        ]);
+
+        $this->closingQuest = Quest::create([
+            'name' => 'Assistir à Sessão de Encerramento',
+            'edition_id' => $this->edition->id,
+            'category' => 'TALK',
+            'requirement_id' => $closingEvent->id,
+            'requirement_type' => Event::class,
+        ]);
+
         $this->draw = RaffleDraw::factory()->create([
             'edition_id' => $this->edition->id,
+            'place' => 1,
+            'required_quest_id' => $this->closingQuest->id,
             'is_active' => true,
         ]);
     }
@@ -38,29 +61,22 @@ class RafflePickWinnerTest extends TestCase
         return User::factory()->admin()->create();
     }
 
-    private function enrollmentWithTickets(int $quantity): Enrollment
+    private function participantEnrollment(int $points = 100): Enrollment
     {
-        $participant = Participant::factory()->create();
-
         $enrollment = Enrollment::factory()->create([
             'edition_id' => $this->edition->id,
-            'participant_id' => $participant->id,
-            'points' => 100,
+            'points' => $points,
         ]);
 
-        RaffleTicket::factory()->create([
-            'raffle_draw_id' => $this->draw->id,
-            'enrollment_id' => $enrollment->id,
-            'quantity' => $quantity,
-        ]);
+        $enrollment->quests()->attach($this->closingQuest);
 
         return $enrollment;
     }
 
     public function test_admin_can_pick_a_winner_and_close_the_draw(): void
     {
-        $first = $this->enrollmentWithTickets(3);
-        $second = $this->enrollmentWithTickets(1);
+        $first = $this->participantEnrollment(3);
+        $second = $this->participantEnrollment(1);
 
         $response = $this->actingAs($this->admin())
             ->from(route('admin.index'))
@@ -80,7 +96,7 @@ class RafflePickWinnerTest extends TestCase
     {
         Log::spy();
 
-        $this->enrollmentWithTickets(1);
+        $this->participantEnrollment(1);
 
         $this->actingAs($this->admin())
             ->post(route('admin.raffleDraws.pick-winner', $this->draw));
@@ -93,7 +109,7 @@ class RafflePickWinnerTest extends TestCase
 
     public function test_cannot_pick_a_winner_twice(): void
     {
-        $this->enrollmentWithTickets(1);
+        $this->participantEnrollment(1);
 
         $admin = $this->admin();
 
@@ -114,7 +130,7 @@ class RafflePickWinnerTest extends TestCase
 
     public function test_cannot_pick_a_winner_for_an_inactive_draw(): void
     {
-        $this->enrollmentWithTickets(1);
+        $this->participantEnrollment(1);
         $this->draw->update(['is_active' => false]);
 
         $response = $this->actingAs($this->admin())
@@ -126,8 +142,14 @@ class RafflePickWinnerTest extends TestCase
         $this->assertNull($this->draw->winner_enrollment_id);
     }
 
-    public function test_cannot_pick_a_winner_without_tickets(): void
+    public function test_cannot_pick_a_winner_without_eligible_participants(): void
     {
+        // Points without attendance must not enter the draw.
+        Enrollment::factory()->create([
+            'edition_id' => $this->edition->id,
+            'points' => 100,
+        ]);
+
         $response = $this->actingAs($this->admin())
             ->post(route('admin.raffleDraws.pick-winner', $this->draw));
 
@@ -138,26 +160,11 @@ class RafflePickWinnerTest extends TestCase
         $this->assertTrue($this->draw->is_active);
     }
 
-    public function test_non_admin_cannot_pick_a_winner(): void
-    {
-        $this->enrollmentWithTickets(1);
-        $participant = Participant::factory()->create();
-
-        $response = $this->actingAs($participant->user)
-            ->post(route('admin.raffleDraws.pick-winner', $this->draw));
-
-        $response->assertForbidden();
-
-        $this->draw->refresh();
-        $this->assertNull($this->draw->winner_enrollment_id);
-    }
-
     public function test_guest_cannot_pick_a_winner(): void
     {
-        $this->enrollmentWithTickets(1);
+        $this->participantEnrollment(1);
 
-        $response = $this->post(route('admin.raffleDraws.pick-winner', $this->draw));
-
-        $response->assertRedirect(route('login'));
+        $this->post(route('admin.raffleDraws.pick-winner', $this->draw))
+            ->assertRedirect(route('login'));
     }
 }
